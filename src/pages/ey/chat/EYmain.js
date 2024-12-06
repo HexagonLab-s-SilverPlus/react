@@ -1,16 +1,16 @@
 // src/pages/ey/EYmain.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './EYmain.css'; // 스타일링을 위한 CSS 파일 import
 
 function EYmain() {
   // 입력 상태 관리
-  const [inputText, setInputText] = useState(''); 
+  const [inputText, setInputText] = useState('');
 
   // 입력값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
     setInputText(e.target.value);
-  }
-
+  };
 
   return (
     <div className="welcome-container">
@@ -25,13 +25,18 @@ function EYmain() {
           value={inputText} // 입력값 상태 연결
           onChange={handleInputChange} // 입력값 변경 이벤트 처리
         />
-        <button 
-          className="send-button" 
+        <Link
+          to={{
+            pathname: '/chat',
+            state: { userMessage: inputText }, // 입력값을 다음 페이지로 전달
+          }}
+          className="send-button"
           aria-label="전송 버튼"
-          disabled={!inputText.trim()} // 입력값이 비어 있으면 비활성화
-          >
+          onClick={() => setInputText('')}
+          style={{ pointerEvents: inputText.trim() ? 'auto' : 'none' }} // 입력값이 없으면 버튼 비활성화
+        >
           <span className="arrow-icon">➤</span>
-        </button>
+        </Link>
         <button className="mic-button" aria-label="음소거 버튼">
           <span className="mic-icon">🔇</span>
         </button>

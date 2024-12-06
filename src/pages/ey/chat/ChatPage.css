@@ -1,0 +1,29 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  .chat-bubble {
+    padding: 20px;
+    border-radius: 12px;
+    margin: 10px 0;
+    font-size: 24px;
+    line-height: 1.5;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  
+  .user-message {
+    align-self: flex-end;
+    background-color: #D1E7DD;
+  }
+  
+  .ai-response {
+    align-self: flex-start;
+    background-color: #F8D7DA;
+  }
+  
