@@ -1,4 +1,3 @@
-
 //src/routers/router.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -10,6 +9,7 @@ import smRouter from './smRouter';
 import sjRouter from './sjRouter';
 import siRouter from './siRouter';
 import eyRouter from './eyRouter';
+import qnaRouter from './qnaRouter';
 
 const AppRouter = () => {
   // 변수 = () => {}  ==>> 함수임
@@ -28,6 +28,4 @@ const AppRouter = () => {
   );
 };
 
-
 export default AppRouter;
-

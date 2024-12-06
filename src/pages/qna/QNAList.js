@@ -1,11 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import SideBar from '../../components/common/SideBar'
+// import { useNavigate } from 'react-router-dom';
+import SideBar from '../../components/common/SideBar';
 
 function QNAList() {
-    return (
-        <SideBar />
-      );
+  return <SideBar />;
 }
 
 export default QNAList;
