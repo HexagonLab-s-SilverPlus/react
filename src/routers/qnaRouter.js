@@ -3,8 +3,8 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import QNAList from '../pages/qna/QNAList';
 
-const noticeRouter = [
+const qnaRouter = [
     <Route path="/qna" element={<QNAList />} />,
 ];
 
-export default noticeRouter;
+export default qnaRouter;

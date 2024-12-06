@@ -26,7 +26,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/hsmain" className={styles.navItem}>
+              <Link to="/qna" className={styles.navItem}>
                 홍세
               </Link>
             </li>
