@@ -1,12 +1,16 @@
 // src/AuthProvider.js
-// 전역 상태 관리자 : 로그인 여부 상태 와 accessToken, refreshToken 상태 관리가 목적임
+
+// 전역 상태 관리자 : 로그인 여부 상태와 accessToken, refreshToken 상태 관리가 목적임
+
 
 import React, { createContext, useState, useEffect } from 'react';
 
 // Context 생성
 export const AuthContext = createContext();
 
-// accessToken 파싱 함수 : 페이로드만 추출해서 JSON 객체로 리턴함
+
+// accessToken 파싱 함수 : 페이로드만 추출해서 리턴함
+
 const parseAccessToken = (token) => {
   if (!token) return null;
   const base64Url = token.split('.')[1];
@@ -22,7 +26,13 @@ const parseAccessToken = (token) => {
 
 // Context Provider 컴포넌트
 export const AuthProvider = ({ children }) => {
-  const [authInfo, setAuthInfo] = useState({ isLoggedIn: false, role: '', username: '' });
+
+  const [authInfo, setAuthInfo] = useState({
+    isLoggedIn: false,
+    role: '',
+    username: '',
+  });
+
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -39,8 +49,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
+

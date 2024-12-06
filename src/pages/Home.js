@@ -1,20 +1,19 @@
+
+// src/pages/Home.js
 import React from 'react';
+import logo from '../assets/images/logo.png'; // 로고 이미지 임포트
 import styles from './Home.module.css';
-import { useNavigate } from 'react-router-dom';
 
 function Home() {
-
-  const navigate = useNavigate();
-
-  const moveBTN = () => {
-    navigate(`/qna`);
-  };
-
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>홈 페이지</h1>
-      <p className={styles.description}>여기는 홈 페이지입니다.</p>
-      <button onClick={moveBTN}>QNA 이동</button>
+    <div className={styles.container3}>
+        <div className={styles.container2}>
+            <img src={logo} alt="Site Logo"/> 
+        </div>
+        <div className={styles.container}>
+            <h2>안녕하세요.실버님<br/>오늘의 기분은 어떠신가요?</h2>
+            <p>말씀해 주시면 목소리가 자동으로 입력됩니다. 편하게 대화해 보세요.</p>
+        </div>
     </div>
   );
 }

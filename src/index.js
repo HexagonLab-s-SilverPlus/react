@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './AuthProvider';
+
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './AuthProvider'; // AuthProvider 가져오기
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
