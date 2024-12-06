@@ -1,3 +1,4 @@
+
 // src/pages/Home.js
 import React from 'react';
 import logo from '../assets/images/logo.png'; // 로고 이미지 임포트
@@ -16,6 +17,5 @@ function Home() {
     </div>
   );
 }
-
 
 export default Home;
