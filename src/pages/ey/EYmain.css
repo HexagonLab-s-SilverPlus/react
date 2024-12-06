@@ -70,3 +70,9 @@
     font-size: 28px;
   }
   
+  /* 비활성화 상태 버튼 스타일 */
+.send-button:disabled {
+    background-color: #A0AEC0; /* 비활성화된 버튼 배경색 */
+    cursor: not-allowed; /* 클릭 불가 상태 */
+  }
+  
