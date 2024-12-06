@@ -1,0 +1,44 @@
+.qnaHeaderdiv {
+    display: flex;
+    flex-direction: row; /* 가로 배치 설정 */
+    position: relative;
+}
+
+
+.qnaHeaderQNA {
+    font-size: 40px;
+    margin-right: 1138px;
+    margin-left:30px ;
+    color: #333333;
+
+}
+
+.qnaHeaderQNAM {
+    font-size: 20px;
+    right: 0;
+    padding-left: 65px;
+    padding-top: 20px;
+}
+
+.qnaHeaderQNALink {
+    text-decoration-line: none;
+    color: #333333;
+}
+
+.qnaSeachdiv {
+    padding-top: 87px;
+    
+    
+
+}
+
+.qnaSeachselect {
+    height: 33px;
+    width: 83px;
+    position: relative;
+    left: 1016px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+}

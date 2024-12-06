@@ -16,6 +16,9 @@ function SideBar() {
         <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>Q&A</Link></li>
         <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>마이페이지</Link></li>
       </ul>
+      <ul className={styles.logoutul}>
+        <li className={styles.logoutli}><Link to="/" className={styles.logoutLink}>로그아웃</Link></li>
+      </ul>
     </header>
   );
 }
