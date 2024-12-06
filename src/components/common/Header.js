@@ -59,16 +59,6 @@ function Header() {
         </nav>
       </div>
 
-      {/* 검색바 */}
-      <div className={styles.searchBar}>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          className={styles.searchInput}
-        />
-        <button className={styles.searchButton}>검색</button>
-      </div>
-
       {/* 로그인/로그아웃 버튼 */}
       <div className={styles.rightSection}>
         {isLoggedIn ? (
