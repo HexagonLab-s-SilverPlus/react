@@ -1,0 +1,31 @@
+/* .container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 2rem;
+    color: #2db400;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    color: #555;
+  } */
+
+    .container {
+      font-size: 24pt;
+      text-align: left;
+      flex: 1;
+      margin-right: '20px';
+    }
+    .container2{
+      flex: 0; 
+    }
+
+    .container3{
+      display: flex; 
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
