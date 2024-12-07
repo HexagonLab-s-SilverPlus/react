@@ -1,15 +1,18 @@
 /* EYmain.css */
+
+  /* 반응형 여백 추가 */
 .welcome-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #ffffff; /* 배경색 */
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto; /* 가운데 정렬 */
+  max-width: calc(100% - 100px); /* 좌우 여백 합산 (341 * 2) */
+}
+
   .welcome-title {
     font-size: 60px; /* 피그마 기준 제목 폰트 크기 */
     color: #14532D; /* 제목 텍스트 색상 */
