@@ -1,0 +1,127 @@
+.noticeList {
+    background-color: #f9f9f9;
+}
+/*상단*/
+.top {
+    display: flex; /*flex 박스 사용*/
+    align-items: end; /*세로축 정렬 끝으로*/
+    padding : 24px 72px 24px; /*안쪽여백 상단/좌우/하단*/
+}
+
+/*공지사항 이름*/
+.menuname {
+    display: flex; /*flex 박스 사용*/
+    font-size:72px; /*글자 크기*/
+    font-weight : bold; /*글자 굵기 굵게*/
+    color:#064420; /*글자색*/
+}
+
+/* 검색창 */
+.searchbox{
+    display: flex; /*flex 박스 사용*/
+    margin-left : auto; /*오른쪽 끝으로 이동*/
+    gap: 5px; /*검색 조건과 검색이름 구분*/
+    font-size:28px; /*글자 크기*/
+    font-weight : bold;/*글자 굵기 굵게*/
+    color:#333333;
+}
+
+
+
+/*검색 옵션*/
+.searchOptions {
+    border-bottom : 2px gray solid
+    
+}
+
+
+
+
+/* 화살표 */
+.arrow{
+    width:24px; /*폭*/
+    height:24px; /*높이*/
+    cursor:pointer; /*클릭효과*/
+}
+
+/* 검색어 div */
+.searchKeyword{
+    display: flex;
+    align-items: center;
+    border-bottom: 2px gray solid;
+
+}
+
+/* 검색버튼 */
+.search{
+    width:24px; /*폭*/
+    height:24px; /*높이*/
+    cursor:pointer; /*클릭효과*/
+}
+
+/*검색어 입력창*/
+.searchKeywordBox{
+    width:320px;
+    font-size: 24px;
+    border: 0px;
+    background-color: #f9f9f9;
+    color:#333333;
+                        
+}
+
+/*검색메뉴 드롭박스*/
+.dropdown{
+    position : absolute; /*부모 요소 기준 위치 설정*/
+    z-index: 1000; /*다른 요소 위에 표시되도록 설정*/
+    margin-top : 40px; /*드롭다운 위치*/
+}
+.dropdownOption{
+    padding : 5px 0px; 
+    cursor: pointer;
+    font-weight: normal;
+}
+.dropdownOption:hover {
+    font-weight: bold;
+}
+
+
+/*리스트*/
+.list{
+    padding: 30px 72px;
+}
+
+.object{
+    margin : 20px 0px;
+    width: 1400px;
+    margin-left: auto;
+    padding: 20px 50px;
+    background-color: #fff;
+    box-shadow: 5px 5px 10px #333333;
+    border-radius:10px;
+}
+
+.object:hover{
+    background-color: #FDFAF6;
+    cursor:pointer;
+}
+
+.title{
+    font-size: 36px;
+    font-weight: bold;
+    color:#333333;
+}
+
+.message{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-top : 10px;
+    font-size: 24px;
+    color:#999999;
+}
+
+.date{
+    color: #333333;
+    font-weight: bold;
+    font-size: 32px;
+}
