@@ -3,7 +3,7 @@
     width: 368px;
     height: 980px;
     background-color: #064420;
-    
+    z-index: 1;
 }
 
 .sideTitle {
@@ -17,7 +17,7 @@
     text-decoration-line: none;
 }
 
-.sideBarul {
+.sideBar {
     list-style-type: none;
     position: relative;
     left: 100px;
@@ -29,17 +29,17 @@
     padding: 0;
 }
 
-.sideBarli {
+.sideBar li {
     margin-bottom: 36px;
 }
 
-.sideBarMenu {
+.sideBar li a {
     position: relative;
     text-decoration-line: none;
     color: white;
 }
 
-.logoutul {
+.logout {
     list-style-type: none;
     margin: 0; 
     padding: 0;
@@ -52,11 +52,11 @@
     padding: 0;
 }
 
-.logoutli {
+.logout li {
     margin-bottom: 36px;
 }
 
-.logoutLink {
+.logout a {
     position: relative;
     text-decoration-line: none;
     color: white;

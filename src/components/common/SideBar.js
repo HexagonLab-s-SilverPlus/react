@@ -7,17 +7,17 @@ function SideBar() {
   return (
     <header className={styles.sideBarHeader}>
       <Link to="/" className={styles.sideTitle}>실버플러스</Link>
-      <ul className={styles.sideBarul}>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>검색</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>계정관리</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>공지사항</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>어르신 맞춤 활동</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>전자책</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>Q&A</Link></li>
-        <li className={styles.sideBarli}><Link to="/" className={styles.sideBarMenu}>마이페이지</Link></li>
+      <ul className={styles.sideBar}>
+        <li><Link to="/">검색</Link></li>
+        <li><Link to="/">계정관리</Link></li>
+        <li><Link to="/">공지사항</Link></li>
+        <li><Link to="/">어르신 맞춤 활동</Link></li>
+        <li><Link to="/">전자책</Link></li>
+        <li><Link to="/qna">Q&A</Link></li>
+        <li><Link to="/">마이페이지</Link></li>
       </ul>
-      <ul className={styles.logoutul}>
-        <li className={styles.logoutli}><Link to="/" className={styles.logoutLink}>로그아웃</Link></li>
+      <ul className={styles.logout}>
+        <li><Link to="/">로그아웃</Link></li>
       </ul>
     </header>
   );

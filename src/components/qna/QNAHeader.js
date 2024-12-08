@@ -12,13 +12,7 @@ function QNAHeader(){
                 <strong className={styles.qnaHeaderQNAM}><Link to="/" className={styles.qnaHeaderQNALink}>FAQ관리</Link></strong>
             </div>
             <hr />
-            <div className={styles.qnaSeachdiv}>
-                <select className={styles.qnaSeachselect}>
-                    <option value="title" selected>제목</option>
-                    <option value="writer">작성자</option>
-                    <option value="date">날짜</option>
-                </select>
-            </div>
+
          </div>
     );
 }
