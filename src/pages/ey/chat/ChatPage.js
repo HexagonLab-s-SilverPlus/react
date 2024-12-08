@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './ChatPage.css';
 import Container from './Container.js';
@@ -15,6 +16,8 @@ function ChatPage() {
       : []
   ); // 초기 메시지 설정
   const [inputText, setInputText] = useState(''); // 새 입력값 관리
+
+  const chatEndRef = useRef(null); // 스크롤을 제어할 참조
 
   // AI 응답 생성 함수
   function getAiResponse(userMessage) {
@@ -42,6 +45,17 @@ function ChatPage() {
     setInputText(''); // 입력창 초기화
   };
 
+  const handleKeyDown = (e) => {
+    if(e.key === 'Enter'){
+        e.preventDefault();
+        handleSendMessage();
+    }
+  }
+  // 메시지가 추가될 때 스크롤을 최신 메시지로 이동
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <Container>
       <div className="chat-container">
@@ -65,6 +79,8 @@ function ChatPage() {
             }
             return null; // 홀수 인덱스 메시지는 렌더링하지 않음 (AI 메시지 이미 처리됨)
           })}
+          {/* 스크롤 참조 요소 */}
+          <div ref={chatEndRef}></div>
         </div>
         {/* 입력창 */}
         <div className="input-container">
@@ -75,6 +91,7 @@ function ChatPage() {
             aria-label="대화 입력창"
             value={inputText}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown} // Enter 키 핸들러 추가
           />
           <button
             className="send-button"
@@ -83,6 +100,16 @@ function ChatPage() {
             disabled={!inputText.trim()} // 빈 입력값이면 비활성화
           >
             <span className="arrow-icon">➤</span>
+          </button>
+
+          <button
+            className="mic-button button" // 공통 클래스 추가
+            aria-label="음소거 버튼"
+            onClick={() => {
+              console.log('Mic button clicked');
+            }}
+          >
+            <span className="mic-icon">🔇</span>
           </button>
         </div>
       </div>
