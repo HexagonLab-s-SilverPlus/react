@@ -1,0 +1,47 @@
+.enrollForm {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.button1 {
+  margin-top: 30px;
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  border-style: hidden;
+  background-color: #064420;
+  border-radius: 8px;
+  color: #ffffff;
+  /* letter-spacing: 15px; */
+  cursor: pointer;
+}
+
+.button2 {
+  width: 110px;
+  height: 30px;
+  font-weight: bold;
+  border-style: hidden;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  color: #333333;
+  cursor: pointer;
+}
+
+
+.textbox {
+  width: 480px;
+  height: 30px;
+  margin-bottom: 5px;
+  font-size: 18px;
+  border-style: solid;
+}
+
+.valuebox {
+  height: 25px;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
