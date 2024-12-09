@@ -16,6 +16,8 @@ jobs:
 
       - name: Release Drafter
         uses: release-drafter/release-drafter@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-release:
     needs: update-release-draft # 이전 Job이 완료된 후 실행
@@ -27,6 +29,7 @@ jobs:
       - name: Publish Release
         uses: actions/github-script@v6
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const draftReleases = await github.repos.listReleases({
               owner: context.repo.owner,
