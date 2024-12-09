@@ -1,11 +1,11 @@
-// src/pages/tj/TJmain.js
+// src/pages/tj/Enroll.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { jwtDecode } from "jwt-decode"; // jwt-decode jwt 토큰 사용시 필요한 패키지
 import styles from "./Enroll.module.css";
 
-function TJmain() {
+function Enroll() {
   const [formData, setFormData] = useState({
     memId: "", // 아이디
     memPw: "", // 비밀번호
@@ -62,7 +62,6 @@ function TJmain() {
   const handleGoBack = () => {};
 
   return (
-    
     <div>
       <h3 style={{textAlign: 'center', color: '#064420'}}>기관 담당자 회원가입</h3>
       <form enctype="multipart/form-data" onSubmit={handleSubmit}>
@@ -232,4 +231,4 @@ function TJmain() {
   );
 }
 
-export default TJmain;
+export default Enroll;
