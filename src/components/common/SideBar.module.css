@@ -1,8 +1,9 @@
 .sideBarHeader {
+    position: fixed;
     width: 368px;
     height: 980px;
     background-color: #064420;
-    
+    z-index: 1;
 }
 
 .sideTitle {
@@ -11,28 +12,52 @@
     text-align: center;
     top: 69px;
     font-size: 48px;
-    font-weight: 1000;
+    font-weight: 700;
     color: white;
     text-decoration-line: none;
 }
 
-.sideBarul {
+.sideBar {
     list-style-type: none;
+    position: relative;
+    left: 100px;
+    top: 171px;
+    width: 268px;
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0; 
+    padding: 0;
+}
+
+.sideBar li {
+    margin-bottom: 36px;
+}
+
+.sideBar li a {
+    position: relative;
     text-decoration-line: none;
+    color: white;
+}
+
+.logout {
+    list-style-type: none;
     margin: 0; 
     padding: 0;
     position: relative;
     left: 100px;
-    top: 171px;
+    top: 241px;
+    width: 268px;
     font-size: 28px;
+    margin: 0; 
+    padding: 0;
 }
 
-.sideBarMenu {
+.logout li {
+    margin-bottom: 36px;
+}
+
+.logout a {
     position: relative;
     text-decoration-line: none;
     color: white;
-}
-
-.sideBarli {
-    margin-bottom: 36px;
 }

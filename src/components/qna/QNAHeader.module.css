@@ -1,0 +1,27 @@
+.qnaHeaderdiv {
+    display: flex;
+    flex-direction: row; /* 가로 배치 설정 */
+    position: relative;
+}
+
+
+.qnaHeaderQNA {
+    font-size: 40px;
+    margin-right: 1058px;
+    margin-left:14px ;
+    color: #333333;
+
+}
+
+.qnaHeaderQNAM {
+    font-size: 20px;
+    font-weight: bold;
+    right: 0;
+    padding-left: 65px;
+    padding-top: 20px;
+}
+
+.qnaHeaderQNALink {
+    text-decoration-line: none;
+    color: #333333;
+}
