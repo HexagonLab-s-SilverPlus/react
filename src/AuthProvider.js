@@ -25,6 +25,7 @@ const parseAccessToken = (token) => {
 };
 
 // Context Provider 컴포넌트
+// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
 
   const [authInfo, setAuthInfo] = useState({

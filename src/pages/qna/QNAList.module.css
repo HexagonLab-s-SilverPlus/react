@@ -1,0 +1,121 @@
+.qnaContent {
+    height: 911px;
+    width: 1456px;
+    padding-top: 69px;
+    padding-left: 61px;
+    position: relative;
+    left: 368px;
+}
+
+.qnaSeachdiv {
+    padding-top: 85px;
+    padding-left: 1016px;
+    position: relative;
+    height: 41px;
+}
+
+.qnaSeachselect {
+    height: 33px;
+    width: 83px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    font-size: 20px;
+    position: absolute;
+    left: 1016px;
+    bottom: 0;
+}
+
+.qnaInput {
+    height: 33px;
+    width: 242px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    position: absolute;
+    left: 1108px;
+    bottom: 0;
+}
+
+.qnaInputBTN {
+    display: inline-block;
+    height: 41px;
+    width: 89px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: #064420;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 18px;
+    position: absolute;
+    left: 1363px;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.qnaListTable {
+    width: 1456px;
+    padding-top: 80px;
+    font-size: 18px;
+}
+
+.qnaListTable tr {
+    height: 44px;
+}
+
+.qnaListTable tr th {
+    border-bottom: 2px solid #0000004b;
+}
+
+.qnaListTable tr td {
+    border-bottom: 2px solid #0000004b;
+}
+
+.qnaListTable tr td button {
+    font-size: 18px;
+    background: none; 
+    border: none;
+    color: rgb(0, 0, 0);
+    text-decoration: underline;
+    cursor: pointer;
+    text-decoration-line: none;
+}
+
+.qnaTitle {
+    width: 956px;
+    text-align: left;
+}
+
+.qnaWCreateBy {
+    width: 200px;
+    text-align: center;
+}
+
+.qnaWCreateAt {
+    width: 200px;
+    text-align: center;
+}
+
+.qnaStateN {
+    width: 100px;
+    text-align: center;
+    color: #ff0000;
+    font-weight: bolder;
+}
+
+.qnaStateY {
+    width: 100px;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.qnaStateYss { 
+    background: 'none'; 
+    border: 'none';
+    color: 'blue';
+    text-decoration: 'underline';
+    cursor: 'pointer';
+ }

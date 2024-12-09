@@ -1,0 +1,89 @@
+/* 부모 컨테이너 */
+.chat-container {
+  display: flex;
+  flex-direction: column; /* 수직 배치 */
+  height: 100vh; /* 화면 전체 높이 */
+}
+
+/* 메시지 영역 (스크롤 가능) */
+.chat-page {
+  flex: 1; /* 남은 공간을 모두 차지 */
+  overflow-y: auto; /* 세로 스크롤 가능 */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 메시지 세트를 한 화면에 꽉 차게 표시 */
+.message-set {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 100px); /* 입력창 제외 영역 */
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* 채팅 말풍선 스타일 */
+.chat-bubble {
+  padding: 20px;
+  border-radius: 12px;
+  margin: 10px 0;
+  font-size: 24px;
+  line-height: 1.5;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.user-message {
+  align-self: flex-end; /* 사용자 메시지는 오른쪽 정렬 */
+  background-color: #d1e7dd;
+}
+
+.ai-response {
+  align-self: flex-start; /* AI 응답은 왼쪽 정렬 */
+  background-color: #f8d7da;
+}
+
+/* 입력창 고정 */
+.input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #ddd;
+  height: 100px; /* 고정된 높이 */
+  box-sizing: border-box;
+}
+
+.text-input {
+  flex: 1; /* 입력창의 가변 너비 */
+  height: 80px;
+  padding: 0 15px;
+  font-size: 25px;
+  border: 1px solid #cbd5e0;
+  border-radius: 25px;
+  outline: none;
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: 50%;
+  background-color: #14532d;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.send-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.send-button:hover {
+  background-color: #276749;
+}

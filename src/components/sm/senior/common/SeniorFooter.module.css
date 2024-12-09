@@ -1,0 +1,13 @@
+.footer{
+    color:#999999;
+    height:48px;
+    text-align: center;
+    font-size: 15px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px #333333;
+    z-index: 100; /* 다른 요소보다 위에 표시 */
+}
+
+.context{
+    padding: 14px;
+}
