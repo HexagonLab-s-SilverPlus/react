@@ -24,7 +24,10 @@ function EYmain() {
   // Enter 키 감지 핸들러
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // 기본 Enter 키 동작 방지 (예: 폼 제출)
+      //~ 이벤트가 발생했을 때 브라우저에서 해당 이벤트의 기본 동작을 막는다.
+      //* SPA에서는 페이지 새로고침을 막아야 한다. 왜?
+
+      e.preventDefault(); // 기본 Enter 키 동작(예: 폼 제출)을 방지
       handleSend(); // 메시지 전송
     }
   };
@@ -50,7 +53,7 @@ function EYmain() {
           />
           <Link
             to="/chat"
-            state={{ userMessage: inputText }}
+            state={{ userMessage: inputText }} //* 현재 입력한 메시지(inputText)를 chatPage로 전달한다.
             className={`${styles['send-button']} ${styles['button']}`}
             aria-label="전송 버튼"
             onClick={() => {
