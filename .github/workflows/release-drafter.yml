@@ -1,16 +1,14 @@
 name: Release Drafter
 
 permissions:
-  contents: write # 콘텐츠 읽기 및 쓰기 권한
-
+  contents: write
 
 on:
   push:
     branches:
-      - main # main 브랜치에 푸시될 때 실행
+      - main
   pull_request:
-    types: [closed] # PR이 병합될 때 실행
-
+    types: [closed]
 
 jobs:
   update-release-draft:
@@ -19,15 +17,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-            fetch-depth: 0 # 모든 커밋을 가져옴
+          fetch-depth: 0
 
       - name: Release Drafter
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v5.15.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-release:
-    needs: update-release-draft # 이전 Job이 완료된 후 실행
+    needs: update-release-draft
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,9 +34,11 @@ jobs:
       - name: Publish Release
         uses: actions/github-script@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const draftReleases = await github.repos.listReleases({
+            const { context } = require('@actions/github');
+
+            const draftReleases = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
@@ -49,11 +49,11 @@ jobs:
               return;
             }
 
-            await github.repos.updateRelease({
+            await github.rest.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: latestDraft.id,
-              draft: false, // Draft 상태 해제 (자동 게시)
+              draft: false,
             });
 
             console.log(`Published release: ${latestDraft.name}`);
