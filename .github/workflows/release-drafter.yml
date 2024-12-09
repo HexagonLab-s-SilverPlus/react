@@ -1,5 +1,9 @@
 name: Release Drafter
 
+permissions:
+  contents: write # 콘텐츠 읽기 및 쓰기 권한
+
+
 on:
   push:
     branches:
@@ -7,12 +11,15 @@ on:
   pull_request:
     types: [closed] # PR이 병합될 때 실행
 
+
 jobs:
   update-release-draft:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+            fetch-depth: 0 # 모든 커밋을 가져옴
 
       - name: Release Drafter
         uses: release-drafter/release-drafter@v5
