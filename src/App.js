@@ -7,7 +7,7 @@ import AppRouter from './routers/router'; // 라우터 설정 임포트
 function App() {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <AppRouter /> {/* 라우터 설정 */}
     </>
   );
