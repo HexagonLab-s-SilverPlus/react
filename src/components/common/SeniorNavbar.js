@@ -2,7 +2,7 @@
 import React,{useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
 import Styles from "./SeniorNavbar.module.css"
-import profile from '../../../../assets/images/profile.png'; // 로고 이미지 임포트
+import profile from '../../assets/images/profile.png'; // 로고 이미지 임포트
 
 const SeniorNavbar = () => {
 
