@@ -1,0 +1,119 @@
+
+/* 전체 메뉴 컨테이너 */
+.menuContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5열 */
+    grid-template-rows: repeat(5, 1fr); /* 5행 */
+    grid-gap: 24px; /* 버튼 간 간격 */
+    height: 100vh; /* 전체 높이 설정 */
+    padding: 24px;
+    box-sizing: border-box;
+
+    /* 중앙 배치 설정 */
+    justify-content: center; /* 가로 중앙 */
+    align-items: center; /* 세로 중앙 */
+}
+
+/* 공통 버튼 스타일 */
+.menuButton {
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* 이미지 위치용 */
+    box-sizing: border-box;
+    font-size: 60px;
+    font-weight: bold;
+    color: #064420;
+}
+
+/* 말동무 대화하기 버튼 스타일 */
+.div1 {
+    grid-area: 1 / 1 / 3 / 2; /* 2행 높이 차지 */
+    background-color: #FDFAF6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 578px;
+    height: 686px;
+}
+
+.div1 p {
+    line-height: 1.2; /* 줄 간격 조정 */
+}
+
+/* 나머지 버튼 스타일 */
+.div2,
+.div3,
+.div4,
+.div5 {
+    background-color: #fff;
+    width: 508px;
+    height: 313px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    text-align: left;
+    position: relative;
+}
+
+.div2 p,
+.div3 p,
+.div4 p,
+.div5 p {
+    margin: 0;
+    line-height: 1.2; /* 줄 간격 조정 */
+}
+
+/* 이미지 오른쪽 하단 배치 */
+.div2 img,
+.div3 img,
+.div4 img,
+.div5 img {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* 각 버튼의 그리드 영역 */
+.div2 {
+    grid-area: 1 / 2 / 2 / 3; /* 두뇌 활성화 게임 */
+}
+
+.div3 {
+    grid-area: 1 / 3 / 2 / 4; /* 어르신 맞춤 활동 */
+}
+
+.div4 {
+    grid-area: 2 / 2 / 3 / 3; /* 공지사항 */
+}
+
+.div5 {
+    grid-area: 2 / 3 / 3 / 4; /* 공문서 작성 */
+}
+
+/* 이미지 크기 설정 */
+.icon {
+    margin-bottom: 10px;
+}
+
+.brainGameIcon {
+    width: 180px;
+    height: 72px;
+}
+
+.activityIcon {
+    width: 111.76px;
+    height: 121px;
+}
+
+.noticeIcon {
+    width: 96px;
+    height: 120px;
+}
+
+.documentIcon {
+    width: 117px;
+    height: 120px;
+}
