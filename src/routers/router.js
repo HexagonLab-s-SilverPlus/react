@@ -9,13 +9,14 @@ import sjRouter from './sjRouter';
 import siRouter from './siRouter';
 import eyRouter from './eyRouter';
 import qnaRouter from './qnaRouter';
+import WelcomePage from '../components/common/WelcomePage';
 
 const AppRouter = () => {
   // 변수 = () => {}  ==>> 함수임
   return (
     <Routes>
       {/*통합된 라우터 파일*/}
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<WelcomePage />} />
       {tjRouter}
       {smRouter}
       {sjRouter}
