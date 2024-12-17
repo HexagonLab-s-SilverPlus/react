@@ -6,13 +6,16 @@ import activityIcon from "../assets/images/activityIcon.png";
 import noticeIcon from "../assets/images/noticeIcon.png";
 import documentIcon from "../assets/images/documentIcon.png";
 import Container from "../pages/ey/chat/Container";
+import { useNavigate } from "react-router-dom";
 
 const SeniorMenu = () => {
+    //const navigate = useNavigate();
+
   return (
     <Container>
       <div className={styles.menuContainer}>
         {/* 말동무 대화하기 */}
-        <div className={`${styles.menuButton} ${styles.div1}`}>
+        <div className={`${styles.menuButton} ${styles.div1}`} onClick={handleChatButton}>
           <img src={chatIcon} alt="말동무 대화하기" />
           <p>
             말동무 <br />
