@@ -36,7 +36,6 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/tjmain" className={styles.navItem}>
                 태장
               </Link>
             </li>
