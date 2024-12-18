@@ -1,17 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
-import styles from './QNAList.module.css'
+import styles from './QnAList.module.css'
 
-function QNAList() {
+
+const QnAList = () => {
 
   const navigate = useNavigate();
 
-  const handleMoveDetailView= () => {
+  const handleMoveDetailView = () => {
     navigate("/");
   };
 
+  //등록 페이지 이동
+  const handleWriteClick = () => {
+    navigate('/qna/write'); 
+  };
+  
   return (
     <div>
       <SideBar />
@@ -24,7 +32,7 @@ function QNAList() {
               <option value="date">날짜</option>
           </select>
           <input className={styles.qnaInput}></input>
-          <button className={styles.qnaInputBTN}>등 록</button>
+          <button className={styles.qnaInputBTN} onClick={handleWriteClick}>등 록</button>
         </div>
         <table className={styles.qnaListTable}>
           <tr>
@@ -98,6 +106,6 @@ function QNAList() {
       </div>
     </div>
   );
-}
+};
 
-export default QNAList;
+export default QnAList;
