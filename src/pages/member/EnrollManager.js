@@ -20,6 +20,16 @@ function EnrollManager() {
   });
 
   const navigate = useNavigate();
+  // 아이디 사용가능여부 상태변수
+  const [isIdAvailable, setIsAvailable] = useState(null);
+  // 아이디 사용가능여부에 따른 메세지 출력 변수
+  const [idCheckMsg, setIdCheckMsg] = useState('');
+  // 아이디 중복검사여부에 다른 메세지 컬러 변경 상태변수
+  const [messageIdColor, setMessageIdColor] = useState('');
+  // 비밀번호 중복검사여부에 따른 메세지 상태변수
+  const [passwordCheckMsg, setPasswordCheckMsg] = useState('');
+  // 비밀번호 중복검사여부에 따른 메세지 컬러 변경 상태변수
+  const [messagePwdColor, setMessagePwdColor] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target; // 이벤트에서 name과 value를 추출
@@ -29,8 +39,66 @@ function EnrollManager() {
     }));
   };
 
+  // 아이디 중복검사 버튼 클릭시 작동하는 핸들러
+  const handleIdCheck = async (e) => {
+    e.preventDefault(); // 기본 동작 방지 (중요)
+    if (!formData.memId) {
+      setIdCheckMsg('아이디를 입력해주세요.');
+      setMessageIdColor('red');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/member/idchk',
+        null,
+        {
+          params: { memId: formData.memId }, // 서버로 전달할 id 값
+        }
+      );
+      if (response.data === 'ok') {
+        setIsAvailable(true);
+        setIdCheckMsg('사용가능한 아이디입니다.');
+        setMessageIdColor('green');
+      } else {
+        setIsAvailable(false);
+        setIdCheckMsg('이미 사용중인 아이디입니다.');
+        setMessageIdColor('red');
+      }
+    } catch (error) {
+      console.error('아이디 중복검사 실패 : '.error);
+    }
+  };
+
+  // formdata 전송 전 input 값 유효성 검사 처리용 함수
+  const validate = () => {
+    // 비밀번호 일치 확인
+    if (formData.memPw !== formData.memPwChk) {
+      setPasswordCheckMsg('비밀번호가 일치하지 않습니다.');
+      setMessagePwdColor('red');
+      return false;
+    } else {
+      setPasswordCheckMsg(' 비밀번호가 일치합니다.');
+      setMessagePwdColor('green');
+      return true;
+    }
+  };
+
+  // 비밀번호 확인 input 의 포커스가 사라지면 유효성검사를 작동시키는 함수
+  const handleConfirmPwd = () => {
+    if (formData.memPwChk) {
+      validate();
+    }
+  };
+
+  // 가입 버튼 클릭시 작동하는 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault(); // 이벤트 발생 제거(submit 이벤트 취소) - 기본 폼 제출 방지
+
+    // 전송 전에 유효성 검사 확인
+    if (!validate()) {
+      return;
+    }
 
     const data = new FormData(); // 커맨드객체 작동을 위한 명칭 일치
     data.append('memId', formData.memId);
@@ -78,20 +146,47 @@ function EnrollManager() {
             />
           </tr>
           <tr className={styles.valuebox}>아이디</tr>
+
           <tr>
             <input
               type="text"
               name="memId"
               onChange={handleChange}
+              className={styles.textbox}
               style={{
                 width: '350px',
                 borderStyle: 'solid',
                 height: '30px',
                 marginRight: '20px',
-                marginBottom: '10px',
+                marginBottom: 0,
               }}
             />
-            <button className={styles.button2}>중복확인</button>
+            <button className={styles.button2} onClick={handleIdCheck}>
+              중복확인
+            </button>
+          </tr>
+          <tr>
+            {setIsAvailable == true ? (
+              <span
+                style={{
+                  color: messageIdColor,
+                  fontSize: '10px',
+                  marginTop: 0,
+                }}
+              >
+                {idCheckMsg}
+              </span>
+            ) : (
+              <span
+                style={{
+                  color: messageIdColor,
+                  fontSize: '10px',
+                  marginTop: 0,
+                }}
+              >
+                {idCheckMsg}
+              </span>
+            )}
           </tr>
           <tr className={styles.valuebox}>비밀번호</tr>
           <tr>
@@ -111,25 +206,32 @@ function EnrollManager() {
               height: '20px',
             }}
           >
+            {}
             대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
           </tr>
           <tr className={styles.valuebox}>비밀번호 확인</tr>
           <tr>
             <input
               type="password"
+              name="memPwChk"
               className={styles.textbox}
+              onChange={handleChange}
               style={{ marginBottom: '0' }}
+              onBlur={handleConfirmPwd}
             />
           </tr>
           <tr
             style={{
               textAlign: 'left',
               fontSize: '10px',
-              color: 'red',
+              color: messagePwdColor,
               height: '20px',
             }}
             name="pwdCheck"
-          ></tr>
+          >
+            {messagePwdColor === 'green' && <span>&#x2714;</span>}
+            {passwordCheckMsg}
+          </tr>
           <tr className={styles.valuebox}>이메일</tr>
           <tr>
             <input

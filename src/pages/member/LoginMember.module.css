@@ -2,8 +2,17 @@
 
 .loginform {
   display: flex;
-  margin-top: 15%;
-  margin-left: 40%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* margin-top: 15%;
+  margin-left: 40%; */
+}
+
+.loginform form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logininput {
@@ -14,9 +23,20 @@
   border-style: outset;
   box-sizing: border-box;
   padding: 0 10px;
+  font-size: 20px;
 }
 
 .logininput::placeholder {
   font-size: 20px;
   line-height: normal;
+}
+
+.loginbutton {
+  width: 400px;
+  height: 50px;
+  border-radius: 8px;
+  background-color: #618264;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
 }

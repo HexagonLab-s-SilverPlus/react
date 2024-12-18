@@ -29,13 +29,13 @@
   cursor: pointer;
 }
 
-
 .textbox {
   width: 480px;
   height: 30px;
   margin-bottom: 5px;
   font-size: 18px;
   border-style: solid;
+  border-radius: 3px;
 }
 
 .valuebox {
@@ -44,4 +44,3 @@
   font-size: 18px;
   letter-spacing: 2px;
 }
-
