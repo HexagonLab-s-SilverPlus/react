@@ -51,7 +51,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/eymain" className={styles.navItem}>
+              <Link to="/welcome-chat" className={styles.navItem}>
                 은영
               </Link>
             </li>
