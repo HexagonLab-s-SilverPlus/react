@@ -4,6 +4,7 @@ import arrowIcon from '../../assets/images/Arrow up-circle.png'
 import Container from '../../pages/ey/chat/Container';
 import { useNavigate } from 'react-router-dom';
 
+
 function WelcomePage() {
     const navigate = useNavigate();
 
