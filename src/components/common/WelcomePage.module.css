@@ -1,0 +1,89 @@
+/* 전체 컨테이너 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    padding: 4rem;
+    box-sizing: border-box;
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* 텍스트 콘텐츠 */
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    color: #003300;
+    line-height: 1.2;
+  }
+  
+  .description {
+    font-size: 28px;
+    color: #666;
+    margin: 1rem 0 2rem 0;
+  }
+  
+  /* 입력창 컨테이너 */
+  .inputContainer {
+    display: flex;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 50px;
+    overflow: hidden;
+    width: 926px;
+    height: 96px;
+  }
+  
+  .input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    padding: 0 1.5rem;
+    color: #333;
+    font: 32px;
+  }
+  
+  .arrowButton {
+    background-color: transparent;
+    border: none;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+  
+  .arrowIcon {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+  }
+  
+  /* 로그인 버튼 */
+  .loginButton {
+    background-color: #003300;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 60px;
+    font-weight: bold;
+    width: 375px;
+    height: 216px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .arrowRight {
+    font-size: 60px;
+    margin-left: 10px;
+  }
+  
