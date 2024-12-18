@@ -1,0 +1,39 @@
+/* src/pages/member/EnrollSelect.module.css */
+.enrollButton {
+  display: flex; /* Flexbox 적용 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 150px; /* 두 div 사이 간격 */
+  margin-top: 15%;
+}
+
+.button1 {
+  width: 300px;
+  height: 300px;
+  border-radius: 50px;
+  border: 0;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #739072;
+}
+
+.button1:hover {
+  background-color: #37493a;
+}
+
+.button2 {
+  width: 300px;
+  height: 300px;
+  border-radius: 50px;
+  border: 0;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #88ab8e;
+}
+
+.button2:hover {
+  background-color: #37493a;
+}

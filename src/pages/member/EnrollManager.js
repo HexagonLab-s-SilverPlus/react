@@ -1,22 +1,22 @@
-// src/pages/tj/TJmain.js
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// src/pages/member/EnrollManager.js
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import { jwtDecode } from "jwt-decode"; // jwt-decode jwt 토큰 사용시 필요한 패키지
-import styles from "./Enroll.module.css";
+import styles from './Enroll.module.css';
 
-function TJmain() {
+function EnrollManager() {
   const [formData, setFormData] = useState({
-    memId: "", // 아이디
-    memPw: "", // 비밀번호
-    memName: "", // 이름
-    memEmail: "", // 이메일
-    memAddress: "", // 주소
-    memCellphone: "", // 휴대전화
+    memId: '', // 아이디
+    memPw: '', // 비밀번호
+    memName: '', // 이름
+    memEmail: '', // 이메일
+    memAddress: '', // 주소
+    memCellphone: '', // 휴대전화
     // memPhone: '',       // 일반전화
-    memRnn: "", // 주민등록번호
+    memRnn: '', // 주민등록번호
     // memGovCode: '', // 관공서 코드
-    memType: "ADMIN", // 회원타입
+    memType: 'ADMIN', // 회원타입
   });
 
   const navigate = useNavigate();
@@ -33,38 +33,39 @@ function TJmain() {
     e.preventDefault(); // 이벤트 발생 제거(submit 이벤트 취소) - 기본 폼 제출 방지
 
     const data = new FormData(); // 커맨드객체 작동을 위한 명칭 일치
-    data.append("memId", formData.memId);
-    data.append("memPw", formData.memPw);
-    data.append("memName", formData.memName);
-    data.append("memEmail", formData.memEmail);
-    data.append("memAddress", formData.memAddress);
-    data.append("memCellphone", formData.memCellphone);
-    data.append("memRnn", formData.memRnn);
-    data.append("memType", "ADMIN");
-    data.append("memStatus", "ACTIVE");
+    data.append('memId', formData.memId);
+    data.append('memPw', formData.memPw);
+    data.append('memName', formData.memName);
+    data.append('memEmail', formData.memEmail);
+    data.append('memAddress', formData.memAddress);
+    data.append('memCellphone', formData.memCellphone);
+    data.append('memRnn', formData.memRnn);
+    data.append('memType', 'ADMIN');
+    data.append('memStatus', 'ACTIVE');
 
     try {
-      await axios.post("http://localhost:8080/member", data, {
+      await axios.post('http://localhost:8080/member', data, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-      alert("가입 성공");
-      navigate("/");
+      alert('가입 성공');
+      navigate('/');
     } catch (error) {
-      console.error("가입 실패");
+      console.error('가입 실패');
       console.log(formData);
       console.log(data);
-      alert("가입실패");
+      alert('가입실패');
     }
   };
 
   const handleGoBack = () => {};
 
   return (
-    
     <div>
-      <h3 style={{textAlign: 'center', color: '#064420'}}>기관 담당자 회원가입</h3>
+      <h3 style={{ textAlign: 'center', color: '#064420' }}>
+        기관 담당자 회원가입
+      </h3>
       <form enctype="multipart/form-data" onSubmit={handleSubmit}>
         <table className={styles.enrollForm}>
           <tr className={styles.valuebox}>이름</tr>
@@ -83,11 +84,11 @@ function TJmain() {
               name="memId"
               onChange={handleChange}
               style={{
-                width: "350px",
-                borderStyle: "solid",
-                height: "30px",
-                marginRight: "20px",
-                marginBottom: "10px",
+                width: '350px',
+                borderStyle: 'solid',
+                height: '30px',
+                marginRight: '20px',
+                marginBottom: '10px',
               }}
             />
             <button className={styles.button2}>중복확인</button>
@@ -99,15 +100,15 @@ function TJmain() {
               name="memPw"
               onChange={handleChange}
               className={styles.textbox}
-              style={{ marginBottom: "0" }}
+              style={{ marginBottom: '0' }}
             />
           </tr>
           <tr
             style={{
-              textAlign: "left",
-              fontSize: "10px",
-              color: "red",
-              height: "20px",
+              textAlign: 'left',
+              fontSize: '10px',
+              color: 'red',
+              height: '20px',
             }}
           >
             대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
@@ -117,15 +118,15 @@ function TJmain() {
             <input
               type="password"
               className={styles.textbox}
-              style={{ marginBottom: "0" }}
+              style={{ marginBottom: '0' }}
             />
           </tr>
           <tr
             style={{
-              textAlign: "left",
-              fontSize: "10px",
-              color: "red",
-              height: "20px",
+              textAlign: 'left',
+              fontSize: '10px',
+              color: 'red',
+              height: '20px',
             }}
             name="pwdCheck"
           ></tr>
@@ -163,12 +164,12 @@ function TJmain() {
               name=""
               onChange={handleChange}
               className={styles.textbox}
-              style={{ width: "350px" }}
+              style={{ width: '350px' }}
             />
             <button
               className={styles.button2}
               style={{
-                marginLeft: "20px",
+                marginLeft: '20px',
               }}
             >
               검색
@@ -182,12 +183,12 @@ function TJmain() {
               onChange={handleChange}
               className={styles.textbox}
               placeholder="'-' 없이 입력"
-              style={{ width: "350px" }}
+              style={{ width: '350px' }}
             />
             <button
               className={styles.button2}
               style={{
-                marginLeft: "20px",
+                marginLeft: '20px',
               }}
             >
               인증번호 받기
@@ -200,12 +201,12 @@ function TJmain() {
               onChange={handleChange}
               className={styles.textbox}
               placeholder="인증번호 입력"
-              style={{ width: "350px" }}
+              style={{ width: '350px' }}
             />
             <button
               className={styles.button2}
               style={{
-                marginLeft: "20px",
+                marginLeft: '20px',
               }}
             >
               인증
@@ -215,7 +216,7 @@ function TJmain() {
             <button
               className={styles.button1}
               onClick={handleGoBack}
-              style={{ backgroundColor: "#d9d9d9", color: "#333333" }}
+              style={{ backgroundColor: '#d9d9d9', color: '#333333' }}
             >
               이전
             </button>
@@ -223,7 +224,7 @@ function TJmain() {
               type="submit"
               value="가입"
               className={styles.button1}
-              style={{ marginLeft: "90px" }}
+              style={{ marginLeft: '90px' }}
             />
           </tr>
         </table>
@@ -232,4 +233,4 @@ function TJmain() {
   );
 }
 
-export default TJmain;
+export default EnrollManager;
