@@ -1,8 +1,8 @@
 // src/pages/notice/NoticeList.js
 
 import React,{useState} from "react";
-import SeniorNavbar from '../../components/sm/senior/common/SeniorNavbar';
-import SeniorFooter from '../../components/sm/senior/common/SeniorFooter';
+import SeniorNavbar from '../../components/common/SeniorNavbar';
+import SeniorFooter from '../../components/common/SeniorFooter';
 import styles from './NoticeList.module.css'
 import search from '../../assets/images/search.png'
 import up from '../../assets/images/keyboard_arrow_up.png'
