@@ -8,7 +8,7 @@ import SeniorMenu from '../components/SeniorMenu';
 // 'eyRouter'를 const로 변경
 const eyRouter = (
   <>
-    <Route path="/eymain" element={<EYmain />} />
+    <Route path="/welcome-chat" element={<EYmain />} />
     <Route path="/chat" element={<ChatPage />} />
     <Route path="/senior-menu" element={<SeniorMenu />} />
   </>

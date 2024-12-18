@@ -9,8 +9,12 @@ import Container from "../pages/ey/chat/Container";
 import { useNavigate } from "react-router-dom";
 
 const SeniorMenu = () => {
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
+    const handleChatButton = () => {
+      navigate('/welcome-chat')
+
+    }
   return (
     <Container>
       <div className={styles.menuContainer}>
