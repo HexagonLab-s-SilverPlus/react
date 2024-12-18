@@ -1,5 +1,4 @@
 // src/pages/notice/NoticeList.js
-
 import React,{useState} from "react";
 import SeniorNavbar from '../../components/common/SeniorNavbar';
 import SeniorFooter from '../../components/common/SeniorFooter';
