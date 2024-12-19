@@ -1,7 +1,7 @@
 // src/pages/member/LoginMember.js
 import React, { useState, useContext } from 'react';
 import styles from './LoginMember.module.css';
-import axios from 'axios';
+import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 import SideBar from '../../components/common/SideBar';
 
@@ -14,8 +14,8 @@ const LoginMember = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login',
+      const response = await apiSpringBoot.post(
+        '/login',
         {
           memId: memId,
           memPw: memPw,
