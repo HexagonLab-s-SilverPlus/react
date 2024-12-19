@@ -3,7 +3,7 @@
 // 전역 상태 관리자 : 로그인 여부 상태와 accessToken, refreshToken 상태 관리가 목적임
 
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import {apiSpringBoot} from './utils/axios';
 
 // Context 생성
 export const AuthContext = createContext();
@@ -32,10 +32,12 @@ export const AuthProvider = ({ children }) => {
     role: '',
     memName: '',
     memId: '',
+    member: null,
   });
 
   // 로그인 함수 : 로그인 시 토큰을 저장하고 로그인 상태를 업데이트 처리함
   const login = ({ accessToken, refreshToken }) => {
+    // 로컬스토리지에 엑세스토큰과 리프레시토큰 저장
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }) => {
       role: parsedToken.role, // JWTUtil 클래스에서 토큰 생성 메소드를 확인해서 이름 맞춤
       memName: parsedToken.name, // JWTUtil 클래스에서 토큰 생성 메소드를 확인해서 이름 맞춤
       memId: parsedToken.sub, // 토큰에서 subject 정보 추출
+      member: parsedToken.member,
     });
 
     console.log('login : ', authInfo);
@@ -69,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   // 로그아웃 함수 : 로그인 상태를 초기화하고, 로컬 스토리지에 저장된 토큰 삭제 처리
   const logout = async (refreshToken) => {
     try {
-      const response = await axios.get('http://localhost:8080/logout', {
+      const response = await apiSpringBoot.get('/logout', {
         headers: {
           Authorization: `Bearer ${refreshToken.refreshToken}`,
         },
@@ -84,6 +87,7 @@ export const AuthProvider = ({ children }) => {
         role: '',
         memName: '',
         memId: '',
+        member: null,
       });
     } catch (error) {}
   };
@@ -98,7 +102,7 @@ export const AuthProvider = ({ children }) => {
       // const response = await axios.post('http://localhost:8080/reissue', {refreshToken});
 
       // 만들어 놓은 reissue 컨트롤러에서는 request header 에 'Bearer' 뒤에 추가한 것을 추출하게 해 놓았음
-      const response = await apiClient.post('/reissue', {
+      const response = await apiSpringBoot.post('/reissue', {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
         },
@@ -113,6 +117,7 @@ export const AuthProvider = ({ children }) => {
         memName: parsedToken.name,
         memId: parsedToken.sub,
         accessToken: newAccessToken,
+        member: parsedToken.member,
       });
     } catch (error) {
       console.error('Failed to refreshToken : ', error);
@@ -133,6 +138,7 @@ export const AuthProvider = ({ children }) => {
           memId: parsedToken.sub,
           accessToken: accessToken,
           refreshToken: refreshToken,
+          member: parsedToken.member,
         });
       }
     }
