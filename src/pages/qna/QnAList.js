@@ -1,6 +1,6 @@
 import React,{ useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../../utils/axios';
+import {apiSpringBoot} from '../../utils/axios';
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
 import styles from './QnAList.module.css';
@@ -25,7 +25,7 @@ const QnAList = () => {
   useEffect(() => {
     const handleMyQnAView = async (uuid) => {
       try{
-        const response = await apiClient.get(`/qna/mylist?uuid=${uuid}`,{
+        const response = await apiSpringBoot.get(`/qna/mylist?uuid=${uuid}`,{
           headers: {
             Authorization: `Bearer ${accessToken}`
         }
