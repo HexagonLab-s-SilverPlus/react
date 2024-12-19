@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,6 +8,14 @@ import styles from './QnAList.module.css'
 
 
 const QnAList = () => {
+  const [test, setTest] = useState({
+    qnaTitle: "",
+  })
+  const [qnaList, setQnaList] = useState({
+    qnaTitle: "asd",
+    qnaWCreateBy: "",
+    qnaADCreateAt: "",
+  });
 
   const navigate = useNavigate();
 
@@ -19,6 +27,24 @@ const QnAList = () => {
   const handleWriteClick = () => {
     navigate('/qna/write'); 
   };
+
+  const handleMyQnAView = async (uuid) => {
+    try{
+      const response = await axios.get(`http://localhost:8080/qna/mylist`,{params: {uuid: uuid}});
+      console.info("response : " + response.data);
+    } catch{
+      console.info('에러러러러러러러'); // 에러 메시지 설정
+    }
+    
+    
+  }
+
+  useEffect(() => {
+    handleMyQnAView("ai-uuid-1234-5678-90ab-cdef12345678");
+  }, []);
+
+
+ 
   
   return (
     <div>
