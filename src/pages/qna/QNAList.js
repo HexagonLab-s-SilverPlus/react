@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
-import styles from './QnAList.module.css'
+import styles from './QnAList.module.css';
 
 
 const QnAList = () => {
