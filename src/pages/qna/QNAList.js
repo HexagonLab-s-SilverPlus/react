@@ -56,9 +56,6 @@ const QnAList = () => {
     return `${year}/${month}/${day} ${hour}:${minute}`;
   };
 
-
- 
-  
   return (
     <div>
       <SideBar />
@@ -67,7 +64,6 @@ const QnAList = () => {
         <div className={styles.qnaSeachdiv}>
           <select className={styles.qnaSeachselect}>
               <option value="title" selected>제목</option>
-              <option value="writer">작성자</option>
               <option value="date">날짜</option>
           </select>
           <input className={styles.qnaInput}></input>
@@ -75,74 +71,18 @@ const QnAList = () => {
         </div>
         <table className={styles.qnaListTable}>
           <tr>
-            <th className={styles.qnaTitleH}>제목</th>
-            <th className={styles.qnaWCreateByH}>작성자</th>
+            <th> 제목</th>
             <th className={styles.qnaWCreateAtH}>마지막 수정 날짜</th>
             <th className={styles.qnaStateH}>상태</th>
           </tr>
           
           {qnaList.map((test) => (
           <tr>
-            <td>{test.qna_title}</td>
-            <td>{test.qna_wcreate_by}</td>
-            <td>{formatDate(test.qna_wupdate_at)}</td>
+            <td><button onClick={handleMoveDetailView}>{test.qna_title}</button></td>
+            <td className={styles.qnaWCreateAt}>{formatDate(test.qna_wupdate_at)}</td>
+            <td className={styles.qnaStateN}>미답변</td>
           </tr>
           ))}
-           
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateN}>미답변</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateN}>미답변</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateN}>미답변</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
-          <tr>
-            <td ><button onClick={handleMoveDetailView}>아이디를 까먹었어요</button></td>
-            <td className={styles.qnaWCreateBy}>작성자</td>
-            <td className={styles.qnaWCreateAt}>2024/12/15</td>
-            <td className={styles.qnaStateY}>답변완료</td>
-          </tr>
           
         </table>
       </div>
