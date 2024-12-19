@@ -1,5 +1,6 @@
 // src/pages/notice/NoticeList.js
 import React,{useState} from "react";
+import { Link } from "react-router-dom";
 import SeniorNavbar from '../../components/common/SeniorNavbar';
 import SeniorFooter from '../../components/common/SeniorFooter';
 import styles from './NoticeList.module.css'
@@ -70,6 +71,9 @@ function NoticeList() {
                             alt="검색"
                         />
                         &nbsp;
+                    </div>
+                    <div>
+                        <button><Link to='/noticeWrite'>등록</Link></button>
                     </div>
                 </div>
             </div>
