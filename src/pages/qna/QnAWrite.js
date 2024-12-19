@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import apiClient from '../../utils/axios';
+import {apiSpringBoot} from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 
@@ -35,7 +35,7 @@ const QnAWrite = () => {
         // }
         
         try {
-            await apiClient.post('/qna', data,{
+            await apiSpringBoot.post('/qna', data,{
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

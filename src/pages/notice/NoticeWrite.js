@@ -2,7 +2,7 @@
 import React,{useState,useEffect,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from "../../AuthProvider"
-import apiClient from '../../utils/axios';
+import {apiSpringBoot} from '../../utils/axios';
 //import axios from 'axios';
 
 const NoticeWrite = () => {
@@ -43,7 +43,7 @@ const NoticeWrite = () => {
             console.log("data"+data);
 
             try{
-                await apiClient.post('/notice',data,{
+                await apiSpringBoot.post('/notice',data,{
                     headers:{
                         'Content-Type':'multipart/form-data',
                         Authorization: `Bearer ${accessToken}`,
