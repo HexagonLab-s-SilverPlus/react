@@ -1,6 +1,7 @@
 // src/pages/member/EnrollManager.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiSpringBoot } from '../../utils/axios';
 import axios from 'axios';
 // import { jwtDecode } from "jwt-decode"; // jwt-decode jwt 토큰 사용시 필요한 패키지
 import styles from './Enroll.module.css';
@@ -49,13 +50,9 @@ function EnrollManager() {
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/member/idchk',
-        null,
-        {
-          params: { memId: formData.memId }, // 서버로 전달할 id 값
-        }
-      );
+      const response = await apiSpringBoot.post('/member/idchk', null, {
+        params: { memId: formData.memId }, // 서버로 전달할 id 값
+      });
       if (response.data === 'ok') {
         setIsAvailable(true);
         setIdCheckMsg('사용가능한 아이디입니다.');
@@ -112,7 +109,7 @@ function EnrollManager() {
     data.append('memStatus', 'ACTIVE');
 
     try {
-      await axios.post('http://localhost:8080/member', data, {
+      await apiSpringBoot.post('/member', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
