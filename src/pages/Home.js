@@ -1,7 +1,8 @@
 
 // src/pages/Home.js
 import React from 'react';
-import logo from '../assets/images/logo.png'; // 로고 이미지 임포트
+import { Link } from 'react-router-dom';
+import logo from '../assets/images/logo2.png'; // 로고 이미지 임포트
 import styles from './Home.module.css';
 
 function Home() {
@@ -10,10 +11,43 @@ function Home() {
         <div className={styles.container2}>
             <img src={logo} alt="Site Logo"/> 
         </div>
-        <div className={styles.container}>
-            <h2>안녕하세요.실버님<br/>오늘의 기분은 어떠신가요?</h2>
-            <p>말씀해 주시면 목소리가 자동으로 입력됩니다. 편하게 대화해 보세요.</p>
-        </div>
+        <ul className={styles.navList}>
+            <li>
+              <Link to="/">
+                홈
+              </Link>
+            </li>
+            <li>
+              <Link to="/qna">
+                홍세
+              </Link>
+            </li>
+            <li>
+              <Link to="/smmain">
+                상무
+              </Link>
+            </li>
+            <li>
+              <Link to="/tjmain">
+                태장
+              </Link>
+            </li>
+            <li>
+              <Link to="/sjmain">
+                수진
+              </Link>
+            </li>
+            <li>
+              <Link to="/simain">
+                서이
+              </Link>
+            </li>
+            <li>
+              <Link to="/eymain">
+                은영
+              </Link>
+            </li>
+          </ul>
     </div>
   );
 }

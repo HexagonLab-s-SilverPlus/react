@@ -1,0 +1,39 @@
+name-template: 'Release v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+
+categories:
+  - title: 🚀 Enhancements
+    labels:
+      - enhancement
+  - title: 🛠 Bug Fixes
+    labels:
+      - bug
+  - title: 📚 Documentation Updates
+    labels:
+      - documentation
+  - title: ❓ Questions and Help
+    labels:
+      - question
+      - help wanted
+  - title: 🚨 Invalid or Duplicate Issues
+    labels:
+      - invalid
+      - duplicate
+  - title: 💡 Suggestions and First Issues
+    labels:
+      - good first issue
+  - title: 🧹 Maintenance
+    labels:
+      - wontfix
+      - chore
+
+change-template: '- $TITLE (#$NUMBER)'
+no-changes-template: '- No changes to document in this release.'
+
+template: |
+  ## What's Changed
+  $CHANGES
+
+  ## Contributors
+  Thanks to the following contributors:
+  $CONTRIBUTORS
