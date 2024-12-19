@@ -1,17 +1,19 @@
-import React, {useState, use} from 'react';
-import axios from 'axios';
+import React, {useState, useContext} from 'react';
+import apiClient from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../AuthProvider';
 
 const QnAWrite = () => {
     const navigate = useNavigate();
+    const { accessToken} = useContext(AuthContext);   // AuthProvider 에서 가져오기
 
     const [formData, setFormData] = useState({
-        qnaTitle: null,       // 제목
-        qnaWCreateBy: "ai-uuid-1234-5678-90ab-cdef12345678",   // 질문자 
-        qnaWContent: null,    // 질문내용
-        qnaADContent: null,    // 답변내용
-        qnaADCreateBy: null,  // 답변자
-        qnaADUpdateBy: null,  // 답변자(수정)
+        qnaTitle: "",       // 제목
+        qnaWCreateBy: "5e74da53-b1ff-4806-a15c-6c98c1508e0d",   // 질문자 
+        qnaWContent: "",    // 질문내용
+        qnaADContent: "",    // 답변내용
+        qnaADCreateBy: "",  // 답변자
+        qnaADUpdateBy: "",  // 답변자(수정)
     });
 
     const handleChange = (e) => {
@@ -33,7 +35,11 @@ const QnAWrite = () => {
         // }
         
         try {
-            await axios.post('http://localhost:8080/qna', data);
+            await apiClient.post('/qna', data,{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
             alert('QnA 등록 성공');
             // 게시글 등록이 성공되면 공지 목록 페이지로 이동
             navigate('/qna');
@@ -55,11 +61,11 @@ const QnAWrite = () => {
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <input type="text" name="qnaWCreateBy" value={formData.qnaWCreateBy} onChange={handleChange}></input>
+                        <input type="text" name="qnaWCreateBy" value={formData.qnaWCreateBy} onChange={handleChange} readOnly></input>
                     </tr>
                     <tr>
                         <th>질문내용</th>
-                        <input type="text" name="qnaWContent" onChange={handleChange}></input>
+                        <textarea type="text" name="qnaWContent" onChange={handleChange}></textarea>
                     </tr>
                     <input type='submit' value="등록하기" />
                 </table>
