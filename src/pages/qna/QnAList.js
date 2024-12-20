@@ -5,11 +5,19 @@ import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
 import styles from './QnAList.module.css';
 import { AuthContext } from '../../AuthProvider';
+import Paging from '../../components/common/Paging';
 
 
 const QnAList = () => {
-  const { accessToken, authInfo} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+  const { accessToken, role} = useContext(AuthContext);   // AuthProvider 에서 가져오기
   const [qnaList, setQnaList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
+  const [pagingInfo, setPagingInfo] = useState({
+    currentPage: 1,
+    maxPage: 1,
+    startPage: 1,
+    endPage: 1,
+  });
 
   const navigate = useNavigate();
 
@@ -22,26 +30,50 @@ const QnAList = () => {
     navigate('/qna/write'); 
   };
 
-  useEffect(() => {
-    const handleMyQnAView = async (uuid) => {
+  const handleMyQnAView = async (uuid, page, limit) => {
       try{
-        const response = await apiSpringBoot.get(`/qna/mylist?uuid=${uuid}`,{
-          headers: {
-            Authorization: `Bearer ${accessToken}`
+        if(role === "ADMIN") {
+          const response = await apiSpringBoot.get(`/qna/mylist`,{
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }, {
+            params: {
+              page: {page},
+              limit: {limit},
+            },
+          });
+          setQnaList(response.data.qna);
+          setMemberList(response.data.member);
+        } else {
+          const response = await apiSpringBoot.get(`/qna/mylist`,{
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            },
+          }, {
+            params: {
+              uuid: {uuid},
+              page: {page},
+              limit: {limit},
+            },
+          });
+          setQnaList(response.data.qna);
+          setMemberList(response.data.member);
         }
-      });
-      setQnaList(response.data.list);
-      console.info("response QnA : " + JSON.stringify(response.data.list));
-      console.info("response paging : " +  JSON.stringify(response.data.paging));
-      console.info(response.data.list);
-  
+
       } catch (e){
         console.log("error : {}", e); // 에러 메시지 설정
-      }
-    }
+      }    
+  }
 
-    handleMyQnAView("5e74da53-b1ff-4806-a15c-6c98c1508e0d");
-  }, [accessToken]);
+  useEffect(() => {
+    handleMyQnAView("5e74da53-b1ff-4806-a15c-6c98c1508e0d", 1, 10);
+    // handleMyQnAView("CECE02F57F344658B7482F5F59F7F998");
+  }, [accessToken] );
+
+  const handlePageChange = async (page) => {
+    handleMyQnAView("5e74da53-b1ff-4806-a15c-6c98c1508e0d", 1, 10);  //일반 목록 페이지 요청
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -71,21 +103,33 @@ const QnAList = () => {
         </div>
         <table className={styles.qnaListTable}>
           <tr>
-            <th> 제목</th>
+            <th>제목</th>
+            <th>이름</th>
             <th className={styles.qnaWCreateAtH}>마지막 수정 날짜</th>
             <th className={styles.qnaStateH}>상태</th>
           </tr>
           
-          {qnaList.map((test) => (
+          {qnaList.map((qna, index) => (
           <tr>
-            <td><button onClick={handleMoveDetailView}>{test.qna_title}</button></td>
-            <td className={styles.qnaWCreateAt}>{formatDate(test.qna_wupdate_at)}</td>
+            <td><button onClick={handleMoveDetailView}>{qna.qna_title}</button></td>
+            <td>{memberList[index].mem_name}</td>
+            <td className={styles.qnaWCreateAt}>{formatDate(qna.qna_wupdate_at)}</td>
             <td className={styles.qnaStateN}>미답변</td>
           </tr>
           ))}
-          
+   
         </table>
+        <div className={styles.pagingDiv}>
+          <Paging 
+            currentPag={pagingInfo.currentPage || 1}
+            maxPage={pagingInfo.maxPage || 1}
+            startPage={pagingInfo.startPage || 1}
+            endPage={pagingInfo.endPage || 1}
+            onPageChange={(page) => handlePageChange(page)}
+          />
+        </div>
       </div>
+      
     </div>
   );
 };
