@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     console.log('login : ', authInfo);
+    console.log('member:', authInfo.member) // member 객체가 포함되었는지 확인인
   };
 
   // // 로그아웃 함수 : 로그인 상태를 초기화하고, 로컬 스토리지에 저장된 토큰 삭제 처리

@@ -34,14 +34,14 @@ function EYmain() {
 
   // 워크스페이스 확인 함수
   const fetchWorkspace = async () => {
-    if(member?.memUuid){
-      console.warn("member.memUuid가 비어 있습니다.");
+    if(!member?.memUUID){ //* '!'를 빠뜨려서 memUuid가 있으면 반환됐었음 -> ! 추가해서 memUuid가 비어 있으 때 경고 출력력
+      console.warn("member.memUUID가 비어 있습니다.");
       return;
 
     }
     try {
       // 워크스페이스 조회하는 스프링부트 엔드포인트 get 요청
-      const response = await apiSpringBoot.get(`/api/workspace/${member.memUuid}`);
+      const response = await apiSpringBoot.get(`/api/workspace/${member.memUUID}`);
       const { data } = response.data; // 워크스페이스 DTO 반환환
       if (data) {
         setWorkspaceId(data.workspaceId); // 워크스페이스 DTO로부터터 고유ID 추출해서 setter
@@ -60,12 +60,13 @@ function EYmain() {
 
   // 컴포넌트 마운트 시 워크스페이스 확인
   useEffect(() => {
+    console.log('workspaceId:', workspaceId);
     console.log('member:', member);
 
-    if (member?.memUuid) {
+    if (member?.memUUID) {
       fetchWorkspace();
     }
-  }, [member.memUuid]); // 로그인한 멤버가 바뀔 때마다 워크스페이스 조회를 해 옴
+  }, [member.memUUID]); // 로그인한 멤버가 바뀔 때마다 워크스페이스 조회를 해 옴
 
 
 
@@ -82,6 +83,8 @@ function EYmain() {
     console.log('InputText:', inputText);
 
     try {
+      console.log("AccessToken: ", accessToken);
+
       // 전송한 메시지와 함께 Flask 서버의 채팅 저장 엔드포인트 post 호출하면서 ai 응답을 기다림
       const response = await apiFlask.post('/chat', { message: inputText }, {
         headers: { Authorization: `Bearer ${accessToken}` },
