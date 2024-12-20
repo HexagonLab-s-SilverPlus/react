@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './EYmain.module.css'; // 스타일링을 위한 CSS 파일 import
+import styles from './WelcomeChat.module.css'; // 스타일링을 위한 CSS 파일 import
 import Container from './Container.js';
 import { AuthContext } from '../../../AuthProvider.js';
 
-function EYmain() {
+function WelcomeChat() {
   // 입력 상태 관리
   const [inputText, setInputText] = useState('');
   const navigate = useNavigate(); // useNavigate 훅 초기화
@@ -50,9 +50,7 @@ function EYmain() {
         setWorkspaceId(data.workspaceId); // 워크스페이스 DTO로부터터 고유ID 추출해서 setter
         // 워크스페이스가 존재할 경우 해당 워크스페이스로 이동동
         navigate(`/w/${data.workspaceId}`, { state: { workspaceId: data.workspaceId } });
-      } else {
-        console.log("워크스페이스 없다.:", response.message);
-      }
+      } 
     } catch (error) {
       if (error.response?.status === 404) {
         console.log("워크스페이스가 존재하지 않습니다.");
@@ -96,9 +94,15 @@ function EYmain() {
 
       const { reply, workspaceId: newWorkspaceId } = response.data;
 
+      // 워크스페이스 ID와 AI 응답 처리리
       if (newWorkspaceId) {
-        navigate(`w/${newWorkspaceId}`, { state: { workspaceId: newWorkspaceId, aiReply: reply } });
+        setWorkspaceId(newWorkspaceId); // 워크스페이스 ID 저장장
+        navigate(`w/${newWorkspaceId}`, { 
+          state: { workspaceId: newWorkspaceId, aiReply: reply },
+         });
       }
+
+      console.log('AI Reply:', reply);
     } catch (error) {
       console.error("메시지 전송 중 오류:", error);
     }
@@ -168,4 +172,4 @@ function EYmain() {
   );
 }
 
-export default EYmain;
+export default WelcomeChat;

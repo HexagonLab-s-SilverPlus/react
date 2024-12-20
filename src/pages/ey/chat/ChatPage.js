@@ -19,7 +19,7 @@ function ChatPage() {
   // 메시지 상태변수 - 배열 형태 [사용자: '', AI: '']
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  const { apiSpringBoot, accessToken } = useContext(AuthContext);
+  const { apiSpringBoot, accessToken, apiFlask } = useContext(AuthContext);
 
   const fetchChatHistory = async () => {
     try {
@@ -27,7 +27,10 @@ function ChatPage() {
       const { data } = response.data;
 
       if (data) {
+        console.log('메시지 이력:', data)
         setMessages(data.map(msg => ({ sender: msg.msgSenderRole, text: msg.msgContent })));
+      }else{
+        console.log('AI와 나눈 대화 없음:', response.message);
       }
     } catch (error) {
       console.error("채팅 기록 불러오기 오류:", error);
