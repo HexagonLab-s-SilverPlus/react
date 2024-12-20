@@ -3,7 +3,7 @@
 // 전역 상태 관리자 : 로그인 여부 상태와 accessToken, refreshToken 상태 관리가 목적임
 
 import React, { createContext, useState, useEffect } from 'react';
-import {apiSpringBoot} from './utils/axios';
+import {apiSpringBoot, apiFlask} from './utils/axios';
 
 // Context 생성
 export const AuthContext = createContext();
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     console.log('login : ', authInfo);
+    console.log('member:', authInfo.member) // member 객체가 포함되었는지 확인인
   };
 
   // // 로그아웃 함수 : 로그인 상태를 초기화하고, 로컬 스토리지에 저장된 토큰 삭제 처리
@@ -151,7 +152,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ ...authInfo, login, logout, refreshAccessToken }}
+      value={{ ...authInfo, login, logout, refreshAccessToken, apiSpringBoot , apiFlask }}
     >
       {children}
     </AuthContext.Provider>
