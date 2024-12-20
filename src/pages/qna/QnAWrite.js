@@ -35,11 +35,7 @@ const QnAWrite = () => {
         // }
         
         try {
-            await apiSpringBoot.post('/qna', data,{
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            await apiSpringBoot.post('/qna', data);
             alert('QnA 등록 성공');
             // 게시글 등록이 성공되면 공지 목록 페이지로 이동
             navigate('/qna');

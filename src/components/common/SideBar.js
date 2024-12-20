@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 
 function SideBar() {
-  const { isLoggedIn, logout, refreshToken } = useContext(AuthContext);
+  const { isLoggedIn, logout, refreshToken, authInfo } =
+    useContext(AuthContext);
 
   const handleLogout = () => {
     if (isLoggedIn) {
       logout({ refreshToken });
       console.log('로그아웃');
+      console.log('authInfo', authInfo);
       alert('로그아웃 성공');
     }
   };
