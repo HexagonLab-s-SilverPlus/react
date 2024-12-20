@@ -15,6 +15,10 @@ const SeniorMenu = () => {
       navigate('/welcome-chat')
 
     }
+    const handleDocButton = () => {
+      navigate('/docmain')
+    }
+
   return (
     <Container>
       <div className={styles.menuContainer}>
@@ -52,7 +56,7 @@ const SeniorMenu = () => {
         </div>
 
         {/* 공문서 작성 */}
-        <div className={`${styles.menuButton} ${styles.div5}`}>
+        <div className={`${styles.menuButton} ${styles.div5}`} onClick={handleDocButton}>
           <p>공문서 작성</p>
           <img src={documentIcon} alt="공문서 작성" />
         </div>
