@@ -24,11 +24,12 @@ const  DocMain = () => {
   return (
     <div className={styles['card-container']}>
       <h2 className={styles.title}>원하시는 공문서를 선택해주세요!</h2> 
-      <button className={styles.card} onClick={handleAddresClick}>전입신고서</button>
-      <button className={styles.card} onClick={handleDeathClick}>사망신고서</button>
-      <button className={styles.card} onClick={handleMedicalClick}>의료급여 신청서</button>
-      <button className={styles.card} onClick={handleBasicClick}>기초연금 신청서</button>
-
+      <div className={styles.cardWrap}>
+        <button className={styles.card} onClick={handleAddresClick}>전입신고서</button>
+        <button className={styles.card} onClick={handleDeathClick}>사망신고서</button>
+        <button className={styles.card} onClick={handleMedicalClick}>의료급여 신청서</button>
+        <button className={styles.card} onClick={handleBasicClick}>기초연금 신청서</button>
+      </div>
     </div>
     
   );
