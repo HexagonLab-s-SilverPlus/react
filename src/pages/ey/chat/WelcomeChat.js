@@ -137,7 +137,7 @@ function WelcomeChat() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown} // Enter 키 핸들러 추가
           />
-          {/* <Link
+          <Link
             to="/chat"
             state={{ userMessage: inputText }} //* 현재 입력한 메시지(inputText)를 chatPage로 전달한다.
             className={`${styles['send-button']} ${styles['button']}`}
@@ -145,18 +145,19 @@ function WelcomeChat() {
             onClick={() => {
               console.log('InputText:', inputText);
               setInputText('');
+              handleSend();
             }}
             style={{ pointerEvents: inputText.trim() ? 'auto' : 'none' }} // 입력값이 없으면 버튼 비활성화
           >
             <span className={styles['arrow-icon']}>➤</span>
-          </Link> */}
-          <button
+          </Link>
+          {/* <button
             className={styles['send-button']}
             onClick={handleSend}
             disabled={!inputText.trim()}
           >
             전송
-          </button>
+          </button> */}
           <button
             className={`${styles['mic-button']} ${styles['button']}`} // 공통 클래스 추가
             aria-label="음소거 버튼"
