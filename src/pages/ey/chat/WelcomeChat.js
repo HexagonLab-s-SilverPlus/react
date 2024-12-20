@@ -97,7 +97,7 @@ function WelcomeChat() {
       // 워크스페이스 ID와 AI 응답 처리리
       if (newWorkspaceId) {
         setWorkspaceId(newWorkspaceId); // 워크스페이스 ID 저장장
-        navigate(`w/${newWorkspaceId}`, { 
+        navigate(`/w/${newWorkspaceId}`, { 
           state: { workspaceId: newWorkspaceId, aiReply: reply },
          });
       }
