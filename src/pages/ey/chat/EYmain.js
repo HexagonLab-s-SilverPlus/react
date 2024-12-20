@@ -1,4 +1,4 @@
-import React, { useState , useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './EYmain.module.css'; // 스타일링을 위한 CSS 파일 import
 import Container from './Container.js';
@@ -10,7 +10,6 @@ function EYmain() {
   const navigate = useNavigate(); // useNavigate 훅 초기화
   const [workspaceId, setWorkspaceId] = useState(null);
   const { apiSpringBoot, apiFlask, member, accessToken } = useContext(AuthContext);
-
 
 
   /*
@@ -34,19 +33,25 @@ function EYmain() {
 
   // 워크스페이스 확인 함수
   const fetchWorkspace = async () => {
-    if(!member?.memUUID){ //* '!'를 빠뜨려서 memUuid가 있으면 반환됐었음 -> ! 추가해서 memUuid가 비어 있으 때 경고 출력력
+    if (!member?.memUUID) { // member.memUUID가 비어 있는 경우 경고고
       console.warn("member.memUUID가 비어 있습니다.");
       return;
 
     }
     try {
+      console.log("memUUID: ", member.memUUID);
+
+
       // 워크스페이스 조회하는 스프링부트 엔드포인트 get 요청
       const response = await apiSpringBoot.get(`/api/workspace/${member.memUUID}`);
       const { data } = response.data; // 워크스페이스 DTO 반환환
       if (data) {
+        console.log("워크스페이스 있다:", data);
         setWorkspaceId(data.workspaceId); // 워크스페이스 DTO로부터터 고유ID 추출해서 setter
         // 워크스페이스가 존재할 경우 해당 워크스페이스로 이동동
         navigate(`/w/${data.workspaceId}`, { state: { workspaceId: data.workspaceId } });
+      } else {
+        console.log("워크스페이스 없다.:", response.message);
       }
     } catch (error) {
       if (error.response?.status === 404) {
@@ -60,7 +65,6 @@ function EYmain() {
 
   // 컴포넌트 마운트 시 워크스페이스 확인
   useEffect(() => {
-    console.log('workspaceId:', workspaceId);
     console.log('member:', member);
 
     if (member?.memUUID) {
@@ -77,7 +81,7 @@ function EYmain() {
   // 메시지 전송 함수
   // handleSend를 쓴다는 것 자체가 기존의 워크스페이스가 전무하다는 뜻
   // 따라서, 메시지 전송 = 워크스페이스 새로 생성 및 이동
-  const handleSend = async() => {
+  const handleSend = async () => {
     if (!inputText.trim()) return; // 빈 입력값 방지
 
     console.log('InputText:', inputText);
