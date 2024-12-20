@@ -28,7 +28,7 @@ const DashList = () => {
                 <h2>정복규님, 안녕하세요!</h2>
                 <div className={styles.buttonContainer}>
                     <button className={`${styles.button} ${styles.blue}`} onClick={ handleSeniorCountClick }>
-                        <span className={styles.pont}>현재 관리중인 어르신 수</span>
+                        <span >현재 관리중인 어르신 수</span>
                         <strong>15명</strong>
                     </button>
                     <button className={`${styles.button} ${styles.red}`} onClick={ handFamilyCountClick }>

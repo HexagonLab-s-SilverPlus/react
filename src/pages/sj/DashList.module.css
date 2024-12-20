@@ -11,15 +11,12 @@
     right: 0;
     box-sizing: border-box;
 }
-.pont{
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;
-}
+
 h2 {
     margin-bottom: 20px;
     color: #333;
 }
+
 
 .buttonContainer {
     display: flex;
@@ -44,7 +41,7 @@ h2 {
 }
 
 .button span {
-    font-size: 14px;
+    font-size: 18px;
     margin-bottom: 5px;
 }
 
