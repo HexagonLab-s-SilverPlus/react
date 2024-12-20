@@ -37,11 +37,17 @@ const NoticeWrite = () => {
     // 등록
     const handleInsertNotice = async (e) => {
         e.preventDefault(); // submit취소
+
+        setFormData((prevFormData)=>({
+            ...prevFormData,
+            [notCreateBy]:member.memUUID,
+            [notUpdateBy]:member.memUUID,
+        }));
         if(window.confirm("공지사항을 등록하시겠습니까?")){
             const data = new FormData();
-            Object.entries(formData).forEach(([k,v])  => data.append(k,v));
-            console.log("data"+data);
-
+            Object.entries(formData).forEach(([key,value])=>data.append(key,value));
+            console.log("notTitle", data.get("notTitle"));
+            console.log("accessToken", accessToken);
             try{
                 await apiSpringBoot.post('/notice',data,{
                     headers:{
