@@ -10,6 +10,7 @@ const QnAWrite = () => {
     const [formData, setFormData] = useState({
         qnaTitle: "",       // 제목
         qnaWCreateBy: "5e74da53-b1ff-4806-a15c-6c98c1508e0d",   // 질문자 
+        // qnaWCreateBy: "CECE02F57F344658B7482F5F59F7F998",   // 질문자 
         qnaWContent: "",    // 질문내용
         qnaADContent: "",    // 답변내용
         qnaADCreateBy: "",  // 답변자

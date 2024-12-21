@@ -4,7 +4,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiSpringBoot } from './utils/axios';
+import {apiSpringBoot, apiFlask} from './utils/axios';
 
 // Context 생성
 export const AuthContext = createContext();
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
 
     console.log('login tokenInfo', tokenInfo);
     console.log('login : ', authInfo);
+    console.log('member:', authInfo.member) // member 객체가 포함되었는지 확인인
   };
 
   // 토큰 저장 함수
@@ -494,7 +495,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ ...authInfo, login, logout, apiSpringBoot, authInfo }}
+      value={{ ...authInfo, login, logout, apiSpringBoot , apiFlask }}
     >
       {children}
     </AuthContext.Provider>
