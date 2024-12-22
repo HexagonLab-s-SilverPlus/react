@@ -30,7 +30,7 @@ const LoginMember = () => {
       console.log('authorizationHeader ', authorizationHeader);
       if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
         const accessToken = authorizationHeader.substring('Bearer '.length);
-        const { refreshToken } = response.data;
+        const {refreshToken} = response.data;
         console.log('accessToken', accessToken);
         console.log('refreshToken', refreshToken);
 

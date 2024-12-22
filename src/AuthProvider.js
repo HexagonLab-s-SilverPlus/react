@@ -4,7 +4,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {apiSpringBoot, apiFlask} from './utils/axios';
+import { apiSpringBoot, apiFlask } from './utils/axios';
 
 // Context 생성
 export const AuthContext = createContext();
@@ -23,6 +23,229 @@ const parseAccessToken = (token) => {
   return JSON.parse(jsonPayload);
 };
 
+let isInerceptorSetup = false;
+
+// 요청, 응답 인터셉터 함수
+const setupInterceptors = (axiosInstance) => {
+  if (isInerceptorSetup) return;
+  isInerceptorSetup = true;
+  // 요청 인터셉터
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
+      console.log('accessToken', accessToken);
+      console.log('refreshToken', refreshToken);
+      console.log('요청 인터셉터 확인');
+      if (
+        config.url.includes('/login') ||
+        config.url.includes('/logout') ||
+        config.url.includes('/reissue')
+      ) {
+        console.log('예외 url 작동확인');
+        return config;
+      }
+
+      if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        config.headers['RefreshToken'] = `Bearer ${refreshToken}`;
+        console.log('config headers', config.headers['Authorization']);
+        console.log('config headers', config.headers['Authorization']);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error); // 오류가 발생하면 Promise 체인에 전달
+    }
+  );
+
+  // 응답 인터셉터
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response; // 응답에 문제가 없으면 바로 반환
+    },
+    async (error) => {
+      console.log('응답 인터셉터 하는지 확인');
+      const originalRequest = error.config; // 원래 요청 정보 저장
+      const tokenExpiredHeader = error.response?.headers['token-expired'];
+
+      console.log('response : ', error.response);
+      console.log('originalRequest :', originalRequest);
+      console.log('tokenExpiredHeader :', tokenExpiredHeader);
+
+      if (!originalRequest) {
+        console.error('originalRequest가 정의되지 않음');
+        return Promise.reject(error);
+      }
+
+      if (originalRequest._retry) {
+        console.warn('이미 재시도된 요청입니다. 무한 반복 방지');
+        return Promise.reject(error);
+      }
+
+      originalRequest._retry = true;
+
+      // 토큰 재발급
+      if (
+        error.response.status === 401 &&
+        tokenExpiredHeader === 'RefreshToken'
+      ) {
+        originalRequest._retry = true;
+        // accessToken 유효, refreshToken 만료
+        // refreshToken 만료시 로그인 연장여부 확인
+
+        const confirmExtend = window.confirm(
+          '로그인이 만료되었습니다. 연장하시겠습니까?'
+        );
+        if (confirmExtend) {
+          try {
+            localStorage.setItem('extendLogin', confirmExtend);
+            const newRefreshToken = await refreshAccessToken();
+            originalRequest.headers['RefreshToken'] =
+              `Bearer ${newRefreshToken}`;
+            localStorage.setItem('refreshToken', newRefreshToken);
+            return await axiosInstance(originalRequest);
+          } catch (error) {
+            console.error('로그인 연장 실패 : ', error.response?.data);
+            alert('다시 로그인해주세요.');
+            tokenLoginClear();
+            navigate('/loginmember');
+          }
+        } else {
+          alert('다시 로그인해주세요.(로그인연장 거부)');
+          tokenLoginClear();
+          navigate('/loginmember');
+          return Promise.reject(error);
+        }
+      }
+
+      // accessToken 만료, refreshToken 유효
+      if (
+        error.response.status === 401 &&
+        tokenExpiredHeader === 'AccessToken'
+      ) {
+        try {
+          originalRequest._retry = true;
+          console.log('AccessToken 만료. 재발급 진행 중...');
+          const newAccessToken = await refreshAccessToken();
+          if (newAccessToken) {
+            originalRequest.headers['Authorization'] =
+              `Bearer ${newAccessToken}`;
+            console.log(
+              'newAccesstoken 헤더에 저장 확인 : ',
+              originalRequest.headers['Authorization']
+            );
+            console.log(originalRequest.headers);
+            return await axiosInstance(originalRequest);
+          }
+        } catch (error) {
+          console.error('accessToken 재발급 실패 : ', error.response?.data);
+          tokenLoginClear();
+          navigate('/loginmember');
+          return Promise.reject(error);
+        }
+      }
+
+      if (error.response.status === 401 && tokenExpiredHeader === 'AllToken') {
+        console.warn('모든 토큰 만료.');
+        tokenLoginClear();
+        navigate('/loginmember');
+      }
+
+      if (error.response && error.response.status !== 401) {
+        tokenLoginClear();
+        navigate('/loginmember');
+      }
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+setupInterceptors(apiSpringBoot);
+
+// token 재발급 요청
+const refreshAccessToken = async () => {
+  let accessToken = localStorage.getItem('accessToken')?.trim();
+  let refreshToken = localStorage.getItem('refreshToken')?.trim();
+  let extendLogin = localStorage.getItem('extendLogin');
+  console.log('extendlogin 체크 : ', extendLogin);
+  console.log(
+    '토근 재발급 코드, 변수에 토큰 저장 확인 accessToken : ',
+    accessToken
+  );
+  console.log(
+    '토근 재발급 코드, 변수에 토큰 저장 확인 refreshToken : ',
+    refreshToken
+  );
+
+  if (!accessToken || !refreshToken) {
+    console.error('reisssu 요청 실패 : 토큰 없음');
+    alert('세션 만료. 다시 로그인해주세요.');
+    tokenLoginClear;
+    navigate('/loginmember');
+    return;
+  }
+
+  try {
+    console.log('reissue 요청 - accessToken : ', accessToken);
+    console.log('reissue 요청 - refreshToken : ', refreshToken);
+
+    const response = await apiSpringBoot.post('/reissue', null, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        RefreshToken: `Bearer ${refreshToken}`,
+        extendLogin: `${extendLogin}`,
+      },
+    });
+
+    console.log('reissue 성공. 응답헤더 : ', response.headers);
+    console.log('authorization : ', response.headers['authorization']);
+    console.log('refreshtoken : ', response.headers['refreshToken']);
+
+    if (!extendLogin) {
+      const newAccessToken = response.headers['authorization']
+        ?.split(' ')[1]
+        ?.trim();
+      localStorage.setItem('accessToken', newAccessToken);
+      console.log('newAccessToken', newAccessToken);
+      // setAuthInfo((prevState) => ({
+      //   ...prevState,
+      //   accessToken: newAccessToken,
+      // }));
+      // console.log('newAccessToken', newAccessToken);
+      return newAccessToken;
+    } else {
+      const newRefreshToken = response.headers['refreshtoken']
+        ?.split(' ')[1]
+        ?.trim();
+      localStorage.setItem('refreshToken', newRefreshToken);
+      console.log('newRefreshToken', newRefreshToken);
+      return newRefreshToken;
+    }
+  } catch (error) {
+    console.error('Reissue 실패 - 상태 코드:', error.response?.status);
+    console.error('Reissue 실패 - 응답 데이터:', error.response?.data);
+
+    const expiredTokenType = error.response?.headers['token-expired'];
+    if (
+      expiredTokenType === 'RefreshToken' ||
+      error.response?.data === 'session expired'
+    ) {
+      alert('세션 만료. 다시 로그인해주세요.');
+      tokenLoginClear();
+      navigate('/loginmember');
+    } else if (expiredTokenType === 'AccessToken') {
+      console.warn('accessToken 만료됨. 재발급 진행');
+      return await refreshAccessToken();
+    } else {
+      console.error('오류 발생 : ', error.message);
+      tokenLoginClear();
+      navigate('/loginmember');
+    }
+  }
+};
+
 // Context Provider 컴포넌트
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -30,21 +253,37 @@ export const AuthProvider = ({ children }) => {
     accessToken: '',
     refreshToken: '',
   });
-  // authInfo 는 accessToken, refreshToken 을 상태관리함
-  const [authInfo, setAuthInfo] = useState({
-    isLoggedIn: false,
-    accessToken: '',
-    refreshToken: '',
-    role: '',
-    memName: '',
-    memId: '',
-    member: null,
+  const [authInfo, setAuthInfo] = useState(() => {
+    // 초기화 시 로컬 저장소를 기반으로 상태 설정
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (accessToken && refreshToken) {
+      const parsedToken = parseAccessToken(accessToken);
+      return {
+        isLoggedIn: true,
+        accessToken,
+        refreshToken,
+        role: parsedToken.role,
+        memName: parsedToken.name,
+        memId: parsedToken.sub,
+        member: parsedToken.member,
+      };
+    }
+    return {
+      isLoggedIn: false,
+      accessToken: '',
+      refreshToken: '',
+      role: '',
+      memName: '',
+      memId: '',
+      member: null,
+    };
   });
 
   // 로그인 함수 : 로그인 시 토큰을 저장하고 로그인 상태를 업데이트 처리함
   const login = ({ accessToken, refreshToken }) => {
     // 로컬스토리지에 엑세스토큰과 리프레시토큰 저장
-
+    tokenUpdate(accessToken, refreshToken);
     const parsedToken = parseAccessToken(accessToken); // 페이로드만 리턴받음
     setAuthInfo({
       isLoggedIn: true,
@@ -55,14 +294,9 @@ export const AuthProvider = ({ children }) => {
       memId: parsedToken.sub, // 토큰에서 subject 정보 추출
       member: parsedToken.member,
     });
-    setTokenInfo({
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    });
-
     console.log('login tokenInfo', tokenInfo);
     console.log('login : ', authInfo);
-    console.log('member:', authInfo.member) // member 객체가 포함되었는지 확인인
+    console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인인
   };
 
   // 토큰 저장 함수
@@ -73,7 +307,6 @@ export const AuthProvider = ({ children }) => {
     if (refreshToken) {
       localStorage.setItem('refreshToken', refreshToken);
     }
-
   };
 
   // 로그아웃 함수 : 로그인 상태를 초기화하고, 로컬 스토리지에 저장된 토큰 삭제 처리
@@ -115,387 +348,48 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // token 재발급 요청
-  const refreshAccessToken = async () => {
-    let accessToken = localStorage.getItem('accessToken')?.trim();
-    let refreshToken = localStorage.getItem('refreshToken')?.trim();
-
-    if (!accessToken || !refreshToken) {
-      console.error('reisssu 요청 실패 : 토큰 없음');
-      alert('세션 만료. 다시 로그인해주세요.');
-      tokenLoginClear;
-      navigate('/loginmember');
-      return;
-    }
-
-    try {
-      console.log('reissue 요청 - accessToken : ', accessToken);
-      console.log('reissue 요청 - refreshToken : ', refreshToken);
-
-      const response = await apiSpringBoot.post('/token/reissue', null, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          RefreshToken: `Bearer ${refreshToken}`,
-        },
-      });
-
-      console.log('reissue 성공. 응답헤더 : ', response.headers);
-      console.log('reissue 성공. 응답바디 : ', response.body);
-      console.log('authorization : ', response.headers['authorization']);
-      console.log('refresh-token : ', response.headers['refresh-token']);
-
-      const newAccessToken = response.headers['authorization']
-        ?.split(' ')[1]
-        ?.trim();
-      const newRefreshToken = localStorage.getItem('refreshToken');
-      localStorage.setItem('accessToken', newAccessToken);
-      // localStorage.setItem('refreshToken', newRefreshToken);
-      console.log('tokenUpdate : reissue 성공 후 토큰 저장완료');
-      setTokenInfo({
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-      });
-      return newAccessToken;
-    } catch (error) {
-      console.error('Reissue 실패 - 상태 코드:', error.response?.status);
-      console.error('Reissue 실패 - 응답 데이터:', error.response?.data);
-
-      const expiredTokenType = error.response?.headers['token-expired'];
-      if (
-        expiredTokenType === 'RefreshToken' ||
-        error.response?.data === 'session expired'
-      ) {
-        alert('세션 만료. 다시 로그인해주세요.');
-        tokenLoginClear;
-        navigate('/loginmember');
-      } else if (expiredTokenType === 'AccessToken') {
-        console.warn('accessToken 만료됨. 재발급 진행');
-        return await refreshAccessToken();
-      } else {
-        console.error('오류 발생 : ', error.message);
-        tokenLoginClear;
-        navigate('/loginmember');
-      }
-    }
-  };
-
-  // // api 요청함수
-  // const apiRequest = async (url, options = {}, retry = true) => {
-  //   console.log('apiRequest 실행');
+  // 컴포넌트 마운트시 (연동시) 로컬 스토리지에서 토큰 확인
+  // useEffect(() => {
   //   const accessToken = localStorage.getItem('accessToken');
   //   const refreshToken = localStorage.getItem('refreshToken');
-
-  //   if (!accessToken || !refreshToken) {
-  //     throw new Error('token 이 없습니다.');
-  //   }
-
-  //   try {
-  //     const response = await apiSpringBoot.get(url, {
-  //       ...options,
-  //       headers: {
-  //         Authorization: `Bearer ${refreshToken}`,
-  //         AccessToken: `Bearer ${accessToken}`,
-  //         ...options.headers,
-  //       },
-  //     });
-  //     return response;
-  //   } catch (error) {
-  //     console.error('API 요청 실패 - 상태코드 : ', error.response?.status);
-  //     console.error('API 응답 헤더 : ', error.response?.headers);
-  //     console.error('API 응답 데이터 : ', error.response?.data);
-  //   }
-
-  //   const tokenExpiredHeader = error.response?.headers['token-expired'];
-
-  //   if (error.response?.status === 401 && retry) {
-  //     // refreshToken 만료 시 로그인 연장여부 확인
-  //     if (tokenExpiredHeader === 'RefreshToken') {
-  //       const confirmExtedn = window.confirm(
-  //         '로그인이 만료되었습니다. 연장하시겠습니까?'
-  //       );
-  //       if (confirmExtedn) {
-  //         try {
-  //           await refreshAccessToken(true);
-  //           return apiRequest(url, options, false);
-  //         } catch (error) {
-  //           console.error('로그인 연장 실패 : ', error.response?.data);
-  //           alert('다시 로그인해주세요.');
-  //           logout();
-  //         }
-  //       } else {
-  //         alert('다시 로그인해주세요.');
-  //         logout();
-  //       }
-  //     }
-
-  //     // accessToken 만료 시 refreshToken 으로 accessToken 재발급
-  //     if (tokenExpiredHeader === 'AccessToken') {
-  //       console.warn('accessToken 만료. 재발급 진행');
-  //       try {
-  //         await refreshAccessToken();
-  //         return apiRequest(url, options, false);
-  //       } catch (error) {
-  //         console.error('accessToken 재발급 실패 : ', error.response?.data);
-  //       }
-  //       logout();
+  //   if (accessToken && refreshToken) {
+  //     const parsedToken = parseAccessToken(accessToken);
+  //     if (parsedToken) {
+  //       setAuthInfo({
+  //         isLoggedIn: true,
+  //         role: parsedToken.role,
+  //         memName: parsedToken.name,
+  //         memId: parsedToken.sub,
+  //         accessToken: accessToken,
+  //         refreshToken: refreshToken,
+  //         member: parsedToken.member,
+  //       });
   //     }
   //   }
-  // };
+  // }, []);
 
-  // 요청, 응답 인터셉터 함수
-  const setupInterceptors = (axiosInstance) => {
-    // 요청 인터셉터
-    axiosInstance.interceptors.request.use(
-      (config) => {
-        if (
-          config.url.includes('logout') ||
-          config.url.includes('login') ||
-          config.url.includes('/reissue')
-        ) {
-          return config;
-        } else if (localStorage.getItem('accessToken', accessToken)) {
-          console.log('요청 인터셉터 하는지 확인');
-          console.log('실제요청 : ', config);
-          console.log(
-            'tokenInfo.accessToken',
-            localStorage.getItem('accessToken', accessToken)
-          );
-          config.headers['Authorization'] = `Bearer ${tokenInfo.accessToken}`;
-          config.headers['RefreshToken'] = `Bearer ${tokenInfo.refreshToken}`;
-          console.log(
-            'config.headers Authorization :',
-            config.headers['Authorization']
-          );
-          console.log(
-            'config.headers RefreshToken :',
-            config.headers['RefreshToken']
-          );
-        }
-        return config; // 수정된 config 반환
-      },
-      (error) => {
-        return Promise.reject(error); // 오류가 발생하면 Promise 체인에 전달
-      }
-    );
-
-    // 응답 인터셉터
-    axiosInstance.interceptors.response.use(
-      (response) => {
-        return response; // 응답에 문제가 없으면 바로 반환
-      },
-      async (error) => {
-        console.log('응답 인터셉터 하는지 확인');
-        const originalRequest = error.config; // 원래 요청 정보 저장
-        const tokenExpiredHeader = error.response?.headers['token-expired'];
-
-        console.log('response : ', error.response);
-        console.log('originalRequest :', originalRequest);
-        console.log('tokenExpiredHeader :', tokenExpiredHeader);
-
-        if (!originalRequest) {
-          console.error('originalRequest가 정의되지 않음');
-          return Promise.reject(error);
-        }
-
-        if (originalRequest._retry) {
-          console.warn('이미 재시도된 요청입니다. 무한 반복 방지');
-          return Promise.reject(error);
-        }
-
-        // 토큰 재발급
-        if (
-          error.response.status === 401 &&
-          tokenExpiredHeader === 'RefreshToken'
-        ) {
-          originalRequest._retry = true;
-          // accessToken 유효, refreshToken 만료
-          // refreshToken 만료시 로그인 연장여부 확인
-
-          const confirmExtend = window.confirm(
-            '로그인이 만료되었습니다. 연장하시겠습니까?'
-          );
-          if (confirmExtend) {
-            try {
-              const newAccessToken = await refreshAccessToken();
-              originalRequest.headers['Authorization'] =
-                `Bearer ${newAccessToken}`;
-              localStorage.setItem('accessToken', newAccessToken);
-              return axiosInstance(originalRequest);
-            } catch (error) {
-              console.error('로그인 연장 실패 : ', error.response?.data);
-              alert('다시 로그인해주세요.');
-              logout();
-              navigate('/loginmember');
-            }
-          } else {
-            alert('다시 로그인해주세요.(로그인연장 거부)');
-            tokenLoginClear;
-            navigate('/loginmember');
-            return Promise.reject(error);
-          }
-        }
-
-        // accessToken 만료, refreshToken 유효
-        if (
-          error.response.status === 401 &&
-          tokenExpiredHeader === 'AccessToken'
-        ) {
-          try {
-            originalRequest._retry = true;
-            console.log('AccessToken 만료. 재발급 진행 중...');
-            const newAccessToken = await refreshAccessToken();
-            originalRequest.headers['Authorization'] =
-              `Bearer ${newAccessToken}`;
-            // // 새 요청 생성
-            // const updatedRequest = {
-            //   ...originalRequest,
-            //   headers: {
-            //     ...originalRequest.headers,
-            //     Authorization: `Bearer ${newAccessToken}`,
-            //   },
-            // };
-
-            // // 새로운 요청 실행
-            // return axiosInstance(updatedRequest);
-
-            return axiosInstance(originalRequest);
-          } catch (error) {
-            console.error('accessToken 재발급 실패 : ', error.response?.data);
-            tokenLoginClear;
-            navigate('/loginmember');
-          }
-        }
-
-        if (
-          error.response.status === 401 &&
-          tokenExpiredHeader === 'AllToken'
-        ) {
-          console.warn('모든 토큰 만료.');
-          tokenLoginClear;
-          navigate('/loginmember');
-        }
-
-        if (error.response && error.response.status !== 401) {
-          logout();
-        }
-
-        return Promise.reject(error);
-      }
-    );
-  };
-
-  // //* 공통 인터셉터 로직을 함수로 추출
-  // const setupInterceptors = (axiosInstance) => {
-  //   //* 요청 인터셉터: 모든 Axios 요청 전에 실행되어 Access Token을 헤더에 추가
-  //   axiosInstance.interceptors.request.use(
-  //     (config) => {
-  //       if (
-  //         config.url.includes('logout') ||
-  //         config.url.includes('login') ||
-  //         config.url.includes('/reissue')
-  //       ) {
-  //         return config;
-  //       }
-
-  //       if (authInfo.accessToken) {
-  //         //! Authorization 헤더에 Bearer 토큰을 추가
-  //         config.headers['Authorization'] = `Bearer ${authInfo.accessToken}`;
-  //         console.log(
-  //           'Access Token being set in headers:',
-  //           authInfo.accessToken
-  //         );
-  //       }
-  //       return config; // 수정된 config 반환
-  //     },
-  //     (error) => {
-  //       return Promise.reject(error); // 오류가 발생하면 이를 Promise 체인에 전달
-  //     }
-  //   );
-
-  //   //* 응답 인터셉터 설정 - 서버 응답 후 실행
-  //   axiosInstance.interceptors.response.use(
-  //     (response) => {
-  //       return response; // 응답이 정상적이면 그대로 반환
-  //     },
-  //     async (error) => {
-  //       const originalRequest = error.config; // 원래의 요청 정보 저장
-
-  //       // //^  /refresh-token 요청 및 /login 요청은 인터셉터에서 제외
-  //       // if (originalRequest.url.includes('/login')) {
-  //       //   return Promise.reject(error); // 무한 재시도 방지
-  //       // }
-
-  //       // * 401 에러 및 재시도 시도가 아닌 경우, Refresh Token으로 Access Token 재발급 시도
-  //       if (
-  //         error.response &&
-  //         error.response.status === 401 &&
-  //         !originalRequest._retry &&
-  //         authInfo.refreshToken
-  //       ) {
-  //         originalRequest._retry = true; // 재시도 플래그 설정하여 무한 재시도 하지 않도록 방지
-  //         console.log(
-  //           '이 리프레시토큰으로 access token 재발급 받으려 시도 중:',
-  //           authInfo.refreshToken
-  //         );
-  //         try {
-  //           const newAccessToken = await refreshAccessToken(); // 토큰 재발급 함수 호출
-
-  //           if (newAccessToken) {
-  //             //! 원래의 요청 헤더에 새로운 Access Token 추가
-  //             originalRequest.headers['Authorization'] =
-  //               `Bearer ${newAccessToken}`;
-  //             //! 수정된 요청을 재시도
-  //             return axiosInstance(originalRequest);
-  //           }
-  //         } catch (refreshError) {
-  //           console.error('Token refresh failed:', refreshError);
-  //         }
-  //       }
-
-  //       //* 401 외의 에러 처리
-  //       if (error.response && error.response.status === 401) {
-  //       }
-
-  //       return Promise.reject(error); // 조건에 해당하지 않으면 오류를 그대로 Promise 체인에 전달
-  //     }
-  //   );
-  // };
-
-  setupInterceptors(apiSpringBoot);
-
-  // 컴포넌트 마운트시 (연동시) 로컬 스토리지에서 토큰 확인
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (accessToken && refreshToken) {
-      const parsedToken = parseAccessToken(accessToken);
-      if (parsedToken) {
-        setAuthInfo({
-          isLoggedIn: true,
-          role: parsedToken.role,
-          memName: parsedToken.name,
-          memId: parsedToken.sub,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          member: parsedToken.member,
-        });
-      }
+    // authInfo 상태 변경 시 로컬 저장소와 동기화
+    if (authInfo.accessToken) {
+      localStorage.setItem('accessToken', authInfo.accessToken);
     }
-    console.log('login : ', authInfo);
-  }, []);
+    if (authInfo.refreshToken) {
+      localStorage.setItem('refreshToken', authInfo.refreshToken);
+    }
+  }, [authInfo.accessToken, authInfo.refreshToken]);
 
-  useEffect(() => {
-    console.log('Updated authInfo: ', authInfo);
-    setTokenInfo({
-      accessToken: authInfo.accessToken,
-      refreshToken: authInfo.refreshToken,
-    });
-    tokenUpdate(authInfo.accessToken, authInfo.refreshToken);
-  }, [authInfo]); // authInfo가 변경될 때 실행
+  // useEffect(() => {
+  //   console.log('Updated authInfo: ', authInfo);
+  //   setTokenInfo({
+  //     accessToken: authInfo.accessToken,
+  //     refreshToken: authInfo.refreshToken,
+  //   });
+  //   tokenUpdate(authInfo.accessToken, authInfo.refreshToken);
+  // }, [authInfo]); // authInfo가 변경될 때 실행
 
   return (
     <AuthContext.Provider
-      value={{ ...authInfo, login, logout, apiSpringBoot , apiFlask }}
+      value={{ ...authInfo, login, logout, apiSpringBoot, apiFlask }}
     >
       {children}
     </AuthContext.Provider>
