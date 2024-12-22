@@ -37,11 +37,11 @@ const NoticeWrite = () => {
     // 등록
     const handleInsertNotice = async (e) => {
         e.preventDefault(); // submit취소
-
+        console.log("uuid : "+member.memUUID);
         setFormData((prevFormData)=>({
             ...prevFormData,
-            [notCreateBy]:member.memUUID,
-            [notUpdateBy]:member.memUUID,
+            notCreateBy:member.memUUID,
+            notUpdateBy:member.memUUID,
         }));
         if(window.confirm("공지사항을 등록하시겠습니까?")){
             const data = new FormData();
@@ -51,7 +51,7 @@ const NoticeWrite = () => {
             try{
                 await apiSpringBoot.post('/notice',data,{
                     headers:{
-                        'Content-Type':'multipart/form-data',
+                        //'Content-Type':'multipart/form-data',
                         Authorization: `Bearer ${accessToken}`,
                     }
                 });
@@ -75,6 +75,7 @@ const NoticeWrite = () => {
 
     //페이지 로딩시 memId 작성자에 넣기기
     useEffect(()=>{
+        console.log("userName" + memName);
         setFormData((prevFormData)=>({
             ...prevFormData,
             notCreateBy:memName,
@@ -89,7 +90,7 @@ const NoticeWrite = () => {
     return (
         <form
             onSubmit={handleInsertNotice}
-            encType='multipart/form-data'
+            // encType='multipart/form-data'
         >
             <table>
                 <thead></thead>
