@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './DashList.module.css';
 import SideBar from '../../components/common/SideBar';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 
 
@@ -22,7 +24,7 @@ const DashList = () => {
     };
    
     return (
-        <div >
+        <div className={styles.rsection}>
             <SideBar />
             <div className={styles.container}>
                 <h2>정복규님, 안녕하세요!</h2>
@@ -40,6 +42,16 @@ const DashList = () => {
                         <strong>10건</strong>
                     </button>
                 </div>
+            </div>
+            <div className={styles.calendarbox}>
+                <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    events={[
+                        { title: '이벤트 1', date: '2024-12-20' },
+                        { title: '이벤트 2', date: '2024-12-22' }
+                    ]}
+                />
             </div>
         </div>
     );

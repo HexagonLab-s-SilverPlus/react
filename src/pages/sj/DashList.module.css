@@ -64,3 +64,19 @@ h2 {
 .button:hover {
     transform: scale(1.05);
 }
+
+.rsection{
+    width: calc(100% - 368px);
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.calendarbox{
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 900px;
+    height: 500px;
+    
+}
