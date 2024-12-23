@@ -19,6 +19,10 @@ const SeniorMenu = () => {
       navigate('/docmain')
     }
 
+    const handleNoticeButton=() =>{
+      navigate('/notice')
+    }
+
   return (
     <Container>
       <div className={styles.menuContainer}>
@@ -50,7 +54,7 @@ const SeniorMenu = () => {
         </div>
 
         {/* 공지사항 */}
-        <div className={`${styles.menuButton} ${styles.div4}`}>
+        <div className={`${styles.menuButton} ${styles.div4}`} onClick={handleNoticeButton}>
           <p>공지사항</p>
           <img src={noticeIcon} alt="공지사항" />
         </div>

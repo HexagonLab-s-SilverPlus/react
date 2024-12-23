@@ -3,7 +3,8 @@ import React,{useState,useEffect,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from "../../AuthProvider"
 import {apiSpringBoot} from '../../utils/axios';
-//import axios from 'axios';
+import SideBar from '../../components/common/SideBar';
+
 
 const NoticeWrite = () => {
 

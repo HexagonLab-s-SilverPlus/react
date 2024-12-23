@@ -1,127 +1,30 @@
-.noticeList {
-    background-color: #f9f9f9;
-}
-/*상단*/
-.top {
-    display: flex; /*flex 박스 사용*/
-    align-items: end; /*세로축 정렬 끝으로*/
-    padding : 24px 72px 24px; /*안쪽여백 상단/좌우/하단*/
-}
+/*senior*/
+.noticeList {background-color:#f9f9f9;}
+.top {display:flex;align-items: end;padding : 24px 72px 24px;}
+.menuname {display:flex; font-size:72px; font-weight : bold; color:#064420;}
+.searchbox{display:flex;margin-left:auto;gap:5px;font-size:28px;font-weight : bold;color:#333333;}
+.searchOptions{border-bottom:2px gray solid;}
+.arrow{width:24px;height:24px;cursor:pointer;}
+.searchKeyword{display:flex;align-items:center;border-bottom:2px gray solid;}
+.search{width:24px;height:24px;cursor:pointer;}
+.searchKeywordBox{width:320px;font-size:24px;border:0px;background-color:#f9f9f9;color:#333333;}
+.dropdown{position:absolute;z-index:1000;margin-top:40px;}
+.dropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
+.dropdownOption:hover{font-weight:bold;}
+.list{padding:30px 72px;}
+.object{margin:20px 0px;width:1400px;margin-left:auto;padding:20px 50px;background-color:#fff;box-shadow: 5px 5px 10px #333333;border-radius:10px;}
+.object:hover{background-color: #FDFAF6;cursor:pointer;}
+.title{font-size:36px;font-weight:bold;color:#333333;}
+.message{display:flex;justify-content:space-between;align-items:end;margin-top:10px;font-size:24px;color:#999999;}
+.date{color:#333333;font-weight:bold;font-size:32px;}
 
-/*공지사항 이름*/
-.menuname {
-    display: flex; /*flex 박스 사용*/
-    font-size:72px; /*글자 크기*/
-    font-weight : bold; /*글자 굵기 굵게*/
-    color:#064420; /*글자색*/
-}
-
-/* 검색창 */
-.searchbox{
-    display: flex; /*flex 박스 사용*/
-    margin-left : auto; /*오른쪽 끝으로 이동*/
-    gap: 5px; /*검색 조건과 검색이름 구분*/
-    font-size:28px; /*글자 크기*/
-    font-weight : bold;/*글자 굵기 굵게*/
-    color:#333333;
-}
-
-
-
-/*검색 옵션*/
-.searchOptions {
-    border-bottom : 2px gray solid
-    
-}
-
-
-
-
-/* 화살표 */
-.arrow{
-    width:24px; /*폭*/
-    height:24px; /*높이*/
-    cursor:pointer; /*클릭효과*/
-}
-
-/* 검색어 div */
-.searchKeyword{
-    display: flex;
-    align-items: center;
-    border-bottom: 2px gray solid;
-
-}
-
-/* 검색버튼 */
-.search{
-    width:24px; /*폭*/
-    height:24px; /*높이*/
-    cursor:pointer; /*클릭효과*/
-}
-
-/*검색어 입력창*/
-.searchKeywordBox{
-    width:320px;
-    font-size: 24px;
-    border: 0px;
-    background-color: #f9f9f9;
-    color:#333333;
-                        
-}
-
-/*검색메뉴 드롭박스*/
-.dropdown{
-    position : absolute; /*부모 요소 기준 위치 설정*/
-    z-index: 1000; /*다른 요소 위에 표시되도록 설정*/
-    margin-top : 40px; /*드롭다운 위치*/
-}
-.dropdownOption{
-    padding : 5px 0px; 
-    cursor: pointer;
-    font-weight: normal;
-}
-.dropdownOption:hover {
-    font-weight: bold;
-}
-
-
-/*리스트*/
-.list{
-    padding: 30px 72px;
-}
-
-.object{
-    margin : 20px 0px;
-    width: 1400px;
-    margin-left: auto;
-    padding: 20px 50px;
-    background-color: #fff;
-    box-shadow: 5px 5px 10px #333333;
-    border-radius:10px;
-}
-
-.object:hover{
-    background-color: #FDFAF6;
-    cursor:pointer;
-}
-
-.title{
-    font-size: 36px;
-    font-weight: bold;
-    color:#333333;
-}
-
-.message{
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    margin-top : 10px;
-    font-size: 24px;
-    color:#999999;
-}
-
-.date{
-    color: #333333;
-    font-weight: bold;
-    font-size: 32px;
-}
+/*member*/
+.memberContainer {display: flex;}
+.memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
+.secTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
+.memberSearchbox{display:flex;justify-content: flex-end;align-items:end;gap:5px;margin-top: 55px;margin-bottom:20px;}
+.memberSearchOptions{border-bottom:2px #064420 solid;cursor:pointer;font-size: 20px;font-weight: bold;}
+.memberArrow{width:20px;height:20px;}
+.memberDropdown{position:absolute;z-index:1000;margin-top:40px;}
+.memberDropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
+.memberDropdownOption:hover{font-weight:bold;}
