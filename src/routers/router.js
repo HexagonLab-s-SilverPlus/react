@@ -10,6 +10,7 @@ import eyRouter from './eyRouter';
 import qnaRouter from './qnaRouter';
 import gameRouter from './gameRouter';
 import WelcomePage from '../components/common/WelcomePage';
+import programRouter from './programRouter';
 
 const AppRouter = () => {
   // 변수 = () => {}  ==>> 함수임
@@ -24,6 +25,7 @@ const AppRouter = () => {
       {eyRouter}
       {qnaRouter}
       {gameRouter}
+      {programRouter}
     </Routes>
   );
 };

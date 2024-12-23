@@ -117,11 +117,11 @@ const QnAList = () => {
           {qnaList.map((qna, index) => (
             <tr>
               <td>
-                <button onClick={handleMoveDetailView}>{qna.qna_title}</button>
+                <button onClick={handleMoveDetailView}>{qna.qnaTitle}</button>
               </td>
-              <td>{memberList[index].mem_name}</td>
+              <td>{memberList[index].memName}</td>
               <td className={styles.qnaWCreateAt}>
-                {formatDate(qna.qna_wupdate_at)}
+                {formatDate(qna.qnaWUpdateAt)}
               </td>
               <td className={styles.qnaStateN}>미답변</td>
             </tr>
