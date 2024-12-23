@@ -14,6 +14,7 @@ function EnrollManager() {
     memEmail: '', // 이메일
     memAddress: '', // 주소
     memCellphone: '', // 휴대전화
+    memCellphoneCheck: '', // 인증번호
     // memPhone: '',       // 일반전화
     memRnn: '', // 주민등록번호
     // memGovCode: '', // 관공서 코드
@@ -22,15 +23,20 @@ function EnrollManager() {
 
   const navigate = useNavigate();
   // 아이디 사용가능여부 상태변수
-  const [isIdAvailable, setIsAvailable] = useState(null);
+  const [isIdAvailable, setIsAvailable] = useState(false);
   // 아이디 사용가능여부에 따른 메세지 출력 변수
-  const [idCheckMsg, setIdCheckMsg] = useState('');
+  const [idCheckMsg, setIdCheckMsg] = useState('아이디 중복확인을 해주세요.');
   // 아이디 중복검사여부에 다른 메세지 컬러 변경 상태변수
-  const [messageIdColor, setMessageIdColor] = useState('');
+  const [messageIdColor, setMessageIdColor] = useState('red');
   // 비밀번호 중복검사여부에 따른 메세지 상태변수
   const [passwordCheckMsg, setPasswordCheckMsg] = useState('');
   // 비밀번호 중복검사여부에 따른 메세지 컬러 변경 상태변수
   const [messagePwdColor, setMessagePwdColor] = useState('');
+  // 휴대전화 인증여부에 따른 상태변수
+  const [cellphoneCheck, setCellphoneCheck] = useState(false);
+  // 휴대전화 인증여부에 따른 메세지 변경 상태변수
+  const [cellphoneCheckMsg, setCellphoneCheckMsg] =
+    useState('휴대전화 인증을 진행해주세요.');
 
   const handleChange = (e) => {
     const { name, value } = e.target; // 이벤트에서 name과 value를 추출
@@ -81,6 +87,22 @@ function EnrollManager() {
     }
   };
 
+  const validatePassword = () => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+    return passwordRegex.test(formData.memPw);
+  };
+
+  const validateCellphone = () => {
+    if (!cellphoneCheck) {
+      setCellphoneCheckMsg('휴대전화 인증에 실패하였습니다.');
+      return false;
+    } else {
+      setCellphoneCheckMsg('휴대전화 인증이 완료되었습니다.');
+      return true;
+    }
+  };
+
   // 비밀번호 확인 input 의 포커스가 사라지면 유효성검사를 작동시키는 함수
   const handleConfirmPwd = () => {
     if (formData.memPwChk) {
@@ -88,12 +110,34 @@ function EnrollManager() {
     }
   };
 
+  const handleCheckPassword = () => {
+    if (formData.memPw) {
+      validateCellphone();
+    }
+  };
+
   // 가입 버튼 클릭시 작동하는 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault(); // 이벤트 발생 제거(submit 이벤트 취소) - 기본 폼 제출 방지
 
+    if (!isIdAvailable) {
+      alert('아이디 중복확인을 해주세요');
+      return;
+    }
+
+    if (!validatePassword()) {
+      alert('비밀번호 조건에 맞지 않습니다.');
+      return;
+    }
+
     // 전송 전에 유효성 검사 확인
     if (!validate()) {
+      alert('비밀번호 일치 확인을 해주세요.');
+      return;
+    }
+
+    if (!validateCellphone()) {
+      alert('휴대전화 인증을 해주세요.');
       return;
     }
 
@@ -125,6 +169,42 @@ function EnrollManager() {
   };
 
   const handleGoBack = () => {};
+
+  const handleVerifyPhone = async () => {
+    const memCellphone = formData.memCellphone;
+    try {
+      const response = await apiSpringBoot.post('/api/sms', {
+        memCellphone: memCellphone,
+        code: '',
+      });
+      alert('인증번호가 발송되었습니다.');
+    } catch (error) {
+      console.error('인증번호요청 실패', error);
+    }
+  };
+
+  const handlePhoneCheck = async () => {
+    const memCellphone = formData.memCellphone;
+    const memCellphoneCheck = formData.memCellphoneCheck;
+    try {
+      const response = await apiSpringBoot.post('/api/sms/verify', {
+        memCellphone: memCellphone,
+        code: memCellphoneCheck,
+      });
+      console.log('headers', response.headers);
+      const verify = response.headers['verify'];
+      console.log('verify', verify);
+      if (verify === 'true') {
+        alert('인증성공');
+        setCellphoneCheck(true);
+      } else if (verify === 'false') {
+        alert('인증 실패. 인증시간이 완료되었거나 인증번호를 틀렸습니다.');
+        setCellphoneCheck(false);
+      }
+    } catch (error) {
+      console.error('인증번호 확인 실패 : ', error);
+    }
+  };
 
   return (
     <div>
@@ -193,6 +273,7 @@ function EnrollManager() {
               onChange={handleChange}
               className={styles.textbox}
               style={{ marginBottom: '0' }}
+              onBlur={handleCheckPassword}
             />
           </tr>
           <tr
@@ -203,7 +284,6 @@ function EnrollManager() {
               height: '20px',
             }}
           >
-            {}
             대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
           </tr>
           <tr className={styles.valuebox}>비밀번호 확인</tr>
@@ -289,6 +369,7 @@ function EnrollManager() {
               style={{
                 marginLeft: '20px',
               }}
+              onClick={handleVerifyPhone}
             >
               인증번호 받기
             </button>
@@ -307,9 +388,21 @@ function EnrollManager() {
               style={{
                 marginLeft: '20px',
               }}
+              onClick={handlePhoneCheck}
             >
               인증
             </button>
+          </tr>
+          <tr>
+            {cellphoneCheck === false ? (
+              <span style={{ color: 'red', fontSize: '10px', marginTop: 0 }}>
+                {cellphoneCheckMsg}
+              </span>
+            ) : (
+              <span style={{ color: 'green', fontSize: '10px', marginTop: 0 }}>
+                &#x2714; {cellphoneCheckMsg}
+              </span>
+            )}
           </tr>
           <tr>
             <button
