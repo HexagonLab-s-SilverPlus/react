@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './DashList.module.css';
 import SideBar from '../../components/common/SideBar';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
+// import FullCalendar from '@fullcalendar/react';
+// import dayGridPlugin from '@fullcalendar/daygrid';
 
 
 

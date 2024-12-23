@@ -1,5 +1,6 @@
 // src/pages/program/ProgramWrite.jsx
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from './ProgramWrite.module.css';
 import SideBar from '../../components/common/SideBar';
 
@@ -8,6 +9,9 @@ const ProgramWrite = () => {
     const [files, setFiles] = useState([]); //전체 파일 상태
     const [imageFiles, setImageFiles] = useState([]);   //이미지 파일 상태
     const fileInputRef = useRef(null);  //파일 입력 참조
+
+    //navigate
+    const navigate = useNavigate();
 
     //파일 추가 핸들러
     const handleFileChange = (e) => {
@@ -65,6 +69,16 @@ const ProgramWrite = () => {
             fileInputRef.current.value = '';
         }
     };
+
+    //이전페이지 이동
+    const handleMovePrev = (e) => {
+        e.preventDefault(); //submit 취소
+        if (window.confirm("등록을 취소하시겠습니까?")) {
+            navigate(-1);
+        }
+    };
+
+
 
     return (
         <div className={styles.pgContainer}>
@@ -156,7 +170,7 @@ const ProgramWrite = () => {
                         <div className={styles.pgBtnWrap}>
                             <input type="submit" value="등록하기" />
                             <input type="reset" value="초기화" />
-                            <input type="button" value="이전 페이지" />
+                            <input type="button" value="이전 페이지" onClick={handleMovePrev} />
                         </div>{/* pgBtnWrap end */}
                     </form>
                 </div>{/* .secContent end */}
