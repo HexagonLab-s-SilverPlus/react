@@ -15,6 +15,7 @@ const QnAList = () => {
   const [qnaList, setQnaList] = useState([]);
   const [memberList, setMemberList] = useState([]);
   const [keyword, setKeyword] = useState();
+  
   const [pagingInfo, setPagingInfo] = useState({
     pageNumber: 1,
     listCount: 1,
@@ -34,8 +35,12 @@ const QnAList = () => {
     navigate('/qna/write'); 
   };
 
+  const handlePageChange = async (page) => {
+    handleQnAView(member.memUUID, page, pagingInfo.pageSize);  //일반 목록 페이지 요청
+  };
+
+
   const handleQnAView = async (uuid, page = 1, limit = 10) => {
-     
       try{
         if(role === "ADMIN") {
           const response = await apiSpringBoot.get(`/qna/mylist`, {
@@ -76,10 +81,7 @@ const QnAList = () => {
     // handleMyQnAView("CECE02F57F344658B7482F5F59F7F998");
   }, [accessToken] );
 
-  const handlePageChange = async (page) => {
-    handleQnAView(member.memUUID, page, pagingInfo.pageSize);  //일반 목록 페이지 요청
-  };
-
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
   
