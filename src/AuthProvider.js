@@ -40,7 +40,11 @@ const setupInterceptors = (axiosInstance) => {
       if (
         config.url.includes('/login') ||
         config.url.includes('/logout') ||
-        config.url.includes('/reissue')
+        config.url.includes('/reissue') ||
+        config.url.includes('/api/sms') ||
+        config.url.includes('/api/sms/verify') ||
+        config.url.includes('/member/idchk') ||
+        config.url.includes('/member')
       ) {
         console.log('예외 url 작동확인');
         return config;
@@ -66,6 +70,10 @@ const setupInterceptors = (axiosInstance) => {
     },
     async (error) => {
       console.log('응답 인터셉터 하는지 확인');
+      if (error.config.url.includes('/api/sms/verify')) {
+        console.log('응답 인터셉터 예외 url 작동 확인');
+        return;
+      }
       const originalRequest = error.config; // 원래 요청 정보 저장
       const tokenExpiredHeader = error.response?.headers['token-expired'];
 
@@ -209,11 +217,6 @@ const refreshAccessToken = async () => {
         ?.trim();
       localStorage.setItem('accessToken', newAccessToken);
       console.log('newAccessToken', newAccessToken);
-      // setAuthInfo((prevState) => ({
-      //   ...prevState,
-      //   accessToken: newAccessToken,
-      // }));
-      // console.log('newAccessToken', newAccessToken);
       return newAccessToken;
     } else {
       const newRefreshToken = response.headers['refreshtoken']
@@ -348,26 +351,6 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // 컴포넌트 마운트시 (연동시) 로컬 스토리지에서 토큰 확인
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   const refreshToken = localStorage.getItem('refreshToken');
-  //   if (accessToken && refreshToken) {
-  //     const parsedToken = parseAccessToken(accessToken);
-  //     if (parsedToken) {
-  //       setAuthInfo({
-  //         isLoggedIn: true,
-  //         role: parsedToken.role,
-  //         memName: parsedToken.name,
-  //         memId: parsedToken.sub,
-  //         accessToken: accessToken,
-  //         refreshToken: refreshToken,
-  //         member: parsedToken.member,
-  //       });
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     // authInfo 상태 변경 시 로컬 저장소와 동기화
     if (authInfo.accessToken) {
@@ -377,15 +360,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('refreshToken', authInfo.refreshToken);
     }
   }, [authInfo.accessToken, authInfo.refreshToken]);
-
-  // useEffect(() => {
-  //   console.log('Updated authInfo: ', authInfo);
-  //   setTokenInfo({
-  //     accessToken: authInfo.accessToken,
-  //     refreshToken: authInfo.refreshToken,
-  //   });
-  //   tokenUpdate(authInfo.accessToken, authInfo.refreshToken);
-  // }, [authInfo]); // authInfo가 변경될 때 실행
 
   return (
     <AuthContext.Provider
