@@ -14,6 +14,14 @@
     height: 41px;
 }
 
+.qnaSeachdiv img {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 1016px;
+    height: 24px;
+}
+
 .qnaSeachselect {
     height: 33px;
     width: 83px;
