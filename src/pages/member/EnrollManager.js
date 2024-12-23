@@ -95,10 +95,8 @@ function EnrollManager() {
 
   const validateCellphone = () => {
     if (!cellphoneCheck) {
-      setCellphoneCheckMsg('휴대전화 인증에 실패하였습니다.');
       return false;
     } else {
-      setCellphoneCheckMsg('휴대전화 인증이 완료되었습니다.');
       return true;
     }
   };
@@ -170,7 +168,8 @@ function EnrollManager() {
 
   const handleGoBack = () => {};
 
-  const handleVerifyPhone = async () => {
+  const handleVerifyPhone = async (e) => {
+    e.preventDefault(); // 기본 동작 방지 (중요)
     const memCellphone = formData.memCellphone;
     try {
       const response = await apiSpringBoot.post('/api/sms', {
@@ -183,7 +182,8 @@ function EnrollManager() {
     }
   };
 
-  const handlePhoneCheck = async () => {
+  const handlePhoneCheck = async (e) => {
+    e.preventDefault(); // 기본 동작 방지 (중요)
     const memCellphone = formData.memCellphone;
     const memCellphoneCheck = formData.memCellphoneCheck;
     try {
@@ -197,9 +197,11 @@ function EnrollManager() {
       if (verify === 'true') {
         alert('인증성공');
         setCellphoneCheck(true);
+        setCellphoneCheckMsg('휴대전화 인증이 완료되었습니다.');
       } else if (verify === 'false') {
         alert('인증 실패. 인증시간이 완료되었거나 인증번호를 틀렸습니다.');
         setCellphoneCheck(false);
+        setCellphoneCheckMsg('휴대전화 인증에 실패하였습니다.');
       }
     } catch (error) {
       console.error('인증번호 확인 실패 : ', error);
@@ -394,13 +396,13 @@ function EnrollManager() {
             </button>
           </tr>
           <tr>
-            {cellphoneCheck === false ? (
+            {!cellphoneCheck ? (
               <span style={{ color: 'red', fontSize: '10px', marginTop: 0 }}>
                 {cellphoneCheckMsg}
               </span>
             ) : (
               <span style={{ color: 'green', fontSize: '10px', marginTop: 0 }}>
-                &#x2714; {cellphoneCheckMsg}
+                {cellphoneCheckMsg}
               </span>
             )}
           </tr>
