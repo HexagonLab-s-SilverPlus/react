@@ -65,12 +65,14 @@ function WelcomeChat() {
     if (!inputText.trim()) return;
 
     try {
+      console.log('accessToken:', accessToken);
+
       const response = await apiFlask.post(
         '/chat',
         { message: inputText },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
-        }
+        },
       );
 
       const { reply, workspaceId } = response.data;

@@ -171,6 +171,7 @@ const setupInterceptors = (axiosInstance) => {
 };
 
 setupInterceptors(apiSpringBoot);
+setupInterceptors(apiFlask);
 
 // token 재발급 요청
 const refreshAccessToken = async () => {

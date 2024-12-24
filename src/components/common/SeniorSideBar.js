@@ -71,8 +71,8 @@ const SeniorSideBar = ({ memUUID }) => {
         </div>
       );
     };
-
     
+
 
 // PropTypes 설정
 // ESLint가 PropTypes 검사를 설정하지 않아 경고가 뜨길래 아래 코드로 선언해서 해결함
