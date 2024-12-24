@@ -1,17 +1,51 @@
 // src/pages/program/ProgramWrite.jsx
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider";
+import { apiSpringBoot } from "../../utils/axios";
 import styles from './ProgramWrite.module.css';
 import SideBar from '../../components/common/SideBar';
 
 
 const ProgramWrite = () => {
+    //토큰정보 가져오기(AuthProvider)
+    const { member, memId } = useContext(AuthContext);
+
     const [files, setFiles] = useState([]); //전체 파일 상태
     const [imageFiles, setImageFiles] = useState([]);   //이미지 파일 상태
     const fileInputRef = useRef(null);  //파일 입력 참조
-
+    
     //navigate
     const navigate = useNavigate();
+
+    //program
+    const [formData, setFormData] = useState({
+        snrOrgName: '',
+        snrOrgPhone: '',
+        snrOrgEmail: '',
+        snrOrgAddress: '',
+        snrTitle: '',
+        snrStartedAt: '',
+        snrEndedAt: '',
+        snrContent: '',
+        snrMgrName: '',
+        snrCreatedBy: '',
+    });
+
+
+    //페이지 로딩시 memId 등록자에 넣기
+    useEffect(() => {
+        console.log('userName : ' + memId + ', memUUID : ' + member.memUUID);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            snrCreatedBy: member.memUUID,
+        }));
+    }, []);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({...prevFormData, [name] : value,}));
+    };
 
     //파일 추가 핸들러
     const handleFileChange = (e) => {
@@ -78,6 +112,57 @@ const ProgramWrite = () => {
         }
     };
 
+    //프로그램 등록하기
+    const handleInsertProgram = async (e) => {
+        e.preventDefault(); //submit 취소
+        if(window.confirm('프로그램을 등록하시겠습니까?')) {
+            const data = new FormData();
+            //Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+
+            // 날짜 변환 (String -> Timestamp)
+            const convertToTimestamp = (dateString) => {
+                return new Date(dateString).toISOString(); // Timestamp 포맷 (yyyy-MM-ddTHH:mm:ss.sssZ)
+            };
+
+            // FormData에 입력값 추가
+            Object.entries(formData).forEach(([key, value]) => {
+                if (key === 'snrStartedAt' || key === 'snrEndedAt') {
+                    // 날짜 필드는 Timestamp로 변환
+                    data.append(key, convertToTimestamp(value));
+                } else {
+                    data.append(key, value);
+                }
+            });
+
+            console.log('snrTitle : ', data.get('snrTitle'));
+
+            if (files) {
+                files.forEach((file) => {
+                    data.append('files', file);  //첨부파일 추가
+                });
+            }
+            console.log('files : ', data.getAll('files'));
+
+            //data 확인용
+            for (let [key, value] of data.entries()) {
+                console.log(`${key} : ${value.name||value}`);
+            }
+
+            try {
+                await apiSpringBoot.post('/program', data, {
+                    headers: {
+                        'Content-Type' : 'multipart/form-data',
+                    }
+                });
+                alert('프로그램 등록에 성공하였습니다.');
+                //navigate('/program');
+            } catch (error) {
+                console.error('프로그램 등록 실패 : ', error);
+                alert('프로그램 등록에 실패하였습니다. 관리자에게 문의하세요.')
+            }
+        }
+    };
+
 
 
     return (
@@ -90,46 +175,51 @@ const ProgramWrite = () => {
 
                 <div className={styles.secContent}>
                     <p className={styles.requiredTxt}>&#42;필수 항목입니다.</p>
-                    <form onReset={handleReset}>
+                    <form onReset={handleReset} onSubmit={handleInsertProgram} encType='multipart/form-data'>
                         <div className={styles.pgBox}>
                             <label>기관명<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrOrgName" id="snrOrgName" value={FormData.snrOrgName} required placeholder="기관명을 입력해 주세요"/>
+                            <input type="text" name="snrOrgName" id="snrOrgName" value={FormData.snrOrgName} required onChange={handleChange} placeholder="기관명을 입력해 주세요"/>
                         </div>
 
                         <div className={styles.pgBox}>
                             <label>기관 전화번호<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="tel" name="snrOrgPhone" id="snrOrgPhone" value={FormData.snrOrgPhone} required placeholder="예) 02-123-4567"/>
-                        </div>
-                        
-                        <div className={styles.pgBox}>
-                            <label>기관 이메일<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="tel" name="snrOrgEmail" id="snrOrgEmail" value={FormData.snrOrgEmail} required placeholder="예) silverplus2024@hexalab.com"/>
+                            <input type="tel" name="snrOrgPhone" id="snrOrgPhone" value={formData.snrOrgPhone} required onChange={handleChange} placeholder="예) 02-123-4567"/>
                         </div>
                         
                         <div className={styles.pgBox}>
                             <label>기관 주소<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrOrgAddress" id="snrOrgAddress" value={FormData.snrOrgAddress} required placeholder="예) 서울 서초구 서초대로 77길 41 4층"/>
+                            <input type="text" name="snrOrgAddress" id="snrOrgAddress" value={formData.snrOrgAddress} required onChange={handleChange} placeholder="예) 서울 서초구 서초대로 77길 41 4층"/>
+                        </div>
+
+                        <div className={styles.pgBox}>
+                            <label>담당자명<span className={styles.redTxt}>&#42;</span></label>
+                            <input type="text" name="snrMgrName" id="snrMgrName" value={formData.snrMgrName} required onChange={handleChange} placeholder="프로그램 담당자명을 입력해 주세요"/>
+                        </div>
+                        
+                        <div className={styles.pgBox}>
+                            <label>담당자 이메일<span className={styles.redTxt}>&#42;</span></label>
+                            <input type="tel" name="snrOrgEmail" id="snrOrgEmail" value={formData.snrOrgEmail} required onChange={handleChange} placeholder="예) silverplus2024@hexalab.com"/>
                         </div>
 
                         <div className={styles.pgLine}></div>
 
                         <div className={styles.pgBox}>
                             <label>제 목<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrTitle" id="snrTitle" value={FormData.snrTitle} required placeholder="제목을 입력해 주세요"/>
+                            <input type="text" name="snrTitle" id="snrTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
                         </div>
 
                         <div className={styles.pgBox}>
                             <label>참여 기간<span className={styles.redTxt}>&#42;</span></label>
                             <div className={styles.pgDateWrap}>
-                                <input type="date" name="snrStartedAt" id="snrStartedAt" value={FormData.snrStartedAt} required />
+                                <input type="date" name="snrStartedAt" id="snrStartedAt" value={formData.snrStartedAt} required onChange={handleChange} />
                                 <span>~</span>
-                                <input type="date" name="snrEndedAt" id="snrEndedAt" value={FormData.snrEndedAt} required />
+                                <input type="date" name="snrEndedAt" id="snrEndedAt" value={formData.snrEndedAt} required onChange={handleChange} />
                             </div>
                         </div>
 
                         <div className={styles.pgBox}>
                             <label>내 용<span className={styles.redTxt}>&#42;</span></label>
-                            <textarea name="snrContent" id="snrContent" value={FormData.snrContent}></textarea>
+                            <textarea name="snrContent" id="snrContent" value={FormData.snrContent} onChange={handleChange}></textarea>
                         </div>
 
                         {/* 첨부파일 */}

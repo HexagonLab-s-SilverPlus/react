@@ -14,15 +14,12 @@ body {background: #fff; color: #333;}
 
 .pgBox {display: flex; flex-direction: column; margin-bottom: 24px;}
 .pgBox > label {font-size: 24px; font-weight: bold; color: #666;}
-.pgBox > input {width: 100%; height: 36px; margin: 8px 0 4px; font-size: 16px; padding-left: 8px;}
+.pgBox > input {width: 100%; height: 40px; margin: 8px 0 4px; font-size: 16px; padding-left: 8px; display: block; box-sizing: border-box;}
 
 .pgDateWrap > input {height: 36px; margin: 8px 0 4px; font-size: 16px; padding: 0 8px; min-width: 240px;}
 .pgDateWrap > span {font-size: 24px; margin: 0 8px;}
 
 .pgBox > textarea {width: 100%; height: 300px; margin: 8px 0 4px; font-size: 16px; font-family: "Pretendard Variable";}
-
-.secContent > form > .pgBox:nth-of-type(9) input {padding-left: 0;}
-
 
 .pgLine {width: 100%; height: 1px; background: #ddd; margin: 48px 0;}
 /* secContent end */
