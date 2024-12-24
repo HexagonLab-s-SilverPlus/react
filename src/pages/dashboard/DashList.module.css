@@ -1,0 +1,178 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 50px;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    width: calc(100% - 368px);
+    position: absolute;
+    top : 0;
+    right: 0;
+    box-sizing: border-box;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 200px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.button span {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.button strong {
+    font-size: 18px;
+}
+
+.button.blue {
+    background-color: #30C6BE;
+}
+
+.button.red {
+    background-color: #F37D89;
+}
+
+.button.purple {
+    background-color: #CCAFEA;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.rsection{
+    display: flex;
+    flex-wrap: wrap;
+
+    width: calc(100%);
+    position: absolute;
+    top: 0;
+    right: 0;
+    gap: 20px; /* 버튼과 달력 사이의 간격 */
+    padding: 20px; /* 내부 여백 */
+    box-sizing: border-box;
+}
+
+.calendarbox{
+    /* flex: 1;
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 900px;
+    height: 500px;
+     */
+     flex: none; /* 부모 요소의 flex-grow를 무시하고 고정된 크기로 설정 */
+     position: relative;
+     top: 0;
+     right: 0;
+     width: 900px; /* 고정 너비 설정 */
+     height: 500px; /* 고정 높이 설정 */
+     margin: 30px;
+   
+     
+    
+} 
+
+
+/* 전체 컨테이너 */
+.todo-container {
+    background-color: #f9f9f9; /* 컨테이너 배경색 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    padding: 20px; /* 내부 여백 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    margin: 20px 0; /* 위아래 간격 */
+}
+
+/* 헤더 스타일 */
+.todo-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 할 일 목록 */
+.todo-list {
+    list-style: none; /* 기본 목록 스타일 제거 */
+    padding: 0; /* 안쪽 여백 제거 */
+    margin: 0; /* 바깥 여백 제거 */
+}
+
+/* 개별 할 일 항목 */
+.todo-item {
+    display: flex; /* 체크박스, 텍스트, 아이콘을 가로로 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    justify-content: space-between; /* 요소 간 간격 벌리기 */
+    padding: 10px 0; /* 항목 간 간격 */
+    border-bottom: 1px solid #ddd; /* 아래쪽 구분선 */
+}
+
+/* 마지막 항목 구분선 제거 */
+.todo-item:last-child {
+    border-bottom: none;
+}
+
+/* 체크박스 */
+.todo-checkbox {
+    margin-right: 10px; /* 체크박스와 텍스트 간 간격 */
+    cursor: pointer; /* 마우스 포인터 표시 */
+}
+
+/* 할 일 텍스트 */
+.todo-text {
+    flex: 1; /* 텍스트 영역 확장 */
+    font-size: 16px;
+    color: #333; /* 텍스트 색상 */
+}
+
+/* 삭제 버튼 */
+.todo-delete {
+    background: none; /* 버튼 배경 제거 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer; /* 마우스 포인터 표시 */
+    color: #888; /* 아이콘 색상 */
+    transition: color 0.2s ease;
+}
+
+/* 삭제 버튼 호버 효과 */
+.todo-delete:hover {
+    color: #e74c3c; /* 빨간색 강조 */
+}
+.form-container {
+    width: 100%;
+    margin-top: 20px; /* 상단 여백 */
+    padding: 20px; /* 내부 여백 */
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    background-color: #f9f9f9; /* 배경색 */
+    width: 100%; /* 전체 너비 */
+    box-sizing: border-box; /* 박스 크기 계산 방식 */
+}

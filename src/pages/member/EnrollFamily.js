@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './Enroll.module.css';
 
-function EnrollFamily(onEnrollSuccess, memType) {
+function EnrollFamily({ onEnrollSuccess, memType }) {
   const [formData, setFormData] = useState({
     memId: '', // 아이디
     memPw: '', // 비밀번호
@@ -115,7 +115,7 @@ function EnrollFamily(onEnrollSuccess, memType) {
 
   const handleCheckPassword = () => {
     if (formData.memPw) {
-      validateCellphone();
+      validatePassword();
     }
   };
 
