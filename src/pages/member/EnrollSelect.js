@@ -16,10 +16,12 @@ const EnrollSelect = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setMemType('');
   };
   const handleEnrollSuccess = () => {
     setShowModal(false);
     navigate('/loginmember');
+    setMemType('');
   };
   const handleMoveEnrollManager = () => {
     setMemType('MANAGER');
