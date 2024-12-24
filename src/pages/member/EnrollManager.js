@@ -2,11 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
-import axios from 'axios';
-// import { jwtDecode } from "jwt-decode"; // jwt-decode jwt 토큰 사용시 필요한 패키지
 import styles from './Enroll.module.css';
 
-function EnrollManager() {
+function EnrollManager({ onEnrollSuccess, memType }) {
   const [formData, setFormData] = useState({
     memId: '', // 아이디
     memPw: '', // 비밀번호
@@ -18,7 +16,7 @@ function EnrollManager() {
     // memPhone: '',       // 일반전화
     memRnn: '', // 주민등록번호
     // memGovCode: '', // 관공서 코드
-    memType: 'ADMIN', // 회원타입
+    memType: memType, // 회원타입
   });
 
   const navigate = useNavigate();
@@ -32,6 +30,8 @@ function EnrollManager() {
   const [passwordCheckMsg, setPasswordCheckMsg] = useState('');
   // 비밀번호 중복검사여부에 따른 메세지 컬러 변경 상태변수
   const [messagePwdColor, setMessagePwdColor] = useState('');
+  // 비밀번호 유효성검사여부에 따른 메세지 컬러 변경 상태변수
+  const [passwordValidate, setPasswordValidate] = useState(false);
   // 휴대전화 인증여부에 따른 상태변수
   const [cellphoneCheck, setCellphoneCheck] = useState(false);
   // 휴대전화 인증여부에 따른 메세지 변경 상태변수
@@ -61,7 +61,7 @@ function EnrollManager() {
       });
       if (response.data === 'ok') {
         setIsAvailable(true);
-        setIdCheckMsg('사용가능한 아이디입니다.');
+        setIdCheckMsg('✔ 사용가능한 아이디입니다.');
         setMessageIdColor('green');
       } else {
         setIsAvailable(false);
@@ -81,7 +81,7 @@ function EnrollManager() {
       setMessagePwdColor('red');
       return false;
     } else {
-      setPasswordCheckMsg(' 비밀번호가 일치합니다.');
+      setPasswordCheckMsg('✔ 비밀번호가 일치합니다.');
       setMessagePwdColor('green');
       return true;
     }
@@ -89,7 +89,12 @@ function EnrollManager() {
 
   const validatePassword = () => {
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+      /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
+    if (passwordRegex.test(formData.memPw)) {
+      setPasswordValidate(true);
+    } else {
+      setPasswordValidate(false);
+    }
     return passwordRegex.test(formData.memPw);
   };
 
@@ -110,7 +115,7 @@ function EnrollManager() {
 
   const handleCheckPassword = () => {
     if (formData.memPw) {
-      validateCellphone();
+      validatePassword();
     }
   };
 
@@ -147,7 +152,7 @@ function EnrollManager() {
     data.append('memAddress', formData.memAddress);
     data.append('memCellphone', formData.memCellphone);
     data.append('memRnn', formData.memRnn);
-    data.append('memType', 'ADMIN');
+    data.append('memType', formData.memType);
     data.append('memStatus', 'ACTIVE');
 
     try {
@@ -157,7 +162,7 @@ function EnrollManager() {
         },
       });
       alert('가입 성공');
-      navigate('/');
+      onEnrollSuccess();
     } catch (error) {
       console.error('가입 실패');
       console.log(formData);
@@ -197,7 +202,7 @@ function EnrollManager() {
       if (verify === 'true') {
         alert('인증성공');
         setCellphoneCheck(true);
-        setCellphoneCheckMsg('휴대전화 인증이 완료되었습니다.');
+        setCellphoneCheckMsg('✔ 휴대전화 인증이 완료되었습니다.');
       } else if (verify === 'false') {
         alert('인증 실패. 인증시간이 완료되었거나 인증번호를 틀렸습니다.');
         setCellphoneCheck(false);
@@ -278,16 +283,30 @@ function EnrollManager() {
               onBlur={handleCheckPassword}
             />
           </tr>
-          <tr
-            style={{
-              textAlign: 'left',
-              fontSize: '10px',
-              color: 'red',
-              height: '20px',
-            }}
-          >
-            대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
-          </tr>
+          {!passwordValidate && (
+            <tr
+              style={{
+                textAlign: 'left',
+                fontSize: '10px',
+                color: 'red',
+                height: '20px',
+              }}
+            >
+              대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
+            </tr>
+          )}
+          {passwordValidate && (
+            <tr
+              style={{
+                textAlign: 'left',
+                fontSize: '10px',
+                color: 'green',
+                height: '20px',
+              }}
+            >
+              ✔ 사용가능한 비밀번호입니다.
+            </tr>
+          )}
           <tr className={styles.valuebox}>비밀번호 확인</tr>
           <tr>
             <input
@@ -308,7 +327,7 @@ function EnrollManager() {
             }}
             name="pwdCheck"
           >
-            {messagePwdColor === 'green' && <span>&#x2714;</span>}
+            {messagePwdColor === 'green'}
             {passwordCheckMsg}
           </tr>
           <tr className={styles.valuebox}>이메일</tr>
