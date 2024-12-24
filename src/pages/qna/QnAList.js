@@ -24,6 +24,8 @@ const QnAList = () => {
     startPage: 1,
     endPage: 1,
     keyword: "",
+    startDate: "2025-01-01",
+    endDate: "2025-01-01",
   });
 
   const navigate = useNavigate();
@@ -38,11 +40,11 @@ const QnAList = () => {
   };
 
   const handlePageChange = async (page) => {
-    handleQnAView(member.memUUID, page, pagingInfo.action, pagingInfo.keyword);  //일반 목록 페이지 요청
+    handleQnAView(member.memUUID, page, pagingInfo.action);  
   };
 
+  const handleQnAView = async (uuid, page, action) => {
 
-  const handleQnAView = async (uuid, page, action, keyword) => {
       try{
         let response = null
         if(role === "ADMIN") {
@@ -51,7 +53,9 @@ const QnAList = () => {
               ...pagingInfo,
               pageNumber: page,
               action: action,
-              keyword, keyword,
+              keyword: pagingInfo.keyword,
+              startDate: pagingInfo.startDate + " 03:00:00",
+              endDate: pagingInfo.endDate + " 03:00:00",
             },
           });
           
@@ -61,41 +65,62 @@ const QnAList = () => {
               ...pagingInfo,
               uuid: uuid,
               pageNumber: page,
+              action: action,
+              keyword: pagingInfo.keyword,
+              startDate: pagingInfo.startDate + " 03:00:00",
+              endDate: pagingInfo.endDate + " 03:00:00",
+
             },
           });
         }
+        console.log(response.data.search);
         setQnaList(response.data.qna);
         setMemberList(response.data.member);
     
-        const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize);
-        setPagingInfo(response.data.search);
+        const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, 
+                                              response.data.search.listCount, response.data.search.pageSize);
+        setPagingInfo(response.data.search.startDate.toLocaleString());
+        
         setPagingInfo((pre) => ({
           ...pre,
           maxPage: maxPage,
           startPage: startPage,
           endPage: endPage,
+          startDate: response.data.search.startDate.substring(0, 10),
+          endDate: response.data.search.endDate.substring(0, 10),
         }));
 
       } catch (e){
         console.log("error : {}", e); // 에러 메시지 설정
       }    
   }
+  
+  const handleSelectChange = (e) => {
+    const {value} = e.target
+    setActionInfo((pre) => ({
+      ...pre,
+      actionType: value
+    }));
+
+  };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    setActionInfo((prev) => ({
+    setPagingInfo((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleSearch = () => {
-    handleQnAView(member.memUUID, 1, actionInfo.actionType, actionInfo.keyword);
+    handleQnAView(member.memUUID, 1, actionInfo.actionType);
   }
 
   useEffect(() => {
-    handleQnAView(member.memUUID, pagingInfo.pageNumber, pagingInfo.action, actionInfo.keyword);
-  }, [accessToken]);
+    if(member.memUUID){
+      handleQnAView(member.memUUID, pagingInfo.pageNumber, pagingInfo.action);
+    }
+  }, []);
 
   
   const formatDate = (dateString) => {
@@ -105,11 +130,46 @@ const QnAList = () => {
     const year = date.getFullYear().toString().slice(2);  // 연도에서 앞 2자리만 추출
     const month = String(date.getMonth() + 1).padStart(2, '0');  // 1월은 0부터 시작하므로 +1 해줍니다.
     const day = String(date.getDate()).padStart(2, '0');
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
+    // const hour = String(date.getHours()).padStart(2, '0');
+    // const minute = String(date.getMinutes()).padStart(2, '0');
   
-    return `${year}/${month}/${day} ${hour}:${minute}`;
+    return `${year}-${month}-${day}`;
   };
+
+
+  const selectClass = () => {
+    switch (actionInfo.actionType) {
+      case 'all':
+        return styles.qnaSearchAllSelect;  // 'title' 선택 시 클래스
+      case 'title':
+        return styles.qnaSearchTitleSelect;  // 'date' 선택 시 클래스
+      case 'date':
+        return styles.qnaSearchDateSelect;  // 'date' 선택 시 클래스
+      default:
+        return styles.qnaSearchAllSelect;
+    } 
+  }
+
+  const searchView = () => {
+    switch (actionInfo.actionType) {
+      case 'all':
+        return ; 
+      case 'title':
+        return <div>
+                  <input name='keyword' onChange={handleChange} className={styles.qnaTitleInput}/> 
+                  <img src={searchImag} onClick={handleSearch} />
+                </div>;
+      case 'date':
+        // 현재 날짜를 가져옵니다.
+        return <div>
+                  <div className={styles.qnaDateInput}>
+                    <input type='date' name='startDate' onChange={handleChange} defaultValue={"2025-01-01"}  className={styles.qnaDate}/> ~ 
+                    <input type='date' name='endDate' onChange={handleChange} defaultValue={"2025-01-01"} className={styles.qnaDate} />
+                  </div>
+                  <img src={searchImag} onClick={handleSearch} />
+                </div>
+    }
+  }
 
   return (
     <div>
@@ -117,13 +177,12 @@ const QnAList = () => {
       <div className={styles.qnaContent}>
         <QNAHeader />
         <div className={styles.qnaSeachdiv}>
-          <select name='actionType' onChange={handleChange} className={styles.qnaSeachselect}>
+          <select name='actionType' onChange={handleSelectChange} className={`${selectClass()}`}>
             <option value="all" selected >전체</option>
             <option value="title">제목</option>
             <option value="date">날짜</option>
           </select>
-          
-          <input name='keyword' onChange={handleChange} className={styles.qnaInput}></input><img src={searchImag} onClick={handleSearch}></img>
+          {searchView()}
           <button className={styles.qnaInputBTN} onClick={handleWriteClick}>등 록</button>
         </div>
         <table className={styles.qnaListTable}>
@@ -146,13 +205,14 @@ const QnAList = () => {
         </table>
         <div className={styles.pagingDiv}>
           <Paging 
-            currentPag={pagingInfo.currentPage || 1}
-            maxPage={pagingInfo.maxPage || 1}
-            startPage={pagingInfo.startPage || 1}
-            endPage={pagingInfo.endPage || 1}
+            currentPag={pagingInfo.currentPage }
+            maxPage={pagingInfo.maxPage}
+            startPage={pagingInfo.startPage }
+            endPage={pagingInfo.endPage}
             onPageChange={(page) => handlePageChange(page)}
           />
         </div>
+        {pagingInfo.startDate}
       </div>
       
     </div>

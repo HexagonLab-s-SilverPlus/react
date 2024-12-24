@@ -23,7 +23,21 @@
     cursor: pointer;
 }
 
-.qnaSeachselect {
+.qnaSearchAllSelect {
+    height: 33px;
+    width: 83px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    font-size: 20px;
+    position: absolute;
+    left: 1260px;
+    bottom: 0;
+    font-family: "Pretendard Variable";
+}
+
+.qnaSearchTitleSelect {
     height: 33px;
     width: 83px;
     border-top: none;
@@ -34,9 +48,24 @@
     position: absolute;
     left: 1016px;
     bottom: 0;
+    font-family: "Pretendard Variable";
 }
 
-.qnaInput {
+.qnaSearchDateSelect {
+    height: 33px;
+    width: 83px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    font-size: 20px;
+    position: absolute;
+    left: 950px;
+    bottom: 0;
+    font-family: "Pretendard Variable";
+}
+
+.qnaTitleInput {
     height: 33px;
     width: 217px;
     border-top: none;
@@ -45,6 +74,19 @@
     position: absolute;
     left: 1108px;
     bottom: 0;
+}
+
+.qnaDateInput {
+    position: absolute;
+    left: 1060px;;
+    bottom: 0px;
+}
+
+.qnaDate {
+    height: 30px;
+    width: 110px;
+    font-family: "Pretendard Variable";
+    font-weight: 500;
 }
 
 .qnaInputBTN {
@@ -63,6 +105,7 @@
     left: 1363px;
     bottom: 0;
     cursor: pointer;
+    font-family: "Pretendard Variable";
 }
 
 .qnaListTable {
