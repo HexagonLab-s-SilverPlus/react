@@ -4,8 +4,8 @@ import { AuthContext } from "../../AuthProvider"
 import {apiSpringBoot} from '../../utils/axios';
 import styles from './DashList.module.css';
 import SideBar from '../../components/common/SideBar';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
+// import FullCalendar from '@fullcalendar/react';
+// import dayGridPlugin from '@fullcalendar/daygrid';
 
 const DashList = () => {
 
@@ -118,7 +118,7 @@ const DashList = () => {
                 </div>
                 
             
-            <div className={styles.calendarbox}>
+            {/* <div className={styles.calendarbox}>
                 <FullCalendar
                     plugins={[dayGridPlugin]}
                     initialView="dayGridMonth"
@@ -127,7 +127,7 @@ const DashList = () => {
                         { title: '이벤트 2', date: '2024-12-22' }
                     ]}
                 />
-                </div>
+                </div> */}
                 
 
                 <div className="form-container">
