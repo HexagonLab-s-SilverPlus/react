@@ -9,6 +9,9 @@ function WelcomeChat() {
   const [workspaces, setWorkspaces] = useState([]); // 워크스페이스 ID 배열 상태
   const navigate = useNavigate();
   const { apiSpringBoot, apiFlask, member, accessToken } = useContext(AuthContext);
+  // const { apiSpringBoot, apiFlask, member } = useContext(AuthContext);
+  
+  // const accessToken  = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MiIsImNhdGVnb3J5IjoicmVmcmVzaCIsIm5hbWUiOiJ0ZXN0MiIsInJvbGUiOiJBRE1JTiIsIm1lbWJlciI6eyJtZW1VVUlEIjoiNWU3NGRhNTMtYjFmZi00ODA2LWExNWMtNmM5OGMxNTA4ZTBkIiwibWVtSWQiOiJ0ZXN0MiIsIm1lbVB3IjoiJDJhJDEwJEt3S0hRRUJBMnkvM1JETHVvOFBKOWVFcGN4bTVYT3dleEtUNEhiSEdraGp3S1VRTmhia3NLIiwibWVtTmFtZSI6InRlc3QyIiwibWVtVHlwZSI6IkFETUlOIiwibWVtRW1haWwiOiJ0ZXN0MUB0LmtyIiwibWVtQWRkcmVzcyI6IuyEnOy0iOuMgOuhnCIsIm1lbUNlbGxwaG9uZSI6IjAxMDEyMzQ1Njc4IiwibWVtUGhvbmUiOm51bGwsIm1lbVJubiI6IjEyMzQ1Ni0xMjM0NTY3IiwibWVtR292Q29kZSI6bnVsbCwibWVtU3RhdHVzIjoiQUNUSVZFIiwibWVtRW5yb2xsRGF0ZSI6bnVsbCwibWVtQ2hhbmdlU3RhdHVzIjpudWxsLCJtZW1GYW1pbHlBcHByb3ZhbCI6bnVsbCwibWVtU29jaWFsS2FrYW8iOm51bGwsIm1lbUtha2FvRW1haWwiOm51bGwsIm1lbVNvY2lhbE5hdmVyIjpudWxsLCJtZW1OYXZlckVtYWlsIjpudWxsLCJtZW1Tb2NpYWxHb29nbGUiOm51bGwsIm1lbUdvb2dsZUVtYWlsIjpudWxsLCJtZW1VVUlERmFtIjpudWxsLCJtZW1VVUlETWdyIjpudWxsfSwiZXhwIjoxNzM1MTI0MzI1fQ.qhtOqXHTu9IdxCGqHUz4npBs5StSVYvgzbqQEmlV1Is";
 
   // 워크스페이스 목록 가져오기
   const fetchWorkspace = async () => {
@@ -30,7 +33,7 @@ function WelcomeChat() {
 
         // 가장 첫 번째 워크스페이스로 이동
         // TODO: 지금은 첫 워크스페이스로 임시방편 이동하지만, 나중에 세션 연결해서 세션 끊기지 않으면 워크스페이스 이동하면 안 됨
-        if (data.length > 0 ) {
+        if (data.length > 0) {
           const firstWorkspace = data[0];
           // navigate(`/w/${firstWorkspace.workspaceId}`, {
           //   state: { workspaceId: firstWorkspace.workspaceId },
