@@ -9,7 +9,19 @@ import SideBar from '../../components/common/SideBar';
 
 const DashList = () => {
 
-    const {member, accessToken, memName} = useContext(AuthContext);
+    
+    const handleSeniorCountClick = () => {
+        navigate = ('/manegedsenior');
+    };
+    const handFamilyCountClick = () => {
+        navigate = ('/familyaccount');
+    };
+    const docCountClick = () => {
+        navigate = ('/docrequest');
+    };
+
+
+    const {member, memId} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -23,19 +35,18 @@ const DashList = () => {
     }
 
     useEffect(()=>{
-        console.log("uuid : "+ memName);
+        console.log("uuid : "+ memId+ ', memUUID : ' + member.memUUID);
         setFormData((prevFormData)=>({
             ...prevFormData,
-            memUuid:memName,
+            memUuid:member.memUUID,
         }))
 
-    },[memName]);
+    },[member, memId]);
 
     //dashboard
     const [formData, setFormData] =useState({
-        taskId:'',
         taskContent:'',
-        taskStatus: false,
+        taskStatus: '',
         taskDate: new Date().toISOString().split('T')[0],
         memUuid:'',
     });
@@ -43,18 +54,36 @@ const DashList = () => {
     //insert
     const handleInsertTodo = async (e) => {
         e.preventDefault();
-        console.log("uuid : "+member.memUuid);
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            memUuid: member.memUuid
+        // console.log("uuid : "+member.memUuid);
+        // setFormData((prevFormData) => ({
+        //     ...prevFormData,
+        //     memUuid: member.memUuid
 
-        }));
+        // }));
+        const data =new FormData();
+
+        const convertToTimestamp = (dateString) => {
+            return `${dateString} 00:00:00`; // ISO 8601 형식 (yyyy-MM-ddTHH:mm:ss.sssZ)
+        };
+
+
+        // FormData에 입력값 추가
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key === 'taskDate' ) {
+                data.append(key, convertToTimestamp(value)); // 'yyyy-MM-dd HH:mm:ss' 형식으로 변환
+            } else {
+                data.append(key, value);
+            }
+        }); 
+            
+        for (let [key, value] of data.entries()) {
+            console.log(`${key}: ${value}`);
+        }
         try {
-            await apiSpringBoot.post('/dashboard', formData,{
+            await apiSpringBoot.post('/dashboard', data,{
                 headers: {
                     'Content-Type' : 'multipart/form-data',
-                    Authrization: `Bearer ${accessToken},`
-                }
+                },
             });
 
             alert('할일 등록 성공');
@@ -65,23 +94,6 @@ const DashList = () => {
             alert('새 할일 등록 실패');
         }
     };
-
-    
-
-    
-
-    const handleSeniorCountClick = () => {
-        navigate = ('/manegedsenior');
-    };
-    const handFamilyCountClick = () => {
-        navigate = ('/familyaccount');
-    };
-    const docCountClick = () => {
-        navigate = ('/docrequest');
-    };
-
-
-
    
     return (
         <div>
@@ -116,9 +128,9 @@ const DashList = () => {
                     ]}
                 />
                 </div> */}
-                </div>
+                
 
-           <div></div>
+                <div className="form-container">
                 <form onSubmit={handleInsertTodo}>
                     <table>
                         <tbody>
@@ -159,12 +171,14 @@ const DashList = () => {
                         </table>    
                     
                 </form>
+                </div>
+                </div></div>
 
        
 
             
         </div>
-        </div>
+       
     
     );
 };
