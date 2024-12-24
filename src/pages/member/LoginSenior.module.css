@@ -1,4 +1,4 @@
-/* src/pages/member/LoginMember.module.css */
+/* src/pages/member/LoginSenior.module.css */
 
 .form {
   position: absolute;
@@ -17,7 +17,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 .logininput {
   width: 600px;
   height: 70px;
@@ -26,12 +25,11 @@
   border-style: outset;
   box-sizing: border-box;
   padding: 0 10px;
-  font-size: 20px;
+  font-size: 30px;
 }
 
 .logininput::placeholder {
-  font-size: 20px;
-  line-height: normal;
+  font-size: 30px;
 }
 
 .loginbutton {
@@ -49,7 +47,7 @@
   height: 60px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  font-size: 28px;
+  font-size: 35px;
   font-weight: bold;
 }
 
