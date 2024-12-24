@@ -1,7 +1,7 @@
 /*senior*/
 .noticeList {background-color:#f9f9f9;}
 .top {display:flex;align-items: end;padding : 24px 72px 24px;}
-.menuname {display:flex; font-size:72px; font-weight : bold; color:#064420;}
+.menuName {display:flex; font-size:72px; font-weight : bold; color:#064420;}
 .searchbox{display:flex;margin-left:auto;gap:5px;font-size:28px;font-weight : bold;color:#333333;}
 .searchOptions{border-bottom:2px gray solid;}
 .arrow{width:24px;height:24px;cursor:pointer;}
@@ -22,9 +22,23 @@
 .memberContainer {display: flex;}
 .memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
 .secTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
-.memberSearchbox{display:flex;justify-content: flex-end;align-items:end;gap:5px;margin-top: 55px;margin-bottom:20px;}
+.memberSearchbox{display:flex;justify-content: flex-end;align-items:end;gap:5px;margin-top: 80px;margin-bottom:20px;}
 .memberSearchOptions{border-bottom:2px #064420 solid;cursor:pointer;font-size: 20px;font-weight: bold;}
 .memberArrow{width:20px;height:20px;}
-.memberDropdown{position:absolute;z-index:1000;margin-top:40px;}
-.memberDropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
+.memberDropdown{position:absolute;z-index:1000;margin-top:5px;}
+.memberDropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;font-size:20px;}
 .memberDropdownOption:hover{font-weight:bold;}
+.memberSearchKeyword{display:flex;align-items:center;border-bottom:2px #064420 solid;}
+.memberSearchKeywordBox{width:320px;font-size:16px;border:0px;background-color:#ffffff;color:#333333;}
+.memberSearch{width:30px;height:30px;cursor:pointer;}
+.memberSearchButton{background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.tableDiv{width:calc(100%);margin-top: 20px;}
+.memberNoticeTable{table-layout:fixed;width: 100%;text-align: center;margin-top:80px;font-size: 18px;border-collapse: collapse;}
+.memberNoticeTable > thead { width: 100%;}
+.memberNoticeTable > thead > tr > th {padding-top : 8px;padding-bottom: 8px;font-weight: bold;border-bottom: 2px solid #999999;}
+.thNo {width: 10%;}
+.thTitle {width: 65%;}
+.thDate {width: 15%;}
+.thViews {width: 10%;}
+.memberNoticeTable > tbody > tr > td {padding-top : 8px;padding-bottom: 8px;border-bottom:2px solid #999999;}
+.noticePaging {margin-top: 45px;}

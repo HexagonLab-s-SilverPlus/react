@@ -9,5 +9,5 @@ export const PagingCalculate = (pageNumber, listCount, pageSize) => {
     console.log("startPage : " + startPage);
     console.log("endPage : " + endPage);
   
-    return {pageNumber, listCount, maxPage, startPage, endPage };
+    return {maxPage, startPage, endPage};
   };
