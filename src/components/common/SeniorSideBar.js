@@ -6,31 +6,30 @@ import { AuthContext } from '../../AuthProvider';
 import styles from './WelcomePage.module.css';
 import PropTypes from 'prop-types';
 
-const SeniorSideBar= ({ memUUID }) => {
-    const [workspaces, setWorkspaces] = useState([]); // 조회된 워크스페이스 배열 상태 선언언
-    const [newWorkspaceName, setNewWorkspaceName] = useState(''); // 새로운 워크스페이스명 상태 선언언
+const SeniorSideBar = ({ memUUID }) => {
+    const [workspaces, setWorkspaces] = useState([]); // 워크스페이스 목록록
     const [error, setError] = useState(null);
-    const [selectedWorkspaceId, setSelectedWorkspaceId]=useState(null);
+    const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null);
     const { apiSpringBoot } = useContext(AuthContext);
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
     // 워크스페이스 목록 가져오기기
     useEffect(() => {
-        const fetchWorkspace = async() => {
-            try{
+        const fetchWorkspace = async () => {
+            try {
                 const response = await apiSpringBoot.get(`/api/workspace/${memUUID}`);
-                if(response.data.success){
+                if (response.data.success) {
                     setWorkspaces(response.data.data);
-                }else{
+                } else {
                     console.error(response.data.message);
                 }
-            }catch(error){
+            } catch (error) {
                 console.error('워크스페이스 조회 실패:', error);
                 setError('워크스페이스를 불러오지 못했습니다.');
             }
         };
 
-        if(memUUID) fetchWorkspace();
+        if (memUUID) fetchWorkspace();
     }, [memUUID]);
 
 
@@ -40,33 +39,10 @@ const SeniorSideBar= ({ memUUID }) => {
         navigate(`/w/${workspaceId}`); // 해당 워크스페이스로 이동
     }
 
-    // 새 워크스페이스 생성 핸들러
-    const handleCreateWorkspace=async()=> {
-        if(!newWorkspaceName.trim()){
-            alert('워크스페이스 이름을 입력해주세요.');
-            return;
-        }
-
-        try{
-            const response = await apiSpringBoot.post('/api/workspace/create', {
-                memUuid: memUUID,
-                workspaceName: newWorkspaceName,
-            });
-            if(response.data.success){
-                setWorkspaces((prev) => [...prev, response.data.data]);
-                setNewWorkspaceName('');
-                alert('새 워크스페이스가 생성되었습니다.');
-            }else{
-                alert(response.data.message);
-            }
-        }catch(error){
-            console.error('워크스페이스 생성 실패:', error);
-            alert('워크스페이스 생성 중 오류가 발생했습니다.');
-        }
-    };
-
-
-
+    // 새 워크스페이스 생성 화면 이동동
+    const handleCreateWorkspace = async () => {
+        navigate('/welcome-chat'); // WelcomeChat으로 이동
+    }
 
     return (
         <div className={styles.sidebar}>
@@ -78,9 +54,7 @@ const SeniorSideBar= ({ memUUID }) => {
                 <div
                   key={workspace.workspaceId}
                   className={`${styles.item} ${
-                    selectedWorkspaceId === workspace.workspaceId
-                      ? styles.selectedItem
-                      : ''
+                    selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ''
                   }`}
                   onClick={() => handleWorkspaceSelect(workspace.workspaceId)}
                 >
@@ -91,24 +65,14 @@ const SeniorSideBar= ({ memUUID }) => {
               <p>등록된 워크스페이스가 없습니다.</p>
             )}
           </div>
-          <div className={styles.creator}>
-            <input
-              type="text"
-              value={newWorkspaceName}
-              placeholder="새 워크스페이스 이름"
-              className={styles.input}
-              onChange={(e) => setNewWorkspaceName(e.target.value)}
-            />
-            <button onClick={handleCreateWorkspace} className={styles.button}>
-              생성
-            </button>
-          </div>
+          <button onClick={handleCreateWorkspace} className={styles.button}>
+            새 워크스페이스 생성
+          </button>
         </div>
       );
+    };
 
-
-
-}
+    
 
 // PropTypes 설정
 // ESLint가 PropTypes 검사를 설정하지 않아 경고가 뜨길래 아래 코드로 선언해서 해결함
