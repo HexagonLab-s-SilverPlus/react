@@ -1,0 +1,56 @@
+/* src/pages/program/ProgramWrite.module.css */
+body {background: #fff; color: #333;}
+.pgContainer input {font-family: "Pretendard Variable";}
+
+.pgContainer {width: 100%; position: relative;}
+
+.pgRSection {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing: border-box; padding: 72px 48px;}
+.secTop > p {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;}
+/* .secTop end */
+
+.secContent {width: 100%; box-sizing: border-box; padding: 24px 8px;}
+.requiredTxt {color: red; font-size: 14px;}
+.redTxt {color: red;}
+
+.pgBox {display: flex; flex-direction: column; margin-bottom: 24px;}
+.pgBox > label {font-size: 24px; font-weight: bold; color: #666;}
+.pgBox > input {width: 100%; height: 40px; margin: 8px 0 4px; font-size: 16px; padding-left: 8px; display: block; box-sizing: border-box;}
+
+.pgDateWrap > input {height: 36px; margin: 8px 0 4px; font-size: 16px; padding: 0 8px; min-width: 240px;}
+.pgDateWrap > span {font-size: 24px; margin: 0 8px;}
+
+.pgBox > textarea {width: 100%; height: 300px; margin: 8px 0 4px; font-size: 16px; font-family: "Pretendard Variable";}
+
+.pgLine {width: 100%; height: 1px; background: #ddd; margin: 48px 0;}
+/* secContent end */
+
+.pgFileWrap {display: flex; justify-content: space-between; min-height: 300px; margin-top: 48px;}
+.pgFileLeft {position: relative; width: 400px;}
+.pgFileLeft > p {font-size: 24px; font-weight: bold; color: #666; margin: 0;}
+
+.fileBtn {font-family: "Pretendard Variable"; width: 400px; height: 36px; background: rgba(97, 130, 100, 0.15); font-size: 16px; margin: 24px 0 8px; border-radius: 18px;}
+.fileBtn:hover {background: #618264; color: #fff;}
+
+.pgFileListContainer {flex-direction: column;}
+.pgFileListContainer > p {font-size: 16px; font-weight: bold; color: #666;}
+.pgFileList {list-style: none; padding: 0; background: rgba(97, 130, 100, 0.15); width: 400px; height: 144px; border-radius: 8px; box-sizing: border-box; padding: 20px;}
+.pgfileItem {display: flex; justify-content: space-between;}
+.pgfileItem > p {width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;}
+
+.pgDeleteBtn {position: relative; left: 3px; top: -2px;}
+.pgDeleteBtn:hover {color: red;}
+/* .pgFileLeft end */
+
+.pgFileRight {width: calc(100% - 500px);}
+.pgFileRight > p {font-size: 24px; font-weight: bold; color: #666; margin-top: 0;}
+
+.pgPreviewContainer {display: flex; width: 100%; height: 240px; background: rgba(97, 130, 100, 0.15); border-radius: 8px; padding: 20px; box-sizing: border-box;}
+.pgPrevItem {width: 200px; height: 200px; position: relative; margin-right: 30px;}
+.pgPrevImage {width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;}
+.pgImgDeleteBtn {position: absolute; top: 5px; right: 5px; background: #fff; width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); text-align: center; line-height: 30px; font-size: 18px;}
+.pgImgDeleteBtn:hover {background-color: #368cfc; color: #fff;}
+/* .pgFileRight end */
+
+.pgBtnWrap {margin-top: 96px; width: 100%; display: flex; justify-content: center;}
+.pgBtnWrap > input {width: 120px; font-size: 16px; height: 40px; background: #eee; border: 0; border-radius: 8px; margin: 0 8px; cursor: pointer;}
+.pgBtnWrap > input:hover {background: #064420; color: #fff;}

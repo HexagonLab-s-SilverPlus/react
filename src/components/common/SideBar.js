@@ -29,7 +29,7 @@ function SideBar() {
           <Link to="/">계정관리</Link>
         </li>
         <li>
-          <Link to="/">공지사항</Link>
+          <Link to="/notice">공지사항</Link>
         </li>
         <li>
           <Link to="/">어르신 맞춤 활동</Link>

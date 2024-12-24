@@ -5,17 +5,43 @@ import { AuthContext } from '../../AuthProvider';
 
 const QnAWrite = () => {
     const navigate = useNavigate();
-    const { accessToken} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+    const { accessToken, member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+    // files
+    const [newFiles, setNewFiles] = useState([]);
 
     const [formData, setFormData] = useState({
         qnaTitle: "",       // 제목
-        qnaWCreateBy: "5e74da53-b1ff-4806-a15c-6c98c1508e0d",   // 질문자 
-        // qnaWCreateBy: "CECE02F57F344658B7482F5F59F7F998",   // 질문자 
+        qnaWCreateBy: member.memUUID,   // 질문자 
         qnaWContent: "",    // 질문내용
         qnaADContent: "",    // 답변내용
         qnaADCreateBy: "",  // 답변자
         qnaADUpdateBy: "",  // 답변자(수정)
     });
+
+        // 첨부파일 입력박스 추가
+        const handleFileInsertBox = (e) => {
+            e.preventDefault(); // submit 취소
+            // 임시 파일 입력 요소 생성
+            const input = document.createElement('input');
+            input.type = 'file';
+    
+            // 파일 선택 이벤트 처리
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    setNewFiles((prevFiles) => [...prevFiles,file]);
+                }
+            };
+    
+            document.body.appendChild(input);
+            input.click();
+            document.body.removeChild(input);
+        };
+        
+        // 파일 삭제 처리
+        const handleDeleteFile = (index) => {
+            setNewFiles((prevfiles)=>prevfiles.filter((_,i) => i !== index));
+        };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -30,13 +56,25 @@ const QnAWrite = () => {
         e.preventDefault(); // 기본 폼 제출 방지 (submit 이벤트 취소함)
     
         const data = new FormData();
+       
+        
+        if (newFiles){
+            newFiles.forEach((file) => {
+                data.append('newFiles',file); // 첨부파일 추가
+                console.log(JSON.stringify(file));
+            });
+        }
+        
         Object.entries(formData).forEach(([key, value]) => data.append(key, value));
         // if(file){
         //     data.append('ofile', file); // 첨부파일 추가
         // }
         
         try {
-            await apiSpringBoot.post('/qna', data);
+            await apiSpringBoot.post('/qna', data,{
+                headers: {'Content-Type':'multipart/form-data',
+                }}
+            );
             alert('QnA 등록 성공');
             // 게시글 등록이 성공되면 공지 목록 페이지로 이동
             navigate('/qna');
@@ -64,6 +102,27 @@ const QnAWrite = () => {
                         <th>질문내용</th>
                         <textarea type="text" name="qnaWContent" onChange={handleChange}></textarea>
                     </tr>
+                    
+                    <tr>
+                        <th colSpan='2'>
+                            <button
+                            onClick={(e)=>handleFileInsertBox(e)}
+                                >첨부파일추가
+                            </button>
+                        </th>
+                    </tr>
+                    {newFiles.map((file, index) => (
+                        <tr key={index}>
+                            <td colSpan="2">
+                                <span>{file.name}</span>
+                                <input 
+                                    type="button"
+                                    onClick={()=>handleDeleteFile(index)}
+                                    value="x"
+                                />
+                            </td>
+                        </tr>
+                    ))}
                     <input type='submit' value="등록하기" />
                 </table>
             </form>            

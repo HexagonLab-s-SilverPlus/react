@@ -14,6 +14,15 @@
     height: 41px;
 }
 
+.qnaSeachdiv img {
+    position: absolute;
+    left: 1325px;
+    bottom: 0px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
 .qnaSeachselect {
     height: 33px;
     width: 83px;
@@ -29,7 +38,7 @@
 
 .qnaInput {
     height: 33px;
-    width: 242px;
+    width: 217px;
     border-top: none;
     border-left: none;
     border-right: none;

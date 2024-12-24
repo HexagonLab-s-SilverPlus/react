@@ -3,24 +3,25 @@ import React,{useState,useEffect,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from "../../AuthProvider"
 import {apiSpringBoot} from '../../utils/axios';
-//import axios from 'axios';
+import SideBar from '../../components/common/SideBar';
+
 
 const NoticeWrite = () => {
 
     // 토큰정보 가져오기(AuthProvider)
-    const {member, accessToken, memName} = useContext(AuthContext);
+    const {member, memId} = useContext(AuthContext);
 
     // notice
     const [formData, setFormData] = useState({
         notTitle:'',
-        notWrite:'',
+        notWriter:'',
         notContent:'',
         notCreateBy:'',
         notUpdateBy:'',
     });
 
     // files
-    const [newFiles, setFiles] = useState([]);
+    const [newFiles, setNewFiles] = useState([]);
 
     // navigate
     const navigate = useNavigate();
@@ -34,25 +35,55 @@ const NoticeWrite = () => {
         }));
     }
 
+    // 첨부파일 입력박스 추가
+    const handleFileInsertBox = (e) => {
+        e.preventDefault(); // submit 취소
+        // 임시 파일 입력 요소 생성
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.style.display = 'none';
+
+        // 파일 선택 이벤트 처리
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                setNewFiles((prevFiles) => [...prevFiles,file]);
+            }
+        };
+
+        document.body.appendChild(input);
+        input.click();
+        document.body.removeChild(input);
+    };
+    
+    // 파일 삭제 처리
+    const handleDeleteFile = (index) => {
+        setNewFiles((prevfiles)=>prevfiles.filter((_,i) => i !== index));
+    };
+
+
     // 등록
     const handleInsertNotice = async (e) => {
         e.preventDefault(); // submit취소
-        console.log("uuid : "+member.memUUID);
-        setFormData((prevFormData)=>({
-            ...prevFormData,
-            notCreateBy:member.memUUID,
-            notUpdateBy:member.memUUID,
-        }));
         if(window.confirm("공지사항을 등록하시겠습니까?")){
             const data = new FormData();
             Object.entries(formData).forEach(([key,value])=>data.append(key,value));
-            console.log("notTitle", data.get("notTitle"));
-            console.log("accessToken", accessToken);
+            console.log("notTitle : ", data.get("notTitle"));
+            if (newFiles){
+                newFiles.forEach((file) => {
+                    data.append('newFiles',file); // 첨부파일 추가
+                });
+            }
+            console.log("newFiles : ", data.getAll("newFiles"));
+
+            for (let [key,value] of data.entries()){
+                console.log(`${key}:${value.name||value}`);
+            }            
+            
             try{
                 await apiSpringBoot.post('/notice',data,{
                     headers:{
-                        //'Content-Type':'multipart/form-data',
-                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type':'multipart/form-data',
                     }
                 });
                 alert('공지사항 등록에 성공하였습니다.');
@@ -75,22 +106,19 @@ const NoticeWrite = () => {
 
     //페이지 로딩시 memId 작성자에 넣기기
     useEffect(()=>{
-        console.log("userName" + memName);
+        console.log("userName" + memId + " " + member.memUUID);
         setFormData((prevFormData)=>({
             ...prevFormData,
-            notCreateBy:memName,
-            notUpdateBy:memName,
+            notWriter:memId,
+            notCreateBy:member.memUUID,
+            notUpdateBy:member.memUUID,
         }))
-
-    },[memName]);
-
-
-    
+    },[]);
 
     return (
         <form
             onSubmit={handleInsertNotice}
-            // encType='multipart/form-data'
+            encType='multipart/form-data'
         >
             <table>
                 <thead></thead>
@@ -113,13 +141,34 @@ const NoticeWrite = () => {
                             <input 
                                 type='text'
                                 name='notWriter'
-                                value={formData.notCreateBy}
+                                value={formData.notWriter}
                                 onChange={handleChange}
                                 required
                                 readOnly
                             />
                         </td>
                     </tr>
+                    <tr>
+                        <th colSpan='2'>
+                            <button
+                            onClick={(e)=>handleFileInsertBox(e)}
+                                >첨부파일추가
+                            </button>
+                        </th>
+                    </tr>
+                    {/* 첨부파일 추가 박스 */}
+                    {newFiles.map((file, index) => (
+                        <tr key={index}>
+                            <td colSpan="2">
+                                <span>{file.name}</span>
+                                <input 
+                                    type="button"
+                                    onClick={()=>handleDeleteFile(index)}
+                                    value="x"
+                                />
+                            </td>
+                        </tr>
+                    ))}
                     <tr>
                         <th>내용</th>
                         <td>
