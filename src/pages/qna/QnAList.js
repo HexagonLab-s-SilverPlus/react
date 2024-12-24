@@ -14,14 +14,16 @@ const QnAList = () => {
   const { accessToken, role, member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
   const [qnaList, setQnaList] = useState([]);
   const [memberList, setMemberList] = useState([]);
-  const [keyword, setKeyword] = useState();
-  
+  const [actionInfo, setActionInfo] = useState([]);
   const [pagingInfo, setPagingInfo] = useState({
     pageNumber: 1,
+    action: "all",
     listCount: 1,
     maxPage: 1,
+    pageSize: 10,
     startPage: 1,
     endPage: 1,
+    keyword: "",
   });
 
   const navigate = useNavigate();
@@ -36,50 +38,64 @@ const QnAList = () => {
   };
 
   const handlePageChange = async (page) => {
-    handleQnAView(member.memUUID, page, pagingInfo.pageSize);  //일반 목록 페이지 요청
+    handleQnAView(member.memUUID, page, pagingInfo.action, pagingInfo.keyword);  //일반 목록 페이지 요청
   };
 
 
-  const handleQnAView = async (uuid, page = 1, limit = 10) => {
+  const handleQnAView = async (uuid, page, action, keyword) => {
       try{
+        let response = null
         if(role === "ADMIN") {
-          const response = await apiSpringBoot.get(`/qna/mylist`, {
+          response = await apiSpringBoot.get(`/qna/mylist`, {
             params: {
-              page: page,
-              limit: limit,
+              ...pagingInfo,
+              pageNumber: page,
+              action: action,
+              keyword, keyword,
             },
           });
-          setQnaList(response.data.qna);
-          setMemberList(response.data.member);
-      
-          setPagingInfo(PagingCalculate(
-            response.data.paging.pageNumber + 1, response.data.listCount, response.data.paging.pageSize));
+          
         } else {
-
-          const response = await apiSpringBoot.get(`/qna/mylist`, {
+          response = await apiSpringBoot.get(`/qna/mylist`, {
             params: {
+              ...pagingInfo,
               uuid: uuid,
-              page: page,
-              limit: limit,
+              pageNumber: page,
             },
           });
-          setQnaList(response.data.qna);
-          setMemberList(response.data.member);
-
-          setPagingInfo(PagingCalculate(
-            response.data.paging.pageNumber + 1, response.data.listCount, response.data.paging.pageSize));
-
         }
+        setQnaList(response.data.qna);
+        setMemberList(response.data.member);
+    
+        const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize);
+        setPagingInfo(response.data.search);
+        setPagingInfo((pre) => ({
+          ...pre,
+          maxPage: maxPage,
+          startPage: startPage,
+          endPage: endPage,
+        }));
 
       } catch (e){
         console.log("error : {}", e); // 에러 메시지 설정
       }    
   }
 
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setActionInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSearch = () => {
+    handleQnAView(member.memUUID, 1, actionInfo.actionType, actionInfo.keyword);
+  }
+
   useEffect(() => {
-    handleQnAView(member.memUUID, pagingInfo.pageNumber, pagingInfo.pageSize);
-    // handleMyQnAView("CECE02F57F344658B7482F5F59F7F998");
-  }, [accessToken] );
+    handleQnAView(member.memUUID, pagingInfo.pageNumber, pagingInfo.action, actionInfo.keyword);
+  }, [accessToken]);
 
   
   const formatDate = (dateString) => {
@@ -101,12 +117,13 @@ const QnAList = () => {
       <div className={styles.qnaContent}>
         <QNAHeader />
         <div className={styles.qnaSeachdiv}>
-          <select className={styles.qnaSeachselect}>
-              <option value="title" selected>제목</option>
-              <option value="date">날짜</option>
+          <select name='actionType' onChange={handleChange} className={styles.qnaSeachselect}>
+            <option value="all" selected >전체</option>
+            <option value="title">제목</option>
+            <option value="date">날짜</option>
           </select>
           
-          <input className={styles.qnaInput}></input><img src={searchImag}></img>
+          <input name='keyword' onChange={handleChange} className={styles.qnaInput}></input><img src={searchImag} onClick={handleSearch}></img>
           <button className={styles.qnaInputBTN} onClick={handleWriteClick}>등 록</button>
         </div>
         <table className={styles.qnaListTable}>

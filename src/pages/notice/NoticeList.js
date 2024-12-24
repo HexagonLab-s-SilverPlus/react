@@ -1,5 +1,5 @@
 // src/pages/notice/NoticeList.js
-import React,{useState, useContext} from "react";
+import React,{useState,useEffect, useContext} from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 // AuthContext
@@ -25,38 +25,74 @@ import up from '../../assets/images/keyboard_arrow_up.png'
 import down from '../../assets/images/keyboard_arrow_down.png'
 
 function NoticeList() {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태
-    const [selectOption, setSelectOption] = useState("제목") ; // 선택된 옵션
+    // 공지사항 리스트트
+    const [notices, setNotices] = useState([]);
+    // // 페이징 정보
+    // const [pagingInfo, setPagingInfo] = useState({
+    //     pageNumber:1,
+    //     pageSize:1,
+    //     maxPage:1,
+    //     startPage:1,
+    //     endPage:1,
+    // });
+    // // 검색 정보
+    // const [search, setSearch] = useState({
+    //     action:"",
+    //     keyword:"",
+    //     startDate:"",
+    //     endDate:"",
+    // });
 
     // navigate 객체생성
     const navigate = useNavigate();
 
     // 토큰정보 가져오기(AuthProvider)
-    const {role} = useContext(AuthContext);
-    console.log("role : " + role);
+    const {role} = useContext(AuthContext);  // 롤정보    
 
-    const toggleDropdown = () => {
+    // 검색관련
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태
+    const [selectOption, setSelectOption] = useState("제목") ; // 선택된 옵션
+
+
+
+    // 핸들러
+    const handleToggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);  // 드롭다운 열기 / 닫기
     };
-
     const handleSelectOption = (option) => {
         setSelectOption(option); // 선택된 옵션 업데이트
         setIsDropdownOpen(false); // 드롭다운 닫기
     };
 
+    // 최초 공지사항 전체리스트 가져오기기
+    useEffect( async () =>{
+        try{
+            const response = await apiSpringBoot.get('/notice');
+            setNotices(response.data.list);
+            console.log(response.data.list);
+        } catch (error){
+            console.log(error);
+            alert("공지사항 불러오기에 실패하였습니다.");
+        }
+    },[]);
+    
+
+
+
+    // 랜더링 뷰
     if (role === "SENIOR"){
         return (
             <div className={styles.noticeList}>
                 {/* 헤더 */}
                 <SeniorNavbar/>
                 <div className={styles.top}>
-                    <div className={styles.menuname}>공지사항</div>
+                    <div className={styles.menuName}>공지사항</div>
                     {/* 검색창 */}
                     <div className={styles.searchbox}>
                         {/* 검색옵션 */}
                         <div 
                             className={styles.searchOptions}
-                            onClick={toggleDropdown}
+                            onClick={handleToggleDropdown}
                         >
                             &nbsp; {selectOption} &nbsp;
                             <img
@@ -120,7 +156,6 @@ function NoticeList() {
                 {/*Footer*/}
                 <SeniorFooter />
             </div>
-
         );
     } else if (role ==="ADMIN"){
         return (
@@ -133,7 +168,7 @@ function NoticeList() {
                     <div className={styles.memberSearchbox}>
                         <div 
                             className={styles.memberSearchOptions}
-                            onClick={toggleDropdown}
+                            onClick={handleToggleDropdown}
                         >
                             &nbsp; {selectOption} &nbsp;
                             <img
@@ -141,41 +176,59 @@ function NoticeList() {
                                 src={isDropdownOpen ? up:down}
                                 alt={isDropdownOpen ? "올리기":"내리기"}
                             />&nbsp;
-                        </div>
                         {isDropdownOpen && (
                             <div className={styles.memberDropdown}>
                                 <div
                                     className={styles.memberDropdownOption}
                                     onClick={()=>handleSelectOption("제목")}
-                                >
+                                    >
                                     &nbsp; 제목 &nbsp;
                                 </div>
                                 <div
                                     className={styles.memberDropdownOption}
                                     onClick={()=>handleSelectOption("내용")}
-                                >
+                                    >
                                     &nbsp; 내용 &nbsp;
                                 </div>
                             </div>
                         )}
+                        </div>
                         {/* 검색키워드입력창 */}
-                        <div className={styles.searchKeyword}>
+                        <div className={styles.memberSearchKeyword}>
                             &nbsp;
                             <input
-                            className={styles.searchKeywordBox}
+                            className={styles.memberSearchKeywordBox}
                             placeholder="검색어를 입력하세요."
                             />
                             &nbsp;
                             <img
-                                className={styles.search}
+                                className={styles.memberSearch}
                                 src={search}
                                 alt="검색"
                             />
                             &nbsp;
                         </div>
                         <div>
-                            <button><Link to='/noticeWrite'>등록</Link></button>
+                            <button className={styles.memberSearchButton} onClick={()=>(navigate("/noticewrite"))}>공지사항 등록</button>
                         </div>
+                    </div>
+                    <div className={styles.tableDiv}>
+                        <table className={styles.memberNoticeTable}>
+                            <thead>
+                                <tr>
+                                    <th className={styles.thNo}>No</th>
+                                    <th className={styles.thTitle}>제목</th>
+                                    <th className={styles.thDate}>등록일</th>
+                                    <th className={styles.thViews}>조회수</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className={styles.noticePaging}>
+                        <Paging/>
                     </div>
                 </div>
             </div>

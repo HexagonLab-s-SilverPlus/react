@@ -4,21 +4,32 @@ import styles from './EnrollSelect.module.css';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/common/Modal';
 import EnrollManager from './EnrollManager';
+import EnrollFamily from './EnrollFamily';
 
 const EnrollSelect = () => {
-  const [showEnrollManagerModal, setShowEnrollManagerModal] = useState(false);
+  // 버튼 클릭시 모달창이 열리게 하는 상태변수
+  const [showModal, setShowModal] = useState(false);
+  // 회원가입 선택 시 memType 을 전달하기위한 상태변수
+  const [memType, setMemType] = useState('');
+
   const navigate = useNavigate();
+
   const handleCloseModal = () => {
-    setShowEnrollManagerModal(false);
+    setShowModal(false);
   };
   const handleEnrollSuccess = () => {
-    setShowEnrollManagerModal(false);
+    setShowModal(false);
     navigate('/loginmember');
   };
   const handleMoveEnrollManager = () => {
-    setShowEnrollManagerModal(true);
+    setMemType('MANAGER');
+    setShowModal(true);
   };
-  const handleMoveEnrollFamily = () => {};
+  const handleMoveEnrollFamily = () => {
+    setMemType('FAMILY');
+    setShowModal(true);
+  };
+
   return (
     <>
       <div className={styles.enrollButton}>
@@ -34,9 +45,20 @@ const EnrollSelect = () => {
         </div>
       </div>
       {/* 기관담당자 회원가입 */}
-      {showEnrollManagerModal && (
+      {showModal && (
         <Modal onClose={handleCloseModal}>
-          <EnrollManager onEnrollSuccess={handleEnrollSuccess}></EnrollManager>
+          {memType === 'MANAGER' && (
+            <EnrollManager
+              memType={memType}
+              onEnrollSuccess={handleEnrollSuccess}
+            ></EnrollManager>
+          )}
+          {memType === 'FAMILY' && (
+            <EnrollFamily
+              memType={memType}
+              onEnrollSuccess={handleEnrollSuccess}
+            ></EnrollFamily>
+          )}
         </Modal>
       )}
     </>
