@@ -20,28 +20,27 @@ import { PagingCalculate } from '../../components/common/PagingCalculate ';
 import styles from './NoticeList.module.css'
 
 // 이미지
-import search from '../../assets/images/search.png'
+import searchIcon from '../../assets/images/search.png'
 import up from '../../assets/images/keyboard_arrow_up.png'
 import down from '../../assets/images/keyboard_arrow_down.png'
 
 function NoticeList() {
-    // 공지사항 리스트트
+    // 공지사항 리스트
     const [notices, setNotices] = useState([]);
-    // // 페이징 정보
-    // const [pagingInfo, setPagingInfo] = useState({
-    //     pageNumber:1,
-    //     pageSize:1,
-    //     maxPage:1,
-    //     startPage:1,
-    //     endPage:1,
-    // });
-    // // 검색 정보
-    // const [search, setSearch] = useState({
-    //     action:"",
-    //     keyword:"",
-    //     startDate:"",
-    //     endDate:"",
-    // });
+    // 페이징 정보
+    const [pagingInfo, setPagingInfo] = useState({
+        pageNumber:1,
+        pageSize:10,
+        maxPage:1,
+        startPage:1,
+        endPage:1,
+        listCount:1,
+    });
+    // 검색 정보
+    const [search, setSearch] = useState({
+        action:"제목",
+        keyword:"",
+    });
 
     // navigate 객체생성
     const navigate = useNavigate();
@@ -51,32 +50,80 @@ function NoticeList() {
 
     // 검색관련
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태
-    const [selectOption, setSelectOption] = useState("제목") ; // 선택된 옵션
-
+    const [selectOption, setSelectOption] = useState("제목");
 
 
     // 핸들러
+    // 드롭다운 토글처리
     const handleToggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);  // 드롭다운 열기 / 닫기
     };
+    // 검색 action 저장
     const handleSelectOption = (option) => {
-        setSelectOption(option); // 선택된 옵션 업데이트
+        setSelectOption(option);
+        setSearch((prev)=>({
+            ...prev,
+            action:option,
+        })); // 선택된 옵션 업데이트
         setIsDropdownOpen(false); // 드롭다운 닫기
     };
+    // 페이지 이동
+    const handlePageChange = async (page) => {
+        handleUpdateView(page);
+    };
+    // 키워드 입력
+    const handleChangeKeyword = (e) => {
+        const {value}=e.target;
+        setSearch((prev)=>({
+            ...prev,
+            keyword:value,
+        }));
+    };
 
-    // 최초 공지사항 전체리스트 가져오기기
-    useEffect( async () =>{
+
+
+    // 최초 공지사항 전체리스트 가져오기
+    useEffect(()=>{
+        const fetchNotices = async () => {
         try{
             const response = await apiSpringBoot.get('/notice');
-            setNotices(response.data.list);
             console.log(response.data.list);
-        } catch (error){
+            console.log(response.data.search);
+            // 리스트저장
+            setNotices(response.data.list);
+            // 페이징 처리할 값 생성
+            setPagingInfo(PagingCalculate(response.data.search.pageNumber,response.data.search.listCount, response.data.search.pageSize));
+        } catch (error) {
             console.log(error);
             alert("공지사항 불러오기에 실패하였습니다.");
         }
+    };
+    fetchNotices();
     },[]);
     
+    // 페이징 변경시
+    const handleUpdateView = async (page) => {
+        console.log(page);
+        console.log(pagingInfo);
+        try{
+            const response = await apiSpringBoot.get(`/notice`, {
+                params: {
+                    ...pagingInfo,
+                    pageNumber:page,
+                },
+            });
+            setNotices(response.data.list);
+            console.log("notices : "+response.data.list);
+            setMemberList(response.data.member);
+        
+            setPagingInfo(PagingCalculate(
+                response.data.paging.pageNumber + 1, response.data.listCount, response.data.paging.pageSize));
+            
 
+        } catch (e){
+            console.log("error : {}", e); // 에러 메시지 설정
+        }    
+    }
 
 
     // 랜더링 뷰
@@ -121,13 +168,14 @@ function NoticeList() {
                         <div className={styles.searchKeyword}>
                             &nbsp;
                             <input
-                            className={styles.searchKeywordBox}
-                            placeholder="검색어를 입력하세요."
+                                className={styles.searchKeywordBox}
+                                placeholder="검색어를 입력하세요."
+                                value={search.keyword}    
                             />
                             &nbsp;
                             <img
                                 className={styles.search}
-                                src={search}
+                                src={searchIcon}
                                 alt="검색"
                             />
                             &nbsp;
@@ -197,13 +245,15 @@ function NoticeList() {
                         <div className={styles.memberSearchKeyword}>
                             &nbsp;
                             <input
-                            className={styles.memberSearchKeywordBox}
-                            placeholder="검색어를 입력하세요."
+                                className={styles.memberSearchKeywordBox}
+                                placeholder="검색어를 입력하세요."
+                                onChange={handleChangeKeyword}
+                                value={search.keyword}  
                             />
                             &nbsp;
                             <img
                                 className={styles.memberSearch}
-                                src={search}
+                                src={searchIcon}
                                 alt="검색"
                             />
                             &nbsp;
@@ -216,19 +266,33 @@ function NoticeList() {
                         <table className={styles.memberNoticeTable}>
                             <thead>
                                 <tr>
-                                    <th className={styles.thNo}>No</th>
                                     <th className={styles.thTitle}>제목</th>
                                     <th className={styles.thDate}>등록일</th>
                                     <th className={styles.thViews}>조회수</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                {notices.map((notice) =>(
+                                    <tr 
+                                        key={notice.notId}
+                                        onClick={()=>(navigate(`/notice/detail/${notice.notId}`))}
+                                    >
+                                        <td>{notice.notTitle}</td>
+                                        <td>{notice.notCreateAt.split('T')[0]}</td>
+                                        <td>{notice.notReadCount}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
                     <div className={styles.noticePaging}>
-                        <Paging/>
+                        <Paging 
+                            currentPag={pagingInfo.currentPage || 1}
+                            maxPage={pagingInfo.maxPage || 1}
+                            startPage={pagingInfo.startPage || 1}
+                            endPage={pagingInfo.endPage || 1}
+                            onPageChange={(page) => handlePageChange(page)}
+                        />
                     </div>
                 </div>
             </div>

@@ -22,7 +22,7 @@ const ProgramWrite = () => {
     const [formData, setFormData] = useState({
         snrOrgName: '',
         snrOrgPhone: '',
-        snrOrgEmail: '',
+        snrMgrEmail: '',
         snrOrgAddress: '',
         snrTitle: '',
         snrStartedAt: '',
@@ -117,22 +117,19 @@ const ProgramWrite = () => {
         e.preventDefault(); //submit 취소
         if(window.confirm('프로그램을 등록하시겠습니까?')) {
             const data = new FormData();
-            //Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-
-            // 날짜 변환 (String -> Timestamp)
             const convertToTimestamp = (dateString) => {
-                return new Date(dateString).toISOString(); // Timestamp 포맷 (yyyy-MM-ddTHH:mm:ss.sssZ)
+                // '2024-12-24' 형식을 '2024-12-24 00:00:00'으로 변환
+                return `${dateString} 00:00:00`;
             };
-
+            
             // FormData에 입력값 추가
             Object.entries(formData).forEach(([key, value]) => {
                 if (key === 'snrStartedAt' || key === 'snrEndedAt') {
-                    // 날짜 필드는 Timestamp로 변환
-                    data.append(key, convertToTimestamp(value));
+                    data.append(key, convertToTimestamp(value)); // 'yyyy-MM-dd HH:mm:ss' 형식으로 변환
                 } else {
                     data.append(key, value);
                 }
-            });
+            });            
 
             console.log('snrTitle : ', data.get('snrTitle'));
 
@@ -198,7 +195,7 @@ const ProgramWrite = () => {
                         
                         <div className={styles.pgBox}>
                             <label>담당자 이메일<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="tel" name="snrOrgEmail" id="snrOrgEmail" value={formData.snrOrgEmail} required onChange={handleChange} placeholder="예) silverplus2024@hexalab.com"/>
+                            <input type="tel" name="snrMgrEmail" id="snrMgrEmail" value={formData.snrMgrEmail} required onChange={handleChange} placeholder="예) silverplus2024@hexalab.com"/>
                         </div>
 
                         <div className={styles.pgLine}></div>

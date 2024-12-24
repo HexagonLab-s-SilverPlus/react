@@ -29,16 +29,15 @@
 .memberDropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;font-size:20px;}
 .memberDropdownOption:hover{font-weight:bold;}
 .memberSearchKeyword{display:flex;align-items:center;border-bottom:2px #064420 solid;}
-.memberSearchKeywordBox{width:320px;font-size:16px;border:0px;background-color:#ffffff;color:#333333;}
+.memberSearchKeywordBox{font-family: "Pretendard Variable";width:320px;font-size:18px;border:0px;background-color:#ffffff;color:#333333;}
 .memberSearch{width:30px;height:30px;cursor:pointer;}
 .memberSearchButton{background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
 .tableDiv{width:calc(100%);margin-top: 20px;}
 .memberNoticeTable{table-layout:fixed;width: 100%;text-align: center;margin-top:80px;font-size: 18px;border-collapse: collapse;}
 .memberNoticeTable > thead { width: 100%;}
 .memberNoticeTable > thead > tr > th {padding-top : 8px;padding-bottom: 8px;font-weight: bold;border-bottom: 2px solid #999999;}
-.thNo {width: 10%;}
-.thTitle {width: 65%;}
-.thDate {width: 15%;}
+.thTitle {width: 70px;}
+.thDate {width: 20%;}
 .thViews {width: 10%;}
-.memberNoticeTable > tbody > tr > td {padding-top : 8px;padding-bottom: 8px;border-bottom:2px solid #999999;}
+.memberNoticeTable > tbody > tr > td {padding-top : 8px;padding-bottom: 8px;border-bottom:2px solid #999999;cursor:pointer;}
 .noticePaging {margin-top: 45px;}

@@ -7,7 +7,7 @@ import NoticeWrite from '../pages/notice/NoticeWrite'; // 공지사항 쓰기기
 
 const noticeRouter = [
     <Route path="/notice" element={<NoticeList />} />,
-    <Route path="/noticeWrite" element={<NoticeWrite />} />,
+    <Route path="/noticewrite" element={<NoticeWrite />} />,
 
 ];
 
