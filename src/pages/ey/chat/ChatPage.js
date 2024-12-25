@@ -1,6 +1,6 @@
 /* 전달받은 워크스페이스 ID를 기반으로 채팅 기록을 로드하고 새 메시지를 보내는 기능능 */
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import styles from './ChatPage.module.css';
 import Container from './Container.js';
 import { AuthContext } from '../../../AuthProvider.js';
@@ -8,8 +8,11 @@ import { AuthContext } from '../../../AuthProvider.js';
 import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
 
 function ChatPage() {
-  const location = useLocation(); //  React Router에서 현재 경로와 관련된 정보를 가져온다.
-  const { workspaceId, aiReply } = location.state || {};  //  location.state는 Link에서 전달된 데이터를 포함한다.
+  const location = useLocation(); //  WelcomeChat.js에서 state로 전달한 값 받기 위함임.
+  const { workspaceId: paramWorkspaceId } = useParams(); // URL에서 workspaceId 가져오기기
+  const { workspaceId: stateWorkspaceId, aiReply } = location.state || {};  //  location.state는 Link에서 전달된 데이터를 포함한다.
+
+  const workspaceId = stateWorkspaceId || paramWorkspaceId; // state에서 먼저 가져오고 없으면 URL에서 가져옴
 
   // 메시지 상태변수 - 배열 형태 [사용자: '', AI: '']
   const [messages, setMessages] = useState([]);
@@ -27,27 +30,31 @@ function ChatPage() {
 
 
   const fetchChatHistory = async () => {
+    if(!workspaceId) return;
+    
     try {
       const response = await apiSpringBoot.get(`/api/chat/history/${workspaceId}`);
-      const { data } = response.data;
+      const { data } = response?.data || {};
 
-      if (data) {
+      if (Array.isArray(data)) {
         console.log('메시지 이력:', data)
-        setMessages(data.map(msg => ({ sender: msg.msgSenderRole, text: msg.msgContent })));
+        setMessages(data.map(msg => ({ 
+          sender: msg.msgSenderRole, 
+          text: msg.msgContent, 
+        })));
       } else {
-        console.log('AI와 나눈 대화 없음:', response.message);
+       console.warn('채팅 기록 데이터가 비정상적입니다.:', response?.data);
+       setMessages([]);
       }
     } catch (error) {
       console.error("채팅 기록 불러오기 오류:", error);
+      setMessages([]);
     }
   };
 
 
   useEffect(() => {
-    if (workspaceId) {
-      fetchChatHistory();
-    }
-
+    if (workspaceId) fetchChatHistory();
     if (aiReply) {
       setMessages(prev => [...prev, { sender: 'AI', text: aiReply }]);
     }

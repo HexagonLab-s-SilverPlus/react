@@ -8,7 +8,7 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 const eyRouter = (
   <>
     <Route path="/welcome-chat" element={<ProtectedRoute element={<WelcomeChat />} />} />
-    <Route path="/chat" element={<ProtectedRoute element={<ChatPage />} />} />
+    {/* <Route path="/chat" element={<ProtectedRoute element={<ChatPage />} />} /> */}
     <Route path="/senior-menu" element={<ProtectedRoute element={<SeniorMenu />} />} />
     <Route path="/w/:workspaceId" element={<ProtectedRoute element={<ChatPage />} />} />
     {/* <Route path="/welcome-chat" element= {<WelcomeChat />} />

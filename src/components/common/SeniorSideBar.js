@@ -36,7 +36,9 @@ const SeniorSideBar = ({ memUUID }) => {
     // 워크스페이스 선택 핸들러
     const handleWorkspaceSelect = (workspaceId) => {
         setSelectedWorkspaceId(workspaceId);
-        navigate(`/w/${workspaceId}`); // 해당 워크스페이스로 이동
+        navigate(`/w/${workspaceId}`, {
+          state: { workspaceId }, // workspaceId를 location.state에 전달달
+        }); // 해당 워크스페이스로 이동
     }
 
     // 새 워크스페이스 생성 화면 이동동
