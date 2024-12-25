@@ -4,10 +4,9 @@ import { AuthContext } from '../../AuthProvider';
 import styles from './SeniorSideBar.module.css';
 import PropTypes from 'prop-types';
 
-const SeniorSideBar = ({ memUUID }) => {
+const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId }) => {
     const [workspaces, setWorkspaces] = useState([]);
     const [error, setError] = useState(null);
-    const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null);
     const { apiSpringBoot } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -68,6 +67,8 @@ const SeniorSideBar = ({ memUUID }) => {
 
 SeniorSideBar.propTypes = {
     memUUID: PropTypes.string.isRequired,
+    selectedWorkspaceId: PropTypes.string,
+    setSelectedWorkspaceId: PropTypes.func.isRequired,
 };
 
 export default SeniorSideBar;

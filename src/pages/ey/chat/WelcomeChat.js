@@ -7,11 +7,12 @@ import { AuthContext } from '../../../AuthProvider.js';
 import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
 
 function WelcomeChat() {
+  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null); // 선택된 워크스페이스 ID
   const [inputText, setInputText] = useState('');
   const [workspaces, setWorkspaces] = useState([]); // 워크스페이스 ID 배열 상태
   const navigate = useNavigate();
   const { apiSpringBoot, apiFlask, member, accessToken } = useContext(AuthContext);
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true); // 사이드바 가시성 상태
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true); // 사이드바 가시성 상태
 
   // const { apiSpringBoot, apiFlask, member } = useContext(AuthContext);
 
@@ -99,11 +100,11 @@ function WelcomeChat() {
     }
   };
 
-    // 토글바로 사이드바 메뉴 출력
-    const toggleSidebar = () => {
-      setIsSidebarVisible(prev => !prev);
-    }
-    
+  // 토글바로 사이드바 메뉴 출력
+  const toggleSidebar = () => {
+    setIsSidebarVisible(prev => !prev);
+  }
+
   return (
     <div className={styles.container}>
       {/* 사이드바 */}
@@ -111,7 +112,11 @@ function WelcomeChat() {
         className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden
           }`}
       >
-        <SeniorSideBar memUUID={member?.memUUID} />
+        <SeniorSideBar
+          memUUID={member?.memUUID}
+          selectedWorkspaceId={selectedWorkspaceId}
+          setSelectedWorkspaceId={setSelectedWorkspaceId} // 전달
+        />
       </div>
 
       {/* 토글 버튼 */}

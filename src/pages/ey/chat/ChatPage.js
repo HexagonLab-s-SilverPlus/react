@@ -6,13 +6,15 @@ import Container from './Container.js';
 import { AuthContext } from '../../../AuthProvider.js';
 // 사이드바 컴포넌트 가져오기
 import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
+import { marked } from 'marked'; // marked 라이브러리 추가가 
 
 function ChatPage() {
   const location = useLocation(); //  WelcomeChat.js에서 state로 전달한 값 받기 위함임.
   const { workspaceId: paramWorkspaceId } = useParams(); // URL에서 workspaceId 가져오기기
   const { workspaceId: stateWorkspaceId, aiReply } = location.state || {};  //  location.state는 Link에서 전달된 데이터를 포함한다.
-
   const workspaceId = stateWorkspaceId || paramWorkspaceId; // state에서 먼저 가져오고 없으면 URL에서 가져옴
+
+  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(workspaceId); // 선택된 워크스페이스 ID
 
   // 메시지 상태변수 - 배열 형태 [사용자: '', AI: '']
   const [messages, setMessages] = useState([]);
@@ -30,7 +32,7 @@ function ChatPage() {
 
 
   const fetchChatHistory = async () => {
-    if(!workspaceId) return;
+    if (!workspaceId) return;
 
     try {
       const response = await apiSpringBoot.get(`/api/chat/history/${workspaceId}`);
@@ -38,13 +40,13 @@ function ChatPage() {
 
       if (Array.isArray(data)) {
         console.log('메시지 이력:', data)
-        setMessages(data.map(msg => ({ 
-          sender: msg.msgSenderRole, 
-          text: msg.msgContent, 
+        setMessages(data.map(msg => ({
+          sender: msg.msgSenderRole,
+          text: msg.msgContent,
         })));
       } else {
-       console.warn('채팅 기록 데이터가 비정상적입니다.:', response?.data);
-       setMessages([]);
+        console.warn('채팅 기록 데이터가 비정상적입니다.:', response?.data);
+        setMessages([]);
       }
     } catch (error) {
       console.error("채팅 기록 불러오기 오류:", error);
@@ -54,7 +56,10 @@ function ChatPage() {
 
 
   useEffect(() => {
-    if (workspaceId) fetchChatHistory();
+    if (workspaceId) {
+      setSelectedWorkspaceId(workspaceId); // URL이나 state로 전달받은 workspaceId를 선택 상태로 설정
+      fetchChatHistory();
+    }
     if (aiReply) {
       setMessages(prev => [...prev, { sender: 'AI', text: aiReply }]);
     }
@@ -135,7 +140,11 @@ function ChatPage() {
         className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden
           }`}
       >
-        <SeniorSideBar memUUID={member?.memUUID} />
+        <SeniorSideBar
+          memUUID={member?.memUUID}
+          selectedWorkspaceId={selectedWorkspaceId}
+          setSelectedWorkspaceId={setSelectedWorkspaceId}  // 선택 상태 업데이트 함수 전달
+        />
       </div>
 
       {/* 토글 버튼 */}
@@ -157,16 +166,21 @@ function ChatPage() {
               }
               if (index % 2 === 0) { // 메시지 세트를 구성하기 위해 짝수 인덱스만 처리
                 const aiMessage = messages[index + 1]; // AI 응답은 항상 다음 인덱스에 위치
+
+                console.log(marked(aiMessage.text)); // 변환된 HTML 확인
+
                 return (
                   <div key={index} className={styles['message-set']}>
                     <div className={`${styles['chat-bubble']} ${styles['user-message']}`}>
                       <p>{message.text}</p>
                     </div>
                     {aiMessage && ( // AI 응답이 있는 경우에만 렌더링
-                      <div className={`${styles['chat-bubble']} ${styles['ai-response']}`}>
-                        <p>{aiMessage.text}</p>
+                      <div className={`${styles['chat-bubble']} ${styles['ai-response']} ${styles['markdown']}`}
+                        dangerouslySetInnerHTML={{ __html: marked(aiMessage.text) }}> 
                       </div>
-                    )}
+                      
+                    )
+                    }
                   </div>
                 );
               }
