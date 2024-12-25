@@ -67,9 +67,16 @@ function ChatPage() {
       // Flask 서버로 메시지 전송송
       const response = await apiFlask.post(
         '/chat',
-        { message: inputText },
         {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          message: inputText,
+          createWorkspace: false // 기존 워크스페이스에서 메시지 전송 플래그
+        },
+
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            RefreshToken: localStorage.getItem('refreshToken') // RefreshToken 추가
+          },
         }
       );
 

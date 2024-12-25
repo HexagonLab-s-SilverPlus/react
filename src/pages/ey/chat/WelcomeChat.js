@@ -65,17 +65,26 @@ function WelcomeChat() {
     if (!inputText.trim()) return;
 
     try {
+      const refreshToken=localStorage.getItem('refreshToken'); // refreshToken 가져오기
       console.log('accessToken:', accessToken);
+      console.log('refreshToken:', refreshToken);
 
       const response = await apiFlask.post(
         '/chat',
-        { message: inputText },
+        { 
+          message: inputText,
+          createWorkspace: true // 새 워크스페이스 생성 요청 플래그그
+        },
         {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: { 
+            Authorization: `Bearer ${accessToken}`,
+            RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
+          },
         },
       );
 
       const { reply, workspaceId } = response.data;
+      console.log('Flask 응답:', reply, workspaceId);
 
       if (!workspaceId) {
         alert("워크스페이스 생성에 실패했습니다. 다시 시도해주세요.");
@@ -83,7 +92,7 @@ function WelcomeChat() {
       }
 
       // 새로운 워크스페이스 생성 시 배열 업데이트
-      setWorkspaces((prev) => [...prev, { workspaceId }]);
+      setWorkspaces((prev) => [...prev, { workspaceId }]); // 새로운 워크스페이스 추가가
 
       // 생성된 워크스페이스로 이동
       navigate(`/w/${workspaceId}`, {
