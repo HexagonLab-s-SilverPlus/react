@@ -22,8 +22,8 @@ function ChatPage() {
   const { apiSpringBoot, accessToken, apiFlask, member } = useContext(AuthContext);
 
   /*
-  & useRef: DOM 요소를 참조하기 위해 사용한다.
-  & 여기서는 스크롤을 제어할 마지막 메시지를 참조한다.
+    & useRef: DOM 요소를 참조하기 위해 사용한다.
+    & 여기서는 스크롤을 제어할 마지막 메시지를 참조한다.
   */
   const chatEndRef = useRef(null);
 
@@ -31,7 +31,7 @@ function ChatPage() {
 
   const fetchChatHistory = async () => {
     if(!workspaceId) return;
-    
+
     try {
       const response = await apiSpringBoot.get(`/api/chat/history/${workspaceId}`);
       const { data } = response?.data || {};
