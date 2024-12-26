@@ -4,31 +4,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { apiSpringBoot } from "../../utils/axios";
 import styles from './ProgramList.module.css';
 import SideBar from '../../components/common/SideBar';
+import PagingDiv4 from '../../components/common/PagingDiv4';
 import pgImage from '../../assets/images/pgImage.png';
 
 const ProgramList = () => {
     const [programs, setPrograms] = useState([]);
+    const [programFiles, setProgramFiles] = useState([]);
 
     //검색
     const [selectedOption, setSelectedOption] = useState('');
 
+    //페이징
+    const [pagingInfo, setPagingInfo] = useState({
+        currentPage: 1,
+        maxPage: 1,
+        startPage: 1,
+        endPage: 1,
+    });
+
     const navigate = useNavigate();
 
     //program list
-    const fetchPrograms = async () => {
+    const fetchPrograms = async (page) => {
         try {
-            const response = await apiSpringBoot.get(`/program`);
+            const response = await apiSpringBoot.get(`/program?page=${page}`);
             setPrograms(response.data.list);
-            console.log(response.data.list);
+            setPagingInfo(response.data.paging);
+            console.log(response.data.paging);
         } catch (error) {
             console.log("fetchPrograms Error : {}", error); // 에러 메시지 설정
             alert('어르신 프로그램 불러오기에 실패하였습니다.');
         }
     };
 
-    // useEffect(() => {
-    //     fetchPrograms();
-    // }, []);
+    useEffect(() => {
+        fetchPrograms(1);
+    }, []);
+
+    const handlePageChange = async (page) => {
+        fetchPrograms(page);
+    }
 
     //등록하기 페이지로 이동 핸들러
     const handleWriteClick = () => {
@@ -79,31 +94,35 @@ const ProgramList = () => {
                     
                     <div className={styles.pgListWrap}>
                         <ul className={styles.pgList}>
-                            <li className={styles.pgListItem}>
-                                <div className={styles.pgListImgWrap}>
-                                    <img src={pgImage} className={styles.pgImage} />
-                                </div>
-                                <div className={styles.pgListTextWrap}>
-                                    <p>제목</p>
-                                    <p><span>기간 : </span>2024-12-25 ~ 24-12-31</p>
-                                    <p><span>장소 : </span>한국ICT인재개발원</p>
-                                </div>
-                            </li>{/* pgList > li */}
-                            {programs.map((program, programFile) => (
-                                <li key={program.snrProgramId} className={styles.pgListItem}>
-                                    <div className={styles.pgListImgWrap}>
-                                        <img src={pgImage} className={styles.pgImage} />
-                                    </div>
-                                    <div className={styles.pgListTextWrap}>
-                                        <p>{program.snrTitle}</p>
-                                        <p><span>기간 : </span>{program.snrStartedAt} ~ {program.snrEndedAt}</p>
-                                        <p><span>장소 : </span>{program.snrOrgName}</p>
-                                    </div>
-                                </li>
-                            ))}
+                            {programs.map((item) => {
+                                const {program, fileUrls} = item;   //프로그램 데이터와 파일 URL 분리
+                                const firstImageUrl = fileUrls && fileUrls.length > 0
+                                    ? fileUrls[0] : pgImage;
+                                
+                                return(
+                                    <li key={program.snrProgramId} className={styles.pgListItem}>
+                                        <div className={styles.pgListImgWrap}>
+                                            <img src={firstImageUrl} className={styles.pgImage} />
+                                        </div>
+                                        <div className={styles.pgListTextWrap}>
+                                            <p>{program.snrTitle}</p>
+                                            <p><span>기간 : </span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</p>
+                                            <p><span>장소 : </span>{program.snrOrgName}</p>
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>{/* pgList end */}
                     </div>{/* pgListWrap end */}
                 </div>{/* secContent end */}
+
+                <PagingDiv4
+                    currentPage={pagingInfo.currentPage || 1}
+                    maxPage={pagingInfo.maxPage || 1}
+                    startPage={pagingInfo.startPage || 1}
+                    endPage={pagingInfo.endPage || 1}
+                    onPageChange={(page) => handlePageChange(page)}
+                />
             </section>{/* pgRSection end */}
         </div>
     );
