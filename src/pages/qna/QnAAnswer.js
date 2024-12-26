@@ -1,20 +1,26 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {apiSpringBoot} from '../../utils/axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
 import styles from './QnAWrite.module.css'
 
-const QnAWrite = () => {
+const QnAAnswer = () => {
     const navigate = useNavigate();
-    const { accessToken, member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+    const {qnaUUID} = useParams();
+    const { accessToken} = useContext(AuthContext);   // AuthProvider 에서 가져오기
     // files
     const [newFiles, setNewFiles] = useState([]);
+    const [qna, setQna] = useState(null);
+    const [member, setMember] = useState(null);
+    
+
+    
 
     const [formData, setFormData] = useState({
         qnaTitle: "",       // 제목
-        qnaWCreateBy: member.memUUID,   // 질문자 
+        qnaWCreateBy: "",   // 질문자 
         qnaWContent: "",    // 질문내용
         qnaADContent: "",    // 답변내용
         qnaADCreateBy: "",  // 답변자
@@ -69,10 +75,7 @@ const QnAWrite = () => {
         }
         
         Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-        // if(file){
-        //     data.append('ofile', file); // 첨부파일 추가
-        // }
-        
+
         try {
             await apiSpringBoot.post('/qna', data,{
                 headers: {'Content-Type':'multipart/form-data',
@@ -87,6 +90,23 @@ const QnAWrite = () => {
         }
     };
 
+    const handleUpdateQnA = async () => {
+        const respone = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
+        setQna(respone.data.qna);
+        setMember(respone.data.member);
+        console.log(JSON.stringify(respone.data.qna));
+        console.log(JSON.stringify(respone.data.member));
+    };
+
+    useEffect(() => {
+        handleUpdateQnA();
+    }, []);
+
+    if (!qna) {
+        // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+        return <div>Loading...</div>;
+    };
+
     return (
         <div>
             <SideBar />
@@ -97,12 +117,12 @@ const QnAWrite = () => {
                 encType="multipart/form-data">
                 <div className={styles.qnaWriteTitleDiv}>
                     <h1 className={styles.qnaWriteTitle}>제 목</h1>
-                    <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaWriteTitleTxt}/>
+                    <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaWriteTitleTxt} defaultValue={qna.qnaTitle} />
                 </div>
                 <hr/>
                 <div className={styles.qnaWriteContentDiv}>
                     <h1 className={styles.qnaWriteContent}>질문내용</h1>
-                    <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaWriteContentTxt}></textarea>
+                    <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaWriteContentTxt} defaultValue={qna.qnaWContent}></textarea>
                 </div>
                 <button
                 onClick={(e)=>handleFileInsertBox(e)}
@@ -129,6 +149,6 @@ const QnAWrite = () => {
         </div>
     );
 }
-export default QnAWrite;
+export default QnAAnswer;
 
 
