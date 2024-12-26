@@ -9,6 +9,7 @@ import documentRouter from './documentRouter';
 import siRouter from './siRouter';
 import eyRouter from './eyRouter';
 import qnaRouter from './qnaRouter';
+import faqRouter from './faqRouter';
 import gameRouter from './gameRouter';
 import WelcomePage from '../components/common/WelcomePage';
 import programRouter from './programRouter';
@@ -26,6 +27,7 @@ const AppRouter = () => {
       {siRouter}
       {eyRouter}
       {qnaRouter}
+      {faqRouter}
       {gameRouter}
       {programRouter}
     </Routes>
