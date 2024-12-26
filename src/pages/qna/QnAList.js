@@ -11,11 +11,15 @@ import searchImag from '../../assets/images/search.png'
 
 
 const QnAList = () => {
-  const { accessToken, role, member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
-  const [qnaList, setQnaList] = useState([]);
-  const [memberList, setMemberList] = useState([]);
-  const [actionInfo, setActionInfo] = useState([]);
-  const [pagingInfo, setPagingInfo] = useState({
+  const { accessToken, role, member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
+  const [qnaList, setQnaList] = useState([]);                     // qnaList 담을 상태훅
+  const [memberList, setMemberList] = useState([]);               // member 담을 상태훅(누가 작성한지 담을때 사용)
+  const [actionInfo, setActionInfo] = useState([]);               // 검색 데이터 담을 상태훅
+
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
+
+  const [pagingInfo, setPagingInfo] = useState({                  // 스프링 부터 search를 보낼때 담을 상태훅
     pageNumber: 1,
     action: "all",
     listCount: 1,
@@ -24,26 +28,25 @@ const QnAList = () => {
     startPage: 1,
     endPage: 1,
     keyword: "",
-    startDate: "2025-01-01",
-    endDate: "2025-01-01",
+    startDate: formattedDate,
+    endDate: formattedDate,
   });
 
-  const navigate = useNavigate();
+  const navigate = useNavigate();         // 이동 훅
 
-  const handleMoveDetailView = () => {
-    navigate("/");
+  const handleMoveDetailView = (qnaUUID) => {    // 디테일 뷰로 이동
+    navigate(`/qna/detail/${qnaUUID}`);
   };
 
-  //등록 페이지 이동
-  const handleWriteClick = () => {
+  const handleWriteClick = () => {        // 등록 뷰로 이동
     navigate('/qna/write'); 
   };
 
-  const handlePageChange = async (page) => {
+  const handlePageChange = async (page) => {          // 페이지 눌렀을때 뷰 바꾸기
     handleQnAView(member.memUUID, page, pagingInfo.action);  
   };
 
-  const handleQnAView = async (uuid, page, action) => {
+  const handleQnAView = async (uuid, page, action) => {   // 페이지 불러오기
 
       try{
         let response = null
@@ -54,8 +57,8 @@ const QnAList = () => {
               pageNumber: page,
               action: action,
               keyword: pagingInfo.keyword,
-              startDate: pagingInfo.startDate + " 03:00:00",
-              endDate: pagingInfo.endDate + " 03:00:00",
+              startDate: pagingInfo.startDate + " 00:00:00",
+              endDate: pagingInfo.endDate + " 00:00:00",
             },
           });
           
@@ -67,35 +70,33 @@ const QnAList = () => {
               pageNumber: page,
               action: action,
               keyword: pagingInfo.keyword,
-              startDate: pagingInfo.startDate + " 03:00:00",
-              endDate: pagingInfo.endDate + " 03:00:00",
+              startDate: pagingInfo.startDate + " 00:00:00",
+              endDate: pagingInfo.endDate + " 00:00:00",
 
             },
           });
         }
-        console.log(response.data.search);
         setQnaList(response.data.qna);
         setMemberList(response.data.member);
-    
+
         const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, 
-                                              response.data.search.listCount, response.data.search.pageSize);
-        setPagingInfo(response.data.search.startDate.toLocaleString());
+                                              response.data.search.listCount, response.data.search.pageSize);;
         
+        setPagingInfo(response.data.search);
         setPagingInfo((pre) => ({
           ...pre,
           maxPage: maxPage,
           startPage: startPage,
           endPage: endPage,
-          startDate: response.data.search.startDate.substring(0, 10),
-          endDate: response.data.search.endDate.substring(0, 10),
+          startDate: formatDate(response.data.search.startDate),
+          endDate: formatDate(response.data.search.endDate),
         }));
-
       } catch (e){
-        console.log("error : {}", e); // 에러 메시지 설정
+        console.log("error : {}", e); 
       }    
   }
   
-  const handleSelectChange = (e) => {
+  const handleSelectChange = (e) => {     // select 바뀌면 검색상태 저장
     const {value} = e.target
     setActionInfo((pre) => ({
       ...pre,
@@ -104,7 +105,7 @@ const QnAList = () => {
 
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e) => {       // 검색 데이터 쓰면 paging훅에 저장
     const { value, name } = e.target;
     setPagingInfo((prev) => ({
       ...prev,
@@ -112,32 +113,30 @@ const QnAList = () => {
     }));
   };
 
-  const handleSearch = () => {
-    handleQnAView(member.memUUID, 1, actionInfo.actionType);
+  const handleSearch = () => {        // 검색 버튼을 눌르면 출력뷰 변경
+    handleQnAView(member.memUUID, 1, actionInfo.actionType);    
   }
 
-  useEffect(() => {
+  useEffect(() => {             // 처음 뷰화면 출력
     if(member.memUUID){
       handleQnAView(member.memUUID, pagingInfo.pageNumber, pagingInfo.action);
     }
   }, []);
 
-  
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+  const formatDate = (w) => {     // 데이터 포멧(우리나라 시간으로)
+    const date = new Date(w);
   
     // 연도에서 앞 2자리를 제거하고, 초는 제외한 형식으로 출력
-    const year = date.getFullYear().toString().slice(2);  // 연도에서 앞 2자리만 추출
-    const month = String(date.getMonth() + 1).padStart(2, '0');  // 1월은 0부터 시작하므로 +1 해줍니다.
-    const day = String(date.getDate()).padStart(2, '0');
-    // const hour = String(date.getHours()).padStart(2, '0');
-    // const minute = String(date.getMinutes()).padStart(2, '0');
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;  // 월은 0부터 시작하므로 1을 더해야 합니다.
+    const day = date.getDate();
   
     return `${year}-${month}-${day}`;
   };
 
+  
 
-  const selectClass = () => {
+  const selectClass = () => {         // select 바 바꿀떄 css 변경
     switch (actionInfo.actionType) {
       case 'all':
         return styles.qnaSearchAllSelect;  // 'title' 선택 시 클래스
@@ -160,11 +159,11 @@ const QnAList = () => {
                   <img src={searchImag} onClick={handleSearch} />
                 </div>;
       case 'date':
-        // 현재 날짜를 가져옵니다.
+
         return <div>
                   <div className={styles.qnaDateInput}>
-                    <input type='date' name='startDate' onChange={handleChange} defaultValue={"2025-01-01"}  className={styles.qnaDate}/> ~ 
-                    <input type='date' name='endDate' onChange={handleChange} defaultValue={"2025-01-01"} className={styles.qnaDate} />
+                    <input type='date' name='startDate' onChange={handleChange} defaultValue={formattedDate}  className={styles.qnaDate}/> ~ 
+                    <input type='date' name='endDate' onChange={handleChange} defaultValue={formattedDate} className={styles.qnaDate} />
                   </div>
                   <img src={searchImag} onClick={handleSearch} />
                 </div>
@@ -175,7 +174,7 @@ const QnAList = () => {
     <div>
       <SideBar />
       <div className={styles.qnaContent}>
-        <QNAHeader />
+        <QNAHeader text="QnA"/>
         <div className={styles.qnaSeachdiv}>
           <select name='actionType' onChange={handleSelectChange} className={`${selectClass()}`}>
             <option value="all" selected >전체</option>
@@ -195,10 +194,11 @@ const QnAList = () => {
           
           {qnaList.map((qna, index) => (
           <tr>
-            <td><button onClick={handleMoveDetailView}>{qna.qnaTitle}</button></td>
+            <td><button onClick={() => handleMoveDetailView(qna.qnaId)}>{qna.qnaTitle}</button></td>
             <td>{memberList[index].memName}</td>
-            <td className={styles.qnaWCreateAt}>{formatDate(qna.qnaWUpdateAt)}</td>
-            <td className={styles.qnaStateN}>미답변</td>
+            <td className={styles.qnaWCreateAt}>{qna.qnaWUpdateAt.split('T')[0]}</td>
+            {qna.qnaADCreateAt ? <td className={styles.qnaStateY}>답변</td>
+                              : <td className={styles.qnaStateN}>미답변</td>}
           </tr>
           ))}
    
@@ -212,7 +212,6 @@ const QnAList = () => {
             onPageChange={(page) => handlePageChange(page)}
           />
         </div>
-        {pagingInfo.startDate}
       </div>
       
     </div>
