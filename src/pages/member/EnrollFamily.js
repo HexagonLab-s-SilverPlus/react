@@ -161,7 +161,7 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     });
 
     try {
-      await apiSpringBoot.post('/member', data, {
+      await apiSpringBoot.post('/member/enroll', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
