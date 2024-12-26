@@ -1,10 +1,14 @@
 // src/pages/notice/Notice.js
 import React,{useState,useEffect,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
+// AuthContext
 import {AuthContext} from "../../AuthProvider"
+// axios
 import {apiSpringBoot} from '../../utils/axios';
+// components
 import SideBar from '../../components/common/SideBar';
-
+// css
+import styles from './NoticeWrite.module.css';
 
 const NoticeWrite = () => {
 
@@ -116,81 +120,89 @@ const NoticeWrite = () => {
     },[]);
 
     return (
-        <form
-            onSubmit={handleInsertNotice}
-            encType='multipart/form-data'
-        >
-            <table>
-                <thead></thead>
-                <tbody>
-                    <tr>
-                        <th>제목</th>
-                        <td>
-                            <input 
-                                type='text'
-                                name='notTitle'
-                                value={formData.notTitle}
-                                onChange={handleChange}
-                                required
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td>
-                            <input 
-                                type='text'
-                                name='notWriter'
-                                value={formData.notWriter}
-                                onChange={handleChange}
-                                required
-                                readOnly
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colSpan='2'>
-                            <button
-                            onClick={(e)=>handleFileInsertBox(e)}
-                                >첨부파일추가
-                            </button>
-                        </th>
-                    </tr>
-                    {/* 첨부파일 추가 박스 */}
-                    {newFiles.map((file, index) => (
-                        <tr key={index}>
-                            <td colSpan="2">
-                                <span>{file.name}</span>
-                                <input 
-                                    type="button"
-                                    onClick={()=>handleDeleteFile(index)}
-                                    value="x"
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                    <tr>
-                        <th>내용</th>
-                        <td>
-                            <textarea
-                                rows='10'
-                                cols='100'
-                                name='notContent'
-                                value={formData.notContent}
-                                onChange={handleChange}
-                                required
-                            ></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <input
-                            type='submit'
-                            value='등록'/>
-                        <button onClick={handleInsertCancel}>취소</button>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+        <div className={styles.memberContainer}>
+            <SideBar />
+            <div className={styles.memberSubContainer}>
+                <div className={styles.MemberNoticeTop}>
+                        <p onClick={()=>(navigate("/notice"))}>공지사항</p>
+                </div>
+                <form
+                    onSubmit={handleInsertNotice}
+                    encType='multipart/form-data'
+                >
+                    <table>
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <th>제목</th>
+                                <td>
+                                    <input 
+                                        type='text'
+                                        name='notTitle'
+                                        value={formData.notTitle}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>작성자</th>
+                                <td>
+                                    <input 
+                                        type='text'
+                                        name='notWriter'
+                                        value={formData.notWriter}
+                                        onChange={handleChange}
+                                        required
+                                        readOnly
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colSpan='2'>
+                                    <button
+                                    onClick={(e)=>handleFileInsertBox(e)}
+                                        >첨부파일추가
+                                    </button>
+                                </th>
+                            </tr>
+                            {/* 첨부파일 추가 박스 */}
+                            {newFiles.map((file, index) => (
+                                <tr key={index}>
+                                    <td colSpan="2">
+                                        <span>{file.name}</span>
+                                        <input 
+                                            type="button"
+                                            onClick={()=>handleDeleteFile(index)}
+                                            value="x"
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                            <tr>
+                                <th>내용</th>
+                                <td>
+                                    <textarea
+                                        rows='10'
+                                        cols='100'
+                                        name='notContent'
+                                        value={formData.notContent}
+                                        onChange={handleChange}
+                                        required
+                                    ></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <input
+                                    type='submit'
+                                    value='등록'/>
+                                <button onClick={handleInsertCancel}>취소</button>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
     );
 };
 
