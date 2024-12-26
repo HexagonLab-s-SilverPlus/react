@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import ReactDOM from "react-dom";
@@ -13,6 +13,12 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
 
     const [isDeletedModalOpen, setIsDeletedModalOpen] = useState(false);
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
+    const [openDropdownId, setOpenDropdownId] = useState(null); // 드랍다운 관리
+
+    // 드랍다운 상태 업데이트의 비동기 이슈를 우회할 수 있다.
+    const currentDropdownId = useRef(null);
+
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         const fetchWorkspace = async () => {
@@ -32,6 +38,21 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
         if (memUUID) fetchWorkspace();
     }, [memUUID]);
 
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setOpenDropdownId(null); // 드랍다운 외부 클릭 시 닫기
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, []);
+
     const handleWorkspaceSelect = (workspaceId) => {
         setSelectedWorkspaceId(workspaceId);
         navigate(`/w/${workspaceId}`, { state: { workspaceId } });
@@ -44,6 +65,7 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
     const openDeletedModal = (workspace) => {
         setWorkspaceToDelete(workspace);
         setIsDeletedModalOpen(true);
+        setOpenDropdownId(null); // 드랍다운 닫기
     };
 
     const closeDeleteModal = () => {
@@ -66,6 +88,19 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
         }
     };
 
+
+    // 미트볼 아이콘 클릭 핸들러
+    const toggleDropdown = (workspaceId) => {
+        // 현재 열려있는 드랍다운 ID와 클릭한 ID가 동일한 경우 드랍다운을 닫기
+        if (openDropdownId === workspaceId) {
+            currentDropdownId.current = null;
+        } else {
+            // 다른 워크스페이스의 드랍다운을 열기
+            setOpenDropdownId(workspaceId);
+            currentDropdownId.current = workspaceId;
+        }
+    };
+
     // 모달 렌더링 문제 수정
     // 모달을 최상위 DOM에 렌더링하도록 React Portal을 사용한다. 이렇게하면 모달이 사이드바에 한정되지 않고 화면 전체를 차지하도록 표시가 가능하다.
     const renderModal = () => {
@@ -76,7 +111,7 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
         const workspaceName = workspaceToDelete?.workspaceName || "이 워크스페이스";
 
 
-        // 모댈 내용을 실제 DOM 트리에 추가하며, document.body에 렌더링한다.
+        // 모달 내용을 실제 DOM 트리에 추가하며, document.body에 렌더링한다.
         // 모달이 현재 컴포넌트의 스타일 영향 없이 전체 화면에 렌더링된다.
         return ReactDOM.createPortal(
             <div className={styles.modalOverlay}>
@@ -117,10 +152,15 @@ const SeniorSideBar = ({ memUUID, selectedWorkspaceId, setSelectedWorkspaceId })
                             </div>
                             <div
                                 className={styles.menuIcon}
-                                onClick={() => openDeletedModal(workspace)}
+                                onClick={() => toggleDropdown(workspace.workspaceId)}
                             >
                                 ⋮
                             </div>
+                            {openDropdownId === workspace.workspaceId && (
+                                <div className={styles.dropdownMenu} ref={dropdownRef}>
+                                    <button onClick={() => openDeletedModal(workspace)}>삭제하기</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (
