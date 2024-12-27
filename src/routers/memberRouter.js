@@ -24,7 +24,7 @@ const memberRouter = [
   <Route path="/myinfofamily" element={<MyInfoFamily />} />,
   <Route path="/myinfoadmin" element={<MyInfoAdmin />} />,
   <Route path="/mlistview" element={<MemberListView />} />,
-  <Route path="/mdetailview" element={<MemberDetailView />} />,
+  <Route path="/mdetailview/:UUID" element={<MemberDetailView />} />,
   <Route path="/findpwdsenior" element={<FindPwdSenior />} />,
   <Route path="/findpwdmember" element={<FindPwdMember />} />,
   <Route path="/findidsenior" element={<FindIdSenior />} />,
