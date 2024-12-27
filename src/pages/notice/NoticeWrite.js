@@ -126,81 +126,78 @@ const NoticeWrite = () => {
                 <div className={styles.MemberNoticeTop}>
                         <p onClick={()=>(navigate("/notice"))}>공지사항</p>
                 </div>
-                <form
-                    onSubmit={handleInsertNotice}
-                    encType='multipart/form-data'
-                >
-                    <table>
-                        <thead></thead>
-                        <tbody>
-                            <tr>
-                                <th>제목</th>
-                                <td>
-                                    <input 
-                                        type='text'
-                                        name='notTitle'
-                                        value={formData.notTitle}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>작성자</th>
-                                <td>
-                                    <input 
-                                        type='text'
-                                        name='notWriter'
-                                        value={formData.notWriter}
-                                        onChange={handleChange}
-                                        required
-                                        readOnly
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colSpan='2'>
-                                    <button
-                                    onClick={(e)=>handleFileInsertBox(e)}
-                                        >첨부파일추가
-                                    </button>
-                                </th>
-                            </tr>
-                            {/* 첨부파일 추가 박스 */}
-                            {newFiles.map((file, index) => (
-                                <tr key={index}>
-                                    <td colSpan="2">
-                                        <span>{file.name}</span>
+                <div className={styles.insertTableDiv}>
+                    <form
+                        onSubmit={handleInsertNotice}
+                        encType='multipart/form-data'
+                    >
+                        <table className={styles.insertTable}>
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td>
                                         <input 
-                                            type="button"
-                                            onClick={()=>handleDeleteFile(index)}
-                                            value="x"
+                                            className={styles.notTitleInput}
+                                            type='text'
+                                            name='notTitle'
+                                            value={formData.notTitle}
+                                            onChange={handleChange}
+                                            placeholder='제목을 입력해 주세요.'
+                                            required
                                         />
                                     </td>
                                 </tr>
-                            ))}
-                            <tr>
-                                <th>내용</th>
-                                <td>
-                                    <textarea
-                                        rows='10'
-                                        cols='100'
-                                        name='notContent'
-                                        value={formData.notContent}
-                                        onChange={handleChange}
-                                        required
-                                    ></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <input
-                                    type='submit'
-                                    value='등록'/>
-                                <button onClick={handleInsertCancel}>취소</button>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                                <tr>
+                                    <td>
+                                        <textarea
+                                            className={styles.notContentInput}
+                                            name='notContent'
+                                            value={formData.notContent}
+                                            onChange={handleChange}
+                                            placeholder='내용을 입력해 주세요.'
+                                            required
+                                        ></textarea>
+                                    </td>
+                                </tr>
+                                <div className={styles.fileDiv}>
+                                <tr >
+                                    <button
+                                        className={styles.noticeButton}
+                                        onClick={(e)=>handleFileInsertBox(e)}
+                                        >첨부파일추가
+                                    </button>
+                                </tr>
+                                {/* 첨부파일 추가 박스 */}
+                                {newFiles.map((file, index) => (
+                                    <tr key={index}>
+                                        <td colSpan="2">
+                                            <span>{file.name}</span>
+                                            <input 
+                                                type="button"
+                                                onClick={()=>handleDeleteFile(index)}
+                                                value="x"
+                                                className={styles.noticeButton}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                                </div>
+                                <tr>
+                                    <td className={styles.buttonDiv}>
+                                        <button
+                                            className={styles.noticeButton}
+                                            type='submit'
+                                        >등록</button> &nbsp;
+                                        <button 
+                                            className={styles.noticeButton}
+                                            onClick={handleInsertCancel}
+                                        >취소</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
             </div>
         </div>
     );

@@ -216,7 +216,7 @@ function NoticeList() {
         //         <SeniorFooter />
         //     </div>
         // );
-    } else if (role ==="ADMIN"){
+    } else {
         console.log('렌더링 직전 데이터 notices : '+notices);
         console.log('렌더링 직전 데이터 pagingInfo : '+pagingInfo);
         console.log('렌더링 직전 데이터 search : '+search.action+ ' ' + search.keyword);
@@ -228,9 +228,15 @@ function NoticeList() {
                         <p onClick={()=>(navigate("/notice"))}>공지사항</p>
                     </div>
                     <div className={styles.memberSubLine}>
-                        <div className={styles.memberWriteButton}>
+                        {role ==="ADMIN"&&(
+                        <div>
                             <button className={styles.memberInputButton} onClick={()=>(navigate("/noticewrite"))}>공지사항 등록</button>
-                        </div>
+                        </div>)
+                        }
+                        {role !=="ADMIN"&&(
+                        <div>
+                        </div>)
+                        }
                         <div className={styles.memberSearchbox}>
                             <div 
                                 className={styles.memberSearchOptions}
@@ -292,7 +298,7 @@ function NoticeList() {
                                 {notices.map((noticeList) =>(
                                     <tr 
                                         key={noticeList.notId}
-                                        onClick={()=>(navigate(`/notice/detail/${noticeList.notId}`))}
+                                        onClick={()=>(navigate(`/noticedetail/${noticeList.notId}`))}
                                     >
                                         <td>{noticeList.notTitle}</td>
                                         <td>{noticeList.notCreateAt.split('T')[0]}</td>
