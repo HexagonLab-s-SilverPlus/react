@@ -98,17 +98,6 @@ const QnAUpdate = () => {
         }
     };
 
-    const formatDate = (w) => {     // 데이터 포멧(우리나라 시간으로)
-            const date = new Date(w);
-          
-            // 연도에서 앞 2자리를 제거하고, 초는 제외한 형식으로 출력
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;  // 월은 0부터 시작하므로 1을 더해야 합니다.
-            const day = date.getDate();
-          
-            return `${year}-${month}-${day}`;
-          };
-
     useEffect(() => {
         handleUpdateQnA();
     }, []);
