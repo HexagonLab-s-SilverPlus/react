@@ -9,10 +9,9 @@ import pgImage from '../../assets/images/pgImage.png';
 
 const ProgramList = () => {
     const [programs, setPrograms] = useState([]);
-    const [programFiles, setProgramFiles] = useState([]);
 
     //검색
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedAction, setSelectedAction] = useState('');
 
     //페이징
     const [pagingInfo, setPagingInfo] = useState({
@@ -20,6 +19,10 @@ const ProgramList = () => {
         maxPage: 1,
         startPage: 1,
         endPage: 1,
+        action: '',
+        keyword: '',
+        startDate: '',
+        endDate: '',
     });
 
     const navigate = useNavigate();
@@ -30,10 +33,9 @@ const ProgramList = () => {
             const response = await apiSpringBoot.get(`/program?page=${page}`);
             setPrograms(response.data.list);
             setPagingInfo(response.data.paging);
-            console.log(response.data.paging);
         } catch (error) {
             console.log("fetchPrograms Error : {}", error); // 에러 메시지 설정
-            alert('어르신 프로그램 불러오기에 실패하였습니다.');
+            alert('어르신 프로그램 목록을 불러오는데 실패했습니다.');
         }
     };
 
@@ -51,8 +53,8 @@ const ProgramList = () => {
     };
 
     //검색 옵션 변경 핸들러
-    const handleOptionChange = (e) => {
-        setSelectedOption(e.target.value);
+    const handleActionChange = (e) => {
+        setSelectedAction(e.target.value);
     };
 
     return (
@@ -65,11 +67,11 @@ const ProgramList = () => {
 
                 <div className={styles.secContent}>
                     <div className={styles.pgListTop}>
-                        <p className={styles.pgTitle}>어르신 프로그램 목록 <span>0</span></p>
+                        <p className={styles.pgTitle}>어르신 프로그램 목록 <span>{pagingInfo.listCount}</span></p>
                         <button type="button" onClick={handleWriteClick}>등록하기</button>
 
                         <div className={styles.pgSearchWrap}>
-                            <select value={selectedOption} onChange={handleOptionChange}>
+                            <select value={selectedAction} onChange={handleActionChange}>
                                 <option>선택&nbsp;&nbsp;</option>
                                 <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                 <option value="pgContent">내용&nbsp;&nbsp;</option>
@@ -78,7 +80,7 @@ const ProgramList = () => {
                                 <option value="pgDate">참여기간&nbsp;</option>
                             </select>
                             
-                            {selectedOption === "pgDate" ? (
+                            {selectedAction === "pgDate" ? (
                                 <div className={styles.pgDateWrap}>
                                     <input type="date" />
                                     <span> ~ </span>
@@ -95,9 +97,11 @@ const ProgramList = () => {
                     <div className={styles.pgListWrap}>
                         <ul className={styles.pgList}>
                             {programs.map((item) => {
-                                const {program, fileUrls} = item;   //프로그램 데이터와 파일 URL 분리
-                                const firstImageUrl = fileUrls && fileUrls.length > 0
-                                    ? fileUrls[0] : pgImage;
+                                const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
+                                
+                                //image MIME 타입 필터링 후 첫 번째 파일 가져오기
+                                const firstImageFile = pgfiles && pgfiles.find(file => file.mimeType.startsWith('image/'));
+                                const firstImageUrl = firstImageFile ? `data:${firstImageFile.mimeType};base64,${firstImageFile.fileContent}` : pgImage;
                                 
                                 return(
                                     <li key={program.snrProgramId} className={styles.pgListItem}>
