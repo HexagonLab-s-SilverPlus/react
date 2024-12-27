@@ -1,4 +1,4 @@
-export const PagingDiv8Calculate = (pageNumber, listCount, pageSize = 8) => {
+export const PagingDiv8Calculate = (pageNumber, listCount, pageSize = 8, groupSize = 8) => {
     //초대 페이지 계산
     const maxPage = Math.ceil(listCount / pageSize);
 

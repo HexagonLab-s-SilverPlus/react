@@ -28,8 +28,8 @@ const QnAList = () => {
     startPage: 1,
     endPage: 1,
     keyword: "",
-    startDate: formattedDate,
-    endDate: formattedDate,
+    startDate: '',
+    endDate: '',
   });
 
   const navigate = useNavigate();         // 이동 훅
