@@ -5,6 +5,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot, apiFlask } from './utils/axios';
+import PropTypes from 'prop-types'; // PropTypes를 import
 
 // Context 생성
 export const AuthContext = createContext();
@@ -117,12 +118,12 @@ const setupInterceptors = (axiosInstance) => {
             console.error('로그인 연장 실패 : ', error.response?.data);
             alert('다시 로그인해주세요.');
             localStorage.clear();
-            navigate('/loginmember');
+            window.location.href = '/loginmember';
           }
         } else {
           alert('다시 로그인해주세요.(로그인연장 거부)');
           localStorage.clear();
-          navigate('/loginmember');
+          window.location.href = '/loginmember';
           return Promise.reject(error);
         }
       }
@@ -149,7 +150,7 @@ const setupInterceptors = (axiosInstance) => {
         } catch (error) {
           console.error('accessToken 재발급 실패 : ', error.response?.data);
           localStorage.clear();
-          navigate('/loginmember');
+          window.location.href = '/loginmember';
           return Promise.reject(error);
         }
       }
@@ -157,12 +158,12 @@ const setupInterceptors = (axiosInstance) => {
       if (error.response.status === 401 && tokenExpiredHeader === 'AllToken') {
         console.warn('모든 토큰 만료.');
         localStorage.clear();
-        navigate('/loginmember');
+        window.location.href = '/loginmember';
       }
 
       if (error.response && error.response.status !== 401) {
         localStorage.clear();
-        navigate('/loginmember');
+        window.location.href = '/loginmember';
       }
 
       return Promise.reject(error);
@@ -192,7 +193,7 @@ const refreshAccessToken = async () => {
     console.error('reisssu 요청 실패 : 토큰 없음');
     alert('세션 만료. 다시 로그인해주세요.');
     localStorage.clear();
-    navigate('/loginmember');
+    window.location.href = '/loginmember';
     return;
   }
 
@@ -238,14 +239,14 @@ const refreshAccessToken = async () => {
     ) {
       alert('세션 만료. 다시 로그인해주세요.');
       localStorage.clear();
-      navigate('/loginmember');
+      window.location.href = '/loginmember';
     } else if (expiredTokenType === 'AccessToken') {
       console.warn('accessToken 만료됨. 재발급 진행');
       return await refreshAccessToken();
     } else {
       console.error('오류 발생 : ', error.message);
       localStorage.clear();
-      navigate('/loginmember');
+      window.location.href = '/loginmember';
     }
   }
 };
@@ -330,7 +331,10 @@ export const AuthProvider = ({ children }) => {
         member: null,
       });
       navigate('/loginmember');
-    } catch (error) {}
+    } catch (error) {
+      console.error('로그아웃 실패 : ', error);
+      alert('로그아웃 실패');
+    }
   };
 
   useEffect(() => {
@@ -350,4 +354,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+
+// PropTypes 설정
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired, // children이 필수 Prop임을 명시
 };
