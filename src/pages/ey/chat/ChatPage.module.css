@@ -5,6 +5,12 @@
   /* 수직 배치 */
   height: 100vh;
   /* 화면 전체 높이 */
+  transition: margin-left 0.3s ease; /* 부드러운 이동 효과 */
+}
+
+/* 사이드바가 열렸을 때의 상태 */
+.chat-container.sidebar-open {
+  margin-left: 360px; /* 사이드바 너비만큼 오른쪽으로 이동 */
 }
 
 /* 메시지 영역 (스크롤 가능) */
@@ -60,8 +66,8 @@
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #f8f9fa;
-  border-top: 1px solid #ddd;
+  /* background-color: #f8f9fa; */
+  /* border-top: 1px solid #ddd; */
   height: 100px;
   /* 고정된 높이 */
   box-sizing: border-box;
@@ -101,16 +107,6 @@
   background-color: #276749;
 }
 
-
-
-
-
-
-
-
-
-
-
 .container {
   display: flex;
   height: 100vh;
@@ -140,25 +136,16 @@
 }
 
 .sidebar {
+  position: relative;
   width: 360px;
-  /* 사이드바의 고정 너비 */
   height: 100vh;
-  /* 화면 전체 높이 */
   background-color: #f0f8ff;
-  /* 배경색 */
-  border-right: 1px solid #ddd;
+  border-right: 2px solid #ddd;
+  display: flex;
+  flex-direction: column;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* 그림자 추가 */
-  overflow: hidden;
-  /* 불필요한 스크롤 방지 */
-  position: fixed;
-  /* 사이드바를 고정 */
-  top: 0;
-  left: 0;
-}
-
-.sidebarHidden {
   transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
 .sidebarVisible {
@@ -166,67 +153,186 @@
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   color: #333;
   text-align: center;
-  margin-bottom: 20px;
-  /* 제목과 내용 간 간격 */
+  margin-top: 80px;
 }
 
 .list {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 20px;
 }
 
 .item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 15px;
   margin-bottom: 10px;
   background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  font-size: 16px;
+  transition: all 0.3s ease;
+  font-size: 25px;
+  text-align: left;
 }
 
 .item:hover {
-  background-color: #e8e8e8;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #d8d8d8 !important;
+  border-color: #e6f7ff !important;
 }
 
 .selectedItem {
-  background-color: #007bff;
-  color: white;
+  background-color: #1890ff !important;
+  color: white !important;
+  font-weight: bold;
+  border-color: #063158;
 }
 
+.noWorkspace {
+  font-size: 30px;
+  text-align: center;
+  color: #888;
+}
 
 .button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #007bff;
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  padding: 15px;
+  font-size: 20px;
+  background-color: #4caf50;
   color: white;
-  border-radius: 8px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 14px;
+  text-align: center;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #45a049;
 }
 
 .error {
   color: red;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
 }
 
+.menuIcon {
+  color: gray;
+  font-size: 20px;
+  cursor: pointer;
+  visibility: hidden;
+}
 
+.item:hover .menuIcon {
+  visibility: visible;
+}
 
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  text-align: center;
+  position: relative;
+}
 
+.modal h3 {
+  margin-bottom: 10px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.modal p {
+  margin-bottom: 20px;
+  color: #555;
+  font-size: 23px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.cancelButton {
+  background: #ccc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #b0b0b0;
+}
+
+.deleteButton {
+  background: #e53935;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #d32f2f;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.dropdownMenu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdownMenu button:hover {
+  background-color: #f0f0f0;
+}
 
 /* 마크다운 스타일링 */
 .markdown {
