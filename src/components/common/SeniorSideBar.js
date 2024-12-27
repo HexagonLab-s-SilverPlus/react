@@ -96,6 +96,11 @@ const SeniorSideBar = ({ memUUID }) => {
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
     const [openDropdownId, setOpenDropdownId] = useState(null);
 
+
+    const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+
+
     const { apiSpringBoot, memName } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -110,6 +115,7 @@ const SeniorSideBar = ({ memUUID }) => {
                     setActiveWorkspaces(responseActive.data.data);
                     setHasMoreActive(responseActive.data.data.length === 5);
                 } else {
+                    setErrorMessage("활성 상태의 워크스페이스가 없습니다.");
                     setActiveWorkspaces([]);
                     setHasMoreActive(false);
                 }
@@ -121,6 +127,7 @@ const SeniorSideBar = ({ memUUID }) => {
                     setArchivedWorkspaces(responseArchived.data.data);
                     setHasMoreArchived(responseArchived.data.data.length === 5);
                 } else {
+                    setErrorMessage("즐겨찾기한 워크스페이스가 없습니다.");
                     setArchivedWorkspaces([]);
                     setHasMoreArchived(false);
                 }
@@ -136,12 +143,16 @@ const SeniorSideBar = ({ memUUID }) => {
                     setDeletedWorkspaces(responseDeleted.data.data);
                     setHasMoreDeleted(responseDeleted.data.data.length === 5);
                 } else {
+                    setErrorMessage("휴지통이 비었습니다.");
                     console.log("휴지통이 비었습니다.");
                     setDeletedWorkspaces([]);
                     setHasMoreDeleted(false);
                 }
             } catch (error) {
+                setErrorMessage("워크스페이스를 불러오는 중 오류가 발생했습니다.");
                 console.error("워크스페이스 초기 데이터 로드 실패:", error);
+            }finally{
+                setLoading(false);
             }
         };
 

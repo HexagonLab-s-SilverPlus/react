@@ -1,0 +1,20 @@
+/* src/pages/notice/NoticeDetail.module.css */
+.memberContainer {display: flex;}
+.memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
+.MemberNoticeTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
+.insertTableDiv {width:100%;margin-top: 70px;}
+.insertTable{width:100%;}
+.insertTable > tbody > tr > td{width:100%;border-bottom: 2px solid #999999;}
+.notTitleLine {display:flex;justify-content:space-between;padding:5px 5px;}
+.notTitle{display: flex;font-weight:bold;font-size: 24px;}
+.writeData{display: flex;align-items: center;justify-items: end; gap: 30px;}
+.img {width:20px;}
+.notContent{width:100%;font-weight:normal;font-size: 16px;padding:30px 20px;}
+.button{font-family: "Pretendard Variable";background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.button2{font-family: "Pretendard Variable";background-color: #eeeeee;font-size:16px;color: #000000;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.filesDiv{padding:15px 5px}
+.file{cursor: pointer;padding:10px 0px 0px 10px;}
+.buttonDiv{position:relative;padding-top:50px;display: flex;justify-content: space-between;align-items: center;}
+.centerButton{position:absolute;left:50%;transform: translateX(-50%);}
+.rightButtons{display:flex;position:absolute;right:0;gap:10px ;}
+.fileview{width:90%}
