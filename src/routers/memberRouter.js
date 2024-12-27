@@ -9,11 +9,11 @@ import MyInfoManager from '../pages/member/MyInfoManager'
 import MyInfoAdmin from '../pages/member/MyInfoAdmin'
 import MyInfoFamily from '../pages/member/MyInfoFamily'
 import MemberListView from '../pages/member/MemberDetailView'
-import MemberListView from '../pages/member/MemberListView'
 import FindPwdSenior from '../pages/member/FindPwdSenior'
 import FindPwdMember from '../pages/member/Findpwdmember'
 import FindIdSenior from '../pages/member/FindIdSenior'
 import FindIdMember from '../pages/member/FindIdMember'
+import MemberDetailView from '../pages/member/MemberDetailView'
 
 
 const memberRouter = [
