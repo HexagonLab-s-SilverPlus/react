@@ -1,24 +1,18 @@
 // src/pages/notice/NoticeList.js
 import React,{useState,useEffect, useContext} from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-
 // AuthContext
 import {AuthContext} from "../../AuthProvider"
-
 // axios
 import {apiSpringBoot} from '../../utils/axios';
-
 // components
 import SeniorNavbar from '../../components/common/SeniorNavbar';
 import SeniorFooter from '../../components/common/SeniorFooter';
 import SideBar from '../../components/common/SideBar';
 import Paging from '../../components/common/Paging';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
-
-
 // css
 import styles from './NoticeList.module.css'
-
 // 이미지
 import searchIcon from '../../assets/images/search.png'
 import up from '../../assets/images/keyboard_arrow_up.png'
@@ -50,7 +44,9 @@ function NoticeList() {
 
     // 검색관련
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태
-    const [selectOption, setSelectOption] = useState("제목");
+    // 키워드 임시저장장
+    const [tempKeyword, setTempKeyword] = useState(""); // 입력 중인 키워드
+
 
 
     // 핸들러
@@ -60,32 +56,64 @@ function NoticeList() {
     };
     // 검색 action 저장
     const handleSelectOption = (option) => {
-        setSelectOption(option);
+        //setSelectOption(option);
         setSearch((prev)=>({
             ...prev,
             action:option,
         })); // 선택된 옵션 업데이트
         setIsDropdownOpen(false); // 드롭다운 닫기
     };
-    // 페이지 이동
-    const handlePageChange = async (page) => {
-        handleUpdateView(page);
-    };
     // 키워드 입력
     const handleChangeKeyword = (e) => {
-        const {value}=e.target;
-        setSearch((prev)=>({
-            ...prev,
-            keyword:value,
-        }));
+        setTempKeyword(e.target.value);
     };
 
+    // 키워드검색
+    const handleSearch = ()=>{
+        const updatedSearch = {
+            ...search,
+            keyword:tempKeyword,
+        }
+        setSearch(updatedSearch); // 상태 업데이트
+        setPagingInfo((prev)=>({
+            ...prev,
+            pageNumber:1,
+        }));
+        handleUpdateView(1,updatedSearch);
+    };
+
+    // 페이징 변경시
+    const handleUpdateView = async (page,updatedSearch = search) => {
+        console.log(pagingInfo);
+        console.log(search);
+        try{
+            const response = await apiSpringBoot.get(`/notice`, {
+                params: {
+                    ...pagingInfo,
+                    pageNumber:page,
+                    ...updatedSearch,
+                },
+            });
+            setPagingInfo(PagingCalculate(page,response.data.search.listCount,response.data.search.pageSize));
+            setPagingInfo((prev) =>({
+                ...prev,
+                pageNumber:page,
+                listCount:response.data.search.listCount,
+                pageSize:response.data.search.pageSize,
+            }));   
+            setNotices(response.data.list);
+            console.log("notices : "+response.data.list);         
+        } catch (e){
+            console.log("error : {}", e); // 에러 메시지 설정
+        }    
+    };
 
 
     // 최초 공지사항 전체리스트 가져오기
     useEffect(()=>{
         const fetchNotices = async () => {
         try{
+            //console.log(response.data.search.pageNumber);
             const response = await apiSpringBoot.get('/notice');
             console.log(response.data.list);
             console.log(response.data.search);
@@ -93,6 +121,13 @@ function NoticeList() {
             setNotices(response.data.list);
             // 페이징 처리할 값 생성
             setPagingInfo(PagingCalculate(response.data.search.pageNumber,response.data.search.listCount, response.data.search.pageSize));
+            setPagingInfo((prev) =>({
+                ...prev,
+                pageNumber:response.data.search.pageNumber,
+                listCount:response.data.search.listCount,
+                pageSize:response.data.search.pageSize,
+            }));
+            console.log(response.data.search.pageNumber);
         } catch (error) {
             console.log(error);
             alert("공지사항 불러오기에 실패하였습니다.");
@@ -100,166 +135,148 @@ function NoticeList() {
     };
     fetchNotices();
     },[]);
-    
-    // 페이징 변경시
-    const handleUpdateView = async (page) => {
-        console.log(page);
-        console.log(pagingInfo);
-        try{
-            const response = await apiSpringBoot.get(`/notice`, {
-                params: {
-                    ...pagingInfo,
-                    pageNumber:page,
-                },
-            });
-            setNotices(response.data.list);
-            console.log("notices : "+response.data.list);
-            setMemberList(response.data.member);
-        
-            setPagingInfo(PagingCalculate(
-                response.data.paging.pageNumber + 1, response.data.listCount, response.data.paging.pageSize));
-            
-
-        } catch (e){
-            console.log("error : {}", e); // 에러 메시지 설정
-        }    
-    }
 
 
     // 랜더링 뷰
     if (role === "SENIOR"){
-        return (
-            <div className={styles.noticeList}>
-                {/* 헤더 */}
-                <SeniorNavbar/>
-                <div className={styles.top}>
-                    <div className={styles.menuName}>공지사항</div>
-                    {/* 검색창 */}
-                    <div className={styles.searchbox}>
-                        {/* 검색옵션 */}
-                        <div 
-                            className={styles.searchOptions}
-                            onClick={handleToggleDropdown}
-                        >
-                            &nbsp; {selectOption} &nbsp;
-                            <img
-                                className={styles.arrow}
-                                src={isDropdownOpen ? up:down}
-                                alt={isDropdownOpen ? "올리기":"내리기"}
-                            />&nbsp;
-                        </div>
-                        {isDropdownOpen && (
-                            <div className={styles.dropdown}>
-                                <div
-                                    className={styles.dropdownOption}
-                                    onClick={()=>handleSelectOption("제목")}
-                                >
-                                    &nbsp; 제목 &nbsp;
-                                </div>
-                                <div
-                                    className={styles.dropdownOption}
-                                    onClick={()=>handleSelectOption("내용")}
-                                >
-                                    &nbsp; 내용 &nbsp;
-                                </div>
-                            </div>
-                        )}
-                        {/* 검색키워드입력창 */}
-                        <div className={styles.searchKeyword}>
-                            &nbsp;
-                            <input
-                                className={styles.searchKeywordBox}
-                                placeholder="검색어를 입력하세요."
-                                value={search.keyword}    
-                            />
-                            &nbsp;
-                            <img
-                                className={styles.search}
-                                src={searchIcon}
-                                alt="검색"
-                            />
-                            &nbsp;
-                        </div>
-                    </div>
-                </div>
+        // return (
+        //     <div className={styles.noticeList}>
+        //         {/* 헤더 */}
+        //         <SeniorNavbar/>
+        //         <div className={styles.top}>
+        //             <div className={styles.menuName}>공지사항</div>
+        //             {/* 검색창 */}
+        //             <div className={styles.searchbox}>
+        //                 {/* 검색옵션 */}
+        //                 <div 
+        //                     className={styles.searchOptions}
+        //                     onClick={handleToggleDropdown}
+        //                 >
+        //                     &nbsp; {selectOption} &nbsp;
+        //                     <img
+        //                         className={styles.arrow}
+        //                         src={isDropdownOpen ? up:down}
+        //                         alt={isDropdownOpen ? "올리기":"내리기"}
+        //                     />&nbsp;
+        //                 </div>
+        //                 {isDropdownOpen && (
+        //                     <div className={styles.dropdown}>
+        //                         <div
+        //                             className={styles.dropdownOption}
+        //                             onClick={()=>handleSelectOption("제목")}
+        //                         >
+        //                             &nbsp; 제목 &nbsp;
+        //                         </div>
+        //                         <div
+        //                             className={styles.dropdownOption}
+        //                             onClick={()=>handleSelectOption("내용")}
+        //                         >
+        //                             &nbsp; 내용 &nbsp;
+        //                         </div>
+        //                     </div>
+        //                 )}
+        //                 {/* 검색키워드입력창 */}
+        //                 <div className={styles.searchKeyword}>
+        //                     &nbsp;
+        //                     <input
+        //                         className={styles.searchKeywordBox}
+        //                         placeholder="검색어를 입력하세요."
+        //                         value={search.keyword}    
+        //                     />
+        //                     &nbsp;
+        //                     <img
+        //                         className={styles.search}
+        //                         src={searchIcon}
+        //                         alt="검색"
+        //                     />
+        //                     &nbsp;
+        //                 </div>
+        //             </div>
+        //         </div>
 
-                {/* 리스트 출력 */}
-                <div className={styles.list}>
-                    <div
-                        className={styles.object}
-                    >
-                        <div className={styles.title}>
-                            TEST 공지사항입니다.
-                        </div>
-                        <div className={styles.message}>
-                            <div >
-                                내용이 궁금하면 클릭해보세요!
-                            </div>
-                            <div className={styles.date}>
-                                2024/12/01
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/*Footer*/}
-                <SeniorFooter />
-            </div>
-        );
+        //         {/* 리스트 출력 */}
+        //         <div className={styles.list}>
+        //             <div
+        //                 className={styles.object}
+        //             >
+        //                 <div className={styles.title}>
+        //                     TEST 공지사항입니다.
+        //                 </div>
+        //                 <div className={styles.message}>
+        //                     <div >
+        //                         내용이 궁금하면 클릭해보세요!
+        //                     </div>
+        //                     <div className={styles.date}>
+        //                         2024/12/01
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //         {/*Footer*/}
+        //         <SeniorFooter />
+        //     </div>
+        // );
     } else if (role ==="ADMIN"){
+        console.log('렌더링 직전 데이터 notices : '+notices);
+        console.log('렌더링 직전 데이터 pagingInfo : '+pagingInfo);
+        console.log('렌더링 직전 데이터 search : '+search.action+ ' ' + search.keyword);
         return (
             <div className={styles.memberContainer}>
                 <SideBar />
                 <div className={styles.memberSubContainer}>
-                    <div className={styles.secTop}>
+                    <div className={styles.MemberNoticeTop}>
                         <p onClick={()=>(navigate("/notice"))}>공지사항</p>
                     </div>
-                    <div className={styles.memberSearchbox}>
-                        <div 
-                            className={styles.memberSearchOptions}
-                            onClick={handleToggleDropdown}
-                        >
-                            &nbsp; {selectOption} &nbsp;
-                            <img
-                                className={styles.memberArrow}
-                                src={isDropdownOpen ? up:down}
-                                alt={isDropdownOpen ? "올리기":"내리기"}
-                            />&nbsp;
-                        {isDropdownOpen && (
-                            <div className={styles.memberDropdown}>
-                                <div
-                                    className={styles.memberDropdownOption}
-                                    onClick={()=>handleSelectOption("제목")}
-                                    >
-                                    &nbsp; 제목 &nbsp;
+                    <div className={styles.memberSubLine}>
+                        <div className={styles.memberWriteButton}>
+                            <button className={styles.memberInputButton} onClick={()=>(navigate("/noticewrite"))}>공지사항 등록</button>
+                        </div>
+                        <div className={styles.memberSearchbox}>
+                            <div 
+                                className={styles.memberSearchOptions}
+                                onClick={handleToggleDropdown}
+                            >
+                                &nbsp; {search.action} &nbsp;
+                                <img
+                                    className={styles.memberArrow}
+                                    src={isDropdownOpen ? up:down}
+                                    alt={isDropdownOpen ? "올리기":"내리기"}
+                                />&nbsp;
+                            {isDropdownOpen && (
+                                <div className={styles.memberDropdown}>
+                                    <div
+                                        className={styles.memberDropdownOption}
+                                        onClick={()=>handleSelectOption("제목")}
+                                        >
+                                        &nbsp; 제목 &nbsp;
+                                    </div>
+                                    <div
+                                        className={styles.memberDropdownOption}
+                                        onClick={()=>handleSelectOption("내용")}
+                                        >
+                                        &nbsp; 내용 &nbsp;
+                                    </div>
                                 </div>
-                                <div
-                                    className={styles.memberDropdownOption}
-                                    onClick={()=>handleSelectOption("내용")}
-                                    >
-                                    &nbsp; 내용 &nbsp;
-                                </div>
+                            )}
                             </div>
-                        )}
-                        </div>
-                        {/* 검색키워드입력창 */}
-                        <div className={styles.memberSearchKeyword}>
-                            &nbsp;
-                            <input
-                                className={styles.memberSearchKeywordBox}
-                                placeholder="검색어를 입력하세요."
-                                onChange={handleChangeKeyword}
-                                value={search.keyword}  
-                            />
-                            &nbsp;
-                            <img
-                                className={styles.memberSearch}
-                                src={searchIcon}
-                                alt="검색"
-                            />
-                            &nbsp;
-                        </div>
-                        <div>
-                            <button className={styles.memberSearchButton} onClick={()=>(navigate("/noticewrite"))}>공지사항 등록</button>
+                            {/* 검색키워드입력창 */}
+                            <div className={styles.memberSearchKeyword}>
+                                &nbsp;
+                                <input
+                                    className={styles.memberSearchKeywordBox}
+                                    placeholder="검색어를 입력하세요."
+                                    onChange={handleChangeKeyword}
+                                    value={tempKeyword}  
+                                />
+                                &nbsp;
+                                <img
+                                    className={styles.memberSearch}
+                                    src={searchIcon}
+                                    alt="검색"
+                                    onClick={handleSearch}
+                                />
+                                &nbsp;
+                            </div>
                         </div>
                     </div>
                     <div className={styles.tableDiv}>
@@ -272,14 +289,14 @@ function NoticeList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {notices.map((notice) =>(
+                                {notices.map((noticeList) =>(
                                     <tr 
-                                        key={notice.notId}
-                                        onClick={()=>(navigate(`/notice/detail/${notice.notId}`))}
+                                        key={noticeList.notId}
+                                        onClick={()=>(navigate(`/notice/detail/${noticeList.notId}`))}
                                     >
-                                        <td>{notice.notTitle}</td>
-                                        <td>{notice.notCreateAt.split('T')[0]}</td>
-                                        <td>{notice.notReadCount}</td>
+                                        <td>{noticeList.notTitle}</td>
+                                        <td>{noticeList.notCreateAt.split('T')[0]}</td>
+                                        <td>{noticeList.notReadCount}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -287,18 +304,16 @@ function NoticeList() {
                     </div>
                     <div className={styles.noticePaging}>
                         <Paging 
-                            currentPag={pagingInfo.currentPage || 1}
+                            currentPag={pagingInfo.pageNumber || 1}
                             maxPage={pagingInfo.maxPage || 1}
                             startPage={pagingInfo.startPage || 1}
                             endPage={pagingInfo.endPage || 1}
-                            onPageChange={(page) => handlePageChange(page)}
+                            onPageChange={(page) => handleUpdateView(page)}
                         />
                     </div>
                 </div>
             </div>
         );
     }
-
-
 }
 export default NoticeList;

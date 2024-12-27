@@ -21,8 +21,9 @@
 /*member*/
 .memberContainer {display: flex;}
 .memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
-.secTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
-.memberSearchbox{display:flex;justify-content: flex-end;align-items:end;gap:5px;margin-top: 80px;margin-bottom:20px;}
+.MemberNoticeTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
+.memberSubLine {display: flex;justify-content: space-between;margin-top: 80px;margin-bottom:20px;}
+.memberSearchbox{display:flex;justify-content: flex-end;align-items:end;gap:5px;}
 .memberSearchOptions{border-bottom:2px #064420 solid;cursor:pointer;font-size: 20px;font-weight: bold;}
 .memberArrow{width:20px;height:20px;}
 .memberDropdown{position:absolute;z-index:1000;margin-top:5px;}
@@ -31,7 +32,7 @@
 .memberSearchKeyword{display:flex;align-items:center;border-bottom:2px #064420 solid;}
 .memberSearchKeywordBox{font-family: "Pretendard Variable";width:320px;font-size:18px;border:0px;background-color:#ffffff;color:#333333;}
 .memberSearch{width:30px;height:30px;cursor:pointer;}
-.memberSearchButton{background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.memberInputButton{background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
 .tableDiv{width:calc(100%);margin-top: 20px;}
 .memberNoticeTable{table-layout:fixed;width: 100%;text-align: center;margin-top:80px;font-size: 18px;border-collapse: collapse;}
 .memberNoticeTable > thead { width: 100%;}
