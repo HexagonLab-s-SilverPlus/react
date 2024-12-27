@@ -156,7 +156,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
     data.append('memStatus', 'ACTIVE');
 
     try {
-      await apiSpringBoot.post('/member', data, {
+      await apiSpringBoot.post('/member/enroll', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

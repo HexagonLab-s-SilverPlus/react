@@ -132,13 +132,13 @@ const LoginSenior = () => {
                   아이디 찾기
                 </Link>
               </span>
-              <spna className={styles.seperator}>❘</spna>
+              <span className={styles.seperator}>❘</span>
               <span>
                 <Link to="/findPwdMember" className={styles.findlink}>
                   비밀번호 찾기
                 </Link>
               </span>
-              <spna className={styles.seperator}>❘</spna>
+              <span className={styles.seperator}>❘</span>
               <span>
                 <Link to="/enrollselect" className={styles.findlink}>
                   회원가입

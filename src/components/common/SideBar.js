@@ -26,7 +26,7 @@ function SideBar() {
           <Link to="/">검색</Link>
         </li>
         <li>
-          <Link to="/">계정관리</Link>
+          <Link to="/mlistview">계정관리</Link>
         </li>
         <li>
           <Link to="/notice">공지사항</Link>
