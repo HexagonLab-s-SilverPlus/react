@@ -7,7 +7,7 @@ import WelcomeChat from '../pages/ey/chat/WelcomeChat';
 
 const eyRouter = [
   <>
-  <Route path="/welcome-chat" element={<ProtectedRoute element={<WelcomeChat />} />} />
+    <Route path="/welcome-chat" element={<ProtectedRoute element={<WelcomeChat />} />} />
     <Route path="/senior-menu" element={<ProtectedRoute element={<SeniorMenu />} />} />
     <Route path="/w/:workspaceId" element={<ProtectedRoute element={<ChatPage />} />} />
   </>
