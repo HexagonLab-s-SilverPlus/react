@@ -38,5 +38,5 @@ body {background: #fff; color: #333;}
 
 .pgListTextWrap {margin: 12px 0;}
 .pgListTextWrap p {font-size: 16px; margin: 0; color: #666; margin-bottom: 4px; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.pgListTextWrap > p:nth-child(1) {font-weight: bold; font-size: 24px; color: #333; margin-bottom: 8px;}
+.pgListTextWrap > p:nth-child(1) > button {display: block; padding: 0; margin: 0; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 8px; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;}
 /* secContent end */

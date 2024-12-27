@@ -1,4 +1,4 @@
-/* src/components/common/PagingDiv4.module.css */
+/* src/components/common/PagingDiv8.module.css */
 .pagingContainer1 {display: flex; justify-content: center; gap: 8px;}
 .pagingContainer1 button {cursor: pointer; padding: 2px 3px;}
 .pagingContainer1 button:disabled {cursor: not-allowed; color: #666;}
