@@ -49,7 +49,7 @@ function ChatPage() {
       fetchChatHistory();
     }
     if (aiReply) {
-      setMessages(prev => [...prev, { sender: 'AI', text: aiReply }]);
+      setMessages((prev) => [...prev, { sender: 'AI', text: aiReply }]);
     }
   }, [workspaceId, aiReply]);
 
@@ -59,10 +59,9 @@ function ChatPage() {
     if (!inputText.trim()) return;
 
     const userMessage = { sender: 'USER', text: inputText };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     setIsLoading(true);
-    setMessages(prev => [...prev, { sender: 'AI', text: "AI 응답 생성 중..." }]);
 
     try {
       const response = await apiFlask.post(
@@ -82,11 +81,11 @@ function ChatPage() {
       const { reply } = response.data;
       const aiMessage = { sender: 'AI', text: reply };
 
-      setMessages(prev => prev.slice(0, -1).concat(aiMessage));
+      setMessages((prev) => [...prev, { sender: 'AI', text: reply }]);
     } catch (error) {
       console.error('메시지 전송 중 오류:', error);
-      setMessages(prev =>
-        prev.slice(0, -1).concat({ sender: 'AI', text: "AI 응답 생성에 실패했습니다. 다시 시도해주세요." })
+      setMessages((prev) =>
+        [...prev, { sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.' }]
       );
     } finally {
       setInputText('');
@@ -125,29 +124,26 @@ function ChatPage() {
       <Container>
         <div className={`${styles['chat-container']} ${isSidebarVisible ? 'sidebar-open' : ''}`}>
           <div className={styles['chat-page']}>
-            {messages.map((message, index) => {
-              if (index % 2 === 0) {
-                const aiMessage = messages[index + 1] || { text: isLoading ? "AI 응답 생성 중 ..." : "" };
-
-                console.log(marked(aiMessage.text));
-
-                return (
-                  <div key={index} className={styles['message-set']}>
-                    <div className={`${styles['chat-bubble']} ${styles['user-message']}`}>
-                      <p>{message.text}</p>
-                    </div>
-                    {aiMessage && (
-                      <div className={`${styles['chat-bubble']} ${styles['ai-response']} ${styles['markdown']}`}
-                        dangerouslySetInnerHTML={{ __html: marked(aiMessage.text) }}>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-              return null;
-            })}
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
+                  }`}
+              >
+                {/* USER 메시지와 AI 메시지의 스타일을 다르게 적용 */}
+                {message.sender === 'AI' ? (
+                  <div
+                    className={styles['markdown']}
+                    dangerouslySetInnerHTML={{ __html: marked(message.text) }}
+                  ></div>
+                ) : (
+                  <p>{message.text}</p>
+                )}
+              </div>
+            ))}
             <div ref={chatEndRef}></div>
           </div>
+
           <div className={styles['input-container']}>
             <input
               type="text"
