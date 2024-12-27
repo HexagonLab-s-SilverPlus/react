@@ -152,11 +152,13 @@ const SeniorSideBar = ({ memUUID }) => {
     // 휴지통 버튼 클릭 핸들러
     const fetchDeletedWorkspaces = async () => {
         try {
+            
             const page = Math.ceil(deletedWorkspaces.length / 5) + 1; // 다음 페이지 계산
             const response = await apiSpringBoot.get(
                 `/api/workspace/${memUUID}/status?workspaceStatus=DELETED&page=${page}&size=5`
             );
-            setDeletedWorkspaces((prev) => [...prev, ...response.data.data]);
+
+            setDeletedWorkspaces(response.data.data || []); // 새로고침 후 데이터 반영
             setHasMoreDeleted(response.data.data.length === 5); // 더 가져올 데이터가 있는지 확인
         } catch (error) {
             console.error("삭제된 워크스페이스 로드 실패:", error);
@@ -164,15 +166,27 @@ const SeniorSideBar = ({ memUUID }) => {
     };
 
 
+    // 워크스페이스 삭제 핸들러
     const handleDeleteWorkspace = async () => {
         if (!workspaceToDelete) return;
 
         try {
             await apiSpringBoot.delete(`/api/workspace/${workspaceToDelete.workspaceId}`);
+            
+            // 기존의 워크스페이스와 삭제된 워크스페이스가 다른 경우에만 필터링해서
+            // 활성화된 워크스페이스 상태에 업데이트한다.
             setActiveWorkspaces((prev) =>
                 prev.filter((workspace) => workspace.workspaceId !== workspaceToDelete.workspaceId)
             );
+
+            // 삭제된 워크스페이스 상태에 추가
+            // 삭제된 워크스페이스 객체를 기존 배열의 맨 앞에 추가한 새로운 배열을 생성하여 업데이트한다.
+            // 이렇게 하면 최근에 삭제된 워크스페이스가 목록의 맨 위에 표시된다.
+            setDeletedWorkspaces((prev) => [workspaceToDelete, ...prev]);
+
+            // 삭제할 워크스페이스 초기화
             setWorkspaceToDelete(null);
+            // 삭제 확인 모달 닫기
             setIsDeleteConfirmationOpen(false);
         } catch (error) {
             console.error("워크스페이스 삭제 실패:", error);
@@ -275,11 +289,13 @@ const SeniorSideBar = ({ memUUID }) => {
                         key={workspace.workspaceId}
                         className={`${styles.item} ${selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ""
                             }`}
-                        onClick={() => setSelectedWorkspaceId(workspace.workspaceId)}
+                        onClick={() => {
+                            setSelectedWorkspaceId(workspace.workspaceId);
+                            navigate(`/w/${workspace.workspaceId}`)
+                        }
+                        }
                     >
-                        <span onClick={() => navigate(`/w/${workspace.workspaceId}`)}>
-                            {workspace.workspaceName}
-                        </span>
+                        {workspace.workspaceName}
                         <button
                             className={styles.menuButton}
                             onClick={(e) => {
@@ -315,8 +331,8 @@ const SeniorSideBar = ({ memUUID }) => {
             <button
                 className={styles.trashButton}
                 onClick={() => {
-                    fetchDeletedWorkspaces();
-                    setIsTrashModalOpen(true);
+                    fetchDeletedWorkspaces(); // 삭제된 데이터 새로고침
+                    setIsTrashModalOpen(true); // 모달 열기
                 }}
             >
                 휴지통

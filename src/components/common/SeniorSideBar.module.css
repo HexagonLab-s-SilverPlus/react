@@ -31,8 +31,23 @@
   border-color: #063158;
 }
 
+.createWorkspaceButton{
+  position: relative; /* 절대 위치에서 상대 위치로 변경 */
+  margin: 20px 0; /* 상하 여백 추가 */
+  width: 100%; /* 버튼을 전체 너비로 변경 */
+  padding: 10px; /* 여백 조정 */
+  font-size: 23px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px; /* 모서리 둥글게 */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-
+.createWorkspaceButton:hover {
+  background-color: #2f6923;
+}
 
 
 .noWorkspace {
@@ -47,9 +62,9 @@
   margin: 20px 0; /* 상하 여백 추가 */
   width: 100%; /* 버튼을 전체 너비로 변경 */
   padding: 10px; /* 여백 조정 */
-  font-size: 18px;
-  background-color: #4caf50;
-  color: white;
+  font-size: 23px;
+  background-color: #8d8d8d;
+  color: rgb(241, 241, 241);
   border: none;
   border-radius: 8px; /* 모서리 둥글게 */
   cursor: pointer;
@@ -58,7 +73,7 @@
 
 
 .button:hover {
-  background-color: #45a049;
+  background-color: #5c5c5c;
 }
 
 .error {
