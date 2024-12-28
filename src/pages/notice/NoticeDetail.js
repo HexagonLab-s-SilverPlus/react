@@ -26,7 +26,7 @@ const NoticeDetail = () => {
     const [files, setFiles] = useState([]);
     const [error,setError] = useState(null);
     // 토큰정보 가져오기(AuthProvider)
-    const {member,isLoggedIn, role,memId} = useContext(AuthContext);
+    const {role,memId,memName} = useContext(AuthContext);
 
     // notice data set
     useEffect(()=>{
@@ -70,6 +70,25 @@ const NoticeDetail = () => {
         } catch (error){
             console.error('File download error : ', error);
             alert('파일 다운로드에 실패했습니다.')
+        }
+    };
+
+    const handleDelete = async () => {
+        if(window.confirm("공지사항을 삭제하시겠습니까?")){
+            try{
+                console.log(notice.notId);
+                console.log(memId);
+                await apiSpringBoot.delete(`/notice/${notice.notId}`,{
+                    params:{
+                        memName:memName,
+                    },
+                });
+                alert("삭제가 완료되었습니다.");
+                navigate('/notice');
+            } catch(error){
+                console.error('delete error : ', error);
+                alert('공지사항 삭제에 실패하였습니다.');
+            }
         }
     };
     
@@ -149,7 +168,10 @@ const NoticeDetail = () => {
                 {role==="ADMIN" && (
                     <div className={styles.rightButtons}>
                         <button className={styles.button}>수정</button>
-                        <button className={styles.button2}>삭제</button>
+                        <button
+                            className={styles.button2}
+                            onClick={handleDelete}
+                        >삭제</button>
                     </div>
                 )}
             </div>
