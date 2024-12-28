@@ -41,8 +41,10 @@
   margin: 35px 0;
   font-size: 28px;
   line-height: 1.5;
-  max-width: 80%;
+  max-width: 70%; /* 최대 너비 */
+  min-width: 50px; /* 최소 너비 */
   word-wrap: break-word;
+  width: fit-content; /* 메시지 내용에 따라 너비 동적으로 조정*/
   /* 글씨  굵게 */
   font-weight: bold;
   /* 그림자 효과 (Figma Drop Shadow 설정 반영) */
@@ -50,15 +52,19 @@
 }
 
 .user-message {
-  align-self: flex-end;
   /* 사용자 메시지는 오른쪽 정렬 */
-  background-color: #F1F3F5
+  align-self: flex-end;
+  background-color: #F1F3F5;
+  margin-left: auto;
+  margin-right: 10px;
 }
 
 .ai-response {
   align-self: flex-start;
   /* AI 응답은 왼쪽 정렬 */
   background-color: #FDFAF6;
+   margin-left: 10px;
+  margin-right: auto;
 }
 
 /* 입력창 고정 */

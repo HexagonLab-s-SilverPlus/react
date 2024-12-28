@@ -5,6 +5,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot, apiFlask } from './utils/axios';
+import PropTypes from 'prop-types'; // PropTypes를 import
 
 // Context 생성
 export const AuthContext = createContext();
@@ -116,13 +117,13 @@ const setupInterceptors = (axiosInstance) => {
           } catch (error) {
             console.error('로그인 연장 실패 : ', error.response?.data);
             alert('다시 로그인해주세요.');
-            tokenLoginClear();
-            navigate('/loginmember');
+            localStorage.clear();
+            window.location.href = '/loginmember';
           }
         } else {
           alert('다시 로그인해주세요.(로그인연장 거부)');
-          tokenLoginClear();
-          navigate('/loginmember');
+          localStorage.clear();
+          window.location.href = '/loginmember';
           return Promise.reject(error);
         }
       }
@@ -148,21 +149,21 @@ const setupInterceptors = (axiosInstance) => {
           }
         } catch (error) {
           console.error('accessToken 재발급 실패 : ', error.response?.data);
-          tokenLoginClear();
-          navigate('/loginmember');
+          localStorage.clear();
+          window.location.href = '/loginmember';
           return Promise.reject(error);
         }
       }
 
       if (error.response.status === 401 && tokenExpiredHeader === 'AllToken') {
         console.warn('모든 토큰 만료.');
-        tokenLoginClear();
-        navigate('/loginmember');
+        localStorage.clear();
+        window.location.href = '/loginmember';
       }
 
       if (error.response && error.response.status !== 401) {
-        tokenLoginClear();
-        navigate('/loginmember');
+        localStorage.clear();
+        window.location.href = '/loginmember';
       }
 
       return Promise.reject(error);
@@ -191,8 +192,8 @@ const refreshAccessToken = async () => {
   if (!accessToken || !refreshToken) {
     console.error('reisssu 요청 실패 : 토큰 없음');
     alert('세션 만료. 다시 로그인해주세요.');
-    tokenLoginClear;
-    navigate('/loginmember');
+    localStorage.clear();
+    window.location.href = '/loginmember';
     return;
   }
 
@@ -237,15 +238,15 @@ const refreshAccessToken = async () => {
       error.response?.data === 'session expired'
     ) {
       alert('세션 만료. 다시 로그인해주세요.');
-      tokenLoginClear();
-      navigate('/loginmember');
+      localStorage.clear();
+      window.location.href = '/loginmember';
     } else if (expiredTokenType === 'AccessToken') {
       console.warn('accessToken 만료됨. 재발급 진행');
       return await refreshAccessToken();
     } else {
       console.error('오류 발생 : ', error.message);
-      tokenLoginClear();
-      navigate('/loginmember');
+      localStorage.clear();
+      window.location.href = '/loginmember';
     }
   }
 };
@@ -253,10 +254,6 @@ const refreshAccessToken = async () => {
 // Context Provider 컴포넌트
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [tokenInfo, setTokenInfo] = useState({
-    accessToken: '',
-    refreshToken: '',
-  });
   const [authInfo, setAuthInfo] = useState(() => {
     // 초기화 시 로컬 저장소를 기반으로 상태 설정
     const accessToken = localStorage.getItem('accessToken');
@@ -298,7 +295,6 @@ export const AuthProvider = ({ children }) => {
       memId: parsedToken.sub, // 토큰에서 subject 정보 추출
       member: parsedToken.member,
     });
-    console.log('login tokenInfo', tokenInfo);
     console.log('login : ', authInfo);
     console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인인
   };
@@ -335,21 +331,10 @@ export const AuthProvider = ({ children }) => {
         member: null,
       });
       navigate('/loginmember');
-    } catch (error) {}
-  };
-
-  // 로컬스토리지와 로그인상태 해제용 함수
-  const tokenLoginClear = () => {
-    localStorage.clear();
-    setAuthInfo({
-      isLoggedIn: false,
-      accessToken: '',
-      refreshToken: '',
-      role: '',
-      memName: '',
-      memId: '',
-      member: null,
-    });
+    } catch (error) {
+      console.error('로그아웃 실패 : ', error);
+      alert('로그아웃 실패');
+    }
   };
 
   useEffect(() => {
@@ -369,4 +354,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+
+// PropTypes 설정
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired, // children이 필수 Prop임을 명시
 };
