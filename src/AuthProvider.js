@@ -158,12 +158,12 @@ const setupInterceptors = (axiosInstance) => {
       if (error.response.status === 401 && tokenExpiredHeader === 'AllToken') {
         console.warn('모든 토큰 만료.');
         // localStorage.clear();
-        window.location.href = '/loginmember';
+        // window.location.href = '/loginmember';
       }
 
       if (error.response && error.response.status !== 401) {
         // localStorage.clear();
-        window.location.href = '/loginmember';
+        // window.location.href = '/loginmember';
       }
 
       return Promise.reject(error);
