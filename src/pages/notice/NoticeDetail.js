@@ -1,4 +1,4 @@
-// src/pages/notice/noticeDetailView.js
+// src/pages/notice/noticeDetail.js
 import React,{useState,useEffect,useContext} from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 // AuthContext
@@ -26,7 +26,7 @@ const NoticeDetail = () => {
     const [files, setFiles] = useState([]);
     const [error,setError] = useState(null);
     // 토큰정보 가져오기(AuthProvider)
-    const {role,memId,memName} = useContext(AuthContext);
+    const {role,memId,memName,member} = useContext(AuthContext);
 
     // notice data set
     useEffect(()=>{
@@ -77,10 +77,12 @@ const NoticeDetail = () => {
         if(window.confirm("공지사항을 삭제하시겠습니까?")){
             try{
                 console.log(notice.notId);
-                console.log(memId);
-                await apiSpringBoot.delete(`/notice/${notice.notId}`,{
+                console.log(member.memUUID);
+                console.log(notice.notCreateAt);
+                await apiSpringBoot.post(`/notice/delete/${notice.notId}`,{
                     params:{
-                        memName:memName,
+                        ...notice,
+                        memUUID:member.memUUID,
                     },
                 });
                 alert("삭제가 완료되었습니다.");
@@ -129,7 +131,7 @@ const NoticeDetail = () => {
                             <tr>
                                 <td>
                                     {files.map((file) => (
-                                        <div key={file.mfId}>
+                                        <div key={file.fileName}>
                                             {file.mimeType.startsWith('image/') && (
                                             <img
                                                 className={styles.fileview}
@@ -167,7 +169,7 @@ const NoticeDetail = () => {
                 </div>
                 {role==="ADMIN" && (
                     <div className={styles.rightButtons}>
-                        <button className={styles.button}>수정</button>
+                        <button className={styles.button} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
                         <button
                             className={styles.button2}
                             onClick={handleDelete}
