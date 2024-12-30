@@ -6,12 +6,14 @@ import { apiSpringBoot } from '../../utils/axios';
 import SideBar from '../../components/common/SideBar';
 import styles from './MemberDetailView.module.css';
 import loading from '../../assets/images/loading.gif';
+import noimage from '../../assets/images/No image.png';
 
 const MemberDetailView = () => {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const { UUID } = useParams();
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState();
+  const [initialData, setInitialData] = useState(null); // 초기 데이터를 저장할 상태
 
   useEffect(() => {
     const MemberDetail = async () => {
@@ -19,6 +21,7 @@ const MemberDetailView = () => {
         const response = await apiSpringBoot.get(`/member/mdetail/${UUID}`);
         console.log('최초 화면출력시 가져오는 데이터 : ', response.data);
         setFormData(response.data);
+        setInitialData(response.data);
       } catch (error) {
         console.error('회원데이터 조회 실패 : ', error);
       }
@@ -103,166 +106,332 @@ const MemberDetailView = () => {
         <div className={styles.mdetailSubHeader}>
           <p>계정 정보</p>
         </div>
-        <div className={styles.mdetailDiv}>
-          <div className={styles.mdetailProfilephoto}></div>
-          <div className={styles.mdetailTableDiv}>
-            <form encType="multipart/form-data" onSubmit={handleSubmit}>
-              <table className={styles.mdetailTable}>
-                <tr>
-                  <th>이 름</th>
-                  <td>
-                    <input value={formData.memName} readOnly />
-                  </td>
-                  <th>아 이 디</th>
-                  <td>
-                    <input value={formData.memId} readOnly />
-                  </td>
-                </tr>
-                <tr>
-                  <th>성 별</th>
-                  <td>
-                    <input
-                      value={
-                        formData.memRnn.split('-')[1][0] === '1' ||
-                        formData.memRnn.split('-')[1][0] === '3'
-                          ? '남성'
-                          : '여성'
-                      }
-                      readOnly
-                    />
-                  </td>
-                  <th>이 메 일</th>
-                  <td>
-                    <input
-                      value={formData.memEmail}
-                      onChange={handleInfoChange}
-                      name="memEmail"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>가 입 일 자</th>
-                  <td>
-                    <input
-                      value={formData.memEnrollDate.split(' ')[0]}
-                      readOnly
-                    />
-                  </td>
-                  <th>계 정 상 태</th>
-                  <td>
-                    <div className={styles.mdetailSelectDiv}>
+        {formData.memType === 'MANAGER' ? (
+          <div className={styles.mdetailDiv}>
+            <div className={styles.mdetailProfilephoto}>
+              <img
+                src={noimage}
+                // style={{ width: '250px', height: '300px' }}
+                className={styles.image}
+              ></img>
+            </div>
+            <div className={styles.mdetailTableDiv}>
+              <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                <table className={styles.mdetailTable}>
+                  <tr>
+                    <th>이 름</th>
+                    <td>
+                      <input value={formData.memName} readOnly />
+                    </td>
+                    <th>아 이 디</th>
+                    <td>
+                      <input value={formData.memId} readOnly />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>성 별</th>
+                    <td>
                       <input
                         value={
-                          formData.memStatus === 'ACTIVE'
-                            ? '활동'
-                            : formData.memStatus === 'INACTIVE'
-                              ? '휴면'
-                              : formData.memStatus === 'BLOCKED'
-                                ? '정지'
-                                : '탈퇴'
+                          formData.memRnn.split('-')[1][0] === '1' ||
+                          formData.memRnn.split('-')[1][0] === '3'
+                            ? '남성'
+                            : '여성'
                         }
                         readOnly
-                        style={{ width: '150px' }}
-                        onChange={handleInfoChange}
-                        name="memStatus"
                       />
-                      <select
-                        className={styles.mdetailSelect}
-                        onChange={(e) =>
-                          setFormData((prevFormData) => ({
-                            ...prevFormData,
-                            memStatus: e.target.value,
-                          }))
+                    </td>
+                    <th>이 메 일</th>
+                    <td>
+                      <input
+                        value={formData.memEmail}
+                        onChange={handleInfoChange}
+                        name="memEmail"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>가 입 일 자</th>
+                    <td>
+                      <input
+                        value={formData.memEnrollDate.split(' ')[0]}
+                        readOnly
+                      />
+                    </td>
+                    <th>계 정 상 태</th>
+                    <td>
+                      <div className={styles.mdetailSelectDiv}>
+                        <input
+                          value={
+                            formData.memStatus === 'ACTIVE'
+                              ? '활동'
+                              : formData.memStatus === 'INACTIVE'
+                                ? '휴면'
+                                : formData.memStatus === 'BLOCKED'
+                                  ? '정지'
+                                  : formData.memStatus
+                          }
+                          readOnly
+                          style={{ width: '150px' }}
+                          onChange={handleInfoChange}
+                          name="memStatus"
+                        />
+                        <select
+                          className={styles.mdetailSelect}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            setFormData((prevFormData) => ({
+                              ...prevFormData,
+                              memStatus:
+                                newValue === '선택'
+                                  ? prevFormData.memStatus
+                                  : newValue,
+                            }));
+                          }}
+                        >
+                          <option selected>선택</option>
+                          <option value="ACTIVE">활동</option>
+                          <option value="INACTIVE">휴면</option>
+                          <option value="BLOCKED">정지</option>
+                        </select>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>연 락 처</th>
+                    <td>
+                      <input
+                        value={
+                          formData.memCellphone &&
+                          /^\d{11}$/.test(formData.memCellphone)
+                            ? formData.memCellphone.replace(
+                                /(\d{3})(\d{4})(\d{4})/,
+                                '$1-$2-$3'
+                              )
+                            : formData.memCellphone || ''
                         }
-                      >
-                        <option value="ACTIVE" selected>
-                          활동
-                        </option>
-                        <option value="INACTIVE">휴면</option>
-                        <option value="BLOCKED">정지</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <th>연 락 처</th>
-                  <td>
+                        onChange={handleInfoChange}
+                        name="memCellphone"
+                      />
+                    </td>
+                    <th>기 관 전 화 번 호</th>
+                    <td>
+                      <input value={formData.memPhone} name="memPhone" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>기 관</th>
+                    <td>
+                      <input readOnly />
+                    </td>
+                    <th>기 관 코 드</th>
+                    <td>
+                      <input value={formData.memGovCode} name="memGovCode" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>주 소</th>
+                    <td>
+                      <input
+                        name="memAddress"
+                        value={formData.memAddress}
+                        onChange={handleInfoChange}
+                        style={{ width: '550px' }}
+                        readOnly
+                      />
+                    </td>
+                  </tr>
+                </table>
+                <div className={styles.mdetailButtonDiv}>
+                  <div>
+                    <button
+                      className={styles.mdetailButton1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(-1);
+                      }}
+                    >
+                      목 록
+                    </button>
+                  </div>
+                  <div>
                     <input
-                      value={
-                        formData.memCellphone &&
-                        /^\d{11}$/.test(formData.memCellphone)
-                          ? formData.memCellphone.replace(
-                              /(\d{3})(\d{4})(\d{4})/,
-                              '$1-$2-$3'
-                            )
-                          : formData.memCellphone || ''
-                      }
-                      onChange={handleInfoChange}
-                      name="memCellphone"
+                      type="reset"
+                      value="초 기 화"
+                      className={styles.mdetailButton2}
+                      onClick={() => setFormData(initialData)}
                     />
-                  </td>
-                  <th>기 관 전 화 번 호</th>
-                  <td>
-                    <input value={formData.memPhone} name="memPhone" />
-                  </td>
-                </tr>
-                <tr>
-                  <th>기 관</th>
-                  <td>
-                    <input readOnly />
-                  </td>
-                  <th>기 관 코 드</th>
-                  <td>
-                    <input value={formData.memGovCode} name="memGovCode" />
-                  </td>
-                </tr>
-                <tr>
-                  <th>주 소</th>
-                  <td>
+                    <button
+                      className={styles.mdetailButton1}
+                      style={{ fontSize: '16px' }}
+                      onClick={handleTemporaryPassword(formData.memUUID)}
+                    >
+                      임시비밀번호발급
+                    </button>
                     <input
-                      name="memAddress"
-                      value={formData.memAddress}
-                      onChange={handleInfoChange}
+                      type="submit"
+                      value="수 정"
+                      className={styles.mdetailButton1}
+                      style={{ margin: '0' }}
                     />
-                  </td>
-                </tr>
-              </table>
-              <div className={styles.mdetailButtonDiv}>
-                <div>
-                  <button
-                    className={styles.mdetailButton1}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(-1);
-                    }}
-                  >
-                    목 록
-                  </button>
+                  </div>
                 </div>
-                <div>
-                  <input
-                    type="reset"
-                    value="초 기 화"
-                    className={styles.mdetailButton2}
-                  />
-                  <button
-                    className={styles.mdetailButton1}
-                    style={{ fontSize: '16px' }}
-                    onClick={handleTemporaryPassword(formData.memUUID)}
-                  >
-                    임시비밀번호발급
-                  </button>
-                  <input
-                    type="submit"
-                    value="수 정"
-                    className={styles.mdetailButton1}
-                    style={{ margin: '0' }}
-                  />
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={styles.mdetailDiv}>
+            <div className={styles.mdetailProfilephoto}></div>
+            <div className={styles.mdetailTableDiv}>
+              <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                <table className={styles.mdetailTable}>
+                  <tr>
+                    <th>이 름</th>
+                    <td>
+                      <input value={formData.memName} readOnly />
+                    </td>
+                    <th>아 이 디</th>
+                    <td>
+                      <input value={formData.memId} readOnly />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>성 별</th>
+                    <td>
+                      <input
+                        value={
+                          formData.memRnn.split('-')[1][0] === '1' ||
+                          formData.memRnn.split('-')[1][0] === '3'
+                            ? '남성'
+                            : '여성'
+                        }
+                        readOnly
+                      />
+                    </td>
+                    <th>이 메 일</th>
+                    <td>
+                      <input
+                        value={formData.memEmail}
+                        onChange={handleInfoChange}
+                        name="memEmail"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>가 입 일 자</th>
+                    <td>
+                      <input
+                        value={formData.memEnrollDate.split(' ')[0]}
+                        readOnly
+                      />
+                    </td>
+                    <th>계 정 상 태</th>
+                    <td>
+                      <div className={styles.mdetailSelectDiv}>
+                        <input
+                          value={
+                            formData.memStatus === 'ACTIVE'
+                              ? '활동'
+                              : formData.memStatus === 'INACTIVE'
+                                ? '휴면'
+                                : formData.memStatus === 'BLOCKED'
+                                  ? '정지'
+                                  : formData.memStatus
+                          }
+                          readOnly
+                          style={{ width: '150px' }}
+                          onChange={handleInfoChange}
+                          name="memStatus"
+                        />
+                        <select
+                          className={styles.mdetailSelect}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            setFormData((prevFormData) => ({
+                              ...prevFormData,
+                              memStatus:
+                                newValue === '선택'
+                                  ? prevFormData.memStatus
+                                  : newValue,
+                            }));
+                          }}
+                        >
+                          <option selected>선택</option>
+                          <option value="ACTIVE">활동</option>
+                          <option value="INACTIVE">휴면</option>
+                          <option value="BLOCKED">정지</option>
+                        </select>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>연 락 처</th>
+                    <td>
+                      <input
+                        value={
+                          formData.memCellphone &&
+                          /^\d{11}$/.test(formData.memCellphone)
+                            ? formData.memCellphone.replace(
+                                /(\d{3})(\d{4})(\d{4})/,
+                                '$1-$2-$3'
+                              )
+                            : formData.memCellphone || ''
+                        }
+                        onChange={handleInfoChange}
+                        name="memCellphone"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>주 소</th>
+                    <td>
+                      <input
+                        name="memAddress"
+                        value={formData.memAddress}
+                        onChange={handleInfoChange}
+                        style={{ width: '550px' }}
+                      />
+                    </td>
+                  </tr>
+                </table>
+                <div className={styles.mdetailButtonDiv}>
+                  <div>
+                    <button
+                      className={styles.mdetailButton1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(-1);
+                      }}
+                    >
+                      목 록
+                    </button>
+                  </div>
+                  <div>
+                    <input
+                      type="reset"
+                      value="초 기 화"
+                      className={styles.mdetailButton2}
+                      onClick={() => setFormData(initialData)}
+                    />
+                    <button
+                      className={styles.mdetailButton1}
+                      style={{ fontSize: '16px' }}
+                      onClick={handleTemporaryPassword(formData.memUUID)}
+                    >
+                      임시비밀번호발급
+                    </button>
+                    <input
+                      type="submit"
+                      value="수 정"
+                      className={styles.mdetailButton1}
+                      style={{ margin: '0' }}
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
