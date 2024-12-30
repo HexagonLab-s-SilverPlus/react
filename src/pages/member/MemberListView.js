@@ -264,7 +264,7 @@ const MemberListView = () => {
                   </td>
                   <td>{list.memEmail}</td>
                   <td>{list.memCellphone}</td>
-                  <td>{list.memEnrollDate.split('T')[0]}</td>
+                  <td>{list.memEnrollDate.split(' ')[0]}</td>
                 </tr>
               ))}
             </tbody>

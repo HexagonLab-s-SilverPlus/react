@@ -36,7 +36,6 @@
 .mdetailDiv {
   margin-top: 80px;
   display: flex;
-  margin-left: 150px;
   gap: 20px;
 }
 
@@ -69,13 +68,13 @@
 }
 
 .mdetailTable > tr > td {
-  width: 500px;
+  width: 400px;
 }
 
 .mdetailTable > tr > td > input {
   margin-left: 10px;
   height: 36px;
-  width: 345px;
+  width: 245px;
   padding: 0;
   padding-left: 15px;
   font-size: 18px;
@@ -107,8 +106,8 @@
 .mdetailButtonDiv {
   display: flex;
   justify-content: space-between;
-  margin-left: 150px;
-  max-width: calc(100% - 582px);
+  max-width: calc(100% - 150px);
+  margin-top: 50px;
 }
 
 .mdetailButton1 {
