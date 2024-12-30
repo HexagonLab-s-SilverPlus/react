@@ -95,11 +95,15 @@ const NoticeDetail = () => {
                 });
             }
             console.log("newFiles : ", data.getAll("newFiles"));
+
             // 삭제된 파일 추가
             if (deleteFiles && deleteFiles.length > 0) {
-                deleteFiles.forEach((file) => {
-                    data.append("deleteFiles", file.nfOriginalName || file); // 삭제 파일 이름 추가
-                });
+                // JSON 문자열로 변환
+                const deleteFilesJson = JSON.stringify(deleteFiles);
+                data.append("deleteFiles", deleteFilesJson); // JSON 문자열 추가
+                // deleteFiles.forEach((file) => {
+                //     data.append("deleteFiles", file); // 삭제 파일 이름 추가
+                // });
             }
             console.log("deleteFiles : ", data.getAll("deleteFiles"));
 
@@ -215,7 +219,7 @@ const NoticeDetail = () => {
                                     </button>
                                 </tr>
                                 {/* 기존 첨부파일 */}
-                                {noticeFiles.map((file, index) => (
+                                {noticeFiles && noticeFiles.map((file, index) => (
                                     <tr key={index}>
                                         <td colSpan="2">
                                             <span>{file.nfOreginalName}</span>
@@ -229,7 +233,7 @@ const NoticeDetail = () => {
                                     </tr>
                                 ))}
                                 {/* 신규 첨부파일 */}
-                                {newFiles.map((file, index) => (
+                                {newFiles && newFiles.map((file, index) => (
                                     <tr key={index}>
                                         <td colSpan="2">
                                             <span>{file.name}</span>
