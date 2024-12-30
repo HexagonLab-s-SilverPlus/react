@@ -10,8 +10,6 @@ import pgImage from '../../assets/images/pgImage.png';
 
 const ProgramList = () => {
     const [programs, setPrograms] = useState([]);
-    //검색
-    const [actionInfo, setActionInfo] = useState([]);
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
@@ -48,6 +46,11 @@ const ProgramList = () => {
     //등록하기 페이지로 이동 핸들러
     const handleWriteClick = () => {
         navigate('/program/write');
+    };
+
+    //목록 페이지로 이동
+    const handleListClick = () => {
+        window.location.reload();   //페이지 새로고침
     };
 
     const handlePageChange = async (page) => {
@@ -90,14 +93,6 @@ const ProgramList = () => {
         }
     };
 
-    //select 변경하면 검색상태 저장
-    // const handleSelectChange = (e) => {
-    //     const {value} = e.target;
-    //     setActionInfo((prev) => ({
-    //         ...prev,
-    //         action: value,
-    //     }));
-    // };
     const handleSelectChange = (e) => {
         const {value} = e.target;
         setPagingInfo((prev) => ({
@@ -122,7 +117,7 @@ const ProgramList = () => {
 
     useEffect(() => {
         handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
-    }, [pagingInfo.action]);
+    }, []);
 
     const renderSearchInputs = () => {
         switch (pagingInfo.action) {
@@ -132,12 +127,14 @@ const ProgramList = () => {
                         <input
                             type="date"
                             name="startDate"
+                            defaultValue={pagingInfo.startDate}
                             onChange={handleInputChange}
                         />
                         <span> ~ </span>
                         <input
                             type="date"
                             name="endDate"
+                            defaultValue={pagingInfo.endDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -168,7 +165,11 @@ const ProgramList = () => {
                 <div className={styles.secContent}>
                     <div className={styles.pgListTop}>
                         <p className={styles.pgTitle}>어르신 프로그램 목록 <span>{pagingInfo.listCount}</span></p>
-                        <button type="button" onClick={handleWriteClick}>등록하기</button>
+                        <div className={styles.pgTopBtns}>
+                            <button type="button" onClick={handleListClick}>목록</button>
+                            <button type="button" onClick={handleWriteClick}>등록하기</button>
+                        </div>
+                            
 
                         <div className={styles.pgSearchWrap}>
                             <select name="action" onChange={ handleSelectChange } className={styles.searchSelect}>
@@ -213,7 +214,9 @@ const ProgramList = () => {
                 </div>{/* secContent end */}
 
                 <PagingDiv8
+                    pageNumber={pagingInfo.pageNumber || 1}
                     currentPage={pagingInfo.currentPage || 1}
+                    pageSize={pagingInfo.pageSize}
                     maxPage={pagingInfo.maxPage || 1}
                     startPage={pagingInfo.startPage || 1}
                     endPage={pagingInfo.endPage || 1}
