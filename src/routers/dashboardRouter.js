@@ -8,6 +8,7 @@ const dashboardRouter = [
  
     <Route path="/dashlist" element={<DashList/>}/>,
     <Route path="/dashboard/:Id" element={<DashList/>}/>,
+    // <Route path="/dashboard/date/:date"  element={<DashList />} />s
 ];
 
 export default dashboardRouter;
