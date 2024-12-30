@@ -1,4 +1,4 @@
-// src/pages/notice/noticeDetailView.js
+// src/pages/notice/noticeDetail.js
 import React,{useState,useEffect,useContext} from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 // AuthContext
@@ -26,7 +26,7 @@ const NoticeDetail = () => {
     const [files, setFiles] = useState([]);
     const [error,setError] = useState(null);
     // 토큰정보 가져오기(AuthProvider)
-    const {member,isLoggedIn, role,memId} = useContext(AuthContext);
+    const {role,memId,memName,member} = useContext(AuthContext);
 
     // notice data set
     useEffect(()=>{
@@ -72,6 +72,27 @@ const NoticeDetail = () => {
             alert('파일 다운로드에 실패했습니다.')
         }
     };
+
+    const handleDelete = async () => {
+        if(window.confirm("공지사항을 삭제하시겠습니까?")){
+            try{
+                console.log(notice.notId);
+                console.log(member.memUUID);
+                console.log(notice.notCreateAt);
+                await apiSpringBoot.post(`/notice/delete/${notice.notId}`,{
+                    params:{
+                        ...notice,
+                        memUUID:member.memUUID,
+                    },
+                });
+                alert("삭제가 완료되었습니다.");
+                navigate('/notice');
+            } catch(error){
+                console.error('delete error : ', error);
+                alert('공지사항 삭제에 실패하였습니다.');
+            }
+        }
+    };
     
     if (!notice){
         return <div className={styles.loading}>loading...</div>; // 로딩 표시
@@ -110,7 +131,7 @@ const NoticeDetail = () => {
                             <tr>
                                 <td>
                                     {files.map((file) => (
-                                        <div key={file.mfId}>
+                                        <div key={file.fileName}>
                                             {file.mimeType.startsWith('image/') && (
                                             <img
                                                 className={styles.fileview}
@@ -148,8 +169,11 @@ const NoticeDetail = () => {
                 </div>
                 {role==="ADMIN" && (
                     <div className={styles.rightButtons}>
-                        <button className={styles.button}>수정</button>
-                        <button className={styles.button2}>삭제</button>
+                        <button className={styles.button} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
+                        <button
+                            className={styles.button2}
+                            onClick={handleDelete}
+                        >삭제</button>
                     </div>
                 )}
             </div>

@@ -16,7 +16,7 @@
 
 .qnaSeachdiv img {
     position: absolute;
-    left: 1325px;
+    right: 0;
     bottom: 0px;
     width: 30px;
     height: 30px;
@@ -32,7 +32,7 @@
     font-weight: bold;
     font-size: 20px;
     position: absolute;
-    left: 1260px;
+    right: 0;
     bottom: 0;
     font-family: "Pretendard Variable";
     font-weight: bold;
@@ -47,7 +47,7 @@
     font-weight: bold;
     font-size: 20px;
     position: absolute;
-    left: 1016px;
+    right: 270px;
     bottom: 0;
     font-family: "Pretendard Variable";
     font-weight: bold;
@@ -62,7 +62,7 @@
     font-weight: bold;
     font-size: 20px;
     position: absolute;
-    left: 950px;
+    right: 310px;
     bottom: 0;
     font-family: "Pretendard Variable";
     font-weight: bold;
@@ -75,13 +75,13 @@
     border-left: none;
     border-right: none;
     position: absolute;
-    left: 1108px;
+    right: 40px;
     bottom: 0;
 }
 
 .qnaDateInput {
     position: absolute;
-    left: 1060px;;
+    right: 40px;
     bottom: 0px;
 }
 
@@ -105,7 +105,7 @@
     border-radius: 10px;
     font-size: 18px;
     position: absolute;
-    left: 1363px;
+    left: 0;
     bottom: 0;
     cursor: pointer;
     font-family: "Pretendard Variable";
@@ -113,9 +113,11 @@
 }
 
 .qnaListTable {
+    margin-top: 100px;
     width: 1456px;
     padding-top: 80px;
     font-size: 18px;
+    border-collapse: collapse;
 }
 
 .qnaListTable tr {
@@ -145,13 +147,19 @@
     text-align: left;
 }
 
-.qnaWCreateBy {
+.memberName {
     width: 200px;
+}
+
+.memberNameTd {
     text-align: center;
 }
 
 .qnaWCreateAt {
     width: 200px;
+}
+
+.qnaWCreateAtTd {
     text-align: center;
 }
 

@@ -272,6 +272,12 @@ function NoticeList() {
                                     className={styles.memberSearchKeywordBox}
                                     placeholder="검색어를 입력하세요."
                                     onChange={handleChangeKeyword}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          handleSearch(); // Enter 키로 검색 실행
+                                          setIsDropdownOpen(false);
+                                        }
+                                      }}
                                     value={tempKeyword}  
                                 />
                                 &nbsp;
@@ -279,7 +285,10 @@ function NoticeList() {
                                     className={styles.memberSearch}
                                     src={searchIcon}
                                     alt="검색"
-                                    onClick={handleSearch}
+                                    onClick={() => {
+                                        handleSearch();
+                                        setIsDropdownOpen(false);
+                                    }}
                                 />
                                 &nbsp;
                             </div>

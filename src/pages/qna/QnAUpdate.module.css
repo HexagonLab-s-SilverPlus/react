@@ -6,18 +6,25 @@
     position: relative;
     left: 368px;
 }
-.qnaWriteTitleDiv {
+.qnaUpdateTitleDiv {
     display: flex;
     margin-top: 60px;
     margin-bottom: 30px;
 }
 
-.qnaWriteContentDiv {
+.memberIdDiv {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.qnaUpdateContentDiv {
     display: flex;
     margin-top: 20px;
 }
+
  
-.qnaWriteTitle {
+.qnaUpdateTitle {
     width: 100px;
     margin: 0;
     padding: 0;
@@ -27,14 +34,31 @@
     font-size: 24px;
 }
 
-.qnaWriteTitleTxt {
+.memberId {
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    text-align: left;
+    font-family: "Pretendard Variable";
+    font-size: 24px;
+}
+
+.qnaUpdateTitleTxt {
     height: 20px;
     width: 30%;
     font-family: "Pretendard Variable";
     font-size: 24px;
 }
 
-.qnaWriteContent {
+.memberIdTxt {
+    height: 20px;
+    width: 30%;
+    font-family: "Pretendard Variable";
+    font-size: 16px;
+}
+
+.qnaUpdateContent {
     width: 100px;
     margin: 0;
     padding: 0;
@@ -44,22 +68,22 @@
     font-size: 24px;
 }
 
-.qnaWriteContentTxt {
+.qnaUpdateContentTxt {
     height: 500px;
     width: 90%;
     font-family: "Pretendard Variable";
-    font-size: 24px;
+    font-size: 16px;
 }
 
 
-.qnaWriteBTN {
+.qnaUpdateBTN {
     position: absolute;
     margin-top: 10px;
     left: 50%;               
     transform: translate(-50%, 0);  
 }
 
-.qnaWriteBTN input {
+.qnaUpdateBTN input {
     display: inline-block;
     height: 41px;
     width: 89px;
@@ -76,7 +100,7 @@
     background-color: #064420;
 }
 
-.qnaWriteBTN button {
+.qnaUpdateBTN button {
     display: inline-block;
     height: 41px;
     width: 89px;
