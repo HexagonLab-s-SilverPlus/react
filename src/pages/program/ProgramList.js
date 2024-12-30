@@ -53,6 +53,11 @@ const ProgramList = () => {
         window.location.reload();   //페이지 새로고침
     };
 
+    //디테일 페이지로 이동
+    const handleMoveDetailView = (snrProgramId) => {
+        navigate(`/program/detail/${snrProgramId}`);
+    };
+
     const handlePageChange = async (page) => {
         handleProgramView(page, pagingInfo.action);
     };
@@ -172,7 +177,7 @@ const ProgramList = () => {
                             
 
                         <div className={styles.pgSearchWrap}>
-                            <select name="action" onChange={ handleSelectChange } className={styles.searchSelect}>
+                            <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
                                 <option value="all" selected>선택&nbsp;&nbsp;</option>
                                 <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                 <option value="pgContent">내용&nbsp;&nbsp;</option>
@@ -198,14 +203,16 @@ const ProgramList = () => {
                                 
                                 return(
                                     <li key={program.snrProgramId} className={styles.pgListItem}>
-                                        <div className={styles.pgListImgWrap}>
-                                            <img src={firstImageUrl} className={styles.pgImage} />
-                                        </div>
-                                        <div className={styles.pgListTextWrap}>
-                                            <p><button>{program.snrTitle}</button></p>
-                                            <p><span>기간 : </span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</p>
-                                            <p><span>장소 : </span>{program.snrOrgName}</p>
-                                        </div>
+                                        <a onClick={() => handleMoveDetailView(program.snrProgramId)}>
+                                            <div className={styles.pgListImgWrap}>
+                                                <img src={firstImageUrl} className={styles.pgImage} />
+                                            </div>
+                                            <div className={styles.pgListTextWrap}>
+                                                <p>{program.snrTitle}</p>
+                                                <p><span>기간 : </span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</p>
+                                                <p><span>장소 : </span>{program.snrOrgName}</p>
+                                            </div>
+                                        </a>
                                     </li>
                                 );
                             })}
