@@ -1,0 +1,10 @@
+/* /src/components/common/PageRider.module.css */
+.floatingButton {
+    position: fixed;
+    width: 100px;
+    bottom: 5%;
+    right: 2.5%;
+    cursor: pointer;
+    z-index: 1000;
+    border-radius: 50%;
+}
