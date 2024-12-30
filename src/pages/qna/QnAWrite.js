@@ -8,7 +8,7 @@ import styles from './QnAWrite.module.css'
 
 const QnAWrite = () => {
     const navigate = useNavigate();
-    const { accessToken, member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+    const { member} = useContext(AuthContext);   // AuthProvider 에서 가져오기
     // files
     const [newFiles, setNewFiles] = useState([]);
 
@@ -47,7 +47,7 @@ const QnAWrite = () => {
     };
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value} = e.target;
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
@@ -69,10 +69,7 @@ const QnAWrite = () => {
         }
         
         Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-        // if(file){
-        //     data.append('ofile', file); // 첨부파일 추가
-        // }
-        
+
         try {
             await apiSpringBoot.post('/qna', data,{
                 headers: {'Content-Type':'multipart/form-data',
@@ -86,12 +83,16 @@ const QnAWrite = () => {
             alert('새 게시글 등록 실패');
         }
     };
+    if (!formData || !member) {
+        // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+        return <div>Loading...</div>;
+    };
 
     return (
         <div>
             <SideBar />
             <div className={styles.qnaContent}>
-                <QNAHeader text="QnA 등록"/>
+                <QNAHeader text="Q&A 등록"/>
                 <form 
                 onSubmit={handleSubmit} 
                 encType="multipart/form-data">
@@ -100,6 +101,10 @@ const QnAWrite = () => {
                     <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaWriteTitleTxt}/>
                 </div>
                 <hr/>
+                <div className={styles.memberIdDiv}>
+                    <h1 className={styles.memberId}>ID</h1>
+                    <input type="text" onChange={handleChange} className={styles.memberIdTxt} value={member.memId} readOnly/>
+                </div>
                 <div className={styles.qnaWriteContentDiv}>
                     <h1 className={styles.qnaWriteContent}>질문내용</h1>
                     <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaWriteContentTxt}></textarea>

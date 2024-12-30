@@ -11,7 +11,7 @@ import searchImag from '../../assets/images/search.png'
 
 
 const QnAList = () => {
-  const { accessToken, role, member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
+  const { member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
   const [qnaList, setQnaList] = useState([]);                     // qnaList 담을 상태훅
   const [memberList, setMemberList] = useState([]);               // member 담을 상태훅(누가 작성한지 담을때 사용)
   const [actionInfo, setActionInfo] = useState([]);               // 검색 데이터 담을 상태훅
@@ -28,8 +28,8 @@ const QnAList = () => {
     startPage: 1,
     endPage: 1,
     keyword: "",
-    startDate: '',
-    endDate: '',
+    startDate: formattedDate,
+    endDate: formattedDate,
   });
 
   const navigate = useNavigate();         // 이동 훅
@@ -47,10 +47,10 @@ const QnAList = () => {
   };
 
   const handleQnAView = async (uuid, page, action) => {   // 페이지 불러오기
-
+    console.log("pagingInfo" + JSON.stringify(pagingInfo));
       try{
         let response = null
-        if(role === "ADMIN") {
+        if(member.memType === "ADMIN") {
           response = await apiSpringBoot.get(`/qna/mylist`, {
             params: {
               ...pagingInfo,
@@ -80,8 +80,7 @@ const QnAList = () => {
         setMemberList(response.data.member);
 
         const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, 
-                                              response.data.search.listCount, response.data.search.pageSize);;
-        
+                                              response.data.search.listCount, response.data.search.pageSize);
         setPagingInfo(response.data.search);
         setPagingInfo((pre) => ({
           ...pre,
@@ -91,18 +90,21 @@ const QnAList = () => {
           startDate: formatDate(response.data.search.startDate),
           endDate: formatDate(response.data.search.endDate),
         }));
+
       } catch (e){
         console.log("error : {}", e); 
       }    
   }
   
-  const handleSelectChange = (e) => {     // select 바뀌면 검색상태 저장
+  const handleSelectChange =  (e) => {     // select 바뀌면 검색상태 저장
     const {value} = e.target
     setActionInfo((pre) => ({
       ...pre,
       actionType: value
     }));
-
+    if(value === "all"){
+      handleQnAView(member.memUUID, 1, "all");
+    }
   };
 
   const handleChange = (e) => {       // 검색 데이터 쓰면 paging훅에 저장
@@ -114,7 +116,7 @@ const QnAList = () => {
   };
 
   const handleSearch = () => {        // 검색 버튼을 눌르면 출력뷰 변경
-    handleQnAView(member.memUUID, 1, actionInfo.actionType);    
+    handleQnAView(member.memUUID, 1, actionInfo.actionType);   
   }
 
   useEffect(() => {             // 처음 뷰화면 출력
@@ -162,7 +164,7 @@ const QnAList = () => {
 
         return <div>
                   <div className={styles.qnaDateInput}>
-                    <input type='date' name='startDate' onChange={handleChange} defaultValue={formattedDate}  className={styles.qnaDate}/> ~ 
+                    <input type='date' name='startDate' onChange={handleChange} defaultValue={formattedDate}  className={styles.qnaDate}/> &nbsp;~ &nbsp;
                     <input type='date' name='endDate' onChange={handleChange} defaultValue={formattedDate} className={styles.qnaDate} />
                   </div>
                   <img src={searchImag} onClick={handleSearch} />
@@ -170,11 +172,17 @@ const QnAList = () => {
     }
   }
 
+
+  if (!qnaList || !memberList || !member) {
+      // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+      return <div>Loading...</div>;
+  };
+
   return (
     <div>
       <SideBar />
       <div className={styles.qnaContent}>
-        <QNAHeader text="QnA"/>
+        <QNAHeader text="Q&A"/>
         <div className={styles.qnaSeachdiv}>
           <select name='actionType' onChange={handleSelectChange} className={`${selectClass()}`}>
             <option value="all" selected >전체</option>
@@ -187,18 +195,18 @@ const QnAList = () => {
         <table className={styles.qnaListTable}>
           <tr>
             <th>제목</th>
-            <th>이름</th>
-            <th className={styles.qnaWCreateAtH}>마지막 수정 날짜</th>
-            <th className={styles.qnaStateH}>상태</th>
+            <th className={styles.memberName}>이름</th>
+            <th className={styles.qnaWCreateAt}>마지막 수정 날짜</th>
+            {member.memType === "ADMIN" && <th className={styles.qnaStateH}>상태</th>}
           </tr>
           
           {qnaList.map((qna, index) => (
           <tr>
             <td><button onClick={() => handleMoveDetailView(qna.qnaId)}>{qna.qnaTitle}</button></td>
-            <td>{memberList[index].memName}</td>
-            <td className={styles.qnaWCreateAt}>{qna.qnaWUpdateAt.split('T')[0]}</td>
-            {qna.qnaADCreateAt ? <td className={styles.qnaStateY}>답변</td>
-                              : <td className={styles.qnaStateN}>미답변</td>}
+            <td className={styles.memberNameTd}>{memberList[index].memName}</td>
+            <td className={styles.qnaWCreateAtTd}>{qna.qnaWUpdateAt.split('T')[0]}</td>
+            {member.memType === "ADMIN" && (qna.qnaADCreateBy ? <td className={styles.qnaStateY}>답변</td>
+                              : <td className={styles.qnaStateN}>미답변</td>)}
           </tr>
           ))}
    
