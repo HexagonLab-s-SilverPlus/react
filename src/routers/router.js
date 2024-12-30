@@ -50,6 +50,7 @@ const AppRouter = () => {
       {siRouter.map((route, index) => React.cloneElement(route, { key: `si-${index}` }))}
       {eyRouter.map((route, index) => React.cloneElement(route, { key: `ey-${index}` }))}
       {qnaRouter.map((route, index) => React.cloneElement(route, { key: `qna-${index}` }))}
+      {faqRouter.map((route, index) => React.cloneElement(route, { key: `qna-${index}` }))}
       {gameRouter.map((route, index) => React.cloneElement(route, { key: `game-${index}` }))}
       {programRouter.map((route, index) => React.cloneElement(route, { key: `program-${index}` }))}
     </Routes>

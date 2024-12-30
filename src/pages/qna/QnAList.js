@@ -28,8 +28,8 @@ const QnAList = () => {
     startPage: 1,
     endPage: 1,
     keyword: "",
-    startDate: '',
-    endDate: '',
+    startDate: formattedDate,
+    endDate: formattedDate,
   });
 
   const navigate = useNavigate();         // 이동 훅
@@ -47,7 +47,7 @@ const QnAList = () => {
   };
 
   const handleQnAView = async (uuid, page, action) => {   // 페이지 불러오기
-
+    console.log("pagingInfo" + JSON.stringify(pagingInfo));
       try{
         let response = null
         if(member.memType === "ADMIN") {
@@ -58,7 +58,7 @@ const QnAList = () => {
               action: action,
               keyword: pagingInfo.keyword,
               startDate: pagingInfo.startDate + " 00:00:00",
-              endDate: pagingInfo.endDate + " 24:00:00",
+              endDate: pagingInfo.endDate + " 00:00:00",
             },
           });
           
@@ -71,7 +71,7 @@ const QnAList = () => {
               action: action,
               keyword: pagingInfo.keyword,
               startDate: pagingInfo.startDate + " 00:00:00",
-              endDate: pagingInfo.endDate + " 24:00:00",
+              endDate: pagingInfo.endDate + " 00:00:00",
 
             },
           });

@@ -13,6 +13,7 @@ const QnADetail = () => {
     const {qnaUUID} = useParams();
     const [qna, setQna] = useState(null);
     const [qnaMember, setQnaMember] = useState(null);
+    const [files, SetFiles] = useState(null);
     const {member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
 
     const navigate = useNavigate();         // 이동 훅
@@ -29,6 +30,7 @@ const QnADetail = () => {
         const respone = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
         setQna(respone.data.qna);
         setQnaMember(respone.data.member);
+        SetFiles(respone.data.files);
     };
 
     const handleQnADelete = async () => {
@@ -80,6 +82,9 @@ const QnADetail = () => {
                 : !qna.qnaADCreateBy &&
                     <button className={styles.qnaUpdateViewBTN} onClick={handleMoveUpdateView}>수 정</button>}
                 <button className={styles.qnaDeleteBTN} onClick={handleQnADelete} >삭 제</button>
+                {files.map((file, index) => (
+                    file
+                ))}
             </div>
         </div>
     </div>
