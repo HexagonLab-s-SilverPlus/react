@@ -18,8 +18,10 @@ body {background: #fff; color: #333;}
 .pgDItem > span:nth-of-type(2) {font-size: 18px; display: block; width: 200px; font-weight: bold; margin: 0 24px;}
 
 .pgDContent {width: 100%; box-sizing: border-box; padding: 24px; white-space: pre-wrap; line-height: 2;}
-.pgDTxt {margin-bottom: 36px;}
-.pgDetailImage {width: 800px; margin: 12px 0;}
+.pgDTxt {margin-bottom: 36px; font-size: 18px;}
+.pgSwiper {width: 100%; height: 800px; margin: 20px 0;}
+.pgSlide {display: flex; justify-content: center; align-items: center; height: 100%; background: #F9F9F9; box-sizing: border-box; padding-bottom: 8px;}
+.pgDetailImage {max-height: 100%; max-width: 100%; object-fit: contain; display: block; margin: auto; position: absolute; left: 0; right: 0; top: 0; bottom: 0;}
 
 .pgAttach {border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; box-sizing: border-box; padding: 24px; display: flex; align-items: center;}
 .pgAttachIcon {width: 200px; height: 36px; background: #064420; border-radius: 36px; text-align: center; line-height: 36px; color: #fff; margin-right: 24px;}

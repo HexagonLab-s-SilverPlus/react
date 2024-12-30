@@ -5,6 +5,13 @@ import { apiSpringBoot } from "../../utils/axios";
 import styles from './ProgramDetail.module.css';
 import SideBar from "../../components/common/SideBar";
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
 const ProgramDetail = () => {
     const [program, setProgram] = useState({
         snrStartedAt: '',
@@ -38,13 +45,13 @@ const ProgramDetail = () => {
         return files
             .filter(file => file.mimeType.startsWith('image/')) // 이미지 파일 필터링
             .map((file, index) => (
-                <div key={index}>
+                <SwiperSlide key={index} className={styles.pgSlide}>
                     <img
                         src={`data:${file.mimeType};base64,${file.fileContent}`}
                         alt={file.fileName}
                         className={styles.pgDetailImage}
                     />
-                </div>
+                </SwiperSlide>
             ));
     };
 
@@ -112,8 +119,24 @@ const ProgramDetail = () => {
                         </ul>
 
                         <div className={styles.pgDContent}>
-                            <div className={styles.pgDTxt}>{program.snrContent}</div>
-                            <div className={styles.pgImages}>{renderImages()}</div>
+                            <p className={styles.pgDTxt}>{program.snrContent || '내용 없음'}</p>
+                            <div className={styles.pgImages}>
+                                <Swiper
+                                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                                    spaceBetween={20}
+                                    slidesPerView={1}
+                                    navigation
+                                    pagination={{ clickable: true }}
+                                    scrollbar={{ draggable: true }}
+                                    className={styles.pgSwiper}
+                                    style={{
+                                        "--swiper-pagination-color": "#064420",
+                                        "--swiper-navigation-color": "#064420",
+                                    }}
+                                >
+                                    {renderImages()}
+                                </Swiper>
+                            </div>
                         </div>
 
                         <div className={styles.pgAttach}>
