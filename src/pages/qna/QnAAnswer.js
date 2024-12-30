@@ -4,28 +4,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
-import styles from './QnAWrite.module.css'
+import styles from './QnAanswer.module.css'
 
 const QnAAnswer = () => {
     const navigate = useNavigate();
     const {qnaUUID} = useParams();
-    const { accessToken} = useContext(AuthContext);   // AuthProvider 에서 가져오기
+    const {member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
+
     // files
     const [newFiles, setNewFiles] = useState([]);
-    const [qna, setQna] = useState(null);
-    const [member, setMember] = useState(null);
-    
+    const [qna, setQna] = useState();
 
-    
-
-    const [formData, setFormData] = useState({
-        qnaTitle: "",       // 제목
-        qnaWCreateBy: "",   // 질문자 
-        qnaWContent: "",    // 질문내용
-        qnaADContent: "",    // 답변내용
-        qnaADCreateBy: "",  // 답변자
-        qnaADUpdateBy: "",  // 답변자(수정)
-    });
 
     // 첨부파일 입력박스 추가
     const handleFileInsertBox = (e) => {
@@ -53,9 +42,9 @@ const QnAAnswer = () => {
     };
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
+        const { name, value} = e.target;
+        setQna((prev) => ({
+            ...prev,
             [name]: value,
 
         }));
@@ -66,7 +55,6 @@ const QnAAnswer = () => {
     
         const data = new FormData();
        
-        
         if (newFiles){
             newFiles.forEach((file) => {
                 data.append('newFiles',file); // 첨부파일 추가
@@ -74,16 +62,15 @@ const QnAAnswer = () => {
             });
         }
         
-        Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-
+        Object.entries(qna).forEach(([key, value]) => data.append(key, value));
         try {
-            await apiSpringBoot.post('/qna', data,{
+            await apiSpringBoot.put(`/qna/${member.memType}`, data, {
                 headers: {'Content-Type':'multipart/form-data',
                 }}
             );
-            alert('QnA 등록 성공');
+            alert('QnA 수정 성공');
             // 게시글 등록이 성공되면 공지 목록 페이지로 이동
-            navigate('/qna');
+            navigate(-1);
         } catch (error) {
             console.error('게시글 등록 실패', error);
             alert('새 게시글 등록 실패');
@@ -91,18 +78,30 @@ const QnAAnswer = () => {
     };
 
     const handleUpdateQnA = async () => {
-        const respone = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
-        setQna(respone.data.qna);
-        setMember(respone.data.member);
-        console.log(JSON.stringify(respone.data.qna));
-        console.log(JSON.stringify(respone.data.member));
+        const response = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
+
+        if(response.data.qna.qnaWCreateAt) response.data.qna.qnaWCreateAt = response.data.qna.qnaWCreateAt.split("T")[0] + " " + response.data.qna.qnaWCreateAt.split("T")[1].split(".")[0];
+        if(response.data.qna.qnaWUpdateAt) response.data.qna.qnaWUpdateAt = response.data.qna.qnaWUpdateAt.split("T")[0] + " " + response.data.qna.qnaWUpdateAt.split("T")[1].split(".")[0];
+        if(response.data.qna.qnaADCreateAt) response.data.qna.qnaADCreateAt = response.data.qna.qnaADCreateAt.split("T")[0] + " " + response.data.qna.qnaADCreateAt.split("T")[1].split(".")[0];
+        if(response.data.qna.qnaADUpdateAt) response.data.qna.qnaADUpdateAt = response.data.qna.qnaADUpdateAt.split("T")[0] + " " + response.data.qna.qnaADUpdateAt.split("T")[1].split(".")[0];
+
+        setQna(Object.fromEntries(
+            Object.entries(response.data.qna).filter(([key, value]) => value !== null)),
+        );
+        if(member.memType === "ADMIN"){
+            setQna((pre) =>({
+                ...pre,
+                qnaADUpdateBy: member.memUUID,
+            }));
+        }
     };
 
     useEffect(() => {
         handleUpdateQnA();
+        
     }, []);
 
-    if (!qna) {
+    if (!qna || !member) {
         // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
         return <div>Loading...</div>;
     };
@@ -111,39 +110,47 @@ const QnAAnswer = () => {
         <div>
             <SideBar />
             <div className={styles.qnaContent}>
-                <QNAHeader text="QnA 등록"/>
+                <QNAHeader text="Q&A 답변"/>
                 <form 
-                onSubmit={handleSubmit} 
-                encType="multipart/form-data">
-                <div className={styles.qnaWriteTitleDiv}>
-                    <h1 className={styles.qnaWriteTitle}>제 목</h1>
-                    <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaWriteTitleTxt} defaultValue={qna.qnaTitle} />
-                </div>
-                <hr/>
-                <div className={styles.qnaWriteContentDiv}>
-                    <h1 className={styles.qnaWriteContent}>질문내용</h1>
-                    <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaWriteContentTxt} defaultValue={qna.qnaWContent}></textarea>
-                </div>
-                <button
-                onClick={(e)=>handleFileInsertBox(e)}
-                    >첨부파일추가
-                </button>
-                {newFiles.map((file, index) => (
-                    <tr key={index}>
-                        <td colSpan="2">
-                            <span>{file.name}</span>
-                            <input 
-                                type="button"
-                                onClick={()=>handleDeleteFile(index)}
-                                value="x"
-                            />
-                        </td>
-                    </tr>
-                ))}
-                <div className={styles.qnaWriteBTN}>
-                    <input type='submit' value="등 록"/>
-                    <button onClick={(event) => {navigate(-1); event.preventDefault();}}>취 소</button>
-                </div>
+                    onSubmit={handleSubmit} 
+                    encType="multipart/form-data">
+   
+                    <div className={styles.qnaAnswerTitleDiv}>
+                        <h1 className={styles.qnaAnswerTitle}>제 목</h1>
+                        <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaAnswerTitleTxt} defaultValue={qna.qnaTitle}readOnly />
+                    </div>
+                    <hr/>
+                    <div className={styles.qnaAnswerContentDiv}>
+                        <h1 className={styles.qnaAnswerContent}>질문내용</h1>
+                        <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaAnswerContentTxt} defaultValue={qna.qnaWContent} readOnly></textarea>
+                    </div>
+                    <button
+                    onClick={(e)=>handleFileInsertBox(e)}
+                        >첨부파일추가
+                    </button>
+                    {newFiles.map((file, index) => (
+                        <tr key={index}>
+                            <td colSpan="2">
+                                <span>{file.name}</span>
+                                <input 
+                                    type="button"
+                                    onClick={()=>handleDeleteFile(index)}
+                                    value="x"
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                    <hr/>
+                    <div className={styles.qnaAnswerContentDiv}>
+                        <h1 className={styles.qnaAnswerContent}>답변내용</h1>
+                        <textarea name="qnaADContent" onChange={handleChange} className={styles.qnaAnswerContentTxt} defaultValue={qna.qnaADContent} />                        
+                    </div>
+                 
+
+                    <div className={styles.qnaAnswerBTN}>
+                        <input type='submit' value="답 변" />
+                        <button onClick={(event) => {navigate(-1); event.preventDefault();}}>취 소</button>
+                    </div>
                 </form>    
             </div>        
         </div>
