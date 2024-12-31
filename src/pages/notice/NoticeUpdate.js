@@ -218,6 +218,7 @@ const NoticeDetail = () => {
                                         >첨부파일추가
                                     </button>
                                 </tr>
+                                <div>
                                 {/* 기존 첨부파일 */}
                                 {noticeFiles && noticeFiles.map((file, index) => (
                                     <tr key={index}>
@@ -246,7 +247,7 @@ const NoticeDetail = () => {
                                         </td>
                                     </tr>
                                 ))}
-
+                                </div>
                                 </div>
                                 <tr>
                                     <td className={styles.buttonDiv}>

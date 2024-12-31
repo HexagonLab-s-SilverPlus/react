@@ -6,7 +6,6 @@ import memberRouter from './memberRouter';
 import noticeRouter from './noticeRouter';
 import dashboardRouter from './dashboardRouter';
 import documentRouter from './documentRouter';
-import siRouter from './siRouter';
 import eyRouter from './eyRouter';
 import qnaRouter from './qnaRouter';
 import faqRouter from './faqRouter';
@@ -47,7 +46,6 @@ const AppRouter = () => {
       {noticeRouter.map((route, index) => React.cloneElement(route, { key: `notice-${index}` }))}
       {dashboardRouter.map((route, index) => React.cloneElement(route, { key: `dashboard-${index}` }))}
       {documentRouter.map((route, index) => React.cloneElement(route, { key: `document-${index}` }))}
-      {siRouter.map((route, index) => React.cloneElement(route, { key: `si-${index}` }))}
       {eyRouter.map((route, index) => React.cloneElement(route, { key: `ey-${index}` }))}
       {qnaRouter.map((route, index) => React.cloneElement(route, { key: `qna-${index}` }))}
       {faqRouter.map((route, index) => React.cloneElement(route, { key: `qna-${index}` }))}

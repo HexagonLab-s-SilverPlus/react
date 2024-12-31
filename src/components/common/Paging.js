@@ -1,7 +1,8 @@
 // src/components/common/PagingView.js
-import React from 'react';
+import React ,{useContext} from 'react';
 import styles from './Paging.module.css';
-
+// AuthContext
+import {AuthContext} from "../../AuthProvider"
 
 const Paging = ({ 
   pageNumber, 
@@ -24,29 +25,36 @@ const Paging = ({
       (_, i) => startPage + i
     );
 
+        // 토큰정보 가져오기(AuthProvider)
+        const {role} = useContext(AuthContext);  // 롤정보    
+
     return (
       <div className={styles.pagingContainer}>
         {/* 1페이지로 이동 버튼 */}
         <button
+          className={role==="SENIOR" ? styles.admin :styles.button}
           disabled={pageNumber === 1}
           onClick={() => onPageChange(1)}>&lt; &lt;</button>
         {/* 이전 페이지 그룹 이동 버튼 */}
         <button
+          className={role==="SENIOR" ? styles.admin :styles.button}
           disabled={startPage === 1}
           onClick={() => onPageChange(startPage - 1)}>&lt;</button>
         {/* 현재 페이지 그룹 페이지 숫자들 */}
         {pages.map((page) => (
           <button
             key={page}
-            className={pageNumber === page ? styles.activePage : ''}
+            className={role==="SENIOR" ? styles.admin :styles.button}
             onClick={() => onPageChange(page)}>{page}</button>
         ))}
         {/* 다음 페이지 그룹 이동 버튼 */}
         <button
+          className={role==="SENIOR" ? styles.admin :styles.button}
           disabled={endPage === maxPage}
           onClick={() => onPageChange(endPage + 1)}>&gt;</button>
         {/* 끝페이지로 이동 버튼 */}
         <button
+          className={role==="SENIOR" ? styles.admin :styles.button}
           disabled={pageNumber === maxPage}
           onClick={() => onPageChange(maxPage)}>&gt;&gt;</button>
       </div>

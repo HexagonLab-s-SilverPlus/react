@@ -167,6 +167,7 @@ const NoticeWrite = () => {
                                         >첨부파일추가
                                     </button>
                                 </tr>
+                                <div>
                                 {/* 첨부파일 추가 박스 */}
                                 {newFiles.map((file, index) => (
                                     <tr key={index}>
@@ -181,6 +182,7 @@ const NoticeWrite = () => {
                                         </td>
                                     </tr>
                                 ))}
+                                </div>
                                 </div>
                                 <tr>
                                     <td className={styles.buttonDiv}>
