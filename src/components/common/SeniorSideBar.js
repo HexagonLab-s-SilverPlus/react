@@ -79,15 +79,15 @@ const DeleteConfirmationModal = ({ isOpen, closeModal, workspaceToDelete, handle
 };
 
 const SeniorSideBar = ({ memUUID }) => {
-    const [activeWorkspaces, setActiveWorkspaces] = useState([]);
+    const [activeWorkspaces, setActiveWorkspaces] = useState([]); // 활성 워크스페이스 
     const [archivedWorkspaces, setArchivedWorkspaces] = useState([]);
     const [deletedWorkspaces, setDeletedWorkspaces] = useState([]);
 
-    const [hasMoreActive, setHasMoreActive] = useState(true);
+    const [hasMoreActive, setHasMoreActive] = useState(true); // 활성 워크스페이스 더보기 버튼 표시 여부
     const [hasMoreArchived, setHasMoreArchived] = useState(true);
     const [hasMoreDeleted, setHasMoreDeleted] = useState(true);
 
-    const [isActiveModalOpen, setIsActiveModalOpen] = useState(false);
+    const [isActiveModalOpen, setIsActiveModalOpen] = useState(false); // 활성화 워크스페이스 모달 상태
     const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
     const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
@@ -111,8 +111,12 @@ const SeniorSideBar = ({ memUUID }) => {
                 const responseActive = await apiSpringBoot.get(
                     `/api/workspace/${memUUID}/status?workspaceStatus=ACTIVE&page=1&size=5`
                 );
+                console.log(responseActive.data.data);
+
                 if (responseActive.data.data) {
-                    setActiveWorkspaces(responseActive.data.data);
+                    const workspace = responseActive.data.data || [];
+                    setActiveWorkspaces(workspace);
+                    // 더복 버튼은 전체 데이터가 6개 이상일 때 표시
                     setHasMoreActive(responseActive.data.data.length === 5);
                 } else {
                     setErrorMessage("활성 상태의 워크스페이스가 없습니다.");
