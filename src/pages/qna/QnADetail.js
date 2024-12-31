@@ -27,17 +27,37 @@ const QnADetail = () => {
     };
 
     const handleQnADetailView = async () => {   // 페이지 불러오기
-        const respone = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
-        setQna(respone.data.qna);
-        setQnaMember(respone.data.member);
-        SetFiles(respone.data.files);
+        const response = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
+        setQna(response.data.qna);
+        setQnaMember(response.data.member);
+        SetFiles(response.data.files);
     };
 
     const handleQnADelete = async () => {
         if(window.confirm('정말 삭제하시겠습니까?')){
-            const respone = await apiSpringBoot.delete(`/qna/${qnaUUID}`);
+            const response = await apiSpringBoot.delete(`/qna/${qnaUUID}`);
             navigate(-1);
         }
+    };
+
+    const getFileExtension = (filename) => {
+        const match = filename.match(/\.([a-zA-Z0-9]+)$/);  // 확장자를 추출하는 정규 표현식
+        return match ? match[0] : null; // '.jpg' 형식으로 반환
+    };
+
+    const handleFileDown = async (fileName, index) => {
+        const response = await apiSpringBoot.get(`/qna/qfdown`,{
+            params: {fileName: fileName},
+            responseType:'blob', // 파일 다운로드를 위한 설정
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',"qna_file_" + index + getFileExtension(fileName));
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
     };
 
     useEffect(() => {
@@ -68,6 +88,20 @@ const QnADetail = () => {
                 {qna.qnaWContent}
             </p>
             <hr />
+            <div className={styles.filesDiv}>
+                첨부파일
+                <div>
+                    {files.map((file, index) =>(
+                        <span 
+                            className={styles.files}
+                            onClick={()=>handleFileDown(file, index)}
+                        >
+                            qna_file_{index} <br/>
+                        </span>
+                    ))}
+                </div>
+            </div>
+
             <div className={styles.qnaDetailBTNDiv}>
                 <button className={styles.qnaListViewBTN} onClick={() => {navigate(-1);}} >목 록</button>
                 {member.memType === "ADMIN" ? (qna.qnaADCreateBy ?
@@ -82,13 +116,11 @@ const QnADetail = () => {
                 : !qna.qnaADCreateBy &&
                     <button className={styles.qnaUpdateViewBTN} onClick={handleMoveUpdateView}>수 정</button>}
                 <button className={styles.qnaDeleteBTN} onClick={handleQnADelete} >삭 제</button>
-                {files.map((file, index) => (
-                    file
-                ))}
+               
+                    
             </div>
         </div>
-    </div>
-);
+    </div>);
 }
 
 export default QnADetail;
