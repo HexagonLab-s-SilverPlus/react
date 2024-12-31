@@ -14,7 +14,7 @@ body {background: #fff; color: #333;}
 .pgTitle {width: 100%; font-weight: bold; font-size: 40px; margin: 24px 0 72px;}
 .pgTitle > span {color: #368cfc;}
 
-.pgTopBtns > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 16px;}
+.pgTopBtns > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 16px; border: 0; cursor: pointer;}
 .pgTopBtns > button:hover {background: #064420; color: #fff;}
 
 .pgSearchWrap {display: flex;}
@@ -22,7 +22,7 @@ body {background: #fff; color: #333;}
 .pgSearchWrap > select > option {text-align: center;}
 
 .pgSearchWrap > input {height: 36px; border: 0; outline: 0; border-bottom: 2px solid #064420; display: block; margin: 0 16px; font-size: 16px; min-width: 300px;}
-.pgSearchWrap > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable";}
+.pgSearchWrap > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer;}
 .pgSearchWrap > button:hover {background: #064420; color: #fff;}
 
 .pgDateWrap {margin: 0 16px; display: flex; align-items: center; border-bottom: 2px solid #064420; box-sizing: border-box;}

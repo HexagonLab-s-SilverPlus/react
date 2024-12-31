@@ -31,6 +31,6 @@ body {background: #fff; color: #333;}
 .pgAttachList > li a:hover {color: #368cfc; font-weight: bold;}
 
 .pgDetailBottom {display: flex; justify-content: flex-end; margin: 96px 0 48px; position: relative;}
-.pgDetailBottom > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-left: 16px;}
+.pgDetailBottom > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-left: 16px; border: 0; cursor: pointer;}
 .pgDetailBottom > button:hover {background: #064420; color: #fff;}
 .pgDetailBottom > button:nth-child(1) {position: absolute; left: 0; right: 0; margin: 0 auto;}
