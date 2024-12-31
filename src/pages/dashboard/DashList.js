@@ -12,6 +12,8 @@ import { FaTrashAlt } from 'react-icons/fa';
 const DashList = () => {
     const [todolist, setTodolist] = useState([]);
     const [calendarEvents, setCalendarEvents] = useState([]);
+    const [filteredTodos, setFilteredTodos] = useState([]);
+    const [selectedDate, setSelectedDate] = useState('');
     const [formData, setFormData] = useState({
         taskId: '',
         taskContent: '',
@@ -23,6 +25,7 @@ const DashList = () => {
     const { member, memId } = useContext(AuthContext);
     const navigate = useNavigate();
 
+
     // 모든 데이터 가져오기
     const fetchAllTodos = async () => {
         try {
@@ -32,7 +35,7 @@ const DashList = () => {
             setCalendarEvents(
                 todos.map((todo) => ({
                     title: todo.taskContent,
-                    date: todo.taskDate.split('T')[0],
+                   date: new Date(todo.taskDate).toLocaleDateString('en-CA'),
                 }))
             );
         } catch (error) {
@@ -40,7 +43,26 @@ const DashList = () => {
         }
     };
 
-    // 입력 필드 추가
+    //특정 날짜 선택시 일정 필터링
+    const handleDateClick = (info) => {
+
+        console.log("Cliced Date:", info);
+        console.log("Clicked Date (String):", info.dateStr);
+
+        const clickedDate = info.dateStr;
+        setSelectedDate(clickedDate);
+        console.log("Selected Date State:", clickedDate);
+
+        const filtered = todolist.filter((todo) => {
+            console.log("Todo Task Date:", new Date(todo.taskDate).toLocaleDateString('en-CA')); // 각 할 일의 날짜 확인
+            return new Date(todo.taskDate).toLocaleDateString('en-CA') === clickedDate;
+
+        });
+        console.log("Filtered Todos:", filtered); 
+        setFilteredTodos(filtered); //필터링된 데이터 저장
+    };
+
+   
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -48,6 +70,8 @@ const DashList = () => {
             [name]: value,
         }));
     };
+
+
 
     //insert
     const handleInsertTodo = async (e) => {
@@ -79,6 +103,7 @@ const DashList = () => {
             });
 
             alert('할일 등록 성공');
+            window.location.reload();// 페이지 새로고침
             // setIsFormVisible(false);
             // fetchTodos();
              // 새로 추가된 데이터를 todolist와 calendarEvents에 업데이트
@@ -98,7 +123,7 @@ const DashList = () => {
             // navigate('/dashlist');
         } catch (error) {
             console.error('할일 등록 실패', error);
-            alert('새 할일 등록 실패');
+            // alert('새 할일 등록 실패');
         }
     };
 
@@ -162,7 +187,8 @@ const DashList = () => {
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
                             events={calendarEvents}
-                            dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
+                            // dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
+                            dateClick={handleDateClick}
                         />
                     </div>
 
@@ -193,9 +219,11 @@ const DashList = () => {
                             <button type="submit">저장하기</button>
                         </form>
                     </div>
-
+                    
+                    <div>
+                        <h3>{selectedDate} 할 일</h3>
                     <ul className={styles.todoList}>
-                        {todolist.map((todo, index) => (
+                        {filteredTodos.map((todo, index) => (
                             <li className={styles.todoItem} key={todo.taskId || index}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <input type="checkbox" className={styles.checkbox} />
@@ -210,6 +238,7 @@ const DashList = () => {
                             </li>
                         ))}
                     </ul>
+                    </div>
                 </div>
             </div>
         </div>
