@@ -40,6 +40,8 @@ function WelcomeChat() {
             Authorization: `Bearer ${accessToken}`,
             RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
           },
+         withCredentials: true // 인증 정보를 요청에 포함
+         // credentials: true // 쿠키를 요청에 포함
         },
       );
 

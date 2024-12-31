@@ -11,8 +11,8 @@
 .writeData{display: flex;align-items: center;justify-items: end; gap: 30px;}
 .img {width:20px;}
 .notContent{width:100%;font-weight:normal;font-size: 16px;padding:30px 20px;white-space: pre-wrap;}
-.button{font-family: "Pretendard Variable";background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
-.button2{font-family: "Pretendard Variable";background-color: #eeeeee;font-size:16px;color: #000000;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.noticebutton{font-family: "Pretendard Variable";background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;cursor: pointer;}
+.noticebutton2{font-family: "Pretendard Variable";background-color: #eeeeee;font-size:16px;color: #000000;padding:5px 20px;border-radius: 10px;text-decoration: none;cursor: pointer;}
 .filesDiv{padding:15px 5px}
 .file{cursor: pointer;padding:10px 0px 0px 10px;}
 .buttonDiv{position:relative;padding-top:50px;display: flex;justify-content: space-between;align-items: center;margin-bottom: 200px;}
