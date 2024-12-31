@@ -91,7 +91,7 @@ const QnADetail = () => {
             <div className={styles.filesDiv}>
                 첨부파일
                 <div>
-                    {files.map((file, index) =>(
+                    {files && files.map((file, index) =>(
                         <span 
                             className={styles.files}
                             onClick={()=>handleFileDown(file, index)}

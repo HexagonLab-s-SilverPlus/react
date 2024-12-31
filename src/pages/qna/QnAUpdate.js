@@ -12,7 +12,7 @@ const QnAUpdate = () => {
 
     // files
     const [newFiles, setNewFiles] = useState([]);
-    const [Files, setFiles] = useState([]);
+    const [files, setFiles] = useState([]);
     const [deleteFiles, setDeleteFiles] = useState([]);
     const [qna, setQna] = useState(null);
     const [qnaMember, setQnaMember] = useState(null);
@@ -154,7 +154,7 @@ const QnAUpdate = () => {
                             >첨부파일추가
                         </button>
                         <div>
-                        {Files.map((file, index) => (
+                        {files && files.map((file, index) => (
                             <tr key={index}>
                                 <td colSpan="2">
                                     <span>qna_file_{index}</span>
@@ -168,7 +168,7 @@ const QnAUpdate = () => {
                         ))}
                         </div>
                         <div>
-                        {newFiles.map((file, index) => (
+                        {newFiles && newFiles.map((file, index) => (
                             <tr key={index}>
                                 <td colSpan="2">
                                     <span>qna_file_{index}</span>
