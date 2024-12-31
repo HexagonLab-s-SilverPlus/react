@@ -70,8 +70,14 @@ const QnAUpdate = () => {
                 console.log(JSON.stringify(file));
             });
         }
+        if (deleteFiles){
+            deleteFiles.forEach((file) => {
+                data.append('deleteFiles',file); // 첨부파일 추가
+                console.log(JSON.stringify(file));
+            });
+        }
 
-        data.append('deleteFile',deleteFiles); // 첨부파일 추가
+        
   
         Object.entries(qna).forEach(([key, value]) => data.append(key, value));
 
