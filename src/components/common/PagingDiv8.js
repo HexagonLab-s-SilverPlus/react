@@ -33,7 +33,8 @@ const PagingDiv8 = ({
             {/* 현재 페이지 그룹 페이지 숫자들 */}
             {pages.map((page) => (
                 <button key={page} onClick={() => onPageChange(page)}
-                    className={pageNumber === page ? styles.activePage1 : ''}
+                    //className={Number(pageNumber) === page ? styles.activePage1 : ''}
+                    className={`${styles.pagingButton} ${Number(pageNumber) === page ? styles.activePage1 : ''}`}
                 >{page}</button>
             ))}
 
@@ -41,7 +42,7 @@ const PagingDiv8 = ({
             <button disabled={endPage === maxPage} onClick={() => onPageChange(endPage + 1)}>&gt;</button>
 
             {/* 끝페이지로 이동 버튼 */}
-            <button disabled={pageNumber === maxPage} onClick={() => onPageChange(maxPage)}>{maxPage}</button>
+            <button disabled={pageNumber === maxPage} onClick={() => onPageChange(maxPage)}>&gt;&gt;</button>
         </div>
     );
 };
