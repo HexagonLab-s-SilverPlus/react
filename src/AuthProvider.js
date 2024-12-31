@@ -45,7 +45,9 @@ const setupInterceptors = (axiosInstance) => {
         config.url.includes('/api/sms') ||
         config.url.includes('/api/sms/verify') ||
         config.url.includes('/idchk') ||
-        config.url.includes('/enroll')
+        config.url.includes('/enroll') ||
+        config.url.includes('/api/email') ||
+        config.url.includes('/api/email/verify')
       ) {
         console.log('예외 url 작동확인');
         return config;

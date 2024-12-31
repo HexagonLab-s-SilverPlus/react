@@ -51,6 +51,8 @@
   border-top-right-radius: 5px;
   font-size: 28px;
   font-weight: bold;
+  border: 0;
+  cursor: pointer;
 }
 
 .findlink {

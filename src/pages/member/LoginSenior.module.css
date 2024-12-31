@@ -40,6 +40,7 @@
   color: #ffffff;
   font-size: 40px;
   cursor: pointer;
+  border: 0;
 }
 
 .loginselectbtn {
@@ -49,6 +50,8 @@
   border-top-right-radius: 5px;
   font-size: 35px;
   font-weight: bold;
+  border: 0;
+  cursor: pointer;
 }
 
 .findlink {
