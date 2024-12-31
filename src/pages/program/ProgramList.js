@@ -125,6 +125,13 @@ const ProgramList = () => {
     }, []);
 
     const renderSearchInputs = () => {
+        //Enter 누르면 검색 버튼 클릭됨
+        const handleKeyPress = (e) => {
+            if (e.key === "Enter") {
+                handleSearchClick();
+            }
+        };
+
         switch (pagingInfo.action) {
             case "pgDate":
                 return (
@@ -152,6 +159,7 @@ const ProgramList = () => {
                         name="keyword"
                         placeholder="검색어를 입력하세요."
                         onChange={handleInputChange}
+                        onKeyDown={handleKeyPress}
                         className={styles.searchInput}
                     /> 
                 );

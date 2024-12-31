@@ -25,10 +25,10 @@ body {background: #fff; color: #333;}
 
 .pgAttach {border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; box-sizing: border-box; padding: 24px; display: flex; align-items: center;}
 .pgAttachIcon {width: 200px; height: 36px; background: #064420; border-radius: 36px; text-align: center; line-height: 36px; color: #fff; margin-right: 24px;}
-.pgAttachList {padding: 0; margin: 0;}
-.pgAttachList > li {list-style: none; margin-bottom: 8px;}
+.pgAttachList {padding: 0; margin: 0; display: flex;}
+.pgAttachList > li {list-style: none; margin-bottom: 8px; margin-right: 24px;}
 .pgAttachList > li a {color: #333; text-decoration: none;}
-.pgAttachList > li a:hover {color: #368cfc; font-weight: bold;}
+.pgAttachList > li a:hover {color: #368cfc;}
 
 .pgDetailBottom {display: flex; justify-content: flex-end; margin: 96px 0 48px; position: relative;}
 .pgDetailBottom > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-left: 16px; border: 0; cursor: pointer;}

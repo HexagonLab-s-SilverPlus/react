@@ -28,6 +28,22 @@ const ProgramDetail = () => {
         navigate(`/program`);
     };
 
+    //수정 페이지로 이동
+    const handleUpdateProgram = () => {
+        navigate(`/program/update/${snrProgramId}`)
+    };
+
+    const formatDate = (w) => {     // 데이터 포멧(우리나라 시간으로)
+        const date = new Date(w);
+      
+        // 연도에서 앞 2자리를 제거하고, 초는 제외한 형식으로 출력
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;  // 월은 0부터 시작하므로 1을 더해야 합니다.
+        const day = date.getDate();
+      
+        return `${year}-${month}-${day}`;
+    };
+
     //디테일 페이지 불러오기
     const handleProgramDetailView = async () => {
         try {
@@ -42,7 +58,7 @@ const ProgramDetail = () => {
 
     // 이미지 렌더링
     const renderImages = () => {
-        return files
+        const imageSlides = files
             .filter(file => file.mimeType.startsWith('image/')) // 이미지 파일 필터링
             .map((file, index) => (
                 <SwiperSlide key={index} className={styles.pgSlide}>
@@ -53,6 +69,7 @@ const ProgramDetail = () => {
                     />
                 </SwiperSlide>
             ));
+        return imageSlides.length > 0 ? imageSlides : null; // 이미지가 없으면 null 반환
     };
 
     // 첨부파일 렌더링 (다운로드 링크)
@@ -72,6 +89,21 @@ const ProgramDetail = () => {
     useEffect(() => {
         handleProgramDetailView();
     }, []);
+
+    //삭제 버튼 클릭 핸들러
+    const handleDeleteProgram = async () => {
+        const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+        if (confirmDelete) {
+            try {
+                await apiSpringBoot.delete(`/program/${snrProgramId}`);
+                alert("프로그램이 삭제되었습니다.");
+                navigate(`/program`); // 삭제 후 목록 페이지로 이동
+            } catch (error) {
+                console.error("프로그램 삭제 실패:", error);
+                alert("프로그램 삭제에 실패하였습니다. 관리자에게 문의하세요.");
+            }
+        }
+    };
     
     return (
         <div className={styles.pgContainer}>
@@ -114,30 +146,32 @@ const ProgramDetail = () => {
                             <li className={styles.pgDItem}>
                                 <span className="material-symbols-outlined">calendar_month</span>
                                 <span>참여기간</span>
-                                <span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</span>
+                                <span>{formatDate(program.snrStartedAt)} ~ {formatDate(program.snrEndedAt)}</span>
                             </li>
                         </ul>
 
                         <div className={styles.pgDContent}>
                             <p className={styles.pgDTxt}>{program.snrContent || '내용 없음'}</p>
                             <div className={styles.pgImages}>
-                                <Swiper
-                                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                                    spaceBetween={20}
-                                    slidesPerView={1}
-                                    navigation
-                                    pagination={{ clickable: true }}
-                                    scrollbar={{ draggable: true }}
-                                    className={styles.pgSwiper}
-                                    style={{
-                                        "--swiper-pagination-color": "#064420",
-                                        "--swiper-navigation-color": "#064420",
-                                    }}
-                                >
-                                    {renderImages()}
-                                </Swiper>
+                                {files.some(file => file.mimeType.startsWith('image/')) && ( // 이미지가 있을 때만 Swiper 렌더링
+                                    <Swiper
+                                        modules={[Navigation, Pagination, Scrollbar, A11y]}
+                                        spaceBetween={20}
+                                        slidesPerView={1}
+                                        navigation
+                                        pagination={{ clickable: true }}
+                                        scrollbar={{ draggable: true }}
+                                        className={styles.pgSwiper}
+                                        style={{
+                                            "--swiper-pagination-color": "#064420",
+                                            "--swiper-navigation-color": "#064420",
+                                        }}
+                                    >
+                                        {renderImages()}
+                                    </Swiper>
+                                )}
                             </div>
-                        </div>
+                        </div>{/* .pgContent end */}
 
                         <div className={styles.pgAttach}>
                             <span className={styles.pgAttachIcon}>첨부파일</span>
@@ -147,8 +181,8 @@ const ProgramDetail = () => {
 
                     <div className={styles.pgDetailBottom}>
                         <button onClick={handleMoveProgram}>목록</button>
-                        <button>수정</button>
-                        <button>삭제</button>
+                        <button onClick={handleUpdateProgram}>수정</button>
+                        <button onClick={handleDeleteProgram}>삭제</button>
                     </div>{/* .pgDetailBottom end */}
                 </div>{/* .secContent end */}
             </section>{/* .pgRSection end */}
