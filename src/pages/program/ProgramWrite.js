@@ -93,8 +93,23 @@ const ProgramWrite = () => {
         }
     };
 
+    //초기 상태 정의
+    const initialFormData = {
+        snrOrgName: '',
+        snrOrgPhone: '',
+        snrMgrEmail: '',
+        snrOrgAddress: '',
+        snrTitle: '',
+        snrStartedAt: '',
+        snrEndedAt: '',
+        snrContent: '',
+        snrMgrName: '',
+        snrCreatedBy: member.memUUID, // 초기값 유지
+    };
+
     //초기화 버튼 클릭 핸들러
     const handleReset = () => {
+        setFormData(initialFormData); // formData 초기화
         setFiles([]);   //파일 목록 초기화
         setImageFiles([]);  //이미지 파일 목록 초기화
 
@@ -152,7 +167,7 @@ const ProgramWrite = () => {
                     }
                 });
                 alert('프로그램 등록에 성공하였습니다.');
-                //navigate('/program');
+                navigate('/program');
             } catch (error) {
                 console.error('프로그램 등록 실패 : ', error);
                 alert('프로그램 등록에 실패하였습니다. 관리자에게 문의하세요.')

@@ -1,7 +1,7 @@
 /*senior*/
-.noticeList {background-color:#f9f9f9;}
-.top {display:flex;align-items: end;padding : 24px 72px 24px;}
-.menuName {display:flex; font-size:72px; font-weight : bold; color:#064420;}
+.noticeList {display: flex;flex-direction: column;min-height: 100vh;background-color:#f9f9f9;}
+.top {display:flex;align-items: end;padding : 24px 72px 24px;flex: 0;}
+.menuName {display:flex; font-size:72px; font-weight : bold; color:#064420;cursor: pointer;}
 .searchbox{display:flex;margin-left:auto;gap:5px;font-size:28px;font-weight : bold;color:#333333;}
 .searchOptions{border-bottom:2px gray solid;}
 .arrow{width:24px;height:24px;cursor:pointer;}
@@ -11,13 +11,14 @@
 .dropdown{position:absolute;z-index:1000;margin-top:40px;}
 .dropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
 .dropdownOption:hover{font-weight:bold;}
-.list{padding:30px 72px;}
-.object{margin:20px 0px;width:1400px;margin-left:auto;padding:20px 50px;background-color:#fff;box-shadow: 5px 5px 10px #333333;border-radius:10px;}
+.list{padding:30px 72px;flex: 0;}
+.object{margin:20px 0px;width:100%;max-width: 1400px;margin-left:auto;padding:20px 50px;background-color:#fff;box-shadow: 5px 5px 10px #333333;border-radius:10px;}
 .object:hover{background-color: #FDFAF6;cursor:pointer;}
 .title{font-size:36px;font-weight:bold;color:#333333;}
 .message{display:flex;justify-content:space-between;align-items:end;margin-top:10px;font-size:24px;color:#999999;}
-.date{color:#333333;font-weight:bold;font-size:32px;}
-
+.date{color:#333333;font-weight:bold;font-size:24px;}
+footer {margin-top: auto;}
+.noticePaging {margin-top: 45px; margin-bottom: 200px;}
 /*member*/
 .memberContainer {display: flex;}
 .memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
@@ -41,4 +42,4 @@
 .thDate {width: 20%;}
 .thViews {width: 10%;}
 .memberNoticeTable > tbody > tr > td {padding-top : 8px;padding-bottom: 8px;border-bottom:2px solid #999999;cursor:pointer;}
-.noticePaging {margin-top: 45px;}
+.memberNoticePaging {margin-top: 45px;}

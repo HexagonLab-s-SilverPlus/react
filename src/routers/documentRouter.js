@@ -5,8 +5,9 @@ import { Route } from 'react-router-dom';
 import DocMain from '../pages/document/DocMain';
 
 const dashboardRouter = [
-    
+    <>
     <Route path="/docmain" element={<DocMain/>}/>,
+    </>
 
 ];
 

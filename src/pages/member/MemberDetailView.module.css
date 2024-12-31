@@ -1,0 +1,172 @@
+/* src/pages/member/MemberDetailView.module.css */
+
+.mdetailMainContainer {
+  display: flex;
+}
+
+.mdetailSubContainer {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+
+.mdetailHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+
+.mdetailSubHeader > p {
+  font-size: 28px;
+  margin: 0;
+  font-weight: bold;
+  border-bottom: 1px solid #064420;
+  padding-top: 40px;
+  padding-bottom: 5px;
+  padding-left: 24px;
+}
+
+.mdetailDiv {
+  margin-top: 80px;
+  display: flex;
+  gap: 20px;
+}
+
+.mdetailProfilephoto {
+  width: 250px;
+  height: 300px;
+  flex-shrink: 0;
+  border: 1px solid;
+  margin-top: 17px;
+}
+
+.mdetailTableDiv {
+  flex-grow: 1;
+  margin-left: 50px;
+  max-width: calc(100%-270px);
+}
+
+.mdetailTable {
+  font-size: 18px;
+  table-layout: fixed;
+  width: 70%;
+}
+
+.mdetailTable > tr {
+  height: 70px;
+}
+
+.mdetailTable > tr > th {
+  margin-left: 10px;
+}
+
+.mdetailTable > tr > td {
+  width: 400px;
+}
+
+.mdetailTable > tr > td > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 245px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 0;
+}
+
+.mdetailTable > tr > td > input[readonly] {
+  background-color: #dddddd;
+}
+
+.mdetailTable > tr > th {
+  width: 150px;
+  line-height: 0;
+  text-align: justify;
+}
+
+.mdetailTable > tr > th::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.mdetailTable > tr > th::before {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.mdetailButtonDiv {
+  display: flex;
+  justify-content: space-between;
+  max-width: calc(100% - 150px);
+  margin-top: 50px;
+}
+
+.mdetailButton1 {
+  border-radius: 3px;
+  background-color: #064420;
+  color: #ffffff;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.mdetailButton2 {
+  border-radius: 3px;
+  background-color: #eeeeee;
+  color: #000000;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading > p {
+  text-align: center;
+  font-size: 30px;
+}
+
+.mdetailSelectDiv {
+  display: flex;
+  align-items: center; /* 수직 중심 정렬 */
+  gap: 10px; /* 요소 간 간격 */
+}
+
+.mdetailSelect {
+  width: 80px;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.mdetailTable > tr > td > div > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 345px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 0;
+}
+
+.mdetailTable > tr > td > div > input[readonly] {
+  background-color: #dddddd;
+}

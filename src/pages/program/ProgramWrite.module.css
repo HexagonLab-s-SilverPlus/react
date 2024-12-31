@@ -5,7 +5,7 @@ body {background: #fff; color: #333;}
 .pgContainer {width: 100%; position: relative;}
 
 .pgRSection {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing: border-box; padding: 72px 48px;}
-.secTop > p {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;}
+.secTop > p {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px; padding-left: 24px;}
 /* .secTop end */
 
 .secContent {width: 100%; box-sizing: border-box; padding: 24px 8px;}

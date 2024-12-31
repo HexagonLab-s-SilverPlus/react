@@ -1,0 +1,40 @@
+/* src/pages/notice/NoticeDetail.module.css */
+/*member*/
+.memberContainer {display: flex;}
+.memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
+.MemberNoticeTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
+.insertTableDiv {width:100%;margin-top: 70px;}
+.insertTable{width:100%;}
+.insertTable > tbody > tr > td{width:100%;border-bottom: 2px solid #999999;}
+.notTitleLine {display:flex;justify-content:space-between;padding:5px 5px;}
+.notTitle{display: flex;font-weight:bold;font-size: 24px;}
+.writeData{display: flex;align-items: center;justify-items: end; gap: 30px;}
+.img {width:20px;}
+.notContent{width:100%;font-weight:normal;font-size: 16px;padding:30px 20px;white-space: pre-wrap;}
+.button{font-family: "Pretendard Variable";background-color: #064420;font-size:16px;color: #ffffff;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.button2{font-family: "Pretendard Variable";background-color: #eeeeee;font-size:16px;color: #000000;padding:5px 20px;border-radius: 10px;text-decoration: none;}
+.filesDiv{padding:15px 5px}
+.file{cursor: pointer;padding:10px 0px 0px 10px;}
+.buttonDiv{position:relative;padding-top:50px;display: flex;justify-content: space-between;align-items: center;margin-bottom: 200px;}
+.centerButton{position:absolute;left:50%;transform: translateX(-50%);}
+.rightButtons{display:flex;position:absolute;right:0;gap:10px ;}
+.fileview{width:90%}
+
+/*senior*/
+.noticeList {display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh;background-color:#f9f9f9;}
+.seniorMainDiv{margin:48px 0;width:calc(100% - 96px); min-height: 300px; background-color:#fff;box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);border-radius:10px;}
+.seniorDetailTable {padding: 48px 72px; width:100%;}
+.seniorTopButton {display: flex;justify-content: space-between;align-items: flex-end;width:100%;margin-bottom: 20px;}
+.seniorInnerButton{text-decoration: none;cursor: pointer;border: none;background-color: #ffffff;font-size: 24px;font-family: "Pretendard Variable";}
+.seniorButton{font-family: "Pretendard Variable";background-color: #064420;font-size:28px;color: #ffffff;padding:5px 40px;border-radius: 10px;text-decoration: none;cursor: pointer;}
+.seniorFakeButton{font-family: "Pretendard Variable";background-color: #064420;font-size:20px;color: #ffffff;padding:5px 40px;border-radius: 10px;text-decoration: none;}
+.seniorTitle{font-size:60px; color :#064420;font-weight: bold;}
+.seniorSubBar{font-size: 28px; font-weight: bold;padding-top: 30px;}
+.seniorContent{font-size: 24px; font-weight: bold;}
+.seniorFiles{font-size: 28px; font-weight: bold;padding-top: 10px;cursor: pointer;}
+footer {margin-top: auto;}
+hr {border: none;height: 2px;background-color: #064420;margin: 16px 0;}
+.seniorBottomBar{display: flex;padding-bottom: 100px;width: calc(100% - 96px);}
+.seniorInnerButton2{text-decoration: none;cursor: pointer;border: none;background-color: #f9f9f9;font-size: 24px;font-family: "Pretendard Variable";}
+.seniorUpButton {display: flex;justify-content: flex-start;}
+.seniorCenterButton {flex: 1;display: flex;justify-content: center;}

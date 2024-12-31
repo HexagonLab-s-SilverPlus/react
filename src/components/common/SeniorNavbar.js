@@ -3,7 +3,7 @@ import React,{useState, useEffect, useContext} from "react";
 import { Link } from 'react-router-dom';
 
 // css
-import Styles from "./SeniorNavbar.module.css"
+import Styles from "./SeniorNavbar.module.css";
 
 // image
 import profile from '../../assets/images/profile.png'; // 로고 이미지 임포트

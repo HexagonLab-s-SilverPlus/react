@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './WelcomeChat.module.css';
 import Container from './Container.js';
@@ -9,50 +9,14 @@ import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
 function WelcomeChat() {
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null); // 선택된 워크스페이스 ID
   const [inputText, setInputText] = useState('');
-  const [workspaces, setWorkspaces] = useState([]); // 워크스페이스 ID 배열 상태
   const navigate = useNavigate();
-  const { apiSpringBoot, apiFlask, member, accessToken } = useContext(AuthContext);
+  const { apiFlask, member, accessToken } = useContext(AuthContext);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true); // 사이드바 가시성 상태
 
   // const { apiSpringBoot, apiFlask, member } = useContext(AuthContext);
 
   // const accessToken  = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MiIsImNhdGVnb3J5IjoicmVmcmVzaCIsIm5hbWUiOiJ0ZXN0MiIsInJvbGUiOiJBRE1JTiIsIm1lbWJlciI6eyJtZW1VVUlEIjoiNWU3NGRhNTMtYjFmZi00ODA2LWExNWMtNmM5OGMxNTA4ZTBkIiwibWVtSWQiOiJ0ZXN0MiIsIm1lbVB3IjoiJDJhJDEwJEt3S0hRRUJBMnkvM1JETHVvOFBKOWVFcGN4bTVYT3dleEtUNEhiSEdraGp3S1VRTmhia3NLIiwibWVtTmFtZSI6InRlc3QyIiwibWVtVHlwZSI6IkFETUlOIiwibWVtRW1haWwiOiJ0ZXN0MUB0LmtyIiwibWVtQWRkcmVzcyI6IuyEnOy0iOuMgOuhnCIsIm1lbUNlbGxwaG9uZSI6IjAxMDEyMzQ1Njc4IiwibWVtUGhvbmUiOm51bGwsIm1lbVJubiI6IjEyMzQ1Ni0xMjM0NTY3IiwibWVtR292Q29kZSI6bnVsbCwibWVtU3RhdHVzIjoiQUNUSVZFIiwibWVtRW5yb2xsRGF0ZSI6bnVsbCwibWVtQ2hhbmdlU3RhdHVzIjpudWxsLCJtZW1GYW1pbHlBcHByb3ZhbCI6bnVsbCwibWVtU29jaWFsS2FrYW8iOm51bGwsIm1lbUtha2FvRW1haWwiOm51bGwsIm1lbVNvY2lhbE5hdmVyIjpudWxsLCJtZW1OYXZlckVtYWlsIjpudWxsLCJtZW1Tb2NpYWxHb29nbGUiOm51bGwsIm1lbUdvb2dsZUVtYWlsIjpudWxsLCJtZW1VVUlERmFtIjpudWxsLCJtZW1VVUlETWdyIjpudWxsfSwiZXhwIjoxNzM1MTI0MzI1fQ.qhtOqXHTu9IdxCGqHUz4npBs5StSVYvgzbqQEmlV1Is";
 
-  // 워크스페이스 목록 가져오기
-  const fetchWorkspace = async () => {
-    if (!member?.memUUID) {
-      console.warn("member.memUUID가 비어 있습니다.");
-      return;
-    }
-
-    try {
-      console.log("Fetching workspaces for memUUID: ", member.memUUID);
-
-      // 스프링부트 API 호출하여 워크스페이스 목록 조회
-      const response = await apiSpringBoot.get(`/api/workspace/${member.memUUID}`);
-      const { data } = response.data;
-
-      if (data && Array.isArray(data)) {
-        console.log("워크스페이스 목록:", data);
-        setWorkspaces(data); // 워크스페이스 배열 저장
-      } else {
-        console.log("워크스페이스가 없습니다.");
-      }
-    } catch (error) {
-      if (error.response?.status === 404) {
-        console.log("워크스페이스가 존재하지 않습니다.");
-      } else {
-        console.error('워크스페이스 확인 중 오류:', error);
-      }
-    }
-  };
-
-  // 초기 렌더링 시 워크스페이스 확인
-  useEffect(() => {
-    if (member?.memUUID) {
-      fetchWorkspace();
-    }
-  }, [member?.memUUID]);
 
   const handleInputChange = (e) => setInputText(e.target.value);
 
@@ -88,7 +52,7 @@ function WelcomeChat() {
       }
 
       // 새로운 워크스페이스 생성 시 배열 업데이트
-      setWorkspaces((prev) => [...prev, { workspaceId }]); // 새로운 워크스페이스 추가가
+      // setWorkspaces((prev) => [...prev, { workspaceId }]); // 새로운 워크스페이스 추가가
 
       // 생성된 워크스페이스로 이동
       navigate(`/w/${workspaceId}`, {
@@ -114,8 +78,6 @@ function WelcomeChat() {
       >
         <SeniorSideBar
           memUUID={member?.memUUID}
-          selectedWorkspaceId={selectedWorkspaceId}
-          setSelectedWorkspaceId={setSelectedWorkspaceId} // 전달
         />
       </div>
 
