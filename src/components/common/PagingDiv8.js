@@ -42,7 +42,7 @@ const PagingDiv8 = ({
             <button disabled={endPage === maxPage} onClick={() => onPageChange(endPage + 1)}>&gt;</button>
 
             {/* 끝페이지로 이동 버튼 */}
-            <button disabled={pageNumber === maxPage} onClick={() => onPageChange(maxPage)}>{maxPage}</button>
+            <button disabled={pageNumber === maxPage} onClick={() => onPageChange(maxPage)}>&gt;&gt;</button>
         </div>
     );
 };
