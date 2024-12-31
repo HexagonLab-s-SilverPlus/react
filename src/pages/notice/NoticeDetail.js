@@ -273,13 +273,13 @@ const NoticeDetail = () => {
                 </div>
                 <div className={styles.buttonDiv}>
                     <div className={styles.centerButton}>
-                        <button className={styles.button} onClick={()=>{navigate(-1)}}>목록</button>
+                        <button className={styles.noticebutton} onClick={()=>{navigate(-1)}}>목록</button>
                     </div>
                     {role==="ADMIN" && (
                         <div className={styles.rightButtons}>
-                            <button className={styles.button} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
+                            <button className={styles.noticebutton} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
                             <button
-                                className={styles.button2}
+                                className={styles.noticebutton2}
                                 onClick={handleDelete}
                             >삭제</button>
                         </div>

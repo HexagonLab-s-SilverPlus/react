@@ -32,29 +32,29 @@ const Paging = ({
       <div className={styles.pagingContainer}>
         {/* 1페이지로 이동 버튼 */}
         <button
-          className={role==="SENIOR" ? styles.admin :styles.pageButton}
+          className={role==="SENIOR" ? styles.adminbutton :styles.pageButton}
           disabled={pageNumber === 1}
           onClick={() => onPageChange(1)}>&lt; &lt;</button>
         {/* 이전 페이지 그룹 이동 버튼 */}
         <button
-          className={role==="SENIOR" ? styles.admin :styles.pageButton}
+          className={role==="SENIOR" ? styles.adminbutton :styles.pageButton}
           disabled={startPage === 1}
           onClick={() => onPageChange(startPage - 1)}>&lt;</button>
         {/* 현재 페이지 그룹 페이지 숫자들 */}
         {pages.map((page) => (
           <button
             key={page}
-            className={role==="SENIOR" ? styles.admin :styles.pageButton}
+            className={role==="SENIOR" ? styles.adminbutton :styles.pageButton}
             onClick={() => onPageChange(page)}>{page}</button>
         ))}
         {/* 다음 페이지 그룹 이동 버튼 */}
         <button
-          className={role==="SENIOR" ? styles.admin :styles.pageButton}
+          className={role==="SENIOR" ? styles.adminbutton :styles.pageButton}
           disabled={endPage === maxPage}
           onClick={() => onPageChange(endPage + 1)}>&gt;</button>
         {/* 끝페이지로 이동 버튼 */}
         <button
-          className={role==="SENIOR" ? styles.admin :styles.pageButton}
+          className={role==="SENIOR" ? styles.adminbutton :styles.pageButton}
           disabled={pageNumber === maxPage}
           onClick={() => onPageChange(maxPage)}>&gt;&gt;</button>
       </div>
