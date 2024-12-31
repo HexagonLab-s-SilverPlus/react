@@ -59,11 +59,28 @@ const ProgramList = () => {
     };
 
     const handlePageChange = async (page) => {
-        handleProgramView(page, pagingInfo.action);
+        const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
+        console.log("Current Page:", currentPage);
+        handleProgramView(currentPage, pagingInfo.action);
     };
+
+    useEffect(() => {
+        console.log("Initial API Call with Page:", pagingInfo.pageNumber, "and Action:", pagingInfo.action);
+        handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
+    }, [pagingInfo.pageNumber, pagingInfo.action]);
 
     //페이지 불러오기
     const handleProgramView = async (page, action) => {
+        console.log("Sending API request with params:", {
+            ...pagingInfo,
+            pageNumber: page,
+            action: action,
+            keyword: pagingInfo.keyword,
+            startDate: pagingInfo.startDate + " 00:00:00",
+            endDate: pagingInfo.endDate + " 00:00:00",
+        });
+                    
+        
         const groupSize = 8; // 그룹 크기 정의
         try {
             const response = await apiSpringBoot.get(`/program`, {
@@ -76,12 +93,13 @@ const ProgramList = () => {
                     endDate: pagingInfo.endDate + " 00:00:00",
                 },
             });
-
+            
             setPrograms(response.data.list);
             console.log("API Response:", response.data.list);
             
             //페이지 계산
             const {maxPage, startPage, endPage} = PagingDiv8Calculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize, groupSize);
+            console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
             setPagingInfo(response.data.search);
             setPagingInfo((prev) => ({
@@ -202,7 +220,7 @@ const ProgramList = () => {
                     
                     <div className={styles.pgListWrap}>
                         <ul className={styles.pgList}>
-                            {programs.map((item) => {
+                            {(programs || []).map((item) => {
                                 const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
                                 
                                 //image MIME 타입 필터링 후 첫 번째 파일 가져오기
@@ -235,7 +253,10 @@ const ProgramList = () => {
                     maxPage={pagingInfo.maxPage || 1}
                     startPage={pagingInfo.startPage || 1}
                     endPage={pagingInfo.endPage || 1}
-                    onPageChange={(page) => handlePageChange(page)}
+                    onPageChange={(page) => {
+                        console.log("Page change triggered:", page);
+                        handlePageChange(page);
+                    }}
                 />
             </section>{/* pgRSection end */}
         </div>
