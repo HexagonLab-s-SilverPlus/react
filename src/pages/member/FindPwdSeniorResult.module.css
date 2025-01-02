@@ -1,0 +1,128 @@
+/* src/pages/member/FindPwdSeniorResult.module.css*/
+
+.fpmResultMainContainer {
+  position: absolute;
+  /* display: flex; */
+  width: 1200px;
+  height: 650px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  /* border: 1px solid; */
+}
+
+.fpmResultHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.findNavigateBtn1 {
+  /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+  font-size: 24px;
+  background-color: #f3f3f3;
+}
+
+.findNavigateBtn2 {
+  background-color: #ffffff;
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.fpmProgress {
+  margin: 10px 0;
+}
+
+.fpmResultSubContainer {
+  position: relative;
+  width: 600px;
+  height: 470px;
+  top: 50px;
+  left: 305px;
+  /* border: 1px solid; */
+}
+
+/* 정보 조회 성공 화면 css */
+.fpmComment {
+  margin-top: 10px;
+}
+
+.fpmComment > p {
+  margin: 10px 0;
+  font-size: 28px;
+}
+
+.fpmSuccessDiv {
+  /* border: 1px solid; */
+  position: relative;
+  top: 20px;
+}
+
+.fpmSuccessDiv > table {
+  margin-left: 20px;
+}
+
+.fpmSuccessDiv > table > tr {
+  font-size: 28px;
+  margin: 0;
+}
+
+.fpmSuccessDiv > table > tr > input {
+  width: 350px;
+  height: 35px;
+  font-size: 28px;
+}
+
+/* 정보 조회 에러 화면 css */
+.fpmErrordDiv {
+  position: relative;
+  top: 200px;
+  /* border: 1px solid; */
+}
+
+.fpmErrordDiv p {
+  font-size: 28px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+/* 정보 조회 실패 화면 css */
+.fpmFailedDiv {
+  position: relative;
+  top: 170px;
+  /* border: 1px solid; */
+}
+
+.fpmFailedDiv p {
+  font-size: 28px;
+  text-align: center;
+}
+
+/* 하단 버튼 css */
+.buttonDiv {
+  position: absolute;
+  top: 430px;
+}
+
+.findPwdBtn {
+  border-radius: 8px;
+  border: 1px solid;
+  width: 220px;
+  height: 60px;
+  background-color: #064420;
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24px;
+}

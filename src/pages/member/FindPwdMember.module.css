@@ -1,5 +1,5 @@
-/* src/pages/member/FIndIdmember.module.css*/
-.findIdMainContainer {
+/* src/pages/member/FindPwdMember.module.css*/
+.findPwdMainContainer {
   position: absolute;
   width: 1200px;
   height: 650px;
@@ -9,7 +9,7 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.findIdtHead {
+.findPwdtHead {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -22,11 +22,11 @@
   border-radius: 1px;
   border: 0;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: #f3f3f3;
 }
 
 .findNavigateBtn2 {
-  background-color: #f3f3f3;
+  background-color: #ffffff;
   width: 120px;
   height: 40px;
   border-radius: 1px;
@@ -38,7 +38,7 @@
   margin: 10px 0;
 }
 
-.findIdSubContainer {
+.findPwdSubContainer {
   position: relative;
   width: 440px;
   height: 470px;
@@ -46,30 +46,30 @@
   left: 385px;
 }
 
-.findIdPhoneContainer {
+.findPwdPhoneContainer {
 }
 
-.findIdEmailContainer {
+.findPwdEmailContainer {
   margin-top: 30px;
 }
 
-.findIdlabel {
+.findPwdlabel {
   font-size: 20px;
 }
 
-.findIdPhoneTable {
+.findPwdPhoneTable {
   margin-top: 30px;
 }
 
-.findIdPhoneTable > tr {
+.findPwdPhoneTable > tr {
   height: 40px;
 }
 
-.findIdPhoneTable > tr > td {
+.findPwdPhoneTable > tr > td {
   font-size: 18px;
 }
 
-.findIdPhoneTable > tr > input {
+.findPwdPhoneTable > tr > input {
   width: 365px;
   height: 30px;
   border-radius: 2px;
@@ -77,19 +77,19 @@
   font-size: 18px;
 }
 
-.findIdEmaileTable {
+.findPwdEmaileTable {
   margin-top: 30px;
 }
 
-.findIdEmaileTable > tr {
+.findPwdEmaileTable > tr {
   height: 40px;
 }
 
-.findIdEmaileTable > tr > td {
+.findPwdEmaileTable > tr > td {
   font-size: 18px;
 }
 
-.findIdEmaileTable > tr > input {
+.findPwdEmaileTable > tr > input {
   width: 420px;
   height: 30px;
   border-radius: 2px;
@@ -97,7 +97,7 @@
   font-size: 18px;
 }
 
-.findIdEmaileTable > tr > select {
+.findPwdEmaileTable > tr > select {
   margin-left: 10px;
   width: 100px;
   height: 30px;
@@ -107,7 +107,7 @@
   top: 430px;
 }
 
-.findIdBtn {
+.findPwdBtn {
   border-radius: 8px;
   border: 1px solid;
   width: 180px;
@@ -120,7 +120,7 @@
   font-size: 18px;
 }
 
-.findIdPhoneTableBtn {
+.findPwdPhoneTableBtn {
   width: 80px;
   height: 30px;
   font-size: 10px;
@@ -138,7 +138,7 @@
   width: 100%;
 }
 
-.findIdEmailTableBtn {
+.findPwdEmailTableBtn {
   width: 110px;
   height: 30px;
   font-size: 10px;
@@ -149,11 +149,11 @@
   cursor: pointer;
 }
 
-.findIdEmailSpan {
+.findPwdEmailSpan {
   margin: 0 15px;
 }
 
-.findIdEmailTimer {
+.findPwdEmailTimer {
   font-size: 10px;
   color: red;
   margin-left: 15px;

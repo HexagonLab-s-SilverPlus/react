@@ -1,4 +1,4 @@
-/* src/pages/member/FIndIdmember.module.css*/
+/* src/pages/member/FIndIdSenior.module.css*/
 .findIdMainContainer {
   position: absolute;
   width: 1200px;
@@ -17,20 +17,22 @@
 
 .findNavigateBtn1 {
   /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
-  width: 120px;
-  height: 40px;
+  width: 160px;
+  height: 60px;
   border-radius: 1px;
   border: 0;
   cursor: pointer;
+  font-size: 24px;
   background-color: #ffffff;
 }
 
 .findNavigateBtn2 {
   background-color: #f3f3f3;
-  width: 120px;
-  height: 40px;
+  width: 160px;
+  height: 60px;
   border-radius: 1px;
   border: 0;
+  font-size: 24px;
   cursor: pointer;
 }
 
@@ -40,9 +42,9 @@
 
 .findIdSubContainer {
   position: relative;
-  width: 440px;
+  width: 540px;
   height: 470px;
-  top: 90px;
+  top: 40px;
   left: 385px;
 }
 
@@ -54,7 +56,7 @@
 }
 
 .findIdlabel {
-  font-size: 20px;
+  font-size: 28px;
 }
 
 .findIdPhoneTable {
@@ -66,15 +68,15 @@
 }
 
 .findIdPhoneTable > tr > td {
-  font-size: 18px;
+  font-size: 28px;
 }
 
 .findIdPhoneTable > tr > input {
-  width: 365px;
-  height: 30px;
+  width: 520px;
+  height: 40px;
   border-radius: 2px;
   border: 1px solid;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .findIdEmaileTable {
@@ -86,44 +88,45 @@
 }
 
 .findIdEmaileTable > tr > td {
-  font-size: 18px;
+  font-size: 28px;
 }
 
 .findIdEmaileTable > tr > input {
-  width: 420px;
-  height: 30px;
+  width: 475px;
+  height: 40px;
   border-radius: 2px;
   border: 1px solid;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .findIdEmaileTable > tr > select {
   margin-left: 10px;
-  width: 100px;
-  height: 30px;
+  width: 120px;
+  height: 40px;
+  font-size: 24px;
 }
 .buttonDiv {
   position: absolute;
-  top: 430px;
+  top: 460px;
 }
 
 .findIdBtn {
   border-radius: 8px;
   border: 1px solid;
-  width: 180px;
-  height: 40px;
+  width: 220px;
+  height: 60px;
   background-color: #064420;
   color: #ffffff;
   border: 0;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .findIdPhoneTableBtn {
-  width: 80px;
-  height: 30px;
-  font-size: 10px;
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
   border-radius: 3px;
   background-color: #e4efe7;
   margin-left: 25px;
@@ -139,22 +142,23 @@
 }
 
 .findIdEmailTableBtn {
-  width: 110px;
-  height: 30px;
-  font-size: 10px;
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
   border-radius: 3px;
   background-color: #e4efe7;
-  margin-left: 25px;
+  margin-left: 30px;
   border: 0;
   cursor: pointer;
 }
 
 .findIdEmailSpan {
   margin: 0 15px;
+  font-size: 24px;
 }
 
 .findIdEmailTimer {
-  font-size: 10px;
+  font-size: 18px;
   color: red;
   margin-left: 15px;
 }

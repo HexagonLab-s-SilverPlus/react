@@ -296,7 +296,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
                 height: '20px',
               }}
             >
-              대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
+              영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
             </tr>
           )}
           {passwordValidate && (

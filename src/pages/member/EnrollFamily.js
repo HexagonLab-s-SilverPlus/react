@@ -26,9 +26,9 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
   const [idCheckMsg, setIdCheckMsg] = useState('아이디 중복확인을 해주세요.');
   // 아이디 중복검사여부에 다른 메세지 컬러 변경 상태변수
   const [messageIdColor, setMessageIdColor] = useState('red');
-  // 비밀번호 중복검사여부에 따른 메세지 상태변수
+  // 비밀번호 유효성검사여부에 따른 메세지 상태변수
   const [passwordCheckMsg, setPasswordCheckMsg] = useState('');
-  // 비밀번호 중복검사여부에 따른 메세지 컬러 변경 상태변수
+  // 비밀번호 유효성검사여부에 따른 메세지 컬러 변경 상태변수
   const [messagePwdColor, setMessagePwdColor] = useState('');
   // 비밀번호 유효성검사여부에 따른 메세지 컬러 변경 상태변수
   const [passwordValidate, setPasswordValidate] = useState(false);
@@ -313,7 +313,7 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
                 height: '20px',
               }}
             >
-              대소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
+              영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
             </tr>
           ) : (
             <tr

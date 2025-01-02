@@ -1,0 +1,144 @@
+/* src/pages/member/FindIdMemberResult.module.css*/
+.fimResultMainContainer {
+  position: absolute;
+  /* display: flex; */
+  width: 1200px;
+  height: 650px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  /* border: 1px solid; */
+}
+
+.fimResultHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.findNavigateBtn1 {
+  /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
+  width: 120px;
+  height: 40px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.findNavigateBtn2 {
+  background-color: #f3f3f3;
+  width: 120px;
+  height: 40px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+}
+
+.fimProgress {
+  margin: 10px 0;
+}
+
+.fimResultSubContainer {
+  position: relative;
+  width: 440px;
+  height: 470px;
+  top: 50px;
+  left: 385px;
+  /* border: 1px solid; */
+}
+
+/* 아이디 조회 성공 화면 css */
+.fimSuccessDiv {
+  /* border: 1px solid; */
+  position: relative;
+  top: 180px;
+  /* text-align: center; */
+}
+
+.fimSuccessDiv > p {
+  font-size: 20px;
+  /* margin-left: 20px; */
+  margin: 0;
+}
+
+.fimSuccessDiv p:nth-child(3) {
+  text-align: right;
+}
+
+.fimSuccessDiv > div {
+  /* margin-left: 40px; */
+  /* border: 1px solid; */
+  justify-items: center;
+  height: 50px;
+  display: flex;
+}
+
+.fimSuccessDiv > div p:nth-child(1) {
+  position: relative;
+  top: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 24px;
+  background-color: #ebe7e7;
+  width: 200px;
+  height: 30px;
+  margin: 10px 0;
+  margin-left: 100px;
+}
+
+.fimSuccessDiv > div p:nth-child(2) {
+  position: relative;
+  top: 10px;
+  text-align: right;
+  font-size: 20px;
+  width: 200px;
+  height: 30px;
+  margin: 10px 0;
+}
+
+/* 아이디 조회 에러 화면 css */
+.fimErrordDiv {
+  position: relative;
+  top: 200px;
+  /* border: 1px solid; */
+}
+
+.fimErrordDiv p {
+  font-size: 24px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+/* 아이디 조회 실패 화면 css */
+.fimFailedDiv {
+  position: relative;
+  top: 170px;
+  /* border: 1px solid; */
+}
+
+.fimFailedDiv p {
+  font-size: 24px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+/* 하단 버튼 css */
+.buttonDiv {
+  position: absolute;
+  top: 430px;
+}
+
+.findIdBtn {
+  border-radius: 8px;
+  border: 1px solid;
+  width: 180px;
+  height: 40px;
+  background-color: #064420;
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+}
