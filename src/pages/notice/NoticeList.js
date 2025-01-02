@@ -48,7 +48,13 @@ function NoticeList() {
     // 키워드 임시저장장
     const [tempKeyword, setTempKeyword] = useState(""); // 입력 중인 키워드
 
-
+    // 날짜시간 보정
+    const adjustTimeZone = (timestamp) => {
+        // 서버에서 받은 Timestamp를 UTC로 간주하고 보정하지 않음
+        const originalDate = new Date(timestamp);
+        const correctedDate = new Date(originalDate.getTime() + 9 * 60 * 60 * 1000); // UTC+9 보정
+        return correctedDate.toISOString(); // ISO 8601 형식 반환
+    };
 
     // 핸들러
     // 드롭다운 토글처리
@@ -224,7 +230,7 @@ function NoticeList() {
                             <div className={styles.message}>
                                 <div className={styles.date}>
                                     등록일 &nbsp;
-                                    {noticeList.notCreateAt.split('T')[0]}
+                                    {adjustTimeZone(noticeList.notCreateAt).split('T')[0]}
                                 </div> &nbsp;&nbsp;&nbsp;
                                 <div className={styles.date}>
                                     조회수 &nbsp;
@@ -344,7 +350,7 @@ function NoticeList() {
                                         onClick={()=>(navigate(`/noticedetail/${noticeList.notId}`))}
                                     >
                                         <td>{noticeList.notTitle}</td>
-                                        <td>{noticeList.notCreateAt.split('T')[0]}</td>
+                                        <td>{adjustTimeZone(noticeList.notCreateAt).split('T')[0]}</td>
                                         <td>{noticeList.notReadCount}</td>
                                     </tr>
                                 ))}
