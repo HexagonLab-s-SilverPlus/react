@@ -9,6 +9,8 @@
     background-color: #fff;
     /*그림자효과*/
     box-shadow : 0px 0px 5px #000000;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /*우측메뉴*/

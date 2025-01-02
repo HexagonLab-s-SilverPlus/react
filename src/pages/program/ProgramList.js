@@ -10,8 +10,6 @@ import pgImage from '../../assets/images/pgImage.png';
 
 const ProgramList = () => {
     const [programs, setPrograms] = useState([]);
-    //검색
-    const [actionInfo, setActionInfo] = useState([]);
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
@@ -50,12 +48,39 @@ const ProgramList = () => {
         navigate('/program/write');
     };
 
-    const handlePageChange = async (page) => {
-        handleProgramView(page, pagingInfo.action);
+    //목록 페이지로 이동
+    const handleListClick = () => {
+        window.location.reload();   //페이지 새로고침
     };
+
+    //디테일 페이지로 이동
+    const handleMoveDetailView = (snrProgramId) => {
+        navigate(`/program/detail/${snrProgramId}`);
+    };
+
+    const handlePageChange = async (page) => {
+        const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
+        console.log("Current Page:", currentPage);
+        handleProgramView(currentPage, pagingInfo.action);
+    };
+
+    useEffect(() => {
+        console.log("Initial API Call with Page:", pagingInfo.pageNumber, "and Action:", pagingInfo.action);
+        handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
+    }, [pagingInfo.pageNumber, pagingInfo.action]);
 
     //페이지 불러오기
     const handleProgramView = async (page, action) => {
+        console.log("Sending API request with params:", {
+            ...pagingInfo,
+            pageNumber: page,
+            action: action,
+            keyword: pagingInfo.keyword,
+            startDate: pagingInfo.startDate + " 00:00:00",
+            endDate: pagingInfo.endDate + " 00:00:00",
+        });
+                    
+        
         const groupSize = 8; // 그룹 크기 정의
         try {
             const response = await apiSpringBoot.get(`/program`, {
@@ -68,12 +93,13 @@ const ProgramList = () => {
                     endDate: pagingInfo.endDate + " 00:00:00",
                 },
             });
-
+            
             setPrograms(response.data.list);
             console.log("API Response:", response.data.list);
             
             //페이지 계산
             const {maxPage, startPage, endPage} = PagingDiv8Calculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize, groupSize);
+            console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
             setPagingInfo(response.data.search);
             setPagingInfo((prev) => ({
@@ -90,14 +116,6 @@ const ProgramList = () => {
         }
     };
 
-    //select 변경하면 검색상태 저장
-    // const handleSelectChange = (e) => {
-    //     const {value} = e.target;
-    //     setActionInfo((prev) => ({
-    //         ...prev,
-    //         action: value,
-    //     }));
-    // };
     const handleSelectChange = (e) => {
         const {value} = e.target;
         setPagingInfo((prev) => ({
@@ -122,9 +140,16 @@ const ProgramList = () => {
 
     useEffect(() => {
         handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
-    }, [pagingInfo.action]);
+    }, []);
 
     const renderSearchInputs = () => {
+        //Enter 누르면 검색 버튼 클릭됨
+        const handleKeyPress = (e) => {
+            if (e.key === "Enter") {
+                handleSearchClick();
+            }
+        };
+
         switch (pagingInfo.action) {
             case "pgDate":
                 return (
@@ -132,12 +157,14 @@ const ProgramList = () => {
                         <input
                             type="date"
                             name="startDate"
+                            defaultValue={pagingInfo.startDate}
                             onChange={handleInputChange}
                         />
                         <span> ~ </span>
                         <input
                             type="date"
                             name="endDate"
+                            defaultValue={pagingInfo.endDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -150,6 +177,7 @@ const ProgramList = () => {
                         name="keyword"
                         placeholder="검색어를 입력하세요."
                         onChange={handleInputChange}
+                        onKeyDown={handleKeyPress}
                         className={styles.searchInput}
                     /> 
                 );
@@ -168,10 +196,14 @@ const ProgramList = () => {
                 <div className={styles.secContent}>
                     <div className={styles.pgListTop}>
                         <p className={styles.pgTitle}>어르신 프로그램 목록 <span>{pagingInfo.listCount}</span></p>
-                        <button type="button" onClick={handleWriteClick}>등록하기</button>
+                        <div className={styles.pgTopBtns}>
+                            <button type="button" onClick={handleListClick}>목록</button>
+                            <button type="button" onClick={handleWriteClick}>등록하기</button>
+                        </div>
+                            
 
                         <div className={styles.pgSearchWrap}>
-                            <select name="action" onChange={ handleSelectChange } className={styles.searchSelect}>
+                            <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
                                 <option value="all" selected>선택&nbsp;&nbsp;</option>
                                 <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                 <option value="pgContent">내용&nbsp;&nbsp;</option>
@@ -188,7 +220,7 @@ const ProgramList = () => {
                     
                     <div className={styles.pgListWrap}>
                         <ul className={styles.pgList}>
-                            {programs.map((item) => {
+                            {(programs || []).map((item) => {
                                 const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
                                 
                                 //image MIME 타입 필터링 후 첫 번째 파일 가져오기
@@ -197,14 +229,16 @@ const ProgramList = () => {
                                 
                                 return(
                                     <li key={program.snrProgramId} className={styles.pgListItem}>
-                                        <div className={styles.pgListImgWrap}>
-                                            <img src={firstImageUrl} className={styles.pgImage} />
-                                        </div>
-                                        <div className={styles.pgListTextWrap}>
-                                            <p><button>{program.snrTitle}</button></p>
-                                            <p><span>기간 : </span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</p>
-                                            <p><span>장소 : </span>{program.snrOrgName}</p>
-                                        </div>
+                                        <a onClick={() => handleMoveDetailView(program.snrProgramId)}>
+                                            <div className={styles.pgListImgWrap}>
+                                                <img src={firstImageUrl} className={styles.pgImage} />
+                                            </div>
+                                            <div className={styles.pgListTextWrap}>
+                                                <p>{program.snrTitle}</p>
+                                                <p><span>기간 : </span>{program.snrStartedAt.split('T')[0]} ~ {program.snrEndedAt.split('T')[0]}</p>
+                                                <p><span>장소 : </span>{program.snrOrgName}</p>
+                                            </div>
+                                        </a>
                                     </li>
                                 );
                             })}
@@ -213,11 +247,16 @@ const ProgramList = () => {
                 </div>{/* secContent end */}
 
                 <PagingDiv8
+                    pageNumber={pagingInfo.pageNumber || 1}
                     currentPage={pagingInfo.currentPage || 1}
+                    pageSize={pagingInfo.pageSize}
                     maxPage={pagingInfo.maxPage || 1}
                     startPage={pagingInfo.startPage || 1}
                     endPage={pagingInfo.endPage || 1}
-                    onPageChange={(page) => handlePageChange(page)}
+                    onPageChange={(page) => {
+                        console.log("Page change triggered:", page);
+                        handlePageChange(page);
+                    }}
                 />
             </section>{/* pgRSection end */}
         </div>

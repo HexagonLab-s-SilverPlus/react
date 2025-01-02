@@ -6,9 +6,16 @@
     position: relative;
     left: 368px;
 }
+
 .qnaWriteTitleDiv {
     display: flex;
     margin-top: 60px;
+    margin-bottom: 30px;
+}
+
+.memberIdDiv {
+    display: flex;
+    margin-top: 30px;
     margin-bottom: 30px;
 }
 
@@ -27,11 +34,29 @@
     font-size: 24px;
 }
 
+.memberId {
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    text-align: left;
+    font-family: "Pretendard Variable";
+    font-size: 24px;
+}
+
+
 .qnaWriteTitleTxt {
     height: 20px;
     width: 30%;
     font-family: "Pretendard Variable";
     font-size: 24px;
+}
+
+.memberIdTxt {
+    height: 20px;
+    width: 30%;
+    font-family: "Pretendard Variable";
+    font-size: 16px;
 }
 
 .qnaWriteContent {
@@ -50,7 +75,6 @@
     font-family: "Pretendard Variable";
     font-size: 24px;
 }
-
 
 .qnaWriteBTN {
     position: absolute;

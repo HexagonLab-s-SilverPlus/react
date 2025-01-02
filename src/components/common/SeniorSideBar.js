@@ -19,7 +19,7 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
                 </button>
                 <div className={styles.trashList}>
                     <InfiniteScroll
-                        dataLength={workspaces.length}
+                        dataLength={workspaces.length} // 현재까지 로드된 데이터 길이
                         next={fetchMore}
                         hasMore={hasMore}
                         loader={<div className={styles.spinner}>로딩 중...</div>}
@@ -79,15 +79,15 @@ const DeleteConfirmationModal = ({ isOpen, closeModal, workspaceToDelete, handle
 };
 
 const SeniorSideBar = ({ memUUID }) => {
-    const [activeWorkspaces, setActiveWorkspaces] = useState([]);
+    const [activeWorkspaces, setActiveWorkspaces] = useState([]); // 활성 워크스페이스 
     const [archivedWorkspaces, setArchivedWorkspaces] = useState([]);
     const [deletedWorkspaces, setDeletedWorkspaces] = useState([]);
 
-    const [hasMoreActive, setHasMoreActive] = useState(true);
+    const [hasMoreActive, setHasMoreActive] = useState(true); // 활성 워크스페이스 더보기 버튼 표시 여부
     const [hasMoreArchived, setHasMoreArchived] = useState(true);
     const [hasMoreDeleted, setHasMoreDeleted] = useState(true);
 
-    const [isActiveModalOpen, setIsActiveModalOpen] = useState(false);
+    const [isActiveModalOpen, setIsActiveModalOpen] = useState(false); // 활성화 워크스페이스 모달 상태
     const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
     const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
@@ -111,8 +111,12 @@ const SeniorSideBar = ({ memUUID }) => {
                 const responseActive = await apiSpringBoot.get(
                     `/api/workspace/${memUUID}/status?workspaceStatus=ACTIVE&page=1&size=5`
                 );
+                console.log(responseActive.data.data);
+
                 if (responseActive.data.data) {
-                    setActiveWorkspaces(responseActive.data.data);
+                    const workspace = responseActive.data.data || [];
+                    setActiveWorkspaces(workspace);
+                    // 더복 버튼은 전체 데이터가 6개 이상일 때 표시
                     setHasMoreActive(responseActive.data.data.length === 5);
                 } else {
                     setErrorMessage("활성 상태의 워크스페이스가 없습니다.");
@@ -151,7 +155,7 @@ const SeniorSideBar = ({ memUUID }) => {
             } catch (error) {
                 setErrorMessage("워크스페이스를 불러오는 중 오류가 발생했습니다.");
                 console.error("워크스페이스 초기 데이터 로드 실패:", error);
-            }finally{
+            } finally {
                 setLoading(false);
             }
         };
@@ -163,14 +167,17 @@ const SeniorSideBar = ({ memUUID }) => {
     // 휴지통 버튼 클릭 핸들러
     const fetchDeletedWorkspaces = async () => {
         try {
-            
+
             const page = Math.ceil(deletedWorkspaces.length / 5) + 1; // 다음 페이지 계산
             const response = await apiSpringBoot.get(
                 `/api/workspace/${memUUID}/status?workspaceStatus=DELETED&page=${page}&size=5`
             );
 
-            setDeletedWorkspaces(response.data.data || []); // 새로고침 후 데이터 반영
-            setHasMoreDeleted(response.data.data.length === 5); // 더 가져올 데이터가 있는지 확인
+            // 기존 데이터에 새 데이터 추가 (append)
+            setDeletedWorkspaces((prev) => [...prev, ...response.data.data]); // 누적
+
+            // 더 이상 데이터가 없으면 hasMoreDeleted를 false로 설정
+            setHasMoreDeleted(response.data.data.length === 5); // 한 번에 가져올 데이터가 5개면 추가 데이터가 있다고 간주
         } catch (error) {
             console.error("삭제된 워크스페이스 로드 실패:", error);
         }
@@ -183,7 +190,7 @@ const SeniorSideBar = ({ memUUID }) => {
 
         try {
             await apiSpringBoot.delete(`/api/workspace/${workspaceToDelete.workspaceId}`);
-            
+
             // 기존의 워크스페이스와 삭제된 워크스페이스가 다른 경우에만 필터링해서
             // 활성화된 워크스페이스 상태에 업데이트한다.
             setActiveWorkspaces((prev) =>
@@ -260,6 +267,60 @@ const SeniorSideBar = ({ memUUID }) => {
 
 
 
+
+    // 즐겨찾기 누르면 해당 워크스페이스 ARCHIVED로 변경
+    const setWorkspaceAsFavorite = async (workspaceId) => {
+        try {
+            const response = await apiSpringBoot.patch(`/api/workspace/${workspaceId}/archived`);
+            console.log("즐겨찾기 설정 성공:", response.data.message);
+
+            // UI 업데이트: 활성 워크스페이스에서 제거하고 즐겨찾기 워크스페이스로 이동
+            setActiveWorkspaces((prev) =>
+                prev.filter((workspace) => workspace.workspaceId !== workspaceId)); // 활성 워크스페이스에서 제거
+
+            const favoritedWorkspace = activeWorkspaces.find(
+                (workspace) => workspace.workspaceId === workspaceId
+            );
+
+            setArchivedWorkspaces((prev) => [favoritedWorkspace, ...prev]); // 기존의 즐겨찾기 워크스페이스에서 가장 위에 추가
+
+            alert("워크스페이스가 즐겨찾기에 추가되었습니다.");
+        } catch (error) {
+            console.error("즐겨찾기 설정 실패:", error);
+            alert("워크스페이스를 즐겨찾기에 추가하는 데 실패했습니다.");
+        }
+    };
+
+
+
+    // 다시 즐겨찾기 해제하는 핸들러
+    const setWorkspaceAsActive = async (workspaceId) => {
+        try {
+            const response = await apiSpringBoot.patch(`/api/workspace/${workspaceId}/active`);
+            console.log("즐겨찾기 해제 성공:", response.data.message);
+
+            // 즐겨찾기 워크스페이스에서 제거하고 활성 워크스페이스로 이동
+            const unFavoriteWorkspace = archivedWorkspaces.find(
+                (workspace) => workspace.workspaceId === workspaceId
+            )
+
+            // 해당 워크스페이스 ID를 필터링해서 즐겨찾기 워크스페이스에서 삭제
+            setArchivedWorkspaces((prev) =>
+                prev.filter((workspace) => workspace.workspaceId !== workspaceId)
+            );
+            // 활성 워크스페이스에 추가
+            setActiveWorkspaces((prev) => [unFavoriteWorkspace, ...prev]); // 활성 목록에 추가 
+
+            alert("워크스페이스가 활성화되었습니다.");
+        } catch (error) {
+            console.error("즐겨찾기 해제 실패:", error);
+            alert("워크스페이스를 활성화하는 데 실패했습니다.");
+        }
+    };
+
+
+
+
     return (
         <div className={styles.sidebar}>
             <h2 className={styles.header}>{memName}님의 말동무</h2>
@@ -276,10 +337,42 @@ const SeniorSideBar = ({ memUUID }) => {
                     <h2 className={styles.header}>즐겨찾기</h2>
                     <div className={styles.list}>
                         {archivedWorkspaces.map((workspace) => (
-                            <div key={workspace.workspaceId} className={styles.item}>
-                                <span onClick={() => navigate(`/w/${workspace.workspaceId}`)}>
-                                    {workspace.workspaceName}
-                                </span>
+                            <div
+                                key={workspace.workspaceId}
+                                className={styles.item}
+                                onClick={() => navigate(`/w/${workspace.workspaceId}`)}
+                            >
+                                {workspace.workspaceName}
+                                <button
+                                    className={styles.menuButton}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleDropdown(workspace.workspaceId);
+                                    }}
+                                >
+                                    ⋮
+                                </button>
+                                {openDropdownId === workspace.workspaceId && (
+                                    <div className={styles.dropdownMenu}>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // 클릭 이벤트 전파 방지
+                                                setWorkspaceAsActive(workspace.workspaceId); // 활성화 메소드 호출
+                                            }}
+                                        >
+                                            즐겨찾기 해제
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setWorkspaceToDelete(workspace); // 삭제할 워크스페이스 설정
+                                                setIsDeleteConfirmationOpen(true); // 삭제 확인 모달 열기
+                                            }}
+                                        >
+                                            삭제
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ))}
                         {hasMoreArchived && (
@@ -291,6 +384,7 @@ const SeniorSideBar = ({ memUUID }) => {
                             </button>
                         )}
                     </div>
+
                 </>
             )}
 
@@ -318,7 +412,13 @@ const SeniorSideBar = ({ memUUID }) => {
                         </button>
                         {openDropdownId === workspace.workspaceId && (
                             <div className={styles.dropdownMenu}>
-                                <button onClick={() => console.log("즐겨찾기 추가")}>즐겨찾기</button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // 클릭 이벤트 전파 방지
+                                        setWorkspaceAsFavorite(workspace.workspaceId); // 즐겨찾기 메소드 호출
+                                    }}>
+                                    즐겨찾기
+                                </button>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
