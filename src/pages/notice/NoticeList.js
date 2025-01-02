@@ -224,7 +224,7 @@ function NoticeList() {
                             {noticeList.notTitle}
                         </div>
                         <div className={styles.message}>
-                            <div >
+                            <div className={styles.messagement}>
                                 내용이 궁금하면 클릭해보세요!
                             </div>
                             <div className={styles.message}>
