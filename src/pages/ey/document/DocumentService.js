@@ -26,6 +26,34 @@ const DocumentService = (apiFlask, accessToken) => ({
         }
     },
 
+
+    
+    /**
+       * GPT 질문 생성 함수
+       * @param {string} key - 키 값
+       * @returns {Promise<string>} - GPT가 생성한 질문
+       */
+    generateQuestion: async (key) => {
+        try {
+            const response = await apiFlask.post(
+                '/generate-question',
+                { key },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        RefreshToken: localStorage.getItem('refreshToken'),
+                    },
+                }
+
+            );
+            return response.data.question;
+        } catch (error) {
+            console.error('generateQuestion 오류:', error);
+            throw error;
+        }
+    },
+
+
     /**
      * 문서를 제출하는 함수
      * @param {string} documentType - 문서 유형
