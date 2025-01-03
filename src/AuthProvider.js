@@ -304,7 +304,7 @@ export const AuthProvider = ({ children }) => {
       member: parsedToken.member,
     });
     console.log('login : ', authInfo);
-    console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인인
+    console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인
   };
 
   // 토큰 저장 함수

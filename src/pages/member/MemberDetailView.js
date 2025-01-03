@@ -32,7 +32,7 @@ const MemberDetailView = () => {
   // 임시비밀번호 발급 함수
   const handleTemporaryPassword = () => {};
 
-  // formData 값 변경 함수수
+  // formData 값 변경 함수
   const handleInfoChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -44,11 +44,14 @@ const MemberDetailView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentTimestamp = new Date()
+    const currentTimestamp = new Date();
+    console.log('memChangeStatus 에 넣을 현재시간 : ', currentTimestamp);
+    const currentTimestampKST = new Date(
+      currentTimestamp.getTime() + 9 * 60 * 60 * 1000
+    )
       .toISOString()
       .replace('T', ' ')
-      .replace(/\..*/, ''); // ISO 8601 형식의 현재 시간
-    console.log('memChangeStatus 에 넣을 현재시간 : ', currentTimestamp);
+      .replace(/\..*/, '');
 
     // FormData 객체 생성
     const data = new FormData();
@@ -56,7 +59,7 @@ const MemberDetailView = () => {
     // formData 상태의 최신 값으로 FormData에 추가
     const updatedFormData = {
       ...formData, // 기존 상태 값
-      memChangeStatus: currentTimestamp, // 새로운 값 추가
+      memChangeStatus: currentTimestampKST, // 새로운 값 추가
     };
 
     // FormData 객체에 값 추가

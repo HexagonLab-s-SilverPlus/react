@@ -17,9 +17,16 @@ import google from '../../assets/images/icon/Google Icon.png';
 const LoginSenior = () => {
   const [memId, setMemId] = useState('');
   const [memPw, setMemPw] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login, isLoggedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
+
+  // 이미 로그인 상태 시 로그인화면 이동 불가
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate('/');
+  //   }
+  // }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -66,8 +73,6 @@ const LoginSenior = () => {
 
   return (
     <>
-      <SideBar></SideBar>
-
       <div className={styles.form}>
         <div>
           <button

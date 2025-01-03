@@ -1,0 +1,219 @@
+/* src/pages/member/MyInfoFamily.module.css */
+/* src/pages/member/MyInfoManager.module.css */
+/* src/pages/member/MemberDetailView.module.css */
+
+.myfoMainContainer {
+  display: flex;
+}
+
+.myfoSubContainer {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+
+.myfoHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+
+.myfoSubHeader > p {
+  font-size: 28px;
+  margin: 0;
+  font-weight: bold;
+  border-bottom: 1px solid #064420;
+  padding-top: 40px;
+  padding-bottom: 5px;
+  padding-left: 24px;
+}
+
+.myfoDiv {
+  margin-top: 80px;
+  display: flex;
+  gap: 20px;
+}
+
+.myfoProfilephoto {
+  width: 250px;
+  height: 300px;
+  flex-shrink: 0;
+  margin-top: 17px;
+}
+
+.myfoTableDiv {
+  flex-grow: 1;
+  margin-left: 50px;
+  max-width: calc(100%-270px);
+}
+
+.myfoTable {
+  font-size: 18px;
+  table-layout: fixed;
+  width: 70%;
+}
+
+.myfoTable > tr {
+  height: 50px;
+}
+
+.myfoTable > tr > th {
+  margin-left: 10px;
+}
+
+.myfoTable > tr > td {
+  width: 400px;
+}
+
+.myfoTable > tr > td > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 245px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 0;
+}
+
+.myfoTable > tr > td > input[readonly] {
+  background-color: #dddddd;
+}
+
+.myfoTable > tr > th {
+  width: 150px;
+  line-height: 0;
+  text-align: justify;
+}
+
+.myfoTable > tr > th::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.myfoTable > tr > th::before {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.myfoButtonDiv {
+  display: flex;
+  justify-content: space-between;
+  max-width: calc(100% - 150px);
+  margin-top: 50px;
+}
+
+.myfolButton1 {
+  border-radius: 3px;
+  border: 0;
+  background-color: #064420;
+  color: #ffffff;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.myfoButton2 {
+  border-radius: 3px;
+  background-color: #eeeeee;
+  border: 0;
+  color: #000000;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading > p {
+  text-align: center;
+  font-size: 30px;
+}
+
+.mmyfoTable > tr > td > div > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 345px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 0;
+}
+
+.myfoTable > tr > td > div > input[readonly] {
+  background-color: #dddddd;
+}
+
+.image {
+  width: 250px;
+  height: 300px;
+}
+
+.myinfoPwdCheck {
+  position: relative;
+  justify-items: center;
+  top: 250px;
+}
+
+.myinfoPwdCheck > p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.myinfoPwdCheck > input {
+  width: 200px;
+  height: 25px;
+  margin-right: 20px;
+}
+
+.myinfoPwdCheck > button {
+  width: 100px;
+  height: 30px;
+  border-radius: 1px;
+  border: 0;
+  background-color: #064420;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.myinfoFailPage {
+  position: relative;
+  justify-items: center;
+  top: 250px;
+}
+
+.myinfoFailPage > p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.myinfoFailPage > button {
+  width: 150px;
+  height: 30px;
+  border-radius: 3px;
+  border: 0;
+  background-color: #064420;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+}
