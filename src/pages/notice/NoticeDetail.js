@@ -219,7 +219,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                        <p onClick={()=>(navigate("/notice"))}>공지사항</p>
+                        <span onClick={()=>(navigate("/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <table className={styles.insertTable}>
@@ -262,7 +262,7 @@ const NoticeDetail = () => {
                                 </tr>
                             <tr>
                                 <td className={styles.filesDiv}>
-                                <button className={styles.button}>첨부파일</button>
+                                <button className={styles.noticeFakeButton}>첨부파일</button>
                                 <div>
                                 {noticeFiles &&noticeFiles.map((files)=>(
                                     <div 
@@ -287,7 +287,7 @@ const NoticeDetail = () => {
                         <div className={styles.rightButtons}>
                             <button className={styles.noticebutton} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
                             <button
-                                className={styles.noticebutton2}
+                                className={styles.noticebutton}
                                 onClick={handleDelete}
                             >삭제</button>
                         </div>
