@@ -168,7 +168,7 @@ const ProgramDetail = () => {
                             <p><span>기관명</span>{program.snrOrgName}</p>
                             <p><span>기관 전화번호</span>{program.snrOrgPhone}</p>
                             <p><span>기관 주소</span>{program.snrOrgAddress}</p>
-                            <p><span>참여 기간</span>{program.snrOrgName}</p>
+                            <p><span>참여 기간</span>{program.snrStartedAt.split('T')[0]} &nbsp; ~ &nbsp; {program.snrEndedAt.split('T')[0]}</p>
                         </div>{/* pgSubTopWrap end */}
                     </div>{/* snrPgSubTop end */}
 
