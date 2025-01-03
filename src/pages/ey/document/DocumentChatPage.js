@@ -37,6 +37,7 @@ function DocumentChatPage() {
   // 문서 키 가져오기
   useEffect(() => {
     const fetchKeys = async () => {
+      // 문서 유형 검증
       if (!serverDocumentType) {
         console.error('문서 유형이 잘못되었습니다:', documentType);
         return;
@@ -45,16 +46,24 @@ function DocumentChatPage() {
       try {
         const response = await documentService.getKeys(serverDocumentType);
         setKeys(response.keys || []);
+
+
         if (response.keys.length > 0) {
-          setMessages([{ sender: 'AI', text: `"${response.keys[0]}"를 작성해주세요.` }]);
+         const firstKey = response.keys[0];
+         const question = await documentService.generateQuestion(firstKey);
+
+         setMessages([{ sender: 'AI', text: question }]);
+        }else{
+          console.error('문서 키가 없습니다.');
         }
       } catch (error) {
         console.error('문서 키 가져오기 오류:', error);
       }
     };
 
-    fetchKeys();
-  }, [documentService, documentType]);
+
+    fetchKeys(); // useEffect의 dependency가 잘못 설정되었을 경우 무한 호출 가능
+  }, [serverDocumentType]);
 
   const handleInputChange = (e) => setInputText(e.target.value);
 
@@ -70,11 +79,19 @@ function DocumentChatPage() {
     const nextKeyIndex = currentKeyIndex + 1;
 
     if (nextKeyIndex < keys.length) {
-      setMessages((prev) => [
-        ...prev,
-        { sender: 'AI', text: `"${keys[nextKeyIndex]}"를 작성해주세요.` },
-      ]);
-      setCurrentKeyIndex(nextKeyIndex);
+      try{
+        const nextKey = keys[nextKeyIndex];
+        const question = await documentService.generateQuestion(nextKey);
+
+        setMessages((prev) => [...prev, { sender: 'AI', text: question }]);
+        setCurrentKeyIndex(nextKeyIndex);
+      }catch(error){
+        console.error('질문 생성 오류:', error);
+        setMessages((prev) => [
+          ...prev,
+          { sender: 'AI', text: '질문 생성 중 오류가 발생했습니다. 다시 시도해주세요.' },
+        ]);
+      }
     } else {
       setIsLoading(true);
 
