@@ -16,7 +16,11 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 500px;
+    width: 1000px;
+}
+
+.modal > h1{
+    font-size:72px;
 }
 
 .buttons {
@@ -27,4 +31,8 @@
     margin: 0 10px;
     padding: 10px 20px;
     cursor: pointer;
+    background-color: #064420;
+    font-size:48px;
+    color:#ffffff;
+    border-radius: 10px;
 }

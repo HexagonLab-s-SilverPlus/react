@@ -11,7 +11,6 @@ import SeniorFooter from '../../components/common/SeniorFooter';
 import SideBar from '../../components/common/SideBar';
 import Paging from '../../components/common/Paging';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
-import PageRider from '../../components/common/PageRider';
 // css
 import styles from './NoticeList.module.css'
 // 이미지
@@ -250,8 +249,6 @@ function NoticeList() {
                             onPageChange={(page) => handleUpdateView(page)}
                         />
                     </div>
-                    {/* pageRider */}
-                    <PageRider/>
                 {/*Footer*/}
                 <SeniorFooter />
             </div>
