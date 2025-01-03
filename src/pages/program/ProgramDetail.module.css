@@ -34,3 +34,44 @@ body {background: #fff; color: #333;}
 .pgDetailBottom > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-left: 16px; border: 0; cursor: pointer;}
 .pgDetailBottom > button:hover {background: #064420; color: #fff;}
 .pgDetailBottom > button:nth-child(1) {position: absolute; left: 0; right: 0; margin: 0 auto;}
+
+
+
+/* role === "SENIOR" */
+.snrPgContainer {width: 100%;}
+.pgSub {width: calc(100% - 192px); min-height: calc(100vh - 240px); margin: 48px auto; background: #fff; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); border-radius: 16px; box-sizing: border-box; padding: 96px;}
+.pgSubTop {width: 100%; border-bottom: 2px solid #064420; padding-bottom: 24px;}
+.pgSubTopBtns {display: flex; justify-content: space-between; align-items: center;}
+.pgSubTopBtns > button {font-size: 32px; font-weight: bold; border: 0; background: none; cursor: pointer;}
+.pgSubTopBtns > button > span {font-size: 36px; position: relative; top: 3px; left: 0px; transition: all 0.3s;}
+.pgSubTopBtns > button:hover > span {left: -9px;}
+.pgSubTopBtns > button:nth-child(2) {background: #618264; color: #fff; width: 192px; height: 60px; border-radius: 8px; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;}
+.pgSubTopBtns > button:nth-child(2):hover {background: #064420;}
+
+.pgSubTopWrap {width: 100%; position: relative;}
+.pgSubTopWrap > h1 {font-size: 60px; word-break: keep-all; overflow-wrap: break-word; letter-spacing: 1px; width: 100%; margin-bottom: 60px; border-bottom: 2px solid #064420; padding-bottom: 48px; margin-bottom: 24px;}
+.pgSubTopWrap > p {font-weight: bold; font-size: 32px; margin: 0 0 16px; padding-left: 16px; display: flex;}
+.pgSubTopWrap > p > span {width: 240px; display: block; color: #333;}
+.pgSubTopWrap > p:nth-of-type(1) {color: #368cfc;}
+/* pgSubTop end */
+
+.pgSubBottom {width: 100%;}
+.pgSubContent {white-space: pre-wrap; width: 100%; padding: 48px 0; font-size: 32px; line-height: 1.5; letter-spacing: 1px;}
+
+.pgSubBottom .pgSwiper {height: 1200px; margin-bottom: 96px;}
+.pgSubBottom .pgAttach {border-color: #618264; border-width: 2px; padding: 48px 24px;}
+.pgSubBottom .pgAttachIcon {background: #618264; color: #fff; width: 480px; height: 60px; border-radius: 8px; letter-spacing: 1px; line-height: 60px; font-size: 32px; font-weight: bold; margin-right: 48px;}
+.pgSubBottom .pgAttachList > li > a {font-size: 24px; font-weight: bold; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+/* pgSubBottom end */
+
+.snrPgBottom {width: 100%; box-sizing: border-box; padding: 0 96px 96px;}
+.snrPgBottom > button {display: block; border: 0; background: none; font-size: 32px; font-weight: bold; font-family: "Pretendard Variable"; cursor: pointer;}
+.snrPgBottom > button:nth-child(1) > span {font-weight: bold; font-size: 36px; position: relative; top: 5px; margin-right: 8px;}
+.snrPgBottom > button:nth-child(1):hover {color: #064420;}
+.snrPgBottom > button:nth-child(1):hover > span {animation: moveUp 1s infinite;}
+@keyframes moveUp {
+    50% {top: -10px;}
+}
+
+.snrPgBottom > button:nth-child(2) {background: #618264; color: #fff; width: 192px; height: 60px; border-radius: 8px; cursor: pointer; transition: all 0.3s; letter-spacing: 1px; margin: 48px auto;}
+.snrPgBottom > button:nth-child(2):hover {background: #064420;}
