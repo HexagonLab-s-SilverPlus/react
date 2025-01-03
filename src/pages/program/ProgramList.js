@@ -247,7 +247,25 @@ const ProgramList = () => {
                     </div>{/* snrPgLeft end */}
 
                     <div className={styles.snrPgRight}>
-                        <ul className={[styles.snrPgList, 'masked-overflow'].join(' ')}>
+                        { isNearby === false ? (
+                                <div className={styles.pgSearchWrap}>
+                                    <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
+                                        <option value="all" selected>선택&nbsp;&nbsp;</option>
+                                        <option value="pgTitle">제목&nbsp;&nbsp;</option>
+                                        <option value="pgContent">내용&nbsp;&nbsp;</option>
+                                        <option value="pgArea">지역&nbsp;&nbsp;</option>
+                                        <option value="pgOrg">기관명&nbsp;&nbsp;</option>
+                                        <option value="pgDate">참여기간&nbsp;</option>
+                                    </select>
+                                    
+                                    {renderSearchInputs()}
+
+                                    <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
+                                </div>
+                        ) : ('')}
+                        
+                        <ul className={[styles.snrPgList, 'masked-overflow'].join(' ')} 
+                            style={{ height: isNearby ? '90%' : '80%' }}>
                             {(programs || []).map((item) => {
                                 const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
                                     
@@ -261,8 +279,6 @@ const ProgramList = () => {
                                     </li>
                                 );
                             })}
-                        </ul>{/* snrPgList end */}
-
                         <PagingDiv8
                             pageNumber={pagingInfo.pageNumber || 1}
                             currentPage={pagingInfo.currentPage || 1}
@@ -275,6 +291,8 @@ const ProgramList = () => {
                                 handlePageChange(page);
                             }}
                         />
+                        </ul>{/* snrPgList end */}
+
                     </div>{/* snrPgRight end */}
                 </section>{/* snrPgSection end */}
 

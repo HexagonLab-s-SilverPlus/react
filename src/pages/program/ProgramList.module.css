@@ -48,23 +48,36 @@ body {background: #fff; color: #333;}
 .snrPgContainer {width: 100%; height: 100vh;}
 .snrPgSection {width: 100%; height: calc(100vh - 96px - 48px); box-sizing: border-box; padding: 0px 96px 24px; display: flex;}
 
-.snrPgLeft {width: 30%; height: 100%; box-sizing: border-box; padding-top: 48px;}
+.snrPgLeft {width: 30%; height: 100%; box-sizing: border-box; padding-top: 48px; position: relative;}
 .snrPgLTop > p {margin: 0; padding: 0; font-weight: bold; font-size: 36px; background: #064420; color: #fff; width: fit-content; padding: 8px 36px; border-radius: 56px;}
 .snrPgLTop > h1 {font-size: 48px; margin: 48px 0;}
 
-.snrPgLeft > button {border: 0; cursor: pointer; width: 90%; height: 300px; border-radius: 16px; margin-top: 24px; background: #618264; color: #fff; font-weight: bold; font-family: "Pretendard Variable"; font-size: 36px; text-align: left; box-sizing: border-box; padding: 24px; line-height: 1.5; transition: all 0.3s;}
+.snrPgLeft > button {border: 0; cursor: pointer; width: 90%; height: 300px; border-radius: 16px; background: #618264; color: #fff; font-weight: bold; font-family: "Pretendard Variable"; font-size: 36px; text-align: left; box-sizing: border-box; padding: 24px; line-height: 1.5; transition: all 0.3s; position: absolute; bottom: 72px;}
 .snrPgLeft > button > span {font-size: 36px; font-weight: bold; margin-left: 5px; position: relative; top: 8px; left: 0; transition: all 1s;}
 .snrPgLeft > button:hover {background: #064420;}
 .snrPgLeft > button:hover > span {left: 50px;}
 /* snrPgLeft end */
 
-.snrPgRight {width: 70%; box-sizing: border-box;}
+.snrPgRight {width: 100%; box-sizing: border-box;}
+
+.snrPgRight .pgSearchWrap {display: flex; justify-content: flex-end; margin-top: 48px; margin-right: 40px;}
+.snrPgRight .pgSearchWrap > select {height: 72px; width: 168px; border: 0; outline: 0; cursor: pointer; border: 2px solid #ddd; display: block; font-size: 32px; font-family: "Pretendard Variable"; border-radius: 8px;}
+.snrPgRight .pgSearchWrap > select > option {text-align: center;}
+
+.snrPgRight .pgSearchWrap > input {height: 72px; border: 0; outline: 0; border: 2px solid #ddd; display: block; margin: 0 16px; font-size: 8px; width: calc(100% - 432px); font-size: 32px; box-sizing: border-box; padding-left: 24px; border-radius: 8px;}
+.snrPgRight .pgSearchWrap > button {background: #eee; font-size: 16px; width: 192px; height: 72px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer; font-size: 32px;}
+.snrPgRight .pgSearchWrap > button:hover {background: #064420; color: #fff;}
+
+.snrPgRight .pgDateWrap {margin: 0 16px; display: flex; align-items: center; box-sizing: border-box; border-bottom: 0;}
+.snrPgRight .pgDateWrap > input {display: block; height: 72px; width: 300px; outline: 0; text-align: center; border: 2px solid #ddd; font-size: 32px; font-family: "Pretendard Variable"; border-radius: 8px; box-sizing: border-box;}
+.snrPgRight .pgDateWrap > span {font-size: 32px; font-weight: bold; margin: 0 0 0 24px; position: relative; left: -10px;}
+
 .snrPgList {width: 100%; box-sizing: border-box; padding-top: 32px;
     /* The Gradient Effect on Content in a Scroll */
     --scrollbar-width: 8px;
     --mask-height: 32px;
     overflow-y: auto;
-    height: 90%;
+    /* height: 90%; */
     padding-bottom: var(--mask-height);
     padding-right: 36px;
 
@@ -96,7 +109,7 @@ body {background: #fff; color: #333;}
     background-color: transparent;
 }
 
-.snrPgListItem {list-style: none; box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 16px; margin-bottom: 24px;}
+.snrPgListItem {list-style: none; box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 16px; margin-bottom: 36px;}
 .snrPgListItem > a {display: block; width: 100%; height: 100%; padding: 36px; box-sizing: border-box; border-radius: 16px; background: #fff; min-height: 216px; position: relative; cursor: pointer;}
 .snrPgListItem h1 {margin: 0; padding: 0; font-size: 36px; word-break: keep-all; overflow-wrap: break-word; letter-spacing: 1px;}
 .snrPgListItem p {margin: 0; padding: 0; font-size: 32px; position: absolute; right: 24px; bottom: 24px; font-weight: bold;}
