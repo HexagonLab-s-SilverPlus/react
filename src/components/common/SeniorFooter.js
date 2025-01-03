@@ -6,7 +6,7 @@ const SeniorFooter = () => {
     return (
         <footer className={Styles.footer}>
             <div className={Styles.context}>
-                © 2024. Silver Plus Inc. All rights reserved.
+                &copy; 2024. Silver Plus Inc. All rights reserved.
             </div>
         </footer>
     );

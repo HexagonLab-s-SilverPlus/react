@@ -33,7 +33,7 @@ function SideBar() {
           <Link to="/notice">공지사항</Link>
         </li>
         <li>
-          <Link to="/program">어르신 맞춤 활동</Link>
+          <Link to="/program">어르신 프로그램</Link>
         </li>
         <li>
           <Link to="/">전자책</Link>
@@ -93,7 +93,7 @@ if (role==="MANAGER") {
           <Link to="/notice">공지사항</Link>
         </li>
         <li>
-          <Link to="/program">어르신 맞춤 활동</Link>
+          <Link to="/program">어르신 프로그램</Link>
         </li>
         <li>
           <Link to="/qna">Q&A</Link>
@@ -147,7 +147,7 @@ if (role==="FAMILY") {
           <Link to="/notice">공지사항</Link>
         </li>
         <li>
-          <Link to="/program">어르신 맞춤 활동</Link>
+          <Link to="/program">어르신 프로그램</Link>
         </li>
         <li>
           <Link to="/qna">Q&A</Link>
