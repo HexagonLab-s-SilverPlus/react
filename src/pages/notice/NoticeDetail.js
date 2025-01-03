@@ -30,6 +30,14 @@ const NoticeDetail = () => {
     // 토큰정보 가져오기(AuthProvider)
     const {role,memId,memName,member} = useContext(AuthContext);
 
+    // 날짜시간 보정
+    const adjustTimeZone = (timestamp) => {
+        // 서버에서 받은 Timestamp를 UTC로 간주하고 보정하지 않음
+        const originalDate = new Date(timestamp);
+        const correctedDate = new Date(originalDate.getTime() + 9 * 60 * 60 * 1000); // UTC+9 보정
+        return correctedDate.toISOString(); // ISO 8601 형식 반환
+    };
+
     // notice data set
     useEffect(()=>{
         const fetchNoticeDetail = async () => {
@@ -128,7 +136,7 @@ const NoticeDetail = () => {
                         <td className={styles.seniorTitle}>{notice.notTitle}</td>
                     </tr>
                     <tr>
-                        <td className={styles.seniorSubBar}>조회수 {notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {notice.notCreateAt.split('T')[0]}</td>
+                        <td className={styles.seniorSubBar}>조회수 {notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {adjustTimeZone(notice.notCreateAt).split('T')[0]}</td>
                     </tr>
                     <tr>
                         <td>
@@ -223,7 +231,7 @@ const NoticeDetail = () => {
                                         <div className={styles.notTitle}>{notice.notTitle}</div>
                                         <div className={styles.writeData}>
                                             <span><img className={styles.img} src={write}/> {memId}</span>
-                                            <span><img className={styles.img} src={date}/> {notice.notCreateAt.split('T')[0]}</span>
+                                            <span><img className={styles.img} src={date}/> {adjustTimeZone(notice.notCreateAt).split('T')[0]}</span>
                                             <span><img className={styles.img} src={readCount}/> {notice.notReadCount}</span>
                                         </div>
                                     </div>
