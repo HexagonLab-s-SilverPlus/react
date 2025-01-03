@@ -43,3 +43,64 @@ body {background: #fff; color: #333;}
 .pgListTextWrap > p:nth-child(1) {display: block; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 8px; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: all 0.3s;}
 .pgListItem > a:hover .pgListTextWrap > p:nth-child(1) {border-color: #064420; color: #064420;}
 /* secContent end */
+
+/* role === "SENIOR" */
+.snrPgContainer {width: 100%; height: 100vh;}
+.snrPgSection {width: 100%; height: calc(100vh - 96px - 48px); box-sizing: border-box; padding: 0px 96px 24px; display: flex;}
+
+.snrPgLeft {width: 30%; height: 100%; box-sizing: border-box; padding-top: 48px;}
+.snrPgLTop > p {margin: 0; padding: 0; font-weight: bold; font-size: 36px; background: #064420; color: #fff; width: fit-content; padding: 8px 36px; border-radius: 56px;}
+.snrPgLTop > h1 {font-size: 48px; margin: 48px 0;}
+
+.snrPgLeft > button {border: 0; cursor: pointer; width: 90%; height: 300px; border-radius: 16px; margin-top: 24px; background: #618264; color: #fff; font-weight: bold; font-family: "Pretendard Variable"; font-size: 36px; text-align: left; box-sizing: border-box; padding: 24px; line-height: 1.5; transition: all 0.3s;}
+.snrPgLeft > button > span {font-size: 36px; font-weight: bold; margin-left: 5px; position: relative; top: 8px; left: 0; transition: all 1s;}
+.snrPgLeft > button:hover {background: #064420;}
+.snrPgLeft > button:hover > span {left: 50px;}
+/* snrPgLeft end */
+
+.snrPgRight {width: 70%; box-sizing: border-box;}
+.snrPgList {width: 100%; box-sizing: border-box; padding-top: 32px;
+    /* The Gradient Effect on Content in a Scroll */
+    --scrollbar-width: 8px;
+    --mask-height: 32px;
+    overflow-y: auto;
+    height: 90%;
+    padding-bottom: var(--mask-height);
+    padding-right: 36px;
+
+    /* The CSS mask */
+    --mask-image-content: linear-gradient(
+        to bottom,
+        transparent,
+        black var(--mask-height),
+        black calc(100% - var(--mask-height)),
+        transparent
+    );
+    --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+    --mask-image-scrollbar: linear-gradient(black, black);
+    --mask-size-scrollbar: var(--scrollbar-width) 100%;
+    mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+    mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+    mask-position: 0 0, 100% 0;
+    mask-repeat: no-repeat, no-repeat;
+}
+/* Webkit */
+.snrPgList::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+.snrPgList::-webkit-scrollbar-thumb {
+    background-color: #618264;
+    border-radius: 9999px; /* always round */
+}
+.snrPgList::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.snrPgListItem {list-style: none; box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 16px; margin-bottom: 24px;}
+.snrPgListItem > a {display: block; width: 100%; height: 100%; padding: 36px; box-sizing: border-box; border-radius: 16px; background: #fff; min-height: 216px; position: relative; cursor: pointer;}
+.snrPgListItem h1 {margin: 0; padding: 0; font-size: 36px; word-break: keep-all; overflow-wrap: break-word; letter-spacing: 1px;}
+.snrPgListItem p {margin: 0; padding: 0; font-size: 32px; position: absolute; right: 24px; bottom: 24px; font-weight: bold;}
+.snrPgListItem span {font-size: 24px; color: #999; position: absolute; bottom: 24px; opacity: 0; transition: all 0.3s;}
+.snrPgListItem a:hover {background: #FDFAF6;}
+.snrPgListItem a:hover > span {opacity: 1;}
+/* snrPgRight end */

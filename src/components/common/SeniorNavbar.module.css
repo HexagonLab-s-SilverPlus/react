@@ -4,11 +4,13 @@
     display: flex; /*flex박스 사용*/
     align-items: end;  /*세로축 정렬*/
     /*안쪽여백(상단/좌우/하단)*/
-    padding: 24px 72px 5px; 
+    /* padding: 24px 72px 5px; */
+    height: 96px;
+    padding: 0 96px 8px;
     /*배경색*/
     background-color: #fff;
     /*그림자효과*/
-    box-shadow : 0px 0px 5px #000000;
+    box-shadow : 0px 5px 20px rgba(0, 0, 0, 0.15);
     width: 100%;
     box-sizing: border-box;
 }
@@ -61,6 +63,7 @@
     box-shadow: 0px 3px 10px #AAAAAA; /* 그림자 */
     padding: 20px;
     min-width: 180px; /* 최소 너비 */
+    z-index: 100;
 }
 
 .modal p {
