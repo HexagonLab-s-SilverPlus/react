@@ -11,7 +11,7 @@ const DocumentService = (apiFlask, accessToken) => ({
     getKeys: async (documentType) => {
         try {
             const response = await apiFlask.post('/select-document', {
-                documentType,
+                documentType, // 전달할 값 확인. 왜 400 bad request 가 뜨냐면 이 값이 없어서 그럼
             },
                 {
                     headers: {

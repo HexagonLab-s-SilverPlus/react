@@ -6,6 +6,17 @@ import { marked } from 'marked';
 import DocumentService from './DocumentService.js';
 import Container from '../chat/Container.js';
 
+
+// 문서 유형 매핑 테이블
+const documentTypeMap = {
+  address: '전입신고서',
+  death: '사망신고서',
+  medical: '의료급여 신청서',
+  basic: '기초연금 신청서',
+};
+
+
+
 function DocumentChatPage() {
   const { documentType } = useParams(); // URL에서 문서 유형 가져오기
   const { apiFlask, accessToken } = useContext(AuthContext); // Context에서 apiFlask 가져오기
@@ -18,11 +29,21 @@ function DocumentChatPage() {
   const [currentKeyIndex, setCurrentKeyIndex] = useState(0);
   const [answers, setAnswers] = useState({});
 
+  // Flask 서버에서 기대하는 문서 유형으로 변환
+  const serverDocumentType = documentTypeMap[documentType];
+
+
+
   // 문서 키 가져오기
   useEffect(() => {
     const fetchKeys = async () => {
+      if (!serverDocumentType) {
+        console.error('문서 유형이 잘못되었습니다:', documentType);
+        return;
+      }
+
       try {
-        const response = await documentService.getKeys(documentType);
+        const response = await documentService.getKeys(serverDocumentType);
         setKeys(response.keys || []);
         if (response.keys.length > 0) {
           setMessages([{ sender: 'AI', text: `"${response.keys[0]}"를 작성해주세요.` }]);
@@ -95,9 +116,8 @@ function DocumentChatPage() {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`${styles['chat-bubble']} ${
-                message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
-              }`}
+              className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
+                }`}
             >
               {message.sender === 'AI' ? (
                 <div
