@@ -7,4 +7,15 @@
     cursor: pointer;
     z-index: 200;
     border-radius: 50%;
+    animation: bounce 1.5s infinite ease-in-out; /* 애니메이션 추가 */
+}
+
+/* 애니메이션 정의 */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0); /* 기본 위치 */
+    }
+    50% {
+        transform: translateY(-10px); /* 위로 약간 이동 */
+    }
 }

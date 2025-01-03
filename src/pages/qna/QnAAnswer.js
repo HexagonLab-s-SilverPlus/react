@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 import SideBar from '../../components/common/SideBar';
 import QNAHeader from '../../components/qna/QNAHeader';
-import styles from './QnAAnswer.module.css'
+import styles from './QnAanswer.module.css'
 
 const QnAAnswer = () => {
     const navigate = useNavigate();
