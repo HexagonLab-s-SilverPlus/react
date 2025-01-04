@@ -15,7 +15,6 @@ const MemberListView = () => {
   const { role } = useContext(AuthContext);
 
   const [memberList, setMemberList] = useState([]);
-  const [actionInfo, setActionInfo] = useState([]);
   const [isDropdown, setIsDropdown] = useState('false');
   // 키워드 저장
   const [tempKeyword, setTempKeyword] = useState('');
@@ -37,6 +36,22 @@ const MemberListView = () => {
     keyword: '',
   });
 
+  const formatDate = (w) => {
+    // 데이터 포맷 (한국 표준시로 변환)
+    const isoDate = w.replace(' ', 'T');
+    const date = new Date(isoDate);
+
+    // 한국 표준시 (UTC+9)로 변환
+    const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
+    // 포맷팅 (yyyy-MM-dd)
+    const year = kstDate.getFullYear();
+    const month = String(kstDate.getMonth() + 1).padStart(2, '0');
+    const day = String(kstDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   useEffect(() => {
     const MemberList = async () => {
       try {
@@ -57,8 +72,13 @@ const MemberListView = () => {
             startPage: startPage,
             endPage: endPage,
           }));
-          setMemberList(response.data.list);
+          const updateList = response.data.list.map((member) => ({
+            ...member,
+            memEnrollDate: formatDate(member.memEnrollDate),
+          }));
+          setMemberList(updateList);
           console.log(response.data.list);
+          console.log(updateList);
         }
       } catch (error) {
         console.error('리스트 출력 실패 : ', error);
@@ -92,8 +112,12 @@ const MemberListView = () => {
         listCount: response.data.search.listCount,
         pageSize: response.data.search.pageSize,
       }));
-      setMemberList(response.data.list);
-      console.log('업데이트 리스트 확인 : ', response.data.list);
+      const updateList = response.data.list.map((member) => ({
+        ...member,
+        memEnrollDate: formatDate(member.memEnrollDate),
+      }));
+      setMemberList(updateList);
+      console.log('업데이트 리스트 확인 : ', updateList);
     } catch (error) {
       console.error('업데이트된 리스트 출력 실패 : ', error);
     }

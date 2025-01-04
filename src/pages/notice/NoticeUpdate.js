@@ -175,7 +175,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                        <p onClick={()=>(navigate("/notice"))}>공지사항</p>
+                        <span onClick={()=>(navigate("/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <form

@@ -180,6 +180,8 @@ function EnrollManager({ onEnrollSuccess, memType }) {
       const response = await apiSpringBoot.post('/api/sms', {
         memCellphone: memCellphone,
         code: '',
+        memId: '',
+        memName: '',
       });
       alert('인증번호가 발송되었습니다.');
     } catch (error) {
@@ -195,6 +197,8 @@ function EnrollManager({ onEnrollSuccess, memType }) {
       const response = await apiSpringBoot.post('/api/sms/verify', {
         memCellphone: memCellphone,
         code: memCellphoneCheck,
+        memId: '',
+        memName: '',
       });
       console.log('headers', response.headers);
       const verify = response.headers['verify'];
@@ -204,7 +208,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
         setCellphoneCheck(true);
         setCellphoneCheckMsg('✔ 휴대전화 인증이 완료되었습니다.');
       } else if (verify === 'false') {
-        alert('인증 실패. 인증시간이 완료되었거나 인증번호를 틀렸습니다.');
+        alert('인증 실패. 인증시간이 만료되었거나 인증번호를 틀렸습니다.');
         setCellphoneCheck(false);
         setCellphoneCheckMsg('휴대전화 인증에 실패하였습니다.');
       }

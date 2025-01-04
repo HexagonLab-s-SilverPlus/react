@@ -1,11 +1,13 @@
 .memberContainer {display: flex;}
 .memberSubContainer {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing:border-box; padding: 72px 48px;}
-.MemberNoticeTop > p  {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px;padding-left: 24px; cursor: pointer;}
+.MemberNoticeTop {border-bottom: 3px solid #064420; padding-bottom: 8px;}
+.MemberNoticeTop > span  {font-size: 40px; font-weight: bold; margin: 0; padding-left: 24px; cursor: pointer;}
 .insertTableDiv {width:calc(100%);margin-top: 80px;}
 .insertTable{width:100%;}
 .insertTable > tbody > tr > td{width:100%;padding-bottom: 10px;}
 .notTitleInput {width:100%;font-weight:bold;font-family:"Pretendard Variable";font-size: 24px;border:1px solid #999999;border-radius:4px;}
-.notContentInput{width:100%;height: 400px;font-family:"Pretendard Variable";font-size: 16px;border:1px solid #999999;border-radius:4px;}
-.noticeButton{background-color: #064420;font-size:16px;color: #ffffff;padding:4px 10px;border-radius: 4px;text-decoration: none;}
-.fileDiv{display: flex; padding-bottom: 30px;}
+.notContentInput{width:100%;height: 400px; font-family:"Pretendard Variable";font-size: 16px;border:1px solid #999999;border-radius:4px;}
+.noticeButton{background-color: #eee;font-size:16px;padding:4px 10px;border-radius: 4px;text-decoration: none;cursor: pointer;}
+.noticeButton:hover{background-color: #064420;color: #ffffff;}
+.fileDiv{display: flex; padding-bottom: 30px;font-weight: bold;}
 .buttonDiv{align-items: center;}
