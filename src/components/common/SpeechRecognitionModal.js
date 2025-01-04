@@ -1,30 +1,30 @@
 // react : useState, useContext, useNavigate
 import React, { useState, useContext, useEffect } from "react";
-import {useNavigate} from "react-router-dom";
 // css
 import styles from "./SpeechRecognitionModal.module.css";
 // authContext
 import { AuthContext } from "../../AuthProvider";
 
 
-const SpeechRecognitionModal = ({ onClose }) => {
+const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
     // 사용자에게 보여줄 메세지
     const [message, setMessage] = useState("무엇을 도와드릴까요?\n원하는 기능을 눌러보세요");
     // // 음성 인식 결과 저장
-    // const [recognizedText, setRecognizedText] = useState("");
+    const [recognizedText, setRecognizedText] = useState("");
     // 인증 정보와 flask API URL 가져오기
     const { apiFlask } = useContext(AuthContext);
-    // 페이지 이동용
-    const navigate = useNavigate();
     // 음성 인식 처리 시간
-    const RECORDING_DURATION = 5000;
+    const RECORDING_DURATION = 7000;
+    // 잠시 보여주기용 텍스트
+    const [wait,setWait] = useState("");
 
     // message 변경때마다 읽어주기
     useEffect(()=>{
         const fetchTTS = async () => {
             if (!message) return; // message가 없을 때 실행하지 않음
             try {
-                const response = await apiFlask.post('/tts/pagereader', { text: message }, {
+                const firstMessage = message.split("\n")[0];
+                const response = await apiFlask.post('/tts/pagereader', { text: firstMessage }, {
                     responseType: 'blob',
                     headers: {
                         'Content-Type': 'application/json',
@@ -88,11 +88,12 @@ const SpeechRecognitionModal = ({ onClose }) => {
                     if (response.status === 200) {
                         const data = response.data;
                         if (data.recognized_text) {
-                            // setRecognizedText(data.recognized_text);
+                            setRecognizedText(data.recognized_text);
+                            console.log(data.recognized_text);
                             handleNavigation(data.recognized_text);
                         } else {
                             // 실패시
-                            setMessage("음성을 인식하지 못했습니다. 다시 시도해주세요.");
+                            setMessage("음성을 제대로 인식하지 못했습니다.\n 다시 시도해주세요.");
                         }
                     } else {
                         setMessage("서버에서 오류가 발생했습니다.");
@@ -101,13 +102,13 @@ const SpeechRecognitionModal = ({ onClose }) => {
                 } catch (error) {
                     console.error("Flask 서버 호출 중 오류:", error);
                     // 오류메세지
-                    setMessage("서버와 통신 중 문제가 발생했습니다.");
+                    setMessage(error.response.data.error);
                 }
             };
             // 녹음 시작
             mediaRecorder.start();
             // 5초 후 녹음 종료
-            setTimeout(() => mediaRecorder.stop(), RECORDING_DURATION); // 5초간 녹음
+            setTimeout(() => mediaRecorder.stop(), RECORDING_DURATION); // 녹음
         } catch (error) {
             // 콘솔에 오류 로그 출력
             console.error("마이크 접근 오류:", error);
@@ -119,23 +120,23 @@ const SpeechRecognitionModal = ({ onClose }) => {
     // 텍스트에 따라 페이지 이동 처리
     const handleNavigation = (text) => {
         if (text.includes("프로그램")) {
-            navigate("/program");
+            window.location.href ="/program";
         } else if (text.includes("공지")) {
-            navigate("/notice");
+            window.location.href ="/notice";
         } else if (text.includes("대시보드")) {
-            navigate("/dashlist");
+            window.location.href ="/dashlist";
         } else if (text.includes("공문서")) {
-            navigate("/docmain");
+            window.location.href ="/docmain";
         } else if (text.includes("말동무") || text.includes("채팅") || text.includes("대화")) {
-            navigate("/welcome-chat");
-        } else if (text.includes("메뉴")) {
-            navigate("/senior-menu");
+            window.location.href ="/welcome-chat";
         } else if (text.toLowerCase().includes("qna") ||text.toLowerCase().includes("q&a") || text.includes("큐앤에이")) {
-            navigate("/qna");
+            window.location.href ="/qna";
         } else if (text.toLowerCase().includes("faq")) {
-            navigate("/faq");
+            window.location.href ="/faq";
+        } else if (text.includes("메뉴")) {
+            window.location.href ="/senior-menu";
         } else {
-            setMessage("음성을 제대로 인식하지 못하거나 \n 서비스하지 않는 기능입니다.");
+            setMessage("음성을 제대로 인식하지 못하거나 서비스하지 않는 기능입니다.");
         }
     };
 
@@ -185,7 +186,47 @@ const SpeechRecognitionModal = ({ onClose }) => {
         }
     }
 
-    const handlePageReader = () => {};
+    const handlePageReader = async () => {
+        // 1. 특정 id의 특스트 가져오기
+        const targetElement = document.getElementById("read"); // 특정 id로 요소 가져오기
+        if (!targetElement){
+            setMessage("읽을 내용이 없습니다.");
+            return;
+        }
+        const pageText = targetElement.innerText.trim(); //텍스트가져오기
+        if(!pageText) {
+            setMessage("읽을 내용이 없습니다.");
+            return;
+        }
+        console.log(pageText);
+        setMessage("");
+        setWait("잠시만 기다려주세요.");
+        
+
+        try{
+            // 2. TTS API 호출
+            const response = await apiFlask.post('/tts/pagereader', { text: pageText }, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            if (response.status===200){
+                // 3. 음성 재생
+                const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
+                const newAudio = new Audio(audioUrl);
+                newAudio.play();
+                onStartTTS(newAudio); // TTS 시작 콜백 호출
+            } else {
+                console.log("음성변환에 실패하였습니다. 다시 시도해주세요.");
+                setMessage("음성변환에 실패하였습니다. 다시 시도해주세요.");
+            }
+        } catch(error){
+            console.error("TTS 요청중 오류 : ", error);
+            setMessage("음성변환에 실패하였습니다. 다시 시도해주세요.")
+        }
+    };
     
     // 랜더링 뷰
     return (
@@ -198,6 +239,7 @@ const SpeechRecognitionModal = ({ onClose }) => {
                         <br />
                     </span>
                     ))}
+                    {wait}
                 </h1>
                 {/* {recognizedText && <p>인식된 텍스트: {recognizedText}</p>} */}
                 <div className={styles.buttons}>

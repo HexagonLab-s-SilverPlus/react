@@ -104,12 +104,7 @@ const NoticeDetail = () => {
         }
     };
     
-    if (!notice){
-        return <div className={styles.loading}>loading...</div>; // 로딩 표시
-    }
-    if (error){
-        return <div>{error}</div>;
-    }
+
     if (role ==="SENIOR"){
     return (
         <div className={styles.noticeList}>
@@ -122,7 +117,7 @@ const NoticeDetail = () => {
                     <tr className={styles.seniorTopButton}>
                         <button 
                             className={styles.seniorInnerButton} 
-                            onClick={()=>(navigate(-1))}
+                            onClick={()=>(navigate('/notice'))}
                         >
                             <span class="material-symbols-outlined">arrow_back</span> 뒤로가기</button>
                         <button
@@ -133,10 +128,10 @@ const NoticeDetail = () => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td className={styles.seniorTitle}>{notice.notTitle}</td>
+                        <td className={styles.seniorTitle}>{notice && notice.notTitle}</td>
                     </tr>
                     <tr>
-                        <td className={styles.seniorSubBar}>조회수 {notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {adjustTimeZone(notice.notCreateAt).split('T')[0]}</td>
+                        <td className={styles.seniorSubBar}>조회수 {notice && notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {notice && adjustTimeZone(notice.notCreateAt).split('T')[0]}</td>
                     </tr>
                     <tr>
                         <td>
@@ -144,8 +139,8 @@ const NoticeDetail = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td className={styles.seniorContent}>
-                            {notice.notContent}
+                        <td id="read" className={styles.seniorContent}>
+                            {notice && notice.notContent}
                         </td>
                     </tr>
                     <tr>
@@ -238,7 +233,7 @@ const NoticeDetail = () => {
                                 </td>
                             </tr>
                             <tr>
-                                <td className={styles.notContent}>
+                                <td id="read" className={styles.notContent}>
                                     {notice.notContent}
                                 </td>
                             </tr>
