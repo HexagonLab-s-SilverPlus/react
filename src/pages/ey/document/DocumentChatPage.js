@@ -40,17 +40,17 @@ function DocumentChatPage() {
         console.error('문서 유형이 잘못되었습니다:', documentType);
         return;
       }
-  
+
       try {
         const response = await documentService.generateQuestion(serverDocumentType);
         console.log('API 응답:', response);
-  
+
         if (!response || !Array.isArray(response) || response.length === 0) {
           console.error('유효하지 않은 질문 응답:', response);
           setMessages([{ sender: 'AI', text: '질문 생성에 실패했습니다. 다시 시도해주세요.' }]);
           return;
         }
-  
+
         // setKeys(response.map((q) => q.key)); // keys에는 key만 저장
         setQuestions(response); // 질문과 키를 함께 저장
         setMessages([{ sender: 'AI', text: response[0]?.question || '질문이 없습니다.' }]); // 첫 번째 질문 설정
@@ -60,31 +60,31 @@ function DocumentChatPage() {
         setMessages([{ sender: 'AI', text: '질문 생성 중 오류가 발생했습니다.' }]);
       }
     };
-  
+
     fetchQuestions();
   }, [serverDocumentType]);
-  
+
 
 
   const handleInputChange = (e) => setInputText(e.target.value);
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
-  
+
     const userMessage = { sender: 'USER', text: inputText };
     setMessages((prev) => [...prev, userMessage]);
-  
+
     const currentQuestion = questions[currentKeyIndex]; // 현재 질문 가져오기
     if (!currentQuestion) {
       console.error('현재 질문이 정의되지 않았습니다.');
       return;
     }
-  
+
     // 사용자 응답을 answers에 저장
     setAnswers((prev) => ({ ...prev, [currentQuestion.key]: inputText })); // key-value 저장
-  
+
     const nextKeyIndex = currentKeyIndex + 1;
-  
+
     if (nextKeyIndex < questions.length) {
       const nextQuestion = questions[nextKeyIndex]?.question || '질문이 없습니다.';
       setMessages((prev) => [...prev, { sender: 'AI', text: nextQuestion }]);
@@ -93,11 +93,22 @@ function DocumentChatPage() {
       try {
         setIsLoading(true);
         const response = await documentService.submitDocument(documentType, answers);
+
+
         setMessages((prev) => [
           ...prev,
-          { sender: 'AI', text: `문서 작성이 완료되었습니다. 아래에서 ${fileName} 다운로드하세요.` },
+          {
+            sender: 'AI',
+            text: '성공적으로 문서가 생성되었습니다. 아래 링크를 클릭해 다운로드하세요.',
+            attachments: [
+              {
+                label: 'CSV 파일',
+                url: `${response.csv_path}`, // 경로만 설정
+              },
+            ],
+          },
         ]);
-        window.location.href = response.file_path; // 다운로드 링크
+        // window.location.href = response.file_path; // 다운로드 링크
       } catch (error) {
         console.error('문서 제출 오류:', error);
         setMessages((prev) => [
@@ -109,7 +120,36 @@ function DocumentChatPage() {
       }
     }
   };
-  
+
+
+
+
+  const downloadFile = async (filePath) => {
+    try {
+      console.log('파일 경로:', filePath);
+
+      const response = await apiFlask.get(`/download-document`, {
+        params: { file_path: filePath }, // 여기서 filePath는 경로만 포함해야 함 (e.g. 'processed/address.csv')
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
+          RefreshToken: localStorage.getItem('refreshToken')
+        },
+        responseType: 'blob', // 파일 다운로드를 위해 blob 타입 설정
+      });
+
+      // 파일 다운로드 처리
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filePath.split('/').pop()); // 파일 이름 설정
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('파일 다운로드 오류:', error);
+    }
+  };
+
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -133,19 +173,32 @@ function DocumentChatPage() {
                 }`}
             >
               {message.sender === 'AI' ? (
-                <div
-                  className={styles['markdown']}
-                  dangerouslySetInnerHTML={{ 
-                    __html: marked(message.text || ''), // 메시지가 없으면 빈 문자열 처리
-                   }}
-                ></div>
+                <div>
+                  <div
+                    className={styles['markdown']}
+                    dangerouslySetInnerHTML={{ __html: marked(message.text || '') }}
+                  ></div>
+                  {message.attachments && (
+                    <div className={styles['attachments']}>
+                      {message.attachments.map((attachment, idx) => (
+                        <button
+                          key={idx}
+                          className={styles['attachment-button']}
+                          onClick={() => downloadFile(attachment.url)} // 파일 경로만 전달
+                        >
+                          {attachment.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ) : (
-                <p>{message.text || '잘못된 메시지 형식입니다.'}</p> // 기본 메시지 표시
+                <p>{message.text || '잘못된 메시지 형식입니다.'}</p>
               )}
             </div>
           ))}
-          <div ref={chatEndRef}></div>
         </div>
+
         <div className={styles['input-container']}>
           <input
             type="text"

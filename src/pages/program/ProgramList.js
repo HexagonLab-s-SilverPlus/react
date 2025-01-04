@@ -67,7 +67,22 @@ const ProgramList = () => {
 
     //목록 페이지로 이동
     const handleListClick = () => {
-        window.location.reload();   //페이지 새로고침
+        // window.location.reload();   //페이지 새로고침
+        if (isNearby) {
+            // 내 주변 프로그램일 때 새로고침
+            window.location.reload();
+        } else {
+            // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
+            setPagingInfo((prev) => ({
+                ...prev,
+                pageNumber: 1,
+                action: 'all', // 전체 검색으로 초기화
+                keyword: '',   // 검색어 초기화
+                startDate: formattedDate,
+                endDate: formattedDate,
+            }));
+            handleProgramView(1, 'all'); // 전체 목록 로드
+        }
     };
 
     //디테일 페이지로 이동
@@ -75,69 +90,119 @@ const ProgramList = () => {
         navigate(`/program/detail/${snrProgramId}`);
     };
 
+    useEffect(() => {
+        const loadPrograms = async () => {
+            const action = isNearby ? 'nearby' : pagingInfo.action;
+            console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
+
+            try {
+                console.log('member address : ', member.memAddress);
+
+                let response = await apiSpringBoot.get(`/program`, {
+                    params: {
+                        ...pagingInfo,
+                        pageNumber: pagingInfo.pageNumber,
+                        action: action,
+                        keyword: pagingInfo.keyword,
+                        startDate: pagingInfo.startDate + " 00:00:00",
+                        endDate: pagingInfo.endDate + " 00:00:00",
+                        ...(isNearby && { memUUID: member.memUUID }),
+                    },
+                });
+
+                setPrograms(response.data.list);
+                console.log("API Response:", response.data.list);
+
+                // 페이지 계산
+                const { maxPage, startPage, endPage } = PagingDiv8Calculate(
+                    response.data.search.pageNumber,
+                    response.data.search.listCount,
+                    response.data.search.pageSize,
+                    8 // 그룹 크기
+                );
+
+                console.log("Paging Calculation:", { maxPage, startPage, endPage });
+
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    maxPage,
+                    startPage,
+                    endPage,
+                    startDate: formatDate(response.data.search.startDate),
+                    endDate: formatDate(response.data.search.endDate),
+                }));
+
+            } catch (error) {
+                console.error('handleProgramView Error:', error);
+            }
+        };
+
+        loadPrograms();
+    }, [pagingInfo.pageNumber, pagingInfo.action, isNearby]);
+
+    const handleSelectChange = (e) => {
+        const { value } = e.target;
+        setPagingInfo((prev) => ({
+            ...prev,
+            action: value,
+        }));
+    };
+
     const handlePageChange = async (page) => {
         const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
-        console.log("Current Page:", currentPage);
+        //console.log("Current Page:", currentPage);
+
+        setPagingInfo((prev) => ({
+            ...prev,
+            pageNumber: page, // 선택된 페이지 번호로 업데이트
+        }));
+
         handleProgramView(currentPage, pagingInfo.action);
     };
 
     //isNearby 상태 변경 이벤트 핸들러
     const toggleNearbyView = () => {
         console.log('before isNearby status : ', isNearby);
-        setIsNearby((prev) => !prev);
+
+        setIsNearby((prev) => {
+            const updated = !prev; // 상태를 반전
+            console.log('after isNearby status : ', updated); // 상태 변경 후 값 확인
+            return updated; // 새로운 상태 반환
+        });
+
+        // 페이지 번호를 초기화
         setPagingInfo((prev) => ({
             ...prev,
-            pageNumber: 1, // 페이지를 1로 초기화
+            pageNumber: 1,
+            keyword: '',
         }));
-        console.log('after isNearby status : ', isNearby);
     };
-    
-    //내주변 목록
-    useEffect(() => {
-        console.log('isNearby status updated:', isNearby);
-        handleProgramView(1, isNearby ? 'nearby' : 'all');
-    }, [isNearby]); // isNearby가 변경될 때 실행
 
     //페이지 불러오기
     const handleProgramView = async (page, action) => {
         const groupSize = 8; // 그룹 크기 정의
         try {
-            console.log('member address : ', member.memAddress);
+            const params = {
+                ...pagingInfo,
+                pageNumber: page,
+                action: isNearby ? 'nearby' : action,
+                keyword: pagingInfo.keyword,
+                startDate: pagingInfo.startDate + " 00:00:00",
+                endDate: pagingInfo.endDate + " 00:00:00",
+                ...(isNearby && { memUUID: member.memUUID }),
+            };
 
-            let response = null;
-            if (isNearby) {
-                response = await apiSpringBoot.get(`/program`, {
-                    params: {
-                        ...pagingInfo,
-                        pageNumber: page,
-                        action: 'nearby',
-                        keyword: pagingInfo.keyword,
-                        startDate: pagingInfo.startDate + " 00:00:00",
-                        endDate: pagingInfo.endDate + " 00:00:00",
-                        memUUID: member.memUUID,
-                    },
-                });
-            } else {
-                response = await apiSpringBoot.get(`/program`, {
-                    params: {
-                        ...pagingInfo,
-                        pageNumber: page,
-                        action: action,
-                        keyword: pagingInfo.keyword,
-                        startDate: pagingInfo.startDate + " 00:00:00",
-                        endDate: pagingInfo.endDate + " 00:00:00",
-                    },
-                });
-            }
-            
+            let response = await apiSpringBoot.get(`/program`, { params });
+
+
             setPrograms(response.data.list);
             console.log("API Response:", response.data.list);
-            
+
             //페이지 계산
-            const {maxPage, startPage, endPage} = PagingDiv8Calculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize, groupSize);
+            const { maxPage, startPage, endPage } = PagingDiv8Calculate(response.data.search.pageNumber,
+                response.data.search.listCount, response.data.search.pageSize, groupSize);
             console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
-            setPagingInfo(response.data.search);
             setPagingInfo((prev) => ({
                 ...prev,
                 maxPage: maxPage,
@@ -146,26 +211,14 @@ const ProgramList = () => {
                 startDate: formatDate(response.data.search.startDate),
                 endDate: formatDate(response.data.search.endDate),
             }));
-            
+
         } catch (error) {
             console.log('handleProgramView Error : {}', error);
         }
     };
 
-    
-    //전체 목록
-    useEffect(() => {
-        console.log("Initial API Call with Page:", pagingInfo.pageNumber, "and Action:", pagingInfo.action);
-        handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
-    }, [pagingInfo.pageNumber, pagingInfo.action]);
 
-    const handleSelectChange = (e) => {
-        const {value} = e.target;
-        setPagingInfo((prev) => ({
-            ...prev,
-            action: value,
-        }));
-    };
+
 
     //input 에 입력 시 paging훅에 저장
     const handleInputChange = (e) => {
@@ -180,10 +233,6 @@ const ProgramList = () => {
     const handleSearchClick = () => {
         handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
     };
-
-    useEffect(() => {
-        handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
-    }, []);
 
     const renderSearchInputs = () => {
         //Enter 누르면 검색 버튼 클릭됨
@@ -200,14 +249,14 @@ const ProgramList = () => {
                         <input
                             type="date"
                             name="startDate"
-                            defaultValue={pagingInfo.startDate}
+                            value={pagingInfo.startDate}
                             onChange={handleInputChange}
                         />
                         <span> ~ </span>
                         <input
                             type="date"
                             name="endDate"
-                            defaultValue={pagingInfo.endDate}
+                            value={pagingInfo.endDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -222,7 +271,7 @@ const ProgramList = () => {
                         onChange={handleInputChange}
                         onKeyDown={handleKeyPress}
                         className={styles.searchInput}
-                    /> 
+                    />
                 );
         }
     };
@@ -247,51 +296,54 @@ const ProgramList = () => {
                     </div>{/* snrPgLeft end */}
 
                     <div className={styles.snrPgRight}>
-                        { isNearby === false ? (
-                                <div className={styles.pgSearchWrap}>
-                                    <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
-                                        <option value="all" selected>선택&nbsp;&nbsp;</option>
-                                        <option value="pgTitle">제목&nbsp;&nbsp;</option>
-                                        <option value="pgContent">내용&nbsp;&nbsp;</option>
-                                        <option value="pgArea">지역&nbsp;&nbsp;</option>
-                                        <option value="pgOrg">기관명&nbsp;&nbsp;</option>
-                                        <option value="pgDate">참여기간&nbsp;</option>
-                                    </select>
-                                    
-                                    {renderSearchInputs()}
+                        {isNearby === false ? (
+                            <div className={styles.pgSearchWrap}>
+                                <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
+                                    <option value="all">선택&nbsp;&nbsp;</option>
+                                    <option value="pgTitle">제목&nbsp;&nbsp;</option>
+                                    <option value="pgContent">내용&nbsp;&nbsp;</option>
+                                    <option value="pgArea">지역&nbsp;&nbsp;</option>
+                                    <option value="pgOrg">기관명&nbsp;&nbsp;</option>
+                                    <option value="pgDate">참여기간&nbsp;</option>
+                                </select>
 
-                                    <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
-                                </div>
+                                {renderSearchInputs()}
+
+                                <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
+                            </div>
                         ) : ('')}
-                        
-                        <ul className={[styles.snrPgList, 'masked-overflow'].join(' ')} 
+
+                        <div className={[styles.snrPgList, 'masked-overflow'].join(' ')}
                             style={{ height: isNearby ? '90%' : '80%' }}>
                             {(programs || []).map((item) => {
-                                const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
-                                    
+                                const { program, pgfiles } = item;   //프로그램 데이터와 파일 URL 분리
+
                                 return (
-                                    <li className={styles.snrPgListItem} key={program.snrProgramId}>
+                                    <div className={styles.snrPgListItem} key={program.snrProgramId}>
                                         <a onClick={() => handleMoveDetailView(program.snrProgramId)}>
                                             <h1>{program.snrTitle}</h1>
                                             <p>{program.snrOrgName}</p>
                                             <span>내용이 궁금하면 클릭해보세요!</span>
                                         </a>
-                                    </li>
+                                    </div>
                                 );
                             })}
-                        <PagingDiv8
-                            pageNumber={pagingInfo.pageNumber || 1}
-                            currentPage={pagingInfo.currentPage || 1}
-                            pageSize={pagingInfo.pageSize}
-                            maxPage={pagingInfo.maxPage || 1}
-                            startPage={pagingInfo.startPage || 1}
-                            endPage={pagingInfo.endPage || 1}
-                            onPageChange={(page) => {
-                                console.log("Page change triggered:", page);
-                                handlePageChange(page);
-                            }}
-                        />
-                        </ul>{/* snrPgList end */}
+
+                            <button type="button" className={styles.pgListBtn} onClick={handleListClick}>목록</button>
+
+                            <PagingDiv8
+                                pageNumber={pagingInfo.pageNumber || 1}
+                                currentPage={pagingInfo.currentPage || 1}
+                                pageSize={pagingInfo.pageSize}
+                                maxPage={pagingInfo.maxPage || 1}
+                                startPage={pagingInfo.startPage || 1}
+                                endPage={pagingInfo.endPage || 1}
+                                onPageChange={(page) => {
+                                    console.log("Page change triggered:", page);
+                                    handlePageChange(page);
+                                }}
+                            />
+                        </div>{/* snrPgList end */}
 
                     </div>{/* snrPgRight end */}
                 </section>{/* snrPgSection end */}
@@ -307,44 +359,44 @@ const ProgramList = () => {
                     <div className={styles.secTop}>
                         <p>어르신 프로그램</p>
                     </div>{/* .secTop end */}
-    
+
                     <div className={styles.secContent}>
                         <div className={styles.pgListTop}>
                             <p className={styles.pgTitle}>어르신 프로그램 목록 <span>{pagingInfo.listCount}</span></p>
                             <div className={styles.pgTopBtns}>
                                 <button type="button" onClick={handleListClick}>목록</button>
-                                {(role === "FAMILY" || role === "ADMIN") && (
+                                {(role === "MANAGER" || role === "ADMIN") && (
                                     <button type="button" onClick={handleWriteClick}>등록하기</button>
                                 )}
                             </div>
-                                
-    
+
+
                             <div className={styles.pgSearchWrap}>
                                 <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
-                                    <option value="all" selected>선택&nbsp;&nbsp;</option>
+                                    <option value="all">선택&nbsp;&nbsp;</option>
                                     <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                     <option value="pgContent">내용&nbsp;&nbsp;</option>
                                     <option value="pgArea">지역&nbsp;&nbsp;</option>
                                     <option value="pgOrg">기관명&nbsp;&nbsp;</option>
                                     <option value="pgDate">참여기간&nbsp;</option>
                                 </select>
-                                
+
                                 {renderSearchInputs()}
-    
+
                                 <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
                             </div>{/* pgSearchWrap end */}
                         </div>{/* pgListTop end */}
-                        
+
                         <div className={styles.pgListWrap}>
                             <ul className={styles.pgList}>
                                 {(programs || []).map((item) => {
-                                    const {program, pgfiles} = item;   //프로그램 데이터와 파일 URL 분리
-                                    
+                                    const { program, pgfiles } = item;   //프로그램 데이터와 파일 URL 분리
+
                                     //image MIME 타입 필터링 후 첫 번째 파일 가져오기
                                     const firstImageFile = pgfiles && pgfiles.find(file => file.mimeType.startsWith('image/'));
                                     const firstImageUrl = firstImageFile ? `data:${firstImageFile.mimeType};base64,${firstImageFile.fileContent}` : pgImage;
-                                    
-                                    return(
+
+                                    return (
                                         <li key={program.snrProgramId} className={styles.pgListItem}>
                                             <a onClick={() => handleMoveDetailView(program.snrProgramId)}>
                                                 <div className={styles.pgListImgWrap}>
@@ -362,7 +414,7 @@ const ProgramList = () => {
                             </ul>{/* pgList end */}
                         </div>{/* pgListWrap end */}
                     </div>{/* secContent end */}
-    
+
                     <PagingDiv8
                         pageNumber={pagingInfo.pageNumber || 1}
                         currentPage={pagingInfo.currentPage || 1}
