@@ -172,7 +172,7 @@ const NoticeDetail = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td >
+                        <td className={styles.noticeSeniorFiles}>
                         <button className={styles.seniorFakeButton}>첨부파일을 클릭하여 확인해 보세요</button>
                         <div>
                         {noticeFiles &&noticeFiles.map((files)=>(
