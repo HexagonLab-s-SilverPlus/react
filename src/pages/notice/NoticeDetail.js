@@ -223,18 +223,18 @@ const NoticeDetail = () => {
                             <tr>
                                 <td>
                                     <div className={styles.notTitleLine}>
-                                        <div className={styles.notTitle}>{notice.notTitle}</div>
+                                        <div className={styles.notTitle}>{notice &&  notice.notTitle}</div>
                                         <div className={styles.writeData}>
-                                            <span><img className={styles.img} src={write}/> {memId}</span>
-                                            <span><img className={styles.img} src={date}/> {adjustTimeZone(notice.notCreateAt).split('T')[0]}</span>
-                                            <span><img className={styles.img} src={readCount}/> {notice.notReadCount}</span>
+                                            <span><img className={styles.img} src={write}/> {notice &&  memId}</span>
+                                            <span><img className={styles.img} src={date}/> {notice &&  adjustTimeZone(notice.notCreateAt).split('T')[0]}</span>
+                                            <span><img className={styles.img} src={readCount}/> {notice && notice.notReadCount}</span>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td id="read" className={styles.notContent}>
-                                    {notice.notContent}
+                                    {notice &&  notice.notContent}
                                 </td>
                             </tr>
                                 <tr>
