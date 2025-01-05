@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../AuthProvider";
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './DashList.module.css';
+import dstyles from './FullCalendarCustom.css';
 import SideBar from '../../components/common/SideBar';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -267,19 +268,22 @@ const DashList = () => {
                         </button>
                     </div>
 
-                    <div className={styles.calendarbox}>
+                    <div className={styles.calendarbox} style={{ width: "1300px", margin: "0 auto" }}>
                         <FullCalendar
+                        // className="custom-calendar"
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
+                          
                             events={calendarEvents}
                             height="750px"
+                            
                             // dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
                             dateClick={handleDateClick}
                         />
                     </div>
                     {showForm &&(
 
-                    <div className="form-container">
+<div className={styles["form-container"]}>
                         <form onSubmit={handleInsertTodo}>
                             <h3> 할 일 작성</h3>
                       
@@ -308,17 +312,17 @@ const DashList = () => {
                     </div>
                     )}
                     
-                    <div>
+                    <div className={styles.todobigform}>
                     <h3 className={styles.todoTitle}>
-        {selectedDate} 할 일
-        <button
-            className={styles.addButton}
-            onClick={() => setShowForm(!showForm)}
-        >
-            +
-        </button>
-    </h3>
-                        <ul className={styles.todoList}>
+                        {selectedDate} 할 일
+                        <button
+                            className={styles.addButton}
+                            onClick={() => setShowForm(!showForm)}
+                        >
+                            +
+                        </button>
+                    </h3>
+                                        <ul className={styles.todoList}>
                         {filteredTodos.map((todo) => (
      <li className={styles.todoItem} key={todo.taskId}>
      {editingTaskId === todo.taskId ? (
