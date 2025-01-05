@@ -12,6 +12,8 @@ const QnAUpdate = () => {
 
     // files
     const [newFiles, setNewFiles] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [deleteFiles, setDeleteFiles] = useState([]);
     const [qna, setQna] = useState(null);
     const [qnaMember, setQnaMember] = useState(null);
     const {member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
@@ -30,6 +32,7 @@ const QnAUpdate = () => {
                 setNewFiles((prevFiles) => [...prevFiles,file]);
             }
         };
+        console.log(newFiles);
 
         document.body.appendChild(input);
         input.click();
@@ -39,6 +42,12 @@ const QnAUpdate = () => {
     // 파일 삭제 처리
     const handleDeleteFile = (index) => {
         setNewFiles((prevfiles)=>prevfiles.filter((_,i) => i !== index));
+    };
+
+    // 파일 삭제 처리
+    const handleDeleteOriginFile = (index, file) => {
+        setFiles((prevfiles)=>prevfiles.filter((_,i) => i !== index));
+        setDeleteFiles((prevfiles)=>[...prevfiles, file]);
     };
 
     const handleChange = (e) => {
@@ -61,7 +70,15 @@ const QnAUpdate = () => {
                 console.log(JSON.stringify(file));
             });
         }
+        if (deleteFiles){
+            deleteFiles.forEach((file) => {
+                data.append('deleteFiles',file); // 첨부파일 추가
+                console.log(JSON.stringify(file));
+            });
+        }
+
         
+  
         Object.entries(qna).forEach(([key, value]) => data.append(key, value));
 
         try {
@@ -90,6 +107,7 @@ const QnAUpdate = () => {
             Object.entries(response.data.qna).filter(([key, value]) => value !== null)),
         );
         setQnaMember(response.data.member)
+        setFiles(response.data.files)
         if(member.memType === "ADMIN"){
             setQna((pre) =>({
                 ...pre,
@@ -129,22 +147,41 @@ const QnAUpdate = () => {
                         <h1 className={styles.qnaUpdateContent}>질문내용</h1>
                         <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaUpdateContentTxt} defaultValue={qna.qnaWContent}></textarea>
                     </div>
-                    <button
-                    onClick={(e)=>handleFileInsertBox(e)}
-                        >첨부파일추가
-                    </button>
-                    {newFiles.map((file, index) => (
-                        <tr key={index}>
-                            <td colSpan="2">
-                                <span>{file.name}</span>
-                                <input 
-                                    type="button"
-                                    onClick={()=>handleDeleteFile(index)}
-                                    value="x"
-                                />
-                            </td>
-                        </tr>
-                    ))}
+                    <hr />
+                    <div className={styles.filesDiv}>
+                        <button
+                        onClick={(e)=>handleFileInsertBox(e)}
+                            >첨부파일추가
+                        </button>
+                        <div>
+                        {files && files.map((file, index) => (
+                            <tr key={index}>
+                                <td colSpan="2">
+                                    <span>qna_file_{index}</span>
+                                    <input 
+                                        type="button"
+                                        onClick={()=>handleDeleteOriginFile(index, file)}
+                                        value="x"
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                        </div>
+                        <div>
+                        {newFiles && newFiles.map((file, index) => (
+                            <tr key={index}>
+                                <td colSpan="2">
+                                    <span>qna_file_{index}</span>
+                                    <input 
+                                        type="button"
+                                        onClick={()=>handleDeleteFile(index)}
+                                        value="x"
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                        </div>
+                    </div>
                     <hr/>
                     {member.memType === "ADMIN" && qna.qnaADCreateBy &&
                     <div className={styles.qnaUpdateContentDiv}>

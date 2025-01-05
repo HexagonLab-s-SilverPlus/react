@@ -27,6 +27,7 @@
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
     "redux": "^5.0.1",
+    "socket.io-client": "^4.8.1",
     "style-loader": "^4.0.0",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.15",
@@ -53,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.17.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",

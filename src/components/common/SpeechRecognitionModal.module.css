@@ -1,4 +1,4 @@
-/* .modalOverlay {
+.modalOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,23 +8,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 500;
 }
 
 .modal {
     background: white;
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
     text-align: center;
-    width: 300px;
+    width: 1000px;
+}
+
+.modal > h1{
+    font-size:72px;
 }
 
 .buttons {
     margin-top: 20px;
 }
 
-button {
+.buttons > button {
     margin: 0 10px;
     padding: 10px 20px;
     cursor: pointer;
-} */
+    background-color: #064420;
+    font-size:48px;
+    color:#ffffff;
+    border-radius: 10px;
+}

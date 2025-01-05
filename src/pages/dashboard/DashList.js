@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../AuthProvider";
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './DashList.module.css';
+import dstyles from './FullCalendarCustom.css';
 import SideBar from '../../components/common/SideBar';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -14,6 +15,10 @@ const DashList = () => {
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [filteredTodos, setFilteredTodos] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
+    const [editingTaskId, setEditingTaskId] = useState(null); // 현재 수정 중인 taskId
+    const [editingContent, setEditingContent] = useState(''); // 수정 중인 내용
+    const [editingStatus, setEditingStatus] = useState('N'); // 수정 중인 상태
+    const [showForm, setShowForm] = useState(false); //폼 표시상태
     const [formData, setFormData] = useState({
         taskId: '',
         taskContent: '',
@@ -26,7 +31,7 @@ const DashList = () => {
     const navigate = useNavigate();
 
 
-    // 모든 데이터 가져오기
+    // 목록
     const fetchAllTodos = async () => {
         try {
             const response = await apiSpringBoot.get('/dashboard');
@@ -38,8 +43,18 @@ const DashList = () => {
                    date: new Date(todo.taskDate).toLocaleDateString('en-CA'),
                 }))
             );
+            const today = new Date().toISOString().split("T")[0];
+            const filtered = todos.filter(
+              (todo) => new Date(todo.taskDate).toLocaleDateString("en-CA") === today
+            );
+            setFilteredTodos(filtered);
+
+
         } catch (error) {
             console.error('데이터 가져오기 실패:', error);
+            setTodolist([]);
+      setCalendarEvents([]);
+      setFilteredTodos([]);
         }
     };
 
@@ -58,6 +73,7 @@ const DashList = () => {
             return new Date(todo.taskDate).toLocaleDateString('en-CA') === clickedDate;
 
         });
+        
         console.log("Filtered Todos:", filtered); 
         setFilteredTodos(filtered); //필터링된 데이터 저장
     };
@@ -73,7 +89,7 @@ const DashList = () => {
 
 
 
-    //insert
+    //등록
     const handleInsertTodo = async (e) => {
         e.preventDefault();
         const data =new FormData();
@@ -104,7 +120,7 @@ const DashList = () => {
 
             alert('할일 등록 성공');
             window.location.reload();// 페이지 새로고침
-            // setIsFormVisible(false);
+            setShowForm(false);
             // fetchTodos();
              // 새로 추가된 데이터를 todolist와 calendarEvents에 업데이트
       const newTodo = response.data;
@@ -134,12 +150,79 @@ const DashList = () => {
             try {
                 await apiSpringBoot.delete(`/dashboard/${Id}`);
                 alert('삭제가 완료되었습니다.');
+                window.location.reload();
                 // fetchTodos(); // 삭제 후 목록 새로고침
             } catch (error) {
                 console.error('삭제 실패:', error);
                 alert('삭제 실패! 서버와의 통신에 문제가 발생했습니다.');
             }
         }
+    };
+
+     // 수정 시작
+     const handleEditClick = (task) => {
+        setEditingTaskId(task.taskId);
+        setEditingContent(task.taskContent); // 현재 내용을 수정 상태로 가져옴
+        setEditingStatus(task.taskStatus); // 현재 상태 수정 가능하도록
+        setFormData((prev) => ({
+            ...prev,
+            taskDate: task.taskDate, // 원래 taskDate 설정
+        }));
+
+    };
+
+    const handleSaveEdit = async () => {
+    if (!editingTaskId) {
+        alert('수정할 Task ID가 없습니다.');
+        return;
+    }
+
+    const updatedTask = {
+        taskId: editingTaskId,
+        taskContent: editingContent,
+        taskStatus: editingStatus,
+        taskDate: formData.taskDate, // 원래 시간 유지
+        memUuid: formData.memUuid,
+    };
+
+    console.log('전송 데이터:', updatedTask);
+
+    try {
+        await apiSpringBoot.put(`/dashboard/${editingTaskId}`, updatedTask, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        alert("수정이 완료되었습니다.");
+        // 상태 업데이트
+        setTodolist((prev) =>
+            prev.map((todo) =>
+                todo.taskId === editingTaskId
+                    ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
+                    : todo
+            )
+        );
+        setFilteredTodos((prev) =>
+            prev.map((todo) =>
+                todo.taskId === editingTaskId
+                    ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
+                    : todo
+            )
+        );
+
+            setEditingTaskId(null); // 수정 모드 종료
+            setEditingContent('');
+            setEditingStatus('N');
+        } catch (error) {
+            console.error('수정 실패:', error);
+            alert('수정에 실패했습니다.');
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingTaskId(null);
+        setEditingContent('');
+        setEditingStatus('N');
     };
 
     useEffect(() => {
@@ -150,6 +233,9 @@ const DashList = () => {
             }));
         }
         fetchAllTodos();
+
+        const today = new Date().toISOString().split("T")[0];
+        setSelectedDate(today);
     }, [member]);
 
     return (
@@ -182,20 +268,25 @@ const DashList = () => {
                         </button>
                     </div>
 
-                    <div className={styles.calendarbox}>
+                    <div className={styles.calendarbox} style={{ width: "1300px", margin: "0 auto" }}>
                         <FullCalendar
+                        // className="custom-calendar"
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
+                          
                             events={calendarEvents}
+                            height="750px"
+                            
                             // dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
                             dateClick={handleDateClick}
                         />
                     </div>
+                    {showForm &&(
 
-                    <div className="form-container">
+<div className={styles["form-container"]}>
                         <form onSubmit={handleInsertTodo}>
-                            
-                            <h3 className={styles.todoTitle}>오늘 할일</h3>
+                            <h3> 할 일 작성</h3>
+                      
                             <div>
                                 <label>내용:</label>
                                 <input
@@ -219,25 +310,82 @@ const DashList = () => {
                             <button type="submit">저장하기</button>
                         </form>
                     </div>
+                    )}
                     
-                    <div>
-                        <h3>{selectedDate} 할 일</h3>
-                    <ul className={styles.todoList}>
-                        {filteredTodos.map((todo, index) => (
-                            <li className={styles.todoItem} key={todo.taskId || index}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <input type="checkbox" className={styles.checkbox} />
-                                    <span className={styles.todoText}>{todo.taskContent}</span>
-                                </div>
-                                <button
-                                    className={styles.deleteButton}
-                                    onClick={() => handleDelete(todo.taskId)}
-                                >
-                                    <FaTrashAlt />
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className={styles.todobigform}>
+                    <h3 className={styles.todoTitle}>
+                        {selectedDate} 할 일
+                        <button
+                            className={styles.addButton}
+                            onClick={() => setShowForm(!showForm)}
+                        >
+                            +
+                        </button>
+                    </h3>
+                                        <ul className={styles.todoList}>
+                        {filteredTodos.map((todo) => (
+     <li className={styles.todoItem} key={todo.taskId}>
+     {editingTaskId === todo.taskId ? (
+         // 수정 모드
+         <div>
+             <input
+                 type="text"
+                 value={editingContent}
+                 onChange={(e) => setEditingContent(e.target.value)}
+                 placeholder="할 일 내용을 수정하세요"
+             />
+             <label>
+                 <input
+                     type="checkbox"
+                     checked={editingStatus === 'Y'}
+                     onChange={(e) =>
+                         setEditingStatus(e.target.checked ? 'Y' : 'N')
+                     }
+                 />
+                 완료 여부
+             </label>
+             <button onClick={handleSaveEdit} className={styles.saveButton}>
+                 저장
+             </button>
+             <button onClick={handleCancelEdit} className={styles.cancelButton}>
+                 취소
+             </button>
+         </div>
+     ) : (
+         // 기본 모드
+         <div style={{ display: 'flex', alignItems: 'center' }}>
+             <input
+                 type="checkbox"
+                 className={styles.checkbox}
+                 checked={todo.taskStatus === 'Y'}
+                 readOnly
+             />
+             <span
+                 className={`${styles.todoText} ${
+                     todo.taskStatus === 'Y' ? styles.completed : ''
+                 }`}
+             >
+                 {todo.taskContent}
+                 
+             </span>
+             <button
+                 onClick={() => handleEditClick(todo)}
+                 className={styles.editButton}
+             >
+                 수정
+             </button>
+             <button
+                 className={styles.deleteButton}
+                 onClick={() => handleDelete(todo.taskId)}
+             >
+                 <FaTrashAlt />
+             </button>
+         </div>
+     )}
+ </li>
+))}
+
+</ul>
                     </div>
                 </div>
             </div>
