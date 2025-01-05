@@ -75,7 +75,7 @@ h2 {
     top: 0;
     right: 0;
     gap: 20px; /* 버튼과 달력 사이의 간격 */
-    padding: 20px; /* 내부 여백 */
+    padding: 50px; /* 내부 여백 */
     box-sizing: border-box;
 }
 
@@ -85,14 +85,15 @@ h2 {
     top: 0;
     right: 0;
     width: 900px;
-    height: 500px;
-     */
-     flex: none; /* 부모 요소의 flex-grow를 무시하고 고정된 크기로 설정 */
+    height: 500px; */
+    
+
+     flex: none; 
      position: relative;
      top: 0;
      right: 0;
-     width: 900px; /* 고정 너비 설정 */
-     height: 500px; /* 고정 높이 설정 */
+     width: 1350px;
+     height: 300px;
      margin: 30px;
    
      
@@ -175,6 +176,7 @@ h2 {
     background-color: #f9f9f9; /* 배경색 */
     width: 100%; /* 전체 너비 */
     box-sizing: border-box; /* 박스 크기 계산 방식 */
+    margin-left: 300px;
 }
 
 .logoLink {
@@ -240,3 +242,10 @@ h2 {
     margin: 20px;
     margin-left: 450px;
 }
+
+.completed {
+    text-decoration: line-through; /* 완료된 항목에 취소선 추가 */
+    color: gray;
+}
+
+
