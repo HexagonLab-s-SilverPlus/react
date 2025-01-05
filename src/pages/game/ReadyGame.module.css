@@ -1,48 +1,8 @@
-.mainPage {
-  /* 백그라운드 이미지 및 레이아웃 설정 */
-  background-image: url('../../assets/images/game/other/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh; /* 화면 전체 높이를 차지 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff; /* 텍스트 색상 흰색 */
-  text-shadow: 1px 1px 2px #000; /* 텍스트 가독성을 위해 그림자 추가 */
-}
-
-/* 메인 타이틀 스타일 */
-.mainPage h1 {
-  font-size: 2rem; /* 큰 글씨 크기 */
-  margin-bottom: 1rem; /* 아래 여백 */
-}
-
-/* 간략한 안내문 스타일 */
-.mainPage p {
-  font-size: 1.2rem; /* 약간 큰 글씨 크기 */
-  margin-bottom: 1rem; /* 아래 여백 */
-}
-
-/* 플레이어 이름 입력 필드 스타일 */
-.mainPage input {
-  padding: 0.5rem; /* 내부 여백 */
-  font-size: 1rem; /* 글씨 크기 */
-  margin-bottom: 1rem; /* 아래 여백 */
-}
-
-/* 게임 시작 버튼 스타일 */
-.mainPage button {
-  padding: 0.5rem 1rem; /* 내부 여백 */
-  font-size: 1rem; /* 글씨 크기 */
-  background: #c53030; /* 빨강 계열 배경색 */
-  color: #fff; /* 흰색 텍스트 */
-  border: none; /* 테두리 제거 */
-  cursor: pointer; /* 마우스 커서 포인터 표시 */
-}
-
-/* 버튼 호버 효과 */
-.mainPage button:hover {
-  background: #a00; /* 호버 시 더 진한 빨강으로 변경 */
-}
+/* src/pages/game/ReadyGame.module.css */
+.mainPage {background-image: url('../../assets/images/game/other/background.png');background-size: cover;background-position: center;height: 100vh;display:flex;align-items: center;
+  justify-content: center;}
+.gameNavBar{position:fixed;top:0; width: 100%;}
+.gameWelcome {justify-items: center;}
+.gameWelcome > p {font-size: 72px;color: #fff;}
+.gameWelcome > button {border:none; font-family: "Pretendard Variable";background-color: #618264;font-size:32px;color: #ffffff;padding:10px 60px;border-radius: 8px;text-decoration: none;cursor: pointer;transition: all 0.3s;letter-spacing: 1px;}
+.gameWelcome > button:hover { background: #064420;}

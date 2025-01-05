@@ -1,12 +1,16 @@
 import React from "react";
 import styles from "./SeniorMenu.module.css";
 import chatIcon from "../assets/images/chatIcon.png";
-import brainGameIcon from "../assets/images/brainGameIcon.png";
+//import brainGameIcon from "../assets/images/brainGameIcon.png";
+import gostop from "../assets/images/game/card/11_1.png";
 import activityIcon from "../assets/images/activityIcon.png";
 import noticeIcon from "../assets/images/noticeIcon.png";
 import documentIcon from "../assets/images/documentIcon.png";
 import Container from "../pages/ey/chat/Container";
 import { useNavigate } from "react-router-dom";
+
+import SeniorNavbar from './common/SeniorNavbar';
+import SeniorFooter from './common/SeniorFooter';
 
 const SeniorMenu = () => {
     const navigate = useNavigate();
@@ -24,8 +28,10 @@ const SeniorMenu = () => {
     }
 
   return (
-    <Container>
+    <div>
+      <SeniorNavbar/>
       <div className={styles.menuContainer}>
+        
         {/* 말동무 대화하기 */}
         <div className={`${styles.menuButton} ${styles.div1}`} onClick={handleChatButton}>
           <img src={chatIcon} alt="말동무 대화하기" />
@@ -36,12 +42,12 @@ const SeniorMenu = () => {
         </div>
 
         {/* 두뇌 활성화 게임 */}
-        <div className={`${styles.menuButton} ${styles.div2}`}>
+        <div className={`${styles.menuButton} ${styles.div2}`} onClick={()=>(navigate('/game'))}>
           <p>
             두뇌 활성화 <br />
-            게임
+            게임 : 맞고
           </p>
-          <img src={brainGameIcon} alt="두뇌 활성화 게임" />
+          <img src={gostop} alt="맞고" style={{width:"100px"}}/>
         </div>
 
         {/* 어르신 맞춤 활동 */}
@@ -64,8 +70,10 @@ const SeniorMenu = () => {
           <p>공문서 작성</p>
           <img src={documentIcon} alt="공문서 작성" />
         </div>
+        
       </div>
-    </Container>
+      <SeniorFooter/>
+    </div>
   );
 };
 

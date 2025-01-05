@@ -1,0 +1,8 @@
+/* src/pages/game/PlayGame.module.css */
+.mainPage {background-image: url('../../assets/images/game/other/background.png');background-size: cover;background-position: center;height: 100vh;display:flex;align-items: center;
+    justify-content: center;}
+.gameNavBar{position:fixed;top:0; width: 100%;}
+.gameArea{width:calc(100% - 192px);height:calc(100vh - 96px);margin-top:96px;}
+
+.card {width: 100px;height: auto;cursor: pointer;transition: transform 0.3s;}
+.card:hover {transform:scale(1.2);}

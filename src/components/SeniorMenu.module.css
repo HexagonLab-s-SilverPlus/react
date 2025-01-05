@@ -1,13 +1,15 @@
 
 /* 전체 메뉴 컨테이너 */
 .menuContainer {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5열 */
-    grid-template-rows: repeat(5, 1fr); /* 5행 */
+    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    grid-template-rows: repeat(2, 1fr); /* 2행 */
     grid-gap: 24px; /* 버튼 간 간격 */
-    height: 100vh; /* 전체 높이 설정 */
     padding: 24px;
     box-sizing: border-box;
+    padding:24px 96px;
+    height:calc(100vh - 96px - 48px);
 
     /* 중앙 배치 설정 */
     justify-content: center; /* 가로 중앙 */
