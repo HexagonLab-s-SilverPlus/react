@@ -30,6 +30,14 @@ const NoticeDetail = () => {
     // 토큰정보 가져오기(AuthProvider)
     const {role,memId,memName,member} = useContext(AuthContext);
 
+    // 날짜시간 보정
+    const adjustTimeZone = (timestamp) => {
+        // 서버에서 받은 Timestamp를 UTC로 간주하고 보정하지 않음
+        const originalDate = new Date(timestamp);
+        const correctedDate = new Date(originalDate.getTime() + 9 * 60 * 60 * 1000); // UTC+9 보정
+        return correctedDate.toISOString(); // ISO 8601 형식 반환
+    };
+
     // notice data set
     useEffect(()=>{
         const fetchNoticeDetail = async () => {
@@ -96,12 +104,7 @@ const NoticeDetail = () => {
         }
     };
     
-    if (!notice){
-        return <div className={styles.loading}>loading...</div>; // 로딩 표시
-    }
-    if (error){
-        return <div>{error}</div>;
-    }
+
     if (role ==="SENIOR"){
     return (
         <div className={styles.noticeList}>
@@ -114,7 +117,7 @@ const NoticeDetail = () => {
                     <tr className={styles.seniorTopButton}>
                         <button 
                             className={styles.seniorInnerButton} 
-                            onClick={()=>(navigate(-1))}
+                            onClick={()=>(navigate('/notice'))}
                         >
                             <span class="material-symbols-outlined">arrow_back</span> 뒤로가기</button>
                         <button
@@ -125,10 +128,10 @@ const NoticeDetail = () => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td className={styles.seniorTitle}>{notice.notTitle}</td>
+                        <td className={styles.seniorTitle}>{notice && notice.notTitle}</td>
                     </tr>
                     <tr>
-                        <td className={styles.seniorSubBar}>조회수 {notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {notice.notCreateAt.split('T')[0]}</td>
+                        <td className={styles.seniorSubBar}>조회수 {notice && notice.notReadCount} &nbsp;&nbsp;&nbsp;&nbsp; 등록일 {notice && adjustTimeZone(notice.notCreateAt).split('T')[0]}</td>
                     </tr>
                     <tr>
                         <td>
@@ -136,8 +139,8 @@ const NoticeDetail = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td className={styles.seniorContent}>
-                            {notice.notContent}
+                        <td id="read" className={styles.seniorContent}>
+                            {notice && notice.notContent}
                         </td>
                     </tr>
                     <tr>
@@ -164,7 +167,7 @@ const NoticeDetail = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td >
+                        <td className={styles.noticeSeniorFiles}>
                         <button className={styles.seniorFakeButton}>첨부파일을 클릭하여 확인해 보세요</button>
                         <div>
                         {noticeFiles &&noticeFiles.map((files)=>(
@@ -211,7 +214,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                        <p onClick={()=>(navigate("/notice"))}>공지사항</p>
+                        <span onClick={()=>(navigate("/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <table className={styles.insertTable}>
@@ -220,18 +223,18 @@ const NoticeDetail = () => {
                             <tr>
                                 <td>
                                     <div className={styles.notTitleLine}>
-                                        <div className={styles.notTitle}>{notice.notTitle}</div>
+                                        <div className={styles.notTitle}>{notice &&  notice.notTitle}</div>
                                         <div className={styles.writeData}>
-                                            <span><img className={styles.img} src={write}/> {memId}</span>
-                                            <span><img className={styles.img} src={date}/> {notice.notCreateAt.split('T')[0]}</span>
-                                            <span><img className={styles.img} src={readCount}/> {notice.notReadCount}</span>
+                                            <span><img className={styles.img} src={write}/> {notice &&  memId}</span>
+                                            <span><img className={styles.img} src={date}/> {notice &&  adjustTimeZone(notice.notCreateAt).split('T')[0]}</span>
+                                            <span><img className={styles.img} src={readCount}/> {notice && notice.notReadCount}</span>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td className={styles.notContent}>
-                                    {notice.notContent}
+                                <td id="read" className={styles.notContent}>
+                                    {notice &&  notice.notContent}
                                 </td>
                             </tr>
                                 <tr>
@@ -254,7 +257,7 @@ const NoticeDetail = () => {
                                 </tr>
                             <tr>
                                 <td className={styles.filesDiv}>
-                                <button className={styles.button}>첨부파일</button>
+                                <button className={styles.noticeFakeButton}>첨부파일</button>
                                 <div>
                                 {noticeFiles &&noticeFiles.map((files)=>(
                                     <div 
@@ -279,7 +282,7 @@ const NoticeDetail = () => {
                         <div className={styles.rightButtons}>
                             <button className={styles.noticebutton} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
                             <button
-                                className={styles.noticebutton2}
+                                className={styles.noticebutton}
                                 onClick={handleDelete}
                             >삭제</button>
                         </div>

@@ -116,3 +116,16 @@
     color: #000000;
     background-color: #EEE;
 }
+
+.filesDiv {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.filesDiv button {
+    height: 28px;
+}
+
+.filesDiv div {
+    margin-left: 100px;
+}
