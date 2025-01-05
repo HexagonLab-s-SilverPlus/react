@@ -24,6 +24,7 @@ const ExceptionURL = [
   '/member/fid',
   '/member/fpwd',
   '/member/pwdupdate',
+  // '/oauth2/authorization/google',
 ];
 
 // accessToken 파싱 함수 : 페이로드만 추출해서 JSON 객체로 리턴

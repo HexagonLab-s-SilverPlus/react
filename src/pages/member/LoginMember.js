@@ -28,6 +28,23 @@ const LoginMember = () => {
   //   }
   // }, [isLoggedIn, navigate]);
 
+  const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
+  const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
+  const naverLoginUrl = 'http://localhost:8080/oauth2/authorization/naver';
+
+  const handleKakaoLogin = (e) => {
+    e.preventDefault();
+    window.location.href = kakaoLoginUrl;
+  };
+  const handleNaverLogin = (e) => {
+    e.preventDefault();
+    window.location.href = naverLoginUrl;
+  };
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
+    window.location.href = googleLoginUrl;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -163,10 +180,16 @@ const LoginMember = () => {
               </span>
               <hr className={styles.line} />
             </div>
-            <div style={{ marginTop: '30px', textAlign: 'center' }}>
-              <img src={kakao} className={styles.icon}></img>
-              <img src={naver} className={styles.icon}></img>
-              <img src={google} className={styles.icon}></img>
+            <div className={styles.loginSocialDiv}>
+              <button onClick={handleKakaoLogin}>
+                <img src={kakao}></img>
+              </button>
+              <button onClick={handleNaverLogin}>
+                <img src={naver}></img>
+              </button>
+              <button onClick={handleGoogleLogin}>
+                <img src={google}></img>
+              </button>
             </div>
           </form>
         </div>
