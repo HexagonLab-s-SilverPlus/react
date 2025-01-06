@@ -92,26 +92,29 @@ const ProgramList = () => {
 
     useEffect(() => {
         const loadPrograms = async () => {
-            const action = isNearby ? 'nearby' : pagingInfo.action;
+            const action = isNearby && role === "SENIOR" ? 'nearby' : pagingInfo.action;
             console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
 
             try {
-                console.log('member address : ', member.memAddress);
+                const params = {
+                    ...pagingInfo,
+                    pageNumber: pagingInfo.pageNumber,
+                    action: action,
+                    keyword: pagingInfo.keyword,
+                    startDate: pagingInfo.startDate + " 00:00:00",
+                    endDate: pagingInfo.endDate + " 00:00:00",
+                };
 
-                let response = await apiSpringBoot.get(`/program`, {
-                    params: {
-                        ...pagingInfo,
-                        pageNumber: pagingInfo.pageNumber,
-                        action: action,
-                        keyword: pagingInfo.keyword,
-                        startDate: pagingInfo.startDate + " 00:00:00",
-                        endDate: pagingInfo.endDate + " 00:00:00",
-                        ...(isNearby && { memUUID: member.memUUID }),
-                    },
-                });
+                // SENIOR 사용자만 memUUID 추가
+                if (isNearby && role === "SENIOR") {
+                    params.memUUID = member.memUUID;
+                }
+
+                let response = await apiSpringBoot.get(`/program`, { params });
 
                 setPrograms(response.data.list);
                 console.log("API Response:", response.data.list);
+                console.log("listCount:", response.data.search.listCount);
 
                 // 페이지 계산
                 const { maxPage, startPage, endPage } = PagingDiv8Calculate(
@@ -130,6 +133,7 @@ const ProgramList = () => {
                     endPage,
                     startDate: formatDate(response.data.search.startDate),
                     endDate: formatDate(response.data.search.endDate),
+                    listCount: response.data.search.listCount,
                 }));
 
             } catch (error) {
@@ -185,15 +189,18 @@ const ProgramList = () => {
             const params = {
                 ...pagingInfo,
                 pageNumber: page,
-                action: isNearby ? 'nearby' : action,
+                action: isNearby && role === "SENIOR" ? 'nearby' : action,
                 keyword: pagingInfo.keyword,
                 startDate: pagingInfo.startDate + " 00:00:00",
                 endDate: pagingInfo.endDate + " 00:00:00",
-                ...(isNearby && { memUUID: member.memUUID }),
             };
 
-            let response = await apiSpringBoot.get(`/program`, { params });
+            // SENIOR 사용자만 memUUID 추가
+            if (isNearby && role === "SENIOR") {
+                params.memUUID = member.memUUID;
+            }
 
+            let response = await apiSpringBoot.get(`/program`, { params });
 
             setPrograms(response.data.list);
             console.log("API Response:", response.data.list);
@@ -210,6 +217,7 @@ const ProgramList = () => {
                 endPage: endPage,
                 startDate: formatDate(response.data.search.startDate),
                 endDate: formatDate(response.data.search.endDate),
+                listCount: response.data.search.listCount,
             }));
 
         } catch (error) {

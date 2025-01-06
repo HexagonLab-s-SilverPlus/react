@@ -13,25 +13,29 @@ import SeniorNavbar from './common/SeniorNavbar';
 import SeniorFooter from './common/SeniorFooter';
 
 const SeniorMenu = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleChatButton = () => {
-      navigate('/welcome-chat')
+  const handleChatButton = () => {
+    navigate('/welcome-chat')
 
-    }
-    const handleDocButton = () => {
-      navigate('/docmain')
-    }
+  }
+  const handleDocButton = () => {
+    navigate('/docmain')
+  }
 
-    const handleNoticeButton=() =>{
-      navigate('/notice')
-    }
+  const handleNoticeButton = () => {
+    navigate('/notice')
+  }
+
+  const handleProgramButton = () => {
+    navigate('/program');
+  };
 
   return (
     <div>
-      <SeniorNavbar/>
+      <SeniorNavbar />
       <div className={styles.menuContainer}>
-        
+
         {/* 말동무 대화하기 */}
         <div className={`${styles.menuButton} ${styles.div1}`} onClick={handleChatButton}>
           <img src={chatIcon} alt="말동무 대화하기" />
@@ -42,16 +46,16 @@ const SeniorMenu = () => {
         </div>
 
         {/* 두뇌 활성화 게임 */}
-        <div className={`${styles.menuButton} ${styles.div2}`} onClick={()=>(navigate('/game'))}>
+        <div className={`${styles.menuButton} ${styles.div2}`} onClick={() => (navigate('/game'))}>
           <p>
             두뇌 활성화 <br />
             게임 : 맞고
           </p>
-          <img src={gostop} alt="맞고" style={{width:"100px"}}/>
+          <img src={gostop} alt="맞고" style={{ width: "100px" }} />
         </div>
 
         {/* 어르신 맞춤 활동 */}
-        <div className={`${styles.menuButton} ${styles.div3}`}>
+        <div className={`${styles.menuButton} ${styles.div3}`} onClick={handleProgramButton}>
           <p>
             어르신 <br />
             맞춤 활동
@@ -70,10 +74,10 @@ const SeniorMenu = () => {
           <p>공문서 작성</p>
           <img src={documentIcon} alt="공문서 작성" />
         </div>
-        
+
       </div>
-      <SeniorFooter/>
-    </div>
+      <SeniorFooter />
+    </div >
   );
 };
 
