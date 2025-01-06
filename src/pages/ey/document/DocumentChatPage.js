@@ -93,20 +93,27 @@ function DocumentChatPage() {
         setIsLoading(true);
         const response = await documentService.submitDocument(documentType, answers);
 
+        console.log("서버 응답:", response);
 
-        setMessages((prev) => [
-          ...prev,
-          {
-            sender: 'AI',
-            text: '성공적으로 문서가 생성되었습니다. 아래 링크를 클릭해 다운로드하세요.',
-            attachments: [
-              {
-                label: 'CSV 파일',
-                url: `${response.csv_path}`, // 경로만 설정
-              },
-            ],
-          },
-        ]);
+
+        if (response.csvPath) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              sender: 'AI',
+              text: '성공적으로 문서가 생성되었습니다. 아래 링크를 클릭해 다운로드하세요.',
+              attachments: [
+                {
+                  label: 'CSV 파일',
+                  url: `${response.csvPath}`, // Flask 응답의 csvPath를 attachment.url로 설정
+                },
+              ],
+            },
+          ]);
+
+        } else {
+          throw new Error('CSV 경로가 반환되지 않았습니다.');
+        }
         // window.location.href = response.file_path; // 다운로드 링크
       } catch (error) {
         console.error('문서 제출 오류:', error);
@@ -124,11 +131,16 @@ function DocumentChatPage() {
 
 
   const downloadFile = async (filePath) => {
+    if (!filePath) {
+      console.error("파일 경로가 비어 있습니다.");
+      return;
+    }
+
     try {
       console.log('파일 경로:', filePath);
 
       const response = await apiFlask.get(`/download-document`, {
-        params: { file_path: filePath }, // 여기서 filePath는 경로만 포함해야 함 (e.g. 'processed/address.csv')
+        params: { csv_path: filePath }, // 여기서 filePath는 경로만 포함해야 함 (e.g. 'processed/address.csv')
         headers: {
           Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
           RefreshToken: `Bearer ${refreshToken}`,
@@ -136,11 +148,16 @@ function DocumentChatPage() {
         responseType: 'blob', // 파일 다운로드를 위해 blob 타입 설정
       });
 
+      // 파일 이름 추출: '_' 뒤의 문자열만 추출
+      const fileName = filePath.includes('_')
+      ? filePath.split('_').pop() // '_' 뒤의 문자열 추출
+      : filePath.split('/').pop(); // 기본 파일 이름 추출
+
       // 파일 다운로드 처리
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', filePath.split('/').pop()); // 파일 이름 설정
+      link.setAttribute('download', fileName); // 파일 이름 설정
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -183,7 +200,14 @@ function DocumentChatPage() {
                         <button
                           key={idx}
                           className={styles['attachment-button']}
-                          onClick={() => downloadFile(attachment.url)} // 파일 경로만 전달
+                          onClick={() => {
+                            if (attachment.url) {
+                              downloadFile(attachment.url); // 파일 경로 전달
+                            } else {
+                              console.error("첨부 파일 경로가 비어 있습니다:", attachment);
+                            }
+                          
+                          }} // 파일 경로만 전달
                         >
                           {attachment.label}
                         </button>
