@@ -14,7 +14,7 @@ import SeniorFooter from "../../components/common/SeniorFooter";
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
-
+    const [files, setFiles] = useState([])
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
 
@@ -104,6 +104,8 @@ const BookList = () => {
                 });
 
                 setBooks(response.data.list);
+                setFiles(response.data.fileList);
+
                 console.log("API Response:", response.data.list);
 
                 // 페이지 계산
@@ -121,9 +123,9 @@ const BookList = () => {
                     maxPage,
                     startPage,
                     endPage,
-                    startDate: formatDate(response.data.search.startDate),
-                    endDate: formatDate(response.data.search.endDate),
+                    listCount: response.data.search.listCount,
                 }));
+
 
             } catch (error) {
                 console.error('handleBookView Error:', error);
@@ -134,7 +136,7 @@ const BookList = () => {
     }, [pagingInfo.pageNumber, pagingInfo.action]);
 
     const handlePageChange = async (page) => {
-        const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
+        const pageNumber = page || 1; // page 값이 없을 경우 기본값으로 1 설정
         //console.log("Current Page:", currentPage);
 
         setPagingInfo((prev) => ({
@@ -142,7 +144,7 @@ const BookList = () => {
             pageNumber: page, // 선택된 페이지 번호로 업데이트
         }));
 
-        handleBookView(currentPage, pagingInfo.action);
+        handleBookView(pageNumber, pagingInfo.action);
     };
 
     //페이지 불러오기
@@ -154,8 +156,6 @@ const BookList = () => {
                 pageNumber: page,
                 action: action,
                 keyword: pagingInfo.keyword,
-                startDate: pagingInfo.startDate + " 00:00:00",
-                endDate: pagingInfo.endDate + " 00:00:00",
             };
 
             let response = await apiSpringBoot.get(`/book`, params);
@@ -194,7 +194,7 @@ const BookList = () => {
 
     //검색 버튼 클릭
     const handleSearchClick = () => {
-        handleBookView(pagingInfo.pageNumber, pagingInfo.action);
+        handleBookView(1, pagingInfo.action);
     };
 
     const renderSearchInputs = () => {
@@ -250,8 +250,7 @@ const BookList = () => {
 
                             <PagingDiv8
                                 pageNumber={pagingInfo.pageNumber || 1}
-                                currentPage={pagingInfo.currentPage || 1}
-                                pageSize={pagingInfo.pageSize}
+                                pageSize={pagingInfo.pageSize || 8}
                                 maxPage={pagingInfo.maxPage || 1}
                                 startPage={pagingInfo.startPage || 1}
                                 endPage={pagingInfo.endPage || 1}
@@ -321,7 +320,6 @@ const BookList = () => {
 
                     <PagingDiv8
                         pageNumber={pagingInfo.pageNumber || 1}
-                        currentPage={pagingInfo.currentPage || 1}
                         pageSize={pagingInfo.pageSize}
                         maxPage={pagingInfo.maxPage || 1}
                         startPage={pagingInfo.startPage || 1}
