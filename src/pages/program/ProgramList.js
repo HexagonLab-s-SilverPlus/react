@@ -1,5 +1,5 @@
 // src/pages/program/ProgramList.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiSpringBoot } from "../../utils/axios";
 import { AuthContext } from "../../AuthProvider";
@@ -14,6 +14,7 @@ import SeniorFooter from "../../components/common/SeniorFooter";
 
 const ProgramList = () => {
     const [programs, setPrograms] = useState([]);
+    const snrPgListRef = useRef(null); // snrPgList 요소를 참조하기 위한 useRef
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
@@ -40,6 +41,12 @@ const ProgramList = () => {
 
 
     //--------------------------------------------------
+    const handleScrollToTop = () => {
+        if (snrPgListRef.current) {
+            snrPgListRef.current.scrollTop = 0; // 스크롤 맨 위로 설정
+        }
+    };
+
     //데이터 포맷(한국)
     const formatDate = (w) => {
         const date = new Date(w);
@@ -82,6 +89,7 @@ const ProgramList = () => {
                 endDate: formattedDate,
             }));
             handleProgramView(1, 'all'); // 전체 목록 로드
+            handleScrollToTop(); // 스크롤 맨 위로
         }
     };
 
@@ -141,14 +149,19 @@ const ProgramList = () => {
             }
         };
 
-        loadPrograms();
-    }, [pagingInfo.pageNumber, pagingInfo.action, isNearby]);
+        if (pagingInfo.pageNumber !== 1 || pagingInfo.action === 'all') {
+            // 페이지 번호가 변경되었거나 전체 조회 시만 데이터를 불러옴
+            loadPrograms();
+        }
+
+    }, [pagingInfo.pageNumber, isNearby]);
 
     const handleSelectChange = (e) => {
         const { value } = e.target;
         setPagingInfo((prev) => ({
             ...prev,
             action: value,
+            pageNumber: 1, // 검색 조건 변경 시 항상 1페이지로 초기화
         }));
     };
 
@@ -162,6 +175,7 @@ const ProgramList = () => {
         }));
 
         handleProgramView(currentPage, pagingInfo.action);
+        handleScrollToTop(); // 스크롤 맨 위로
     };
 
     //isNearby 상태 변경 이벤트 핸들러
@@ -176,10 +190,19 @@ const ProgramList = () => {
 
         // 페이지 번호를 초기화
         setPagingInfo((prev) => ({
-            ...prev,
             pageNumber: 1,
-            keyword: '',
+            listCount: 1,
+            pageSize: 8,
+            maxPage: 1,
+            startPage: 1,
+            endPage: 1,
+            action: 'all', // 기본 검색 옵션으로 초기화
+            keyword: '',   // 검색어 초기화
+            startDate: formattedDate, // 기본 날짜 초기화
+            endDate: formattedDate,
         }));
+
+        handleScrollToTop(); // 스크롤 맨 위로
     };
 
     //페이지 불러오기
@@ -239,7 +262,8 @@ const ProgramList = () => {
 
     //검색 버튼 클릭
     const handleSearchClick = () => {
-        handleProgramView(pagingInfo.pageNumber, pagingInfo.action);
+        handleProgramView(1, pagingInfo.action);
+        handleScrollToTop(); // 스크롤 맨 위로
     };
 
     const renderSearchInputs = () => {
@@ -322,7 +346,9 @@ const ProgramList = () => {
                         ) : ('')}
 
                         <div className={[styles.snrPgList, 'masked-overflow'].join(' ')}
-                            style={{ height: isNearby ? '90%' : '80%' }}>
+                            style={{ height: isNearby ? '90%' : '80%' }}
+                            ref={snrPgListRef} // snrPgList 요소에 ref 추가
+                        >
                             {(programs || []).map((item) => {
                                 const { program, pgfiles } = item;   //프로그램 데이터와 파일 URL 분리
 
