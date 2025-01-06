@@ -36,9 +36,6 @@ function SideBar() {
           <Link to="/program">어르신 프로그램</Link>
         </li>
         <li>
-          <Link to="/">전자책</Link>
-        </li>
-        <li>
           <Link to="/qna">Q&A</Link>
         </li>
         <li>
@@ -94,6 +91,9 @@ if (role==="MANAGER") {
         </li>
         <li>
           <Link to="/program">어르신 프로그램</Link>
+        </li>
+        <li>
+          <Link to="/book">전자책</Link>
         </li>
         <li>
           <Link to="/qna">Q&A</Link>
