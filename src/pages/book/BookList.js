@@ -158,7 +158,7 @@ const BookList = () => {
                 endDate: pagingInfo.endDate + " 00:00:00",
             };
 
-            let response = await apiSpringBoot.get(`/book`, { params });
+            let response = await apiSpringBoot.get(`/book`, params);
 
 
             setBooks(response.data.list);
@@ -183,9 +183,6 @@ const BookList = () => {
         }
     };
 
-
-
-
     //input 에 입력 시 paging훅에 저장
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -207,39 +204,17 @@ const BookList = () => {
                 handleSearchClick();
             }
         };
-
-        switch (pagingInfo.action) {
-            case "bkDate":
-                return (
-                    <div className={styles.bkDateWrap}>
-                        <input
-                            type="date"
-                            name="startDate"
-                            value={pagingInfo.startDate}
-                            onChange={handleInputChange}
-                        />
-                        <span> ~ </span>
-                        <input
-                            type="date"
-                            name="endDate"
-                            value={pagingInfo.endDate}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                );
-            case "all":
-            default:
-                return (
-                    <input
-                        type="search"
-                        name="keyword"
-                        placeholder="검색어를 입력하세요."
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyPress}
-                        className={styles.searchInput}
-                    />
-                );
-        }
+        return (
+            <input
+                type="search"
+                name="keyword"
+                placeholder="검색어를 입력하세요."
+                onChange={handleInputChange}
+                onKeyDown={handleKeyPress}
+                className={styles.searchInput}
+            />
+        );
+        
     };
 
     //--------------------------------------------------
@@ -259,14 +234,12 @@ const BookList = () => {
                     <div className={styles.snrBkRight}>
                         <div className={[styles.snrBkList, 'masked-overflow'].join(' ')}
                             style={{ height: '90%' }}>
-                            {(books || []).map((item) => {
-                                const { book, bkfiles } = item;   //프로그램 데이터와 파일 URL 분리
+                            {(books || []).map((book) => {
 
                                 return (
-                                    <div className={styles.snrBkListItem} key={book.snrBookId}>
-                                        <a onClick={() => handleMoveDetailView(book.snrBookId)}>
-                                            <h1>{book.snrTitle}</h1>
-                                            <p>{book.snrOrgName}</p>
+                                    <div className={styles.snrBkListItem} key={book.bookNum}>
+                                        <a onClick={() => handleMoveDetailView(book.bookNum)}>
+                                            <h1>{book.bookTitle}</h1>
                                             <span>내용이 궁금하면 클릭해보세요!</span>
                                         </a>
                                     </div>
@@ -295,7 +268,7 @@ const BookList = () => {
                 <SeniorFooter />
             </div>//snrBkContainer end
         );
-    } else {
+    } else if(role === "MANAGER") {
         return (
             <div className={styles.bkContainer}>
                 <SideBar />
@@ -324,23 +297,19 @@ const BookList = () => {
 
                         <div className={styles.bkListWrap}>
                             <ul className={styles.bkList}>
-                                {(books || []).map((item) => {
-                                    const { book, bkfiles } = item;   //프로그램 데이터와 파일 URL 분리
-
+                                {(books || []).map((book) => {
                                     //image MIME 타입 필터링 후 첫 번째 파일 가져오기
-                                    const firstImageFile = bkfiles && bkfiles.find(file => file.mimeType.startsWith('image/'));
+                                    const firstImageFile = book && book.bookImage;
                                     const firstImageUrl = firstImageFile ? `data:${firstImageFile.mimeType};base64,${firstImageFile.fileContent}` : bkImage;
 
                                     return (
-                                        <li key={book.snrBookId} className={styles.bkListItem}>
-                                            <a onClick={() => handleMoveDetailView(book.snrBookId)}>
+                                        <li key={book.bookNum} className={styles.bkListItem}>
+                                            <a onClick={() => handleMoveDetailView(book.bookNum)}>
                                                 <div className={styles.bkListImgWrap}>
                                                     <img src={firstImageUrl} className={styles.bkImage} />
                                                 </div>
                                                 <div className={styles.bkListTextWrap}>
-                                                    <p>{book.snrTitle}</p>
-                                                    <p><span>기간 : </span>{book.snrStartedAt.split('T')[0]} ~ {book.snrEndedAt.split('T')[0]}</p>
-                                                    <p><span>장소 : </span>{book.snrOrgName}</p>
+                                                    <p>{book.bookTitle}</p>
                                                 </div>
                                             </a>
                                         </li>
