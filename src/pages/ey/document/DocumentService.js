@@ -2,7 +2,7 @@
  * DocumentService: `apiFlask`를 사용해 문서 관련 API를 호출하는 유틸리티
  * @param {object} apiFlask - `AuthContext`에서 제공받은 Axios 인스턴스
  */
-const DocumentService = (apiFlask, accessToken) => ({
+const DocumentService = (apiFlask, accessToken, refreshToken) => ({
     // /**
     //  * 문서 키를 가져오는 함수
     //  * @param {string} documentType - 문서 유형
@@ -28,28 +28,32 @@ const DocumentService = (apiFlask, accessToken) => ({
 
 
     /**
-         * GPT 질문 생성 함수
-         * @param {string} documentType - 문서 유형
-         * @returns {Promise<string[]>} - GPT가 생성한 질문 목록
-         */
+     * GPT 질문 생성 함수
+     * @param {string} documentType - 문서 유형
+     * @returns {Promise<string[]>} - GPT가 생성한 질문 목록
+    */
     generateQuestion: async (documentType) => {
+        console.log("refreshTOken: ", refreshToken)
         try {
+            console.debug("헤더의 RefreshToken: ", `Bearer ${refreshToken}`)
+
             const response = await apiFlask.post(
                 '/generate-question',
                 { documentType },
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
-                        RefreshToken: localStorage.getItem('refreshToken'),
+                        RefreshToken: `Bearer ${refreshToken}`,
                     },
-                }
+                    withCredentials: true,
+                },
 
             );
 
             if (!response.data || !Array.isArray(response.data.questions)) {
                 throw new Error('유효하지 않은 응답 형식');
-              }
-              
+            }
+
             return response.data.questions;
         } catch (error) {
             console.error('generateQuestion 오류:', error);
@@ -73,8 +77,9 @@ const DocumentService = (apiFlask, accessToken) => ({
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
-                        RefreshToken: localStorage.getItem('refreshToken')
+                        RefreshToken: `Bearer ${refreshToken}`,
                     },
+                    withCredentials: true,
                 });
             return response.data;
         } catch (error) {

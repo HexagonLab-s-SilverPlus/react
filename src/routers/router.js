@@ -12,6 +12,7 @@ import faqRouter from './faqRouter';
 import gameRouter from './gameRouter';
 import WelcomePage from '../components/common/WelcomePage';
 import programRouter from './programRouter';
+import bookRouter from './bookRouter';
 
 const AppRouter = () => {
   // 변수 = () => {}  ==>> 함수임
@@ -51,6 +52,7 @@ const AppRouter = () => {
       {faqRouter.map((route, index) => React.cloneElement(route, { key: `qna-${index}` }))}
       {gameRouter.map((route, index) => React.cloneElement(route, { key: `game-${index}` }))}
       {programRouter.map((route, index) => React.cloneElement(route, { key: `program-${index}` }))}
+      {bookRouter.map((route, index) => React.cloneElement(route, { key: `bookRouter-${index}` }))}
     </Routes>
   );
 };
