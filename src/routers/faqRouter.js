@@ -5,10 +5,10 @@ import FAQList from '../pages/faq/FAQList';
 
 
 
-const qnaRouter = [
+const faqRouter = [
     <>
         <Route path="/faq" element={<FAQList />} />,
     </>
 ];
 
-export default qnaRouter;
+export default faqRouter;
