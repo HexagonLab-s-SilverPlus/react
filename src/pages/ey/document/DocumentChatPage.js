@@ -10,13 +10,12 @@ import Container from '../chat/Container.js';
 
 function DocumentChatPage() {
   const { documentType } = useParams(); // URL에서 문서 유형 가져오기
-  const { apiFlask, accessToken } = useContext(AuthContext); // Context에서 apiFlask 가져오기
-  const documentService = DocumentService(apiFlask, accessToken); // DocumentService를 apiFlask로 생성
+  const { apiFlask, accessToken, refreshToken } = useContext(AuthContext); // Context에서 apiFlask 가져오기
+  const documentService = DocumentService(apiFlask, accessToken, refreshToken); // DocumentService를 apiFlask로 생성
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const [keys, setKeys] = useState([]);
   const [currentKeyIndex, setCurrentKeyIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [fileName, setFileName] = useState(""); // 동적 파일 이름 저장
@@ -132,7 +131,7 @@ function DocumentChatPage() {
         params: { file_path: filePath }, // 여기서 filePath는 경로만 포함해야 함 (e.g. 'processed/address.csv')
         headers: {
           Authorization: `Bearer ${accessToken}`, // 인증 헤더 추가
-          RefreshToken: localStorage.getItem('refreshToken')
+          RefreshToken: `Bearer ${refreshToken}`,
         },
         responseType: 'blob', // 파일 다운로드를 위해 blob 타입 설정
       });
