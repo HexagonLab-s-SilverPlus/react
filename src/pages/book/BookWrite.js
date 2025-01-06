@@ -24,6 +24,12 @@ const BookWrite = () => {
         bookCreatedBy: member.memUUID,
     });
     
+    const initialFormData = ({
+        bookTitle: '',
+        bookCreatedBy: member.memUUID,
+    });
+    
+    
 
     //초기화 버튼 클릭 핸들러
     const handleReset = () => {
@@ -119,36 +125,36 @@ const BookWrite = () => {
                     </div>
                 </div>
                 <form onReset={handleReset} onSubmit={handleInsertProgram} encType='multipart/form-data'>
-                    <div className={styles.pgBox}>
+                    <div className={styles.bkBox}>
                         <label>제 목<span className={styles.redTxt}>&#42;</span></label>
                         <input type="text" name="bookTitle" id="bookTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
                     </div>
                     {/* 첨부파일 */}
-                    <div className={styles.pgFileWrap}>
-                        <div className={styles.pgFileLeft}>
+                    <div className={styles.bkFileWrap}>
+                        <div className={styles.bkFileLeft}>
                             <p>사진 이미지 등록</p>
                             <button type="button" onClick={handleImageBtnClick} className={styles.fileBtn}>파일 선택</button>
                             <input type="file" ref={imageInputRef} multiple accept="*/*" onChange={handleImageChange} style={{display: "none"}} />
-                        </div>{/* .pgFileLeft end */}              
-                        <div className={styles.pgFileRight}>
-                            <div className={styles.pgPrevItem}>
-                                <img src={image} className={styles.pgPrevImage} />
+                        </div>{/* .bkFileLeft end */}              
+                        <div className={styles.bkFileRight}>
+                            <div className={styles.bkPrevItem}>
+                                <img src={image} className={styles.bkPrevImage} />
                             </div>
                         </div>
-                    </div>{/* .pgFileWrap end */}
+                    </div>{/* .bkFileWrap end */}
 
-                    <div className={styles.pgFileWrap}>
-                        <div className={styles.pgFileLeft}>
+                    <div className={styles.bkFileWrap}>
+                        <div className={styles.bkFileLeft}>
                             <p>책정보 파일 등록</p>
                             <button type="button" onClick={handleFileBtnClick} className={styles.fileBtn}>파일 선택</button>
                             <input type="file" ref={fileInputRef} multiple accept="*/*" onChange={handleFileChange} style={{display: "none"}} />
-                        </div>{/* .pgFileLeft end */}              
-                    </div>{/* .pgFileWrap end */}
+                        </div>{/* .bkFileLeft end */}              
+                    </div>{/* .bkFileWrap end */}
                     
-                    <div className={styles.pgBtnWrap}>
+                    <div className={styles.bkBtnWrap}>
                         <input type="submit" value="등록하기" />
                         <input type="reset" value="초기화" />
-                    </div>{/* pgBtnWrap end */}
+                    </div>{/* bkBtnWrap end */}
                 </form>
             </section>
         </div>
