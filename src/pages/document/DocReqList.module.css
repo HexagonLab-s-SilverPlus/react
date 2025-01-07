@@ -1,0 +1,99 @@
+.dDocTop {
+    border-bottom: 3px solid #064420;
+    padding-bottom: 8px;
+}
+
+.dDocTop > .dMenuName {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0;
+    padding-left: 24px;
+    cursor: pointer;
+}
+
+.dRsection {
+    width: calc(100% - 368px);
+    position: absolute;
+    top: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding: 72px 48px;
+}
+
+.dTableDiv {
+    width: calc(100%);
+    margin-top: 20px;
+}
+
+.dDocRequestTable {
+    table-layout: fixed;
+    width: 100%;
+    text-align: center;
+    margin-top: 80px;
+    font-size: 18px;
+    border-collapse: collapse;
+}
+
+/* 테이블 스타일 */
+.dTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 100px;
+    text-align: center;
+}
+
+/* 데이터 셀 스타일 */
+.dTd {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 중앙 열에 세로선 추가 */
+th:not(:first-child):not(:last-child),
+.dTd:not(:first-child):not(:last-child) {
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+/* 테이블 헤더 스타일 */
+th, .dTd {
+    border: 1px solid #618264;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* 헤더 배경색 */
+th {
+    border-top: 2px solid #618264;
+    border-bottom: 2px solid #618264;
+    font-weight: bold;
+}
+
+/* 행 스타일 */
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 버튼 스타일 */
+.dViewButton {
+    background-color: #618264;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dViewButton:hover {
+    background-color: #064420;
+}
+
+.dMenuName {
+    display: flex;
+    font-size: 32px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+}

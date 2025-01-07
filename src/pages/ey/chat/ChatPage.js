@@ -63,17 +63,20 @@ function ChatPage() {
 
     setIsLoading(true);
 
+    console.log()
     try {
       const response = await apiFlask.post(
         '/chat',
         {
           message: inputText,
-          createWorkspace: false
+          createWorkspace: false,
+          workspaceId: selectedWorkspaceId,
         },
         {
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            RefreshToken: localStorage.getItem('refreshToken')
+            RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
           },
         }
       );
@@ -107,6 +110,27 @@ function ChatPage() {
   const toggleSidebar = () => {
     setIsSidebarVisible(prev => !prev);
   };
+
+
+  // 스프링부트의 세션 종료하는(상태를 COMPLETED로 변경하는) API 호출
+  const handleEndSession = async () => {
+    try {
+      const response = await apiSpringBoot.patch('/api/session/update-status', null, {
+        params: {
+          workspaceId: selectedWorkspaceId,
+          status: 'COMPLETED', // 상태를 변경
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
+        },
+      });
+      console.log('세션 종료 성공:', response.data);
+    } catch (error) {
+      console.error('세션 종료 중 오류:', error);
+    }
+  };
+
 
   return (
     <div className={styles.container}>
@@ -142,6 +166,12 @@ function ChatPage() {
               </div>
             ))}
             <div ref={chatEndRef}></div>
+
+
+            {/* 세션 종료 버튼임 */}
+            <button onClick={handleEndSession} className={styles.endSessionButton}>
+              세션 종료
+            </button>
           </div>
 
           <div className={styles['input-container']}>

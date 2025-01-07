@@ -100,13 +100,6 @@ const FindPwdSeniorResult = () => {
     return passwordRegex.test(memPwd.memPw);
   };
 
-  // 비밀번호 확인 input 의 포커스가 사라지면 유효성검사를 작동시키는 함수
-  const handleConfirmPwd = () => {
-    if (memPwd.memPwChk) {
-      validate();
-    }
-  };
-
   const handleCheckPassword = () => {
     if (memPwd.memPw) {
       validatePassword();
@@ -122,7 +115,7 @@ const FindPwdSeniorResult = () => {
     }
 
     // 전송 전에 유효성 검사 확인
-    if (!validate()) {
+    if (!validate(memPwd)) {
       alert('비밀번호 일치 확인을 해주세요.');
       return;
     }
