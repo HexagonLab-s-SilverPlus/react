@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from './BookWrite.module.css';
+import styles from './BookUpdate.module.css';
 import SideBar from "../../components/common/SideBar";
 import { AuthContext } from "../../AuthProvider";
 import { apiSpringBoot } from "../../utils/axios";
 
 
-const BookWrite = () => {
+const BookUpdate = () => {
 
     //토큰정보 가져오기(AuthProvider)
     const { member } = useContext(AuthContext);
@@ -191,4 +191,4 @@ const BookWrite = () => {
     );
 };
 
-export default BookWrite;
+export default BookUpdate;
