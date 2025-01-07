@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from './BookUpdate.module.css';
 import SideBar from "../../components/common/SideBar";
 import { AuthContext } from "../../AuthProvider";
@@ -7,6 +7,12 @@ import { apiSpringBoot } from "../../utils/axios";
 
 
 const BookUpdate = () => {
+
+    const [book, setBook] = useState();
+    const [mimeType, setMimeType] = useState();
+    const [fileContent, setFileContent] = useState();
+
+    const {bookUUID} = useParams();
 
     //토큰정보 가져오기(AuthProvider)
     const { member } = useContext(AuthContext);
@@ -23,39 +29,40 @@ const BookUpdate = () => {
 
     //program
     const [formData, setFormData] = useState({
+        bookCreateAt: "",
+        bookCreatedBy: "",
+        bookDetail: "",
+        bookImage: "",
+        bookNum: "",
         bookTitle: '',
-        bookCreatedBy: member.memUUID,
+        bookCreatedBy: "",
+        bookUpdateAt: "",
+        bookUpdatedBy: member.memUUID,
     });
-    
-    const initialFormData = ({
-        bookTitle: '',
-        bookCreatedBy: member.memUUID,
-    });
-    
-    
 
-    //초기화 버튼 클릭 핸들러
-    const handleReset = () => {
-        setFormData(initialFormData); // formData 초기화
-        setFile(null);   //파일 목록 초기화
-        setFileSelect("파일 없음");
-        setImage(null);
-        setImageFiles(null);  //이미지 파일 목록 초기화
-        setImageFileSelect("파일 없음");
+    useEffect(() => {
+        const loadBooks = async () => {
+            try {
+                const response = await apiSpringBoot.get(`/book/${bookUUID}`);
+                setBook(response.data.book);
+                setMimeType(response.data.mimeType);
+                setFileContent(response.data.fileContent);
+                setImageFileSelect(response.data.book.bookImage);
+                setFileSelect(response.data.book.bookDetail);
+                console.log(response.data);
+            } catch (error) {
+                console.error('handleBookView Error:', error);
+            }
+            
+        };
 
-        //파일 입력 필드 초기화
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-        if (imageInputRef.current) {
-            imageInputRef.current.value = '';
-        }
-    };
+        loadBooks();
+    }, []);
 
-    //프로그램 등록하기
+    //프로그램 수정하기
     const handleInsertProgram = async (e) => {
         e.preventDefault(); //submit 취소
-        if(window.confirm('책을 등록하시겠습니까?')) {
+        if(window.confirm('책을 수정하시겠습니까?')) {
             const data = new FormData();
 
             if (file){
@@ -67,16 +74,16 @@ const BookUpdate = () => {
             Object.entries(formData).forEach(([key, value]) => data.append(key, value)); 
             
             try {
-                await apiSpringBoot.post('/book', data,{
+                await apiSpringBoot.put('/book', data,{
                     headers: {'Content-Type':'multipart/form-data',
                     }}
                 );
-                alert('Book 등록 성공');
-                // 게시글 등록이 성공되면 공지 목록 페이지로 이동
+                alert('Book 수정 성공');
+                // 게시글 수정이 성공되면 공지 목록 페이지로 이동
                 navigate('/book');
             } catch (error) {
-                console.error('Book 등록 실패', error);
-                alert('새 게시글 등록 실패');
+                console.error('Book 수정 실패', error);
+                alert('새 게시글 수정 실패');
             }
         }
     };
@@ -118,7 +125,7 @@ const BookUpdate = () => {
     //이전페이지 이동
     const handleMovePrev = (e) => {
         e.preventDefault(); //submit 취소
-        if (window.confirm("등록을 취소하시겠습니까?")) {
+        if (window.confirm("수정을 취소하시겠습니까?")) {
             navigate(-1);
         }
     };
@@ -126,6 +133,11 @@ const BookUpdate = () => {
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
         setFileSelect(e.target.files[0].name);
+    };
+
+    if (!book) {
+        // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+        return <div>Loading...</div>;
     };
 
     return(
@@ -137,21 +149,21 @@ const BookUpdate = () => {
                 </div>
                 <div className={styles.secContent}>
                     <div className={styles.bkListTop}>
-                        <p className={styles.bkTitle}>전자책 등록</p>
+                        <p className={styles.bkTitle}>전자책 수정</p>
                     </div>
                 </div>
-                <form onReset={handleReset} onSubmit={handleInsertProgram} encType='multipart/form-data'>
+                <form onSubmit={handleInsertProgram} encType='multipart/form-data'>
                     <div className={styles.bkBox}>
                         <label>제 목</label>
                         <span className={styles.redTxt}>&#42;</span>
-                        <input type="text" name="bookTitle" id="bookTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
+                        <input type="text" name="bookTitle" id="bookTitle" defaultValue={book.bookTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
                     </div>
                     {/* 첨부파일 */}
                     <div className={styles.bkFiles}>
                         <div className={styles.bkFilesSelect}>
                             <div className={styles.bkFileWrap}>
                                 <div className={styles.bkFileLeft}>
-                                    <p className={styles.bkFileListContainer}>사진 이미지 등록</p>
+                                    <p className={styles.bkFileListContainer}>사진 이미지 수정</p>
                                     <div >
                                         <button type="button" onClick={handleImageBtnClick} className={styles.fileBtn}>파일 선택</button>               
                                         <p className={styles.bkFileList}>{imageFileSelect}</p>
@@ -162,7 +174,7 @@ const BookUpdate = () => {
                             
                             <div className={styles.bkFileWrap}>
                                 <div className={styles.bkFileLeft}>
-                                    <p>책정보 파일 등록</p>
+                                    <p>책정보 파일 수정</p>
                                     <div>
                                         <button type="button" onClick={handleFileBtnClick} className={styles.fileBtn}>파일 선택</button>
                                         <p className={styles.bkFileList}>{fileSelect}</p>
@@ -174,15 +186,16 @@ const BookUpdate = () => {
 
                         <div className={styles.bkFileRight}>
                             <div className={styles.bkPrevItem}>
+                                {image ?
                                 <img src={image} className={styles.bkPrevImage} />
+                                : <img src={`data:${mimeType};base64,${fileContent}`} className={styles.bkPrevImage} />}
                             </div>
                         </div>
                     </div>
 
                     
                     <div className={styles.bkBtnWrap}>
-                        <input type="submit" value="등록하기" />
-                        <input type="reset" value="초기화" />
+                        <input type="submit" value="수정하기" />
                         <input type="button" value="이전 페이지" onClick={handleMovePrev} />
                     </div>{/* bkBtnWrap end */}
                 </form>
