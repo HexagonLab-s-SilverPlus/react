@@ -178,25 +178,27 @@ const BookList = () => {
                 <section className={styles.snrBkSection}>
                     <div className={styles.snrBkLeft}>
                         <div className={styles.snrBkLTop}>
-                            <h1>오늘의<br />어르신 프로그램</h1>
+                            <h1>전자책</h1>
                         </div>{/* snrBkLTop end */}
                     </div>{/* snrBkLeft end */}
 
                     <div className={styles.snrBkRight}>
                         <div className={[styles.snrBkList, 'masked-overflow'].join(' ')}
                             style={{ height: '90%' }}>
-                            {(books || []).map((book) => {
-
-                                return (
-                                    <div className={styles.snrBkListItem} key={book.bookNum}>
-                                        <a onClick={() => handleMoveDetailView(book.bookNum)}>
-                                            <h1>{book.bookTitle}</h1>
-                                            <span>내용이 궁금하면 클릭해보세요!</span>
-                                        </a>
-                                    </div>
-                                );
-                            })}
-
+                                <ul className={styles.pgBookList}>
+                                    {(books || []).map((book) => (
+                                            <li className={styles.pgBookItem} key={book.book.bookNum}>
+                                                <div>
+                                                    <div className={styles.pgBookImageWrap}>
+                                                        <img src={`data:${book.mimeType};base64,${book.fileContent}`} className={styles.pgBookImage}/>
+                                                    </div>
+                                                    <div className={styles.pgBookTextWrap}>
+                                                        <p>{book.book.bookTile}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                    ))}
+                                </ul>
                             <button type="button" className={styles.bkListBtn} onClick={()=>(window.location.href ="/book")}>목록</button>
 
                             <PagingDiv8

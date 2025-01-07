@@ -111,13 +111,16 @@ body {background: #fff; color: #333;}
     background-color: transparent;
 }
 
-.snrBkListItem {list-style: none; box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 16px; margin-bottom: 36px;}
-.snrBkListItem > a {display: block; width: 100%; height: 100%; padding: 36px; box-sizing: border-box; border-radius: 16px; background: #fff; min-height: 216px; position: relative; cursor: pointer;}
-.snrBkListItem h1 {margin: 0; padding: 0; font-size: 36px; word-break: keep-all; overflow-wrap: break-word; letter-spacing: 1px;}
-.snrBkListItem p {margin: 0; padding: 0; font-size: 32px; position: absolute; right: 24px; bottom: 24px; font-weight: bold;}
-.snrBkListItem span {font-size: 24px; color: #999; position: absolute; bottom: 24px; opacity: 0; transition: all 0.3s;}
-.snrBkListItem a:hover {background: #FDFAF6;}
-.snrBkListItem a:hover > span {opacity: 1;}
+.pgBookList {width: 100%;}
+.pgBookList {margin: 48px 0; padding: 0; display: flex; flex-wrap: wrap; align-content: flex-start;}
+.pgBookItem {list-style: none; padding: 0; width: 24%; margin-right: calc(4% / 3); margin-bottom: 48px; }
+.pgBookItem:nth-child(4n) {margin-right: 0;}
+.pgBookItem > div {display: block; width: 100%; height: 100%; cursor: pointer;}
+.pgBookImage {width: 100%; aspect-ratio: 1 / 1; object-fit: cover;}
+
+.pgBookTextWrap {margin: 12px 0;}
+.pgBookTextWrap p {font-size: 16px; margin: 0; color: #666; margin-bottom: 4px; width: fit-content; max-width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.pgBookTextWrap > p:nth-child(1) {display: block; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 8px; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: all 0.3s;}
 
 .bkListBtn {border: 0; background: #618264; color: #fff; width: 144px; font-size: 32px; height: 60px; font-family: "Pretendard Variable"; letter-spacing: 1px; border-radius: 8px; display: block; margin-right: 0; margin-left: auto; cursor: pointer;}
 /* snrBkRight end */
