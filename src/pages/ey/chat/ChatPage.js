@@ -63,17 +63,20 @@ function ChatPage() {
 
     setIsLoading(true);
 
+    console.log()
     try {
       const response = await apiFlask.post(
         '/chat',
         {
           message: inputText,
-          createWorkspace: false
+          createWorkspace: false,
+          workspaceId: selectedWorkspaceId,
         },
         {
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            RefreshToken: localStorage.getItem('refreshToken')
+            RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
           },
         }
       );
