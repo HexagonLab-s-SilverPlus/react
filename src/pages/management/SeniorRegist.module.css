@@ -1,0 +1,323 @@
+/* src/pages/management/SeniorRegist.module.css */
+/* src/pages/member/MemberDetailView.module.css */
+
+.mdetailMainContainer {
+  display: flex;
+}
+
+.mdetailSubContainer {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+
+.mdetailHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+
+.mdetailSubHeader > p {
+  font-size: 28px;
+  margin: 0;
+  font-weight: bold;
+  border-bottom: 1px solid #064420;
+  padding-top: 40px;
+  padding-bottom: 5px;
+  padding-left: 24px;
+}
+
+.mdetailDiv {
+  margin-top: 80px;
+  display: flex;
+  gap: 20px;
+}
+
+.mdetailProfilephoto {
+  width: 250px;
+  height: 300px;
+  flex-shrink: 0;
+  margin-top: 17px;
+  margin-right: 50px;
+  /* border: 1px solid; */
+}
+
+.mdetailProfilephoto > button {
+  position: relative;
+  /* top: 310px; */
+  left: 80px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  height: 25px;
+}
+
+.sregistProfile {
+  width: 250px;
+  height: 300px;
+}
+
+.mdetailTableDiv {
+  flex-grow: 1;
+  margin-left: 50px;
+  max-width: calc(100%-270px);
+  display: flex;
+}
+
+.mdetailTable {
+  font-size: 18px;
+  table-layout: fixed;
+  width: 70%;
+}
+
+.mdetailTable > tr {
+  height: 70px;
+}
+
+.mdetailTable > tr > th {
+  margin-left: 10px;
+  width: 90px;
+  line-height: 0;
+  text-align: justify;
+}
+
+.mdetailTable > tr > td {
+  width: 300px;
+}
+
+.mdetailTable > tr > td > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 245px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 2px solid #dddddd;
+}
+
+.mdetailTable > tr > td > input[readonly] {
+  background-color: #dddddd;
+  border: 3px solid #dddddd;
+}
+
+.mdetailTable > tr > th::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.mdetailTable > tr > th::before {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.mdetailButtonDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 1325px;
+  max-width: calc(100% - 150px);
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+.mdetailButton1 {
+  border-radius: 3px;
+  border: 0;
+  background-color: #064420;
+  color: #ffffff;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.mdetailButton2 {
+  border-radius: 3px;
+  background-color: #eeeeee;
+  border: 0;
+  color: #000000;
+  width: 144px;
+  height: 48px;
+  margin-right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading > p {
+  text-align: center;
+  font-size: 30px;
+}
+
+.mdetailSelectDiv {
+  display: flex;
+  align-items: center; /* 수직 중심 정렬 */
+  gap: 10px; /* 요소 간 간격 */
+}
+
+.mdetailSelect {
+  width: 80px;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.mdetailTable > tr > td > div > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 345px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 0;
+}
+
+.mdetailTable > tr > td > div > input[readonly] {
+  background-color: #dddddd;
+}
+
+.image {
+  width: 250px;
+  height: 300px;
+}
+
+/* 아이디 비밀번호 입력칸 */
+.sregistIdPwd {
+  width: 1200px;
+  vertical-align: middle;
+  margin-top: 20px;
+}
+
+.sregistIdPwd > td {
+  width: 250px;
+}
+
+.sregistIdPwd > th {
+  margin-left: 10px;
+  width: 90px;
+  height: 40px;
+  line-height: 0;
+  text-align: justify;
+}
+
+.sregistIdPwd > td > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 200px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 2px solid #dddddd;
+}
+
+.sregistIdPwd > th::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.sregistIdPwd > th::before {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+/* 아이디 비밀번호 체크 메세지 출력*/
+.sregistIdPwdChk {
+  width: 1200px;
+  vertical-align: middle;
+}
+
+.sregistIdPwdChk > td {
+  width: 250px;
+}
+
+.sregistIdPwdChk > th {
+  margin-left: 10px;
+  width: 90px;
+  /* height: 70px; */
+  line-height: 0;
+  text-align: justify;
+}
+
+.sregistIdPwdChk > td > input {
+  margin-left: 10px;
+  border: 0;
+  background-color: #fff;
+  font-size: 10px;
+}
+
+.sregistIdPwdChk > td > button {
+  margin-left: 10px;
+  height: 25px;
+  font-weight: bold;
+  border-style: hidden;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  color: #333333;
+  cursor: pointer;
+}
+
+/* 이메일 입력 칸*/
+.sregistEmailDiv {
+  width: 700px;
+  vertical-align: middle;
+}
+
+.sregistEmailDiv > td {
+  height: 70;
+  vertical-align: middle;
+}
+
+.sregistEmailDiv > th {
+  margin-left: 10px;
+  width: 90px;
+  height: 70px;
+  line-height: 0;
+  text-align: justify;
+}
+
+.sregistEmailDiv > td > input {
+  margin-left: 10px;
+  height: 36px;
+  width: 200px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+  border: 2px solid #dddddd;
+}
+
+.sregistEmailDiv > th::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.sregistEmailDiv > th::before {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.sregistEmailDiv > td > select {
+  margin-left: 20px;
+  width: 100px;
+  height: 36px;
+}
