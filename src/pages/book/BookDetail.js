@@ -9,7 +9,6 @@ import { apiSpringBoot } from "../../utils/axios";
 const BookDetail = () => {
 
     const [book, setBook] = useState();
-    const [fileName, setFileName] = useState();
     const [mimeType, setMimeType] = useState();
     const [fileContent, setFileContent] = useState();
 
@@ -22,6 +21,8 @@ const BookDetail = () => {
             try {
                 const response = await apiSpringBoot.get(`/book/${bookUUID}`);
                 setBook(response.data.book);
+                setMimeType(response.data.mimeType);
+                setFileContent(response.data.fileContent);
                 console.log(response.data);
             } catch (error) {
                 console.error('handleBookView Error:', error);
@@ -31,6 +32,23 @@ const BookDetail = () => {
 
         loadBooks();
     }, []);
+
+    const handleDelete = async () => {
+        if(window.confirm('책을 삭제하시겠습니까?')) {
+            await apiSpringBoot.delete(`/book/${bookUUID}`);
+            navigate(-1)
+        }
+    }
+
+    const handleMoveUpdateView = (bookUUId) => {
+        navigate(`/book/update/${bookUUId}`);
+    };
+    
+
+    if (!book) {
+        // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+        return <div>Loading...</div>;
+    };
 
     return(
         <div className={styles.bkContainer}>
@@ -43,7 +61,7 @@ const BookDetail = () => {
                 
                 <div className={styles.bkBox}>
                     <label>제 목</label>
-                    <span className={styles.redTxt}>뭐라카노~</span>
+                    <span className={styles.redTxt}>{book.bookTitle}</span>
                 </div>
                 {/* 첨부파일 */}
                 <div className={styles.bkFiles}>
@@ -52,8 +70,7 @@ const BookDetail = () => {
                             <div className={styles.bkFileLeft}>
                                 <p className={styles.bkFileListContainer}>사진 이미지</p>
                                 <div >
-                                    {/* <p className={styles.bkFileList}>{book.bookImage}</p> */}
-                                    <p className={styles.bkFileList}></p>
+                                    <p className={styles.bkFileList}>{book.bookImage}</p>
                                 </div>
                             </div>{/* .bkFileLeft end */}              
                         </div>{/* .bkFileWrap end */}
@@ -62,8 +79,7 @@ const BookDetail = () => {
                             <div className={styles.bkFileLeft}>
                                 <p>책정보 파일</p>
                                 <div>
-                                    {/* <p className={styles.bkFileList}>{book.bookDetail}</p> */}
-                                    <p className={styles.bkFileList}></p>
+                                    <p className={styles.bkFileList}>{book.bookDetail}</p>
                                 </div>
                             </div>{/* .bkFileLeft end */}              
                         </div>{/* .bkFileWrap end */}
@@ -71,15 +87,15 @@ const BookDetail = () => {
 
                     <div className={styles.bkFileRight}>
                         <div className={styles.bkPrevItem}>
-                            <img src={image} className={styles.bkPrevImage} />
+                            <img src={`data:${mimeType};base64,${fileContent}`} className={styles.bkPrevImage} />
                         </div>
                     </div>
                 </div>
 
                 
                 <div className={styles.bkBtnWrap}>
-                    <input type="button" value="수 정" />
-                    <input type="button" value="삭 제" />
+                    <input type="button" value="수 정" onClick={() => handleMoveUpdateView(bookUUID)} />
+                    <input type="button" value="삭 제" onClick={handleDelete} />
                     <input type="button" value="이전 페이지" onClick={() => navigate(-1)} />
                 </div>{/* bkBtnWrap end */}
             

@@ -16,8 +16,9 @@ const BookWrite = () => {
     const [image, setImage] = useState(null);
     const [imageFiles, setImageFiles] = useState(null);   //이미지 파일 상태
 
-    const[imageFileSelect, setImageFileSelect] = useState("파일 없음")
-    const[fileSelect, setFileSelect] = useState("파일 없음")
+    const[imageFileSelect, setImageFileSelect] = useState("파일 없음");
+    const[fileSelect, setFileSelect] = useState("파일 없음");
+    const[fileContent, setFileContent] = useState(null);
 
     const navigate = useNavigate();
 
@@ -124,8 +125,9 @@ const BookWrite = () => {
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-        setFileSelect(e.target.files[0].name);
+        const file = e.target.files[0];
+        setFile(file);
+        setFileSelect(file.name);
     };
 
     return(
@@ -144,7 +146,7 @@ const BookWrite = () => {
                     <div className={styles.bkBox}>
                         <label>제 목</label>
                         <span className={styles.redTxt}>&#42;</span>
-                        <input type="text" name="bookTitle" id="bookTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
+                        <input type="text" name="bookTitle" id="bookTitle" required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
                     </div>
                     {/* 첨부파일 */}
                     <div className={styles.bkFiles}>
