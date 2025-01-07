@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useEffect, useRef, useContext  } from 'react';
+import { AuthContext } from '../../AuthProvider'
 
 const EMGTest = () => {
     const [videoStream, setVideoStream] = useState(null);
@@ -7,6 +7,10 @@ const EMGTest = () => {
     const [isEnd, setIsEnd] = useState(false);
     const [imageData, setImageData] = useState([]);
     const videoRef = useRef(null); // video 요소에 대한 ref
+    const { member} = useContext(AuthContext); 
+
+    const total_time = 3000;
+    const capture_time = 200;
 
      // 웹캠 스트리밍 시작
      useEffect(() => {
@@ -81,13 +85,13 @@ const EMGTest = () => {
                 ...prevData,
                 captureImage(),  // 캡처된 이미지를 기존 상태 배열에 추가
             ]);
-        }, 1000); // 1초마다 이미지 캡처
+        }, capture_time);
 
         // 5초 후, 전송을 종료
         setTimeout(() => {
             clearInterval(sendImages);
             setIsSending(false);
-        }, 5000); // 5초 후에 전송 중지
+        }, total_time);
     };
 
     // 이미지를 서버에 전송
@@ -100,6 +104,8 @@ const EMGTest = () => {
                 },
                 body: JSON.stringify({
                     images: imageData,
+                    uuid: member.memUUID,
+                    sessId: "b3f3c1b9-e34f-45e9-a8c6-8d1e2b3d2ab4",
                 }),
             });
             const data = await response.json();
