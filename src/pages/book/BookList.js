@@ -14,7 +14,6 @@ import SeniorFooter from "../../components/common/SeniorFooter";
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
-
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
 
@@ -31,11 +30,11 @@ const BookList = () => {
         startDate: formattedDate,
         endDate: formattedDate,
     });
-
+    
     const navigate = useNavigate();
 
     //토큰정보 가져오기(AuthProvider)
-    const { role, member } = useContext(AuthContext);
+    const { role } = useContext(AuthContext);
 
     //--------------------------------------------------
     //데이터 포맷(한국)
@@ -64,20 +63,20 @@ const BookList = () => {
     };
 
     //목록 페이지로 이동
-    const handleListClick = () => {
+    // const handleListClick = () => {
         
-        // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
-        setPagingInfo((prev) => ({
-            ...prev,
-            pageNumber: 1,
-            action: 'all', // 전체 검색으로 초기화
-            keyword: '',   // 검색어 초기화
-            startDate: formattedDate,
-            endDate: formattedDate,
-        }));
-        handleBookView(1, 'all'); // 전체 목록 로드
+    //     // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
+    //     setPagingInfo((prev) => ({
+    //         ...prev,
+    //         pageNumber: 1,
+    //         action: 'all', // 전체 검색으로 초기화
+    //         keyword: '',   // 검색어 초기화
+    //         startDate: formattedDate,
+    //         endDate: formattedDate,
+    //     }));
+    //     handleBookView(1, 'all'); // 전체 목록 로드
         
-    };
+    // };
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrBookId) => {
@@ -86,24 +85,23 @@ const BookList = () => {
 
     useEffect(() => {
         const loadBooks = async () => {
-            const action = pagingInfo.action;
-            console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
+            // const action = pagingInfo.action;
+            // console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
 
             try {
-                console.log('member address : ', member.memAddress);
-
                 let response = await apiSpringBoot.get(`/book`, {
                     params: {
                         ...pagingInfo,
                         pageNumber: pagingInfo.pageNumber,
-                        action: action,
                         keyword: pagingInfo.keyword,
                         startDate: pagingInfo.startDate + " 00:00:00",
                         endDate: pagingInfo.endDate + " 00:00:00",
                     },
                 });
+                console.log("book",response.data.fileList.book);
+                setBooks(response.data.fileList);
+                //setFiles(response.data.fileList);
 
-                setBooks(response.data.list);
                 console.log("API Response:", response.data.list);
 
                 // 페이지 계산
@@ -121,9 +119,9 @@ const BookList = () => {
                     maxPage,
                     startPage,
                     endPage,
-                    startDate: formatDate(response.data.search.startDate),
-                    endDate: formatDate(response.data.search.endDate),
+                    listCount: response.data.search.listCount,
                 }));
+
 
             } catch (error) {
                 console.error('handleBookView Error:', error);
@@ -134,28 +132,27 @@ const BookList = () => {
     }, [pagingInfo.pageNumber, pagingInfo.action]);
 
     const handlePageChange = async (page) => {
-        const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
+        const pageNumber = page || 1; // page 값이 없을 경우 기본값으로 1 설정
         //console.log("Current Page:", currentPage);
-
+        console.log("핸들인풋체인지");
         setPagingInfo((prev) => ({
             ...prev,
             pageNumber: page, // 선택된 페이지 번호로 업데이트
         }));
 
-        handleBookView(currentPage, pagingInfo.action);
+        handleBookView(pageNumber, pagingInfo.action);
     };
 
     //페이지 불러오기
     const handleBookView = async (page, action) => {
         const groupSize = 8; // 그룹 크기 정의
+        console.log("핸들 북 뷰");
         try {
             const params = {
                 ...pagingInfo,
                 pageNumber: page,
                 action: action,
                 keyword: pagingInfo.keyword,
-                startDate: pagingInfo.startDate + " 00:00:00",
-                endDate: pagingInfo.endDate + " 00:00:00",
             };
 
             let response = await apiSpringBoot.get(`/book`, params);
@@ -186,6 +183,7 @@ const BookList = () => {
     //input 에 입력 시 paging훅에 저장
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        console.log("핸들인풋체인지");
         setPagingInfo((prev) => ({
             ...prev,
             [name]: value,
@@ -194,7 +192,8 @@ const BookList = () => {
 
     //검색 버튼 클릭
     const handleSearchClick = () => {
-        handleBookView(pagingInfo.pageNumber, pagingInfo.action);
+        handleBookView(1, pagingInfo.action);
+        console.log("핸들서치클릭");
     };
 
     const renderSearchInputs = () => {
@@ -246,12 +245,11 @@ const BookList = () => {
                                 );
                             })}
 
-                            <button type="button" className={styles.bkListBtn} onClick={handleListClick}>목록</button>
+                            <button type="button" className={styles.bkListBtn} onClick={()=>(window.location.href ="/book")}>목록</button>
 
                             <PagingDiv8
                                 pageNumber={pagingInfo.pageNumber || 1}
-                                currentPage={pagingInfo.currentPage || 1}
-                                pageSize={pagingInfo.pageSize}
+                                pageSize={pagingInfo.pageSize || 8}
                                 maxPage={pagingInfo.maxPage || 1}
                                 startPage={pagingInfo.startPage || 1}
                                 endPage={pagingInfo.endPage || 1}
@@ -281,7 +279,7 @@ const BookList = () => {
                         <div className={styles.bkListTop}>
                             <p className={styles.bkTitle}>책 목록 <span>{pagingInfo.listCount}</span></p>
                             <div className={styles.bkTopBtns}>
-                                <button type="button" onClick={handleListClick}>목록</button>
+                                <button type="button" onClick={()=>(window.location.href ="/book")}>목록</button>
                                 {(role === "MANAGER" || role === "ADMIN") && (
                                     <button type="button" onClick={handleWriteClick}>등록하기</button>
                                 )}
@@ -299,17 +297,17 @@ const BookList = () => {
                             <ul className={styles.bkList}>
                                 {(books || []).map((book) => {
                                     //image MIME 타입 필터링 후 첫 번째 파일 가져오기
-                                    const firstImageFile = book && book.bookImage;
-                                    const firstImageUrl = firstImageFile ? `data:${firstImageFile.mimeType};base64,${firstImageFile.fileContent}` : bkImage;
+                                    // const firstImageFile = book && book.fileContent;
+                                    // const firstImageUrl = firstImageFile ? `data:${firstImageFile.mimeType};base64,${firstImageFile.fileContent}` : bkImage;
 
                                     return (
-                                        <li key={book.bookNum} className={styles.bkListItem}>
-                                            <a onClick={() => handleMoveDetailView(book.bookNum)}>
+                                        <li key={book.book.bookNum} className={styles.bkListItem}>
+                                            <a onClick={() => handleMoveDetailView(book.book.bookNum)}>
                                                 <div className={styles.bkListImgWrap}>
-                                                    <img src={firstImageUrl} className={styles.bkImage} />
+                                                    <img src={`data:${book.mimeType};base64,${book.fileContent}`} className={styles.bkImage} />
                                                 </div>
                                                 <div className={styles.bkListTextWrap}>
-                                                    <p>{book.bookTitle}</p>
+                                                    <p>{book.book.bookTitle}</p>
                                                 </div>
                                             </a>
                                         </li>
@@ -321,7 +319,6 @@ const BookList = () => {
 
                     <PagingDiv8
                         pageNumber={pagingInfo.pageNumber || 1}
-                        currentPage={pagingInfo.currentPage || 1}
                         pageSize={pagingInfo.pageSize}
                         maxPage={pagingInfo.maxPage || 1}
                         startPage={pagingInfo.startPage || 1}
