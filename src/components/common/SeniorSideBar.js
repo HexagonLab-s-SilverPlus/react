@@ -389,7 +389,7 @@ const SeniorSideBar = ({ memUUID }) => {
             <div className={styles.workspaceContainer}>
                 {archivedWorkspaces.length > 0 && (
                     <>
-                        <h2 className={styles.header}>즐겨찾기</h2>
+                        <h2 className={styles.header}>즐겨찾기⭐</h2>
                         <div className={styles.list}>
                             <div className={styles.archivedList}>
                                 {archivedWorkspaces.map((workspace) => (
