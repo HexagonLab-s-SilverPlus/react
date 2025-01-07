@@ -1,16 +1,60 @@
-/* src/pages/book/Book.module.css */
+/* src/pages/program/ProgramWrite.module.css */
 body {background: #fff; color: #333;}
 .bkContainer input {font-family: "Pretendard Variable";}
+
+.bkContainer {width: 100%; position: relative;}
 
 .bkRSection {width: calc(100% - 368px); position: absolute; top: 0; right: 0; box-sizing: border-box; padding: 72px 48px;}
 .secTop > p {font-size: 40px; font-weight: bold; margin: 0; border-bottom: 3px solid #064420; padding-bottom: 8px; padding-left: 24px;}
 /* .secTop end */
 
 .secContent {width: 100%; box-sizing: border-box; padding: 24px 8px;}
+.requiredTxt {color: red; font-size: 14px;}
+.redTxt {color: red;}
+
+.bkBox {display: flex; margin-bottom: 24px;}
+.bkBox > label {font-size: 24px; font-weight: bold; color: #666;}
+.bkBox > input {width: 100%; height: 40px; margin: 8px 0 4px; font-size: 16px; padding-left: 8px; display: block; box-sizing: border-box;}
+
+.bkDateWrap > input {height: 36px; margin: 8px 0 4px; font-size: 16px; padding: 0 8px; min-width: 240px;}
+.bkDateWrap > span {font-size: 24px; margin: 0 8px;}
+
+.bkBox > textarea {width: 100%; height: 300px; margin: 8px 0 4px; font-size: 16px; font-family: "Pretendard Variable";}
+
+.bkLine {width: 100%; height: 1px; background: #ddd; margin: 48px 0;}
+/* secContent end */
+
+.bkFileWrap {display: flex; justify-content: space-between; min-height: 300px; margin-top: 48px;}
+.bkFileLeft {position: relative; width: 400px;}
+.bkFileLeft > p {font-size: 24px; font-weight: bold; color: #666; margin: 0;}
+
+.fileBtn {font-family: "Pretendard Variable"; width: 400px; height: 36px; background: rgba(97, 130, 100, 0.15); font-size: 16px; margin: 24px 0 8px; border-radius: 18px; border: 0; cursor: pointer;}
+.fileBtn:hover {background: #618264; color: #fff;}
+
+.bkFileListContainer {flex-direction: column;}
+.bkFileListContainer > p {font-size: 16px; font-weight: bold; color: #666;}
+.bkFileList {list-style: none; padding: 0; background: rgba(97, 130, 100, 0.15); width: 400px; height: 144px; border-radius: 8px; box-sizing: border-box; padding: 20px;}
+.bkfileItem {display: flex; justify-content: space-between;}
+.bkfileItem > p {width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;}
+
+.bkDeleteBtn {position: relative; left: 3px; top: -2px; border: 0; background: none; cursor: pointer;}
+.bkDeleteBtn:hover {color: red;}
+/* .bkFileLeft end */
+
+.bkFileRight {width: calc(100% - 500px);}
+.bkFileRight > p {font-size: 24px; font-weight: bold; color: #666; margin-top: 0;}
+
+.bkPreviewContainer {display: flex; width: 100%; height: 240px; background: rgba(97, 130, 100, 0.15); border-radius: 8px; padding: 20px; box-sizing: border-box;}
+.bkPrevItem {width: 200px; height: 200px; position: relative; margin-right: 30px;}
+.bkPrevImage {width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;}
+.bkImgDeleteBtn {position: absolute; top: 5px; right: 5px; background: #fff; width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); text-align: center; line-height: 30px; font-size: 18px; border: 0; cursor: pointer;}
+.bkImgDeleteBtn:hover {background-color: #368cfc; color: #fff;}
+/* .bkFileRight end */
+
+.bkBtnWrap {margin-top: 96px; width: 100%; display: flex; justify-content: center;}
+.bkBtnWrap > input {width: 120px; font-size: 16px; height: 40px; background: #eee; border: 0; border-radius: 8px; margin: 0 8px; cursor: pointer;}
+.bkBtnWrap > input:hover {background: #064420; color: #fff;}
 
 .bkListTop {display: flex; flex-wrap: wrap; justify-content: space-between;}
 .bkTitle {width: 100%; font-weight: bold; font-size: 40px; margin: 24px 0 72px;}
 .bkTitle > span {color: #368cfc;}
-
-.bkTopBtns > button {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 16px; border: 0; cursor: pointer;}
-.bkTopBtns > button:hover {background: #064420; color: #fff;}

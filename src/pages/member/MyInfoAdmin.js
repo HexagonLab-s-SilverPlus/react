@@ -247,45 +247,52 @@ const MyInfoAdmin = () => {
                   </tr>
                   <tr style={{ height: '20px' }}>
                     <th></th>
-                    {!passwordValidate ? (
-                      <td
-                        style={{
-                          marginLeft: '25px',
-                          textAlign: 'left',
-                          fontSize: '10px',
-                          color: 'red',
-                          height: '20px',
-                        }}
-                      >
-                        영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로
-                        입력해주세요.
-                      </td>
-                    ) : (
-                      <td
-                        style={{
-                          textAlign: 'left',
-                          fontSize: '10px',
-                          color: 'green',
-                          height: '20px',
-                        }}
-                      >
-                        사용가능한 비밀번호입니다.
-                      </td>
-                    )}
-
+                    <div style={{ marginLeft: '10px' }}>
+                      {!passwordValidate ? (
+                        <td
+                          style={{
+                            marginLeft: '25px',
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: 'red',
+                            height: '20px',
+                          }}
+                        >
+                          영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로
+                          입력해주세요.
+                        </td>
+                      ) : (
+                        <td
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: 'green',
+                            height: '20px',
+                          }}
+                        >
+                          사용가능한 비밀번호입니다.
+                        </td>
+                      )}
+                    </div>
                     <th></th>
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        fontSize: '10px',
-                        color: messagePwdColor,
-                        height: '20px',
-                      }}
-                      name="pwdCheck"
-                    >
-                      {messagePwdColor === 'green' && <span>&#x2714;</span>}
-                      {passwordCheckMsg}
-                    </td>
+                    <div style={{ marginLeft: '10px' }}>
+                      {pwdVerify.memPwChk === '' ? (
+                        <td></td>
+                      ) : (
+                        <td
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: messagePwdColor,
+                            height: '20px',
+                          }}
+                          name="pwdCheck"
+                        >
+                          {messagePwdColor === 'green' && <span>&#x2714;</span>}
+                          {passwordCheckMsg}
+                        </td>
+                      )}
+                    </div>
                   </tr>
                   <tr>
                     <th>가 입 일 자</th>

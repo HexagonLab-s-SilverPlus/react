@@ -7,6 +7,10 @@ import styles from './MyInfoFamily.module.css';
 import SideBar from '../../components/common/SideBar';
 import noimage from '../../assets/images/No image.png';
 
+import kakao from '../../assets/images/icon/Kakao Icon.png';
+import naver from '../../assets/images/icon/Naver Icon.png';
+import google from '../../assets/images/icon/Google Icon.png';
+
 const MyInfoFamily = () => {
   const { member } = useContext(AuthContext);
   const [pwdChk, setPwdChk] = useState('');
@@ -51,6 +55,75 @@ const MyInfoFamily = () => {
       }
     } else {
       setIsVerify('false');
+    }
+  };
+
+  // 소셜 연동 함수
+  const handleSocialLink = async (e, provider) => {
+    e.preventDefault();
+
+    const requestURL = `http://localhost:8080/oauth2/authorization/${provider}?memUUID=${updateMember.memUUID}`;
+    let result = null;
+
+    // 소셜 연동/연동해제 요청
+    if (provider === 'google') {
+      updateMember.memSocialGoogle === 'N'
+        ? (window.location.href = `${requestURL}&linking=true`)
+        : (result = await apiSpringBoot.put(
+            `/member/social/${updateMember.memUUID}`,
+            null,
+            {
+              params: { provider: provider },
+            }
+          ));
+      if (result) {
+        if (result.headers['response'] === 'success') {
+          alert('연동 해제 성공');
+          window.location.reload();
+        } else {
+          alert('연동 해제 실패');
+        }
+      }
+    }
+
+    if (provider === 'kakao') {
+      updateMember.memSocialKakao === 'N'
+        ? (window.location.href = `${requestURL}&linking=true`)
+        : (result = await apiSpringBoot.put(
+            `/member/social/${updateMember.memUUID}`,
+            null,
+            {
+              params: { provider: provider },
+            }
+          ));
+      if (result) {
+        if (result.headers['response'] === 'success') {
+          alert('연동 해제 성공');
+          window.location.reload();
+        } else {
+          alert('연동 해제 실패');
+        }
+      }
+    }
+
+    if (provider === 'naver') {
+      updateMember.memSocialNaver === 'N'
+        ? (window.location.href = `${requestURL}&linking=true`)
+        : (result = await apiSpringBoot.put(
+            `/member/social/${updateMember.memUUID}`,
+            null,
+            {
+              params: { provider: provider },
+            }
+          ));
+      if (result) {
+        if (result.headers['response'] === 'success') {
+          alert('연동 해제 성공');
+          window.location.reload();
+        } else {
+          alert('연동 해제 실패');
+        }
+      }
     }
   };
 
@@ -247,45 +320,52 @@ const MyInfoFamily = () => {
                   </tr>
                   <tr style={{ height: '20px' }}>
                     <th></th>
-                    {!passwordValidate ? (
-                      <td
-                        style={{
-                          marginLeft: '25px',
-                          textAlign: 'left',
-                          fontSize: '10px',
-                          color: 'red',
-                          height: '20px',
-                        }}
-                      >
-                        영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로
-                        입력해주세요.
-                      </td>
-                    ) : (
-                      <td
-                        style={{
-                          textAlign: 'left',
-                          fontSize: '10px',
-                          color: 'green',
-                          height: '20px',
-                        }}
-                      >
-                        사용가능한 비밀번호입니다.
-                      </td>
-                    )}
-
+                    <div style={{ marginLeft: '10px' }}>
+                      {!passwordValidate ? (
+                        <td
+                          style={{
+                            marginLeft: '25px',
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: 'red',
+                            height: '20px',
+                          }}
+                        >
+                          영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로
+                          입력해주세요.
+                        </td>
+                      ) : (
+                        <td
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: 'green',
+                            height: '20px',
+                          }}
+                        >
+                          사용가능한 비밀번호입니다.
+                        </td>
+                      )}
+                    </div>
                     <th></th>
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        fontSize: '10px',
-                        color: messagePwdColor,
-                        height: '20px',
-                      }}
-                      name="pwdCheck"
-                    >
-                      {messagePwdColor === 'green' && <span>&#x2714;</span>}
-                      {passwordCheckMsg}
-                    </td>
+                    <div style={{ marginLeft: '10px' }}>
+                      {pwdVerify.memPwChk === '' ? (
+                        <td></td>
+                      ) : (
+                        <td
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '10px',
+                            color: messagePwdColor,
+                            height: '20px',
+                          }}
+                          name="pwdCheck"
+                        >
+                          {messagePwdColor === 'green' && <span>&#x2714;</span>}
+                          {passwordCheckMsg}
+                        </td>
+                      )}
+                    </div>
                   </tr>
                   <tr>
                     <th>가 입 일 자</th>
@@ -340,6 +420,69 @@ const MyInfoFamily = () => {
                         onChange={handleInfoChange}
                         style={{ width: '550px' }}
                       />
+                    </td>
+                  </tr>
+                  <tr>
+                    {/* <th></th>
+                    <td></td> */}
+                    <th>소 셜 연 동</th>
+                    <td>
+                      <div className={styles.socialLinkDiv}>
+                        <button onClick={(e) => handleSocialLink(e, 'google')}>
+                          <img src={google} />
+                        </button>
+                        {updateMember.memSocialGoogle === 'N' ? (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'red' }}
+                          >
+                            close
+                          </span>
+                        ) : (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'green' }}
+                          >
+                            check_circle
+                          </span>
+                        )}
+                        <button onClick={(e) => handleSocialLink(e, 'kakao')}>
+                          <img src={kakao} />
+                        </button>
+                        {updateMember.memSocialKakao === 'N' ? (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'red' }}
+                          >
+                            close
+                          </span>
+                        ) : (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'green' }}
+                          >
+                            check_circle
+                          </span>
+                        )}
+                        <button onClick={(e) => handleSocialLink(e, 'naver')}>
+                          <img src={naver} />
+                        </button>
+                        {updateMember.memSocialNaver === 'N' ? (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'red' }}
+                          >
+                            close
+                          </span>
+                        ) : (
+                          <span
+                            class="material-symbols-outlined"
+                            style={{ color: 'green' }}
+                          >
+                            check_circle
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 </table>
