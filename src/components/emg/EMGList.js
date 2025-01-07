@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import EMG from '../../components/emg/EMG'
+import EMG from './EMG';
+
 
 function EMGList() {
     const [onCamera, setOnCamera] = useState(false);
@@ -22,6 +23,7 @@ function EMGList() {
             {onCamera ? <div> 현재 True상태</div>: <div> 현재 false</div> }
             <EMG onCamera = {onCamera} sessId="b3f3c1b9-e34f-45e9-a8c6-8d1e2b3d2ab4" />
             <button onClick={handleOnCamera} style={{height: "100px", width:"100px"}}/>
+            
         </div>
     );
 };
