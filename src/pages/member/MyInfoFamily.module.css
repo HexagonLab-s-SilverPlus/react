@@ -217,3 +217,29 @@
   cursor: pointer;
   font-weight: bold;
 }
+
+.socialLinkDiv {
+  margin-left: 25px;
+  height: 40px;
+  vertical-align: middle;
+}
+
+.socialLinkDiv > button {
+  width: 30px;
+  height: 30px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.socialLinkDiv > span {
+  margin: 0 10px;
+}
+
+.socialLinkDiv > button > img {
+  width: 30px;
+  height: 30px;
+}
