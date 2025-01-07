@@ -10,6 +10,23 @@ import PropTypes from 'prop-types'; // PropTypes를 import
 // Context 생성
 export const AuthContext = createContext();
 
+// 예외 URL 변수 설정
+const ExceptionURL = [
+  '/login',
+  '/logout',
+  '/reissue',
+  '/api/sms',
+  '/api/sms/verify',
+  '/idchk',
+  '/enroll',
+  '/api/email',
+  '/api/email/verify',
+  '/member/fid',
+  '/member/fpwd',
+  '/member/pwdupdate',
+  // '/oauth2/authorization/google',
+];
+
 // accessToken 파싱 함수 : 페이로드만 추출해서 JSON 객체로 리턴
 const parseAccessToken = (token) => {
   if (!token) return null;
@@ -38,17 +55,7 @@ const setupInterceptors = (axiosInstance) => {
       console.log('accessToken', accessToken);
       console.log('refreshToken', refreshToken);
       console.log('요청 인터셉터 확인');
-      if (
-        config.url.includes('/login') ||
-        config.url.includes('/logout') ||
-        config.url.includes('/reissue') ||
-        config.url.includes('/api/sms') ||
-        config.url.includes('/api/sms/verify') ||
-        config.url.includes('/idchk') ||
-        config.url.includes('/enroll') ||
-        config.url.includes('/api/email') ||
-        config.url.includes('/api/email/verify')
-      ) {
+      if (ExceptionURL.some((url) => config.url.includes(url))) {
         console.log('예외 url 작동확인');
         return config;
       }
@@ -298,7 +305,7 @@ export const AuthProvider = ({ children }) => {
       member: parsedToken.member,
     });
     console.log('login : ', authInfo);
-    console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인인
+    console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인
   };
 
   // 토큰 저장 함수

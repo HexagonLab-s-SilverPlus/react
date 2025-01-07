@@ -1,7 +1,6 @@
 // src/pages/member/FindIdMember.js
-import React, { useContext, useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AuthContext } from '../../AuthProvider';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './FindIdMember.module.css';
 import SeniorFooter from '../../components/common/SeniorFooter';
@@ -9,6 +8,7 @@ import SeniorFooter from '../../components/common/SeniorFooter';
 const FindIdMember = () => {
   const [timeLeft, setTimeLeft] = useState(0); // 3분(180초)
   const [isTimerVisible, setIsTimerVisible] = useState(false); // 타이머 표시 여부
+  const navigate = useNavigate();
 
   // 인증 옵션선택을 관리하는 상태변수
   const [selectOption, setSelectOption] = useState('phone');
@@ -20,6 +20,7 @@ const FindIdMember = () => {
     setVerifyData({
       memName: '',
       memCellphone: '',
+      memEmail: '',
       isVerify: false,
     });
   };
@@ -180,16 +181,42 @@ const FindIdMember = () => {
     }
   };
 
+  // 아이디 찾기 결과페이지 이동 함수
+  // const moveFindIdResult = () => {
+  //   if (verifyData.isVerify === true) {
+  //     navigate('/fimResult', { state: verifyData });
+  //   } else {
+  //     alert('휴대전화 또는 이메일 인증을 진행해주세요.');
+  //     return;
+  //   }
+  // };
+
   const moveFindIdResult = () => {
-    navigator('/fimResult', { state: verifyData });
+    navigate('/fimResult', { state: verifyData });
+  };
+
+  const handleMovePwdFind = () => {
+    navigate('/findpwdmember');
   };
 
   return (
     <>
       <div className={styles.findIdMainContainer}>
-        <div className={styles.findNavigate}>
-          <button className={styles.findNavigateBtn1}>아이디찾기</button>
-          <button className={styles.findNavigateBtn2}>비밀번호찾기</button>
+        <div className={styles.findIdtHead}>
+          <div>
+            <button className={styles.findNavigateBtn1}>아이디찾기</button>
+            <button
+              className={styles.findNavigateBtn2}
+              onClick={handleMovePwdFind}
+            >
+              비밀번호찾기
+            </button>
+          </div>
+          {/* <div className={styles.fimProgress}>
+            <small>
+              회원정보인증 <span>→</span>
+            </small>
+          </div> */}
         </div>
         <div className={styles.findIdSubContainer}>
           <div className={styles.findIdPhoneContainer}>

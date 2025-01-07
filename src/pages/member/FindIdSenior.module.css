@@ -1,0 +1,164 @@
+/* src/pages/member/FIndIdSenior.module.css*/
+.findIdMainContainer {
+  position: absolute;
+  width: 1200px;
+  height: 650px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.findIdtHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.findNavigateBtn1 {
+  /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+  font-size: 24px;
+  background-color: #ffffff;
+}
+
+.findNavigateBtn2 {
+  background-color: #f3f3f3;
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.fimProgress {
+  margin: 10px 0;
+}
+
+.findIdSubContainer {
+  position: relative;
+  width: 540px;
+  height: 470px;
+  top: 40px;
+  left: 385px;
+}
+
+.findIdPhoneContainer {
+}
+
+.findIdEmailContainer {
+  margin-top: 30px;
+}
+
+.findIdlabel {
+  font-size: 28px;
+}
+
+.findIdPhoneTable {
+  margin-top: 30px;
+}
+
+.findIdPhoneTable > tr {
+  height: 40px;
+}
+
+.findIdPhoneTable > tr > td {
+  font-size: 28px;
+}
+
+.findIdPhoneTable > tr > input {
+  width: 520px;
+  height: 40px;
+  border-radius: 2px;
+  border: 1px solid;
+  font-size: 24px;
+}
+
+.findIdEmaileTable {
+  margin-top: 30px;
+}
+
+.findIdEmaileTable > tr {
+  height: 40px;
+}
+
+.findIdEmaileTable > tr > td {
+  font-size: 28px;
+}
+
+.findIdEmaileTable > tr > input {
+  width: 475px;
+  height: 40px;
+  border-radius: 2px;
+  border: 1px solid;
+  font-size: 24px;
+}
+
+.findIdEmaileTable > tr > select {
+  margin-left: 10px;
+  width: 120px;
+  height: 40px;
+  font-size: 24px;
+}
+.buttonDiv {
+  position: absolute;
+  top: 460px;
+}
+
+.findIdBtn {
+  border-radius: 8px;
+  border: 1px solid;
+  width: 220px;
+  height: 60px;
+  background-color: #064420;
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.findIdPhoneTableBtn {
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  margin-left: 25px;
+  border: 0;
+  cursor: pointer;
+}
+
+.footer {
+  position: fixed; /* 화면의 특정 위치에 고정 */
+  bottom: 0; /* 아래쪽에 고정 */
+  right: 0; /* 왼쪽에 고정 */
+  width: 100%;
+}
+
+.findIdEmailTableBtn {
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  margin-left: 30px;
+  border: 0;
+  cursor: pointer;
+}
+
+.findIdEmailSpan {
+  margin: 0 15px;
+  font-size: 24px;
+}
+
+.findIdEmailTimer {
+  font-size: 18px;
+  color: red;
+  margin-left: 15px;
+}

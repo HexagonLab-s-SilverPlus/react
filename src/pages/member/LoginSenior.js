@@ -17,9 +17,16 @@ import google from '../../assets/images/icon/Google Icon.png';
 const LoginSenior = () => {
   const [memId, setMemId] = useState('');
   const [memPw, setMemPw] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login, isLoggedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
+
+  // 이미 로그인 상태 시 로그인화면 이동 불가
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate('/');
+  //   }
+  // }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -66,8 +73,6 @@ const LoginSenior = () => {
 
   return (
     <>
-      <SideBar></SideBar>
-
       <div className={styles.form}>
         <div>
           <button
@@ -128,13 +133,13 @@ const LoginSenior = () => {
             </div>
             <div style={{ marginBottom: '25px', textAlign: 'center' }}>
               <span>
-                <Link to="/findIdMember" className={styles.findlink}>
+                <Link to="/findidsenior" className={styles.findlink}>
                   아이디 찾기
                 </Link>
               </span>
               <span className={styles.seperator}>❘</span>
               <span>
-                <Link to="/findPwdMember" className={styles.findlink}>
+                <Link to="/findpwdsenior" className={styles.findlink}>
                   비밀번호 찾기
                 </Link>
               </span>
@@ -149,19 +154,6 @@ const LoginSenior = () => {
               <button type="submit" className={styles.loginbutton}>
                 로 그 인
               </button>
-            </div>
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              <hr className={styles.line} />
-              <span style={{ fontSize: '20px', margin: '10px 10px' }}>
-                {' '}
-                소 셜 로 그 인{' '}
-              </span>
-              <hr className={styles.line} />
-            </div>
-            <div style={{ marginTop: '30px', textAlign: 'center' }}>
-              <img src={kakao} className={styles.icon}></img>
-              <img src={naver} className={styles.icon}></img>
-              <img src={google} className={styles.icon}></img>
             </div>
           </form>
         </div>

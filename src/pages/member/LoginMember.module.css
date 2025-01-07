@@ -53,6 +53,7 @@
   font-weight: bold;
   border: 0;
   cursor: pointer;
+  background-color: #ffffff;
 }
 
 .findlink {
@@ -71,11 +72,25 @@
   width: 25%;
   display: inline-block;
   vertical-align: middle;
+  background-color: #000000;
 }
 
-.icon {
-  margin-left: 60px;
-  margin-right: 60px;
+.loginSocialDiv {
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.loginSocialDiv > button {
+  width: 60px;
+  height: 60px;
+  margin: 0 60px;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .footer {

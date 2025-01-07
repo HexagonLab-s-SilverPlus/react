@@ -20,10 +20,10 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
                 <div className={styles.trashList}>
                     <InfiniteScroll
                         dataLength={workspaces.length} // 현재까지 로드된 데이터 길이
-                        next={fetchMore}
-                        hasMore={hasMore}
-                        loader={<div className={styles.spinner}>로딩 중...</div>}
-                        height={300}
+                        next={fetchMore} // 다음 데이터를 가져오는 함수
+                        hasMore={hasMore} // 데이터가 더 있는지 여부
+                        loader={<div className={styles.spinner}>로딩 중...</div>} // 로딩 상태 표시
+                        height={300} // 스크롤 영역 높이
                     >
                         {workspaces.length > 0 ? (
                             workspaces.map((workspace) => (
@@ -109,7 +109,8 @@ const SeniorSideBar = ({ memUUID }) => {
         const fetchInitialData = async () => {
             try {
                 const responseActive = await apiSpringBoot.get(
-                    `/api/workspace/${memUUID}/status?workspaceStatus=ACTIVE&page=1&size=5`
+                    `/api/workspace/${memUUID}/status`,
+                    { params: { workspaceStatus: "ACTIVE", page: 1, size: 5 } }
                 );
                 console.log(responseActive.data.data);
 
@@ -221,17 +222,35 @@ const SeniorSideBar = ({ memUUID }) => {
         try {
             let page;
             if (type === "active") {
-                page = Math.ceil(activeWorkspaces.length / 5) + 1;
+                // 현재 로드된 데이터 길이를 기반으로 페이지 번호 기반
+                page = Math.ceil(activeWorkspaces.length / 5) + 1; // 다음 페이지 계산
+
                 const response = await apiSpringBoot.get(
-                    `/api/workspace/${memUUID}/status?workspaceStatus=ACTIVE&page=${page}&size=5`
+                    `/api/workspace/${memUUID}/status`,
+                    { params: { workspaceStatus: type.toUpperCase(), page, size: 5 } } // 쿼리 파라미터 전달
                 );
-                if (response.data.data) {
+
+                const newWorkspaces = response.data.data || [];
+                console.log("새로운 워크스페이스:", newWorkspaces);
+
+                if(newWorkspaces.length > 0){
+                    // 기존 데이터와 새 데이터를 병합
+                    setActiveWorkspaces((prev) => [...prev, ...newWorkspaces]); // 기존 데이터에 추가
+
+                    // 더 이상 데이터가 없으면 hasMoreActive를 false로 설정
+                    setHasMoreActive(newWorkspaces.length === 5); // 한 번에 가져올 데이터가 5개면 추가 데이터가 있다고 간주
+                }else{
+                    setHasMoreActive(false); // 더 이상 가져올 데이터가 없음
+                }
+
+                
+                // 받은 데이터가 있다면 기존 데이터에 병합
+                if (response.data.data && response.data.data.length > 0) {
+                    // 데이터를 기존 배열에 병합
                     setActiveWorkspaces((prev) => [...prev, ...response.data.data]); // 기존 데이터에 추가
-                    setHasMoreActive(response.data.data.length === 5);
+                    setHasMoreActive(response.data.data.length === 5); // 남은 데이터 유무 확인
                 } else {
-                    console.log("활성 워크스페이스가 비었습니다.");
-                    setActiveWorkspaces([]);
-                    setHasMoreActive(false);
+                    setHasMoreActive(false); // 더 이상 데이터가 없을 경우
                 }
             } else if (type === "archived") {
                 page = Math.ceil(archivedWorkspaces.length / 5) + 1;

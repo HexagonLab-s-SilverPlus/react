@@ -9,12 +9,24 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.findNavigate {
-  position: relative;
-  top: -40px;
+.findIdtHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.findNavigate > button {
+.findNavigateBtn1 {
+  /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
+  width: 120px;
+  height: 40px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.findNavigateBtn2 {
+  background-color: #f3f3f3;
   width: 120px;
   height: 40px;
   border-radius: 1px;
@@ -22,16 +34,8 @@
   cursor: pointer;
 }
 
-.findNavigateBtn1 {
-  box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1);
-  border: 0;
-  cursor: pointer;
-}
-
-.findNavigateBtn2 {
-  background-color: #f3f3f3;
-  border: 0;
-  cursor: pointer;
+.fimProgress {
+  margin: 10px 0;
 }
 
 .findIdSubContainer {
@@ -112,6 +116,8 @@
   color: #ffffff;
   border: 0;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .findIdPhoneTableBtn {

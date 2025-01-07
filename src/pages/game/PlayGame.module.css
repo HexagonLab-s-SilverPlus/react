@@ -1,0 +1,22 @@
+/* src/pages/game/PlayGame.module.css */
+.mainPage {background-image: url('../../assets/images/game/other/background.png');background-size: cover;background-position: center;height: 100vh;display:flex;align-items: center;
+    justify-content: center;}
+.gameNavBar{position:fixed;top:0; width: 100%;}
+.gameArea{width:calc(100% - 48px);height:calc(100vh - 96px - 48px);box-sizing:border-box;margin-top:96px;display:grid;grid-template-rows: 20% 60% 20%;}
+
+.opponentArea {width:100%;display: flex; box-sizing: border-box; background-color: rgba(255, 255, 255, 0.1);}
+.getOpponentCards {height: 100%; width: 85%;}
+.opponentCards {height:100%;width: 15%;align-content: center;text-align: center;}
+.opponentCards img {height:45%;}
+
+.tableArea{display:flex;align-items: center; width:100%;}
+.deckCards{width:20%;text-align: center;}
+.openCards{width:50%;}
+.getPlayerArea{width:30%;background-color: rgba(255, 255, 255, 0.1);height: 100%;}
+
+
+.playerArea{display: flex;background-color: rgba(255, 255, 255, 0.1);align-items: center;}
+.playerArea img {height: 95%;}
+
+/* .card {width: 100px;height: auto;cursor: pointer;transition: transform 0.3s;}
+.card:hover {transform:scale(1.2);} */

@@ -18,6 +18,8 @@ import FindIdMemberResult from '../pages/member/FindIdMemberResult';
 import FindIdSeniorResult from '../pages/member/FindIdSeniorResult';
 import FindPwdMemberResult from '../pages/member/FindPwdMemberResult';
 import FindPwdSeniorResult from '../pages/member/FindPwdSeniorResult';
+import Oauth2 from '../pages/member/oauth2';
+import FaceLogin from '../pages/member/FaceLogin';
 
 const memberRouter = [
   <>
@@ -38,6 +40,8 @@ const memberRouter = [
     <Route path="/fisResult" element={<FindIdSeniorResult />} />,
     <Route path="/fpmResult" element={<FindPwdMemberResult />} />,
     <Route path="/fpsResult" element={<FindPwdSeniorResult />} />,
+    <Route path="/oauth2" element={<Oauth2 />} />,
+    <Route path="/facelogin" element={<FaceLogin />} />,
   </>,
 ];
 

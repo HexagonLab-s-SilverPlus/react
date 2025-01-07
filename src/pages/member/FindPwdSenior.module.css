@@ -1,0 +1,165 @@
+/* src/pages/member/FindPwdSenior.module.css*/
+.findPwdMainContainer {
+  position: absolute;
+  width: 1200px;
+  height: 650px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.findPwdtHead {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.findNavigateBtn1 {
+  /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  cursor: pointer;
+  font-size: 24px;
+  background-color: #f3f3f3;
+}
+
+.findNavigateBtn2 {
+  background-color: #ffffff;
+  width: 160px;
+  height: 60px;
+  border-radius: 1px;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.fimProgress {
+  margin: 10px 0;
+}
+
+.findPwdSubContainer {
+  position: relative;
+  width: 600px;
+  height: 470px;
+  top: 40px;
+  left: 335px;
+  /* border: 1px solid; */
+}
+
+.findPwdPhoneContainer {
+}
+
+.findPwdEmailContainer {
+  margin-top: 30px;
+}
+
+.findPwdlabel {
+  font-size: 28px;
+}
+
+.findPwdPhoneTable {
+  margin-top: 30px;
+}
+
+.findPwdPhoneTable > tr {
+  height: 40px;
+}
+
+.findPwdPhoneTable > tr > td {
+  font-size: 28px;
+}
+
+.findPwdPhoneTable > tr > input {
+  width: 520px;
+  height: 40px;
+  border-radius: 2px;
+  border: 1px solid;
+  font-size: 24px;
+}
+
+.findPwdEmaileTable {
+  margin-top: 30px;
+}
+
+.findPwdEmaileTable > tr {
+  height: 40px;
+}
+
+.findPwdEmaileTable > tr > td {
+  font-size: 28px;
+}
+
+.findPwdEmaileTable > tr > input {
+  width: 475px;
+  height: 40px;
+  border-radius: 2px;
+  border: 1px solid;
+  font-size: 24px;
+}
+
+.findPwdEmaileTable > tr > select {
+  margin-left: 10px;
+  width: 120px;
+  height: 40px;
+  font-size: 24px;
+}
+.buttonDiv {
+  position: absolute;
+  top: 440px;
+}
+
+.findPwdBtn {
+  border-radius: 8px;
+  border: 1px solid;
+  width: 220px;
+  height: 60px;
+  background-color: #064420;
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.findPwdPhoneTableBtn {
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  margin-left: 25px;
+  border: 0;
+  cursor: pointer;
+}
+
+.footer {
+  position: fixed; /* 화면의 특정 위치에 고정 */
+  bottom: 0; /* 아래쪽에 고정 */
+  right: 0; /* 왼쪽에 고정 */
+  width: 100%;
+}
+
+.findPwdEmailTableBtn {
+  width: 160px;
+  height: 40px;
+  font-size: 24px;
+  border-radius: 3px;
+  background-color: #e4efe7;
+  margin-left: 30px;
+  border: 0;
+  cursor: pointer;
+}
+
+.findPwdEmailSpan {
+  margin: 0 15px;
+  font-size: 24px;
+}
+
+.findPwdEmailTimer {
+  font-size: 18px;
+  color: red;
+  margin-left: 15px;
+}
