@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import ReactDOM from "react-dom";
@@ -108,15 +108,35 @@ const SeniorSideBar = ({ memUUID }) => {
 
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null);
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
-    const [openDropdownId, setOpenDropdownId] = useState(null);
 
+
+
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+    const dropdownRef = useRef(null); // 드롭다운 영역을 참조하기 위한 ref
 
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
 
 
+
+
     const { apiSpringBoot, memName } = useContext(AuthContext);
     const navigate = useNavigate();
+
+
+    // 드롭다운 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setOpenDropdownId(null); // 외부 클릭 시 드롭다운 닫기
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
 
 
@@ -230,7 +250,7 @@ const SeniorSideBar = ({ memUUID }) => {
     };
 
     const toggleDropdown = (workspaceId) => {
-        setOpenDropdownId(openDropdownId === workspaceId ? null : workspaceId);
+        setOpenDropdownId((prev) => (prev === workspaceId ? null : workspaceId));
     };
 
 
@@ -402,18 +422,19 @@ const SeniorSideBar = ({ memUUID }) => {
                                         <button
                                             className={styles.menuButton}
                                             onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleDropdown(workspace.workspaceId);
+                                                e.stopPropagation(); // 클릭 이벤트 전파 방지
+                                                toggleDropdown(workspace.workspaceId); // 드랍다운 토글
                                             }}
                                         >
                                             ⋮
                                         </button>
                                         {openDropdownId === workspace.workspaceId && (
-                                            <div className={styles.dropdownMenu}>
+                                            <div className={styles.dropdownMenu} ref={dropdownRef}>
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation(); // 클릭 이벤트 전파 방지
                                                         setWorkspaceAsActive(workspace.workspaceId); // 활성화 메소드 호출
+                                                        setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
                                                     }}
                                                 >
                                                     즐겨찾기 해제
@@ -423,6 +444,7 @@ const SeniorSideBar = ({ memUUID }) => {
                                                         e.stopPropagation();
                                                         setWorkspaceToDelete(workspace); // 삭제할 워크스페이스 설정
                                                         setIsDeleteConfirmationOpen(true); // 삭제 확인 모달 열기
+                                                        setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
                                                     }}
                                                 >
                                                     삭제
@@ -470,11 +492,12 @@ const SeniorSideBar = ({ memUUID }) => {
                                     ⋮
                                 </button>
                                 {openDropdownId === workspace.workspaceId && (
-                                    <div className={styles.dropdownMenu}>
+                                    <div className={styles.dropdownMenu} ref={dropdownRef}>
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation(); // 클릭 이벤트 전파 방지
                                                 setWorkspaceAsFavorite(workspace.workspaceId); // 즐겨찾기 메소드 호출
+                                                setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
                                             }}>
                                             즐겨찾기
                                         </button>
@@ -483,6 +506,7 @@ const SeniorSideBar = ({ memUUID }) => {
                                                 e.stopPropagation();
                                                 setWorkspaceToDelete(workspace);
                                                 setIsDeleteConfirmationOpen(true);
+                                                setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
                                             }}
                                         >
                                             삭제
