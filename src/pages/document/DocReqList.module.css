@@ -51,7 +51,7 @@ tr:hover {
 /* 버튼 스타일 */
 button {
     background-color: #618264;
-    color: white;
+    color: #064420;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
@@ -59,7 +59,7 @@ button {
 }
 
 button:hover {
-    background-color: #064420;
+    background-color: #ffffff;
 }
 
 .menuName{
