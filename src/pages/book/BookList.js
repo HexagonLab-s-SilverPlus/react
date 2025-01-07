@@ -183,8 +183,7 @@ const BookList = () => {
                     </div>{/* snrBkLeft end */}
 
                     <div className={styles.snrBkRight}>
-                        <div className={[styles.snrBkList, 'masked-overflow'].join(' ')}
-                            style={{ height: '90%' }}>
+                        <div className={styles.snrBkList}>
                                 <ul className={styles.pgBookList}>
                                     {(books || []).map((book) => (
                                             <li className={styles.pgBookItem} key={book.book.bookNum}>
@@ -193,7 +192,10 @@ const BookList = () => {
                                                         <img src={`data:${book.mimeType};base64,${book.fileContent}`} className={styles.pgBookImage}/>
                                                     </div>
                                                     <div className={styles.pgBookTextWrap}>
-                                                        <p>{book.book.bookTile}</p>
+                                                        <p>{book.book.bookTitle}</p>
+                                                    </div>
+                                                    <div>
+                                                        <button className={styles.pgBookbutton}>재생</button>
                                                     </div>
                                                 </div>
                                             </li>

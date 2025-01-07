@@ -74,7 +74,7 @@ body {background: #fff; color: #333;}
 .snrBkRight .bkDateWrap > input {display: block; height: 72px; width: 300px; outline: 0; text-align: center; border: 2px solid #ddd; font-size: 32px; font-family: "Pretendard Variable"; border-radius: 8px; box-sizing: border-box;}
 .snrBkRight .bkDateWrap > span {font-size: 32px; font-weight: bold; margin: 0 0 0 24px; position: relative; left: -10px;}
 
-.snrBkList {width: 100%; box-sizing: border-box; padding-top: 32px;
+.snrBkList {width: 100%; height:90%;box-sizing: border-box; padding-top: 32px;
     /* The Gradient Effect on Content in a Scroll */
     --scrollbar-width: 8px;
     --mask-height: 32px;
@@ -117,10 +117,10 @@ body {background: #fff; color: #333;}
 .pgBookItem:nth-child(4n) {margin-right: 0;}
 .pgBookItem > div {display: block; width: 100%; height: 100%; cursor: pointer;}
 .pgBookImage {width: 100%; aspect-ratio: 1 / 1; object-fit: cover;}
-
-.pgBookTextWrap {margin: 12px 0;}
-.pgBookTextWrap p {font-size: 16px; margin: 0; color: #666; margin-bottom: 4px; width: fit-content; max-width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.pgBookTextWrap > p:nth-child(1) {display: block; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 8px; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: all 0.3s;}
+.pgBookbutton {background: #eee; font-size: 36px; width: 100%; height: 48px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 4px; border: 0; cursor: pointer;}
+.pgBookbutton:hover {background: #064420; color: #fff;}
+.pgBookTextWrap {font-size: 48px; margin: 0; color: #000; width: fit-content; max-width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.pgBookTextWrap > p:nth-child(1) {font-weight: bold; font-size: 32px; color: #333; margin-bottom: 8px; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: all 0.3s;}
 
 .bkListBtn {border: 0; background: #618264; color: #fff; width: 144px; font-size: 32px; height: 60px; font-family: "Pretendard Variable"; letter-spacing: 1px; border-radius: 8px; display: block; margin-right: 0; margin-left: auto; cursor: pointer;}
 /* snrBkRight end */
