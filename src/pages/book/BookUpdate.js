@@ -35,10 +35,10 @@ const BookUpdate = () => {
         bookImage: "",
         bookNum: "",
         bookTitle: '',
-        bookCreatedBy: "",
-        bookUpdateAt: "",
         bookUpdatedBy: member.memUUID,
     });
+
+
 
     useEffect(() => {
         const loadBooks = async () => {
@@ -49,6 +49,14 @@ const BookUpdate = () => {
                 setFileContent(response.data.fileContent);
                 setImageFileSelect(response.data.book.bookImage);
                 setFileSelect(response.data.book.bookDetail);
+                setFormData((prev) => ({
+                    ...prev,
+                    bookCreateAt:response.data.book.bookCreateAt,
+                    bookCreatedBy:response.data.book.bookCreatedBy,
+                    bookImage:response.data.book.bookImage,
+                    bookNum:response.data.book.bookNum,
+                    bookDetail:response.data.book.bookDetail,
+                }));
                 console.log(response.data);
             } catch (error) {
                 console.error('handleBookView Error:', error);
@@ -64,7 +72,9 @@ const BookUpdate = () => {
         e.preventDefault(); //submit 취소
         if(window.confirm('책을 수정하시겠습니까?')) {
             const data = new FormData();
-
+            console.log(file);
+            console.log(imageFiles)
+            console.log(formData)
             if (file){
                 data.append('bookfile',file); // 첨부파일 추가
             }
@@ -74,8 +84,9 @@ const BookUpdate = () => {
             Object.entries(formData).forEach(([key, value]) => data.append(key, value)); 
             
             try {
-                await apiSpringBoot.put('/book', data,{
-                    headers: {'Content-Type':'multipart/form-data',
+                await apiSpringBoot.put(`/book/${formData.bookNum}`, data,{
+                    headers: {
+                        'Content-Type':'multipart/form-data',
                     }}
                 );
                 alert('Book 수정 성공');
@@ -139,7 +150,7 @@ const BookUpdate = () => {
         // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
         return <div>Loading...</div>;
     };
-
+    console.log("타임 ; ", formData.bookCreateAt);
     return(
         <div className={styles.bkContainer}>
             <SideBar />
