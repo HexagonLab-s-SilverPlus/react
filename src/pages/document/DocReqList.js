@@ -8,52 +8,43 @@ import { apiSpringBoot } from '../../utils/axios';
 const DocRequestList = () => {
     const [docountdata, setdocountdata] = useState([]); // 공문서 요청 데이터를 관리하는 상태
     const navigate = useNavigate();
-    const { member, memId} = useContext(AuthContext); // 사용자 권한 정보
+    const { role, memId } = useContext(AuthContext); // 사용자 권한 정보
 
-   // 날짜시간 보정 함수
-   const adjustTimeZone = (timestamp) => {
-    if (!timestamp) {
-        return "유효하지 않은 날짜"; // null 또는 undefined 처리
-    }
+    // 권한 확인
+    useEffect(() => {
+        console.log("User role:", role); // 디버깅 로그
 
-    try {
-        console.log("Raw timestamp:", timestamp);
+        if (role?.toLowerCase() !== 'manager') { // role 값 검증
+            alert('접근 권한이 없습니다.');
+            navigate('/'); // 홈 페이지로 리다이렉트
+        }
+    }, [role, navigate]);
 
-        // "25/01/07 00:54:29.487000000" 형식을 파싱
-        const [shortYear, month, dayAndTime] = timestamp.split("/");
-        const [day, time] = dayAndTime.split(" ");
-        const fullYear = `20${shortYear}`; // '25' → '2025'
+    // 날짜시간 보정 함수
+    const adjustTimeZone = (timestamp) => {
+        if (!timestamp) {
+            console.error("Timestamp is null or undefined");
+            return "유효하지 않은 날짜";
+        }
 
-        console.log("Parsed date components:", {
-            shortYear,
-            month,
-            day,
-            time,
-            fullYear,
-        });
+        try {
+            console.log("Raw timestamp:", timestamp);
 
-        // JavaScript의 Date 객체는 0-based month 사용하므로 month에서 1을 뺌
-        const parsedMonth = parseInt(month, 10) - 1;
+            const utcDate = new Date(timestamp);
 
-        // 초 단위까지만 처리 (밀리초 이하 제거)
-        const timeWithoutMs = time.split(".")[0];
+            if (isNaN(utcDate.getTime())) {
+                console.error("Invalid date format detected:", timestamp);
+                throw new Error("Invalid date format");
+            }
 
-        // UTC 시간으로 Date 객체 생성
-        const utcDate = new Date(
-            Date.UTC(fullYear, parsedMonth, day, ...timeWithoutMs.split(":").map(Number))
-        );
+            const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
-        // UTC+9로 시간 보정
-        const correctedDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
-
-        // 최종 결과 반환 (YYYY-MM-DD 형식)
-        return correctedDate.toISOString().split("T")[0];
-    } catch (error) {
-        console.error("Invalid date value or parsing error:", timestamp, error);
-        return "유효하지 않은 날짜"; // 유효하지 않은 값 처리
-    }
-};
-
+            return kstDate.toISOString().split("T")[0];
+        } catch (error) {
+            console.error("Error in adjustTimeZone function:", timestamp, error);
+            return "유효하지 않은 날짜";
+        }
+    };
 
     // 데이터 fetch 및 상태 업데이트
     useEffect(() => {
@@ -64,27 +55,25 @@ const DocRequestList = () => {
                 const response = await apiSpringBoot.get('/api/document');
                 console.log("Raw response data:", response.data);
     
-                // 문서 타입 매핑 객체
                 const docTypeMap = {
                     address: "전입신고서",
                 };
     
-                // 데이터 가공 및 번호(rownum) 부여
                 const dataWithIndex = response.data.list.map((document, index) => {
                     console.log("Processing document:", document);
     
                     const rowData = {
-                        rownum: index + 1, // 번호 부여 (1부터 시작)
-                        username: document.writtenBy, // 작성자
-                        doctype: docTypeMap[document.docType] || document.docType, // 문서 타입 변환
-                        docCompleted: adjustTimeZone(document.docCompleted), // 생성 날짜 (시간 보정 포함)
+                        rownum: index + 1,
+                        username: document.writtenBy,
+                        doctype: docTypeMap[document.docType] || document.docType,
+                        docCompleted: adjustTimeZone(document.createAt),
                     };
     
                     console.log("Processed row data:", rowData);
                     return rowData;
                 });
     
-                setdocountdata(dataWithIndex); // 상태 업데이트
+                setdocountdata(dataWithIndex);
                 console.log("Final processed data:", dataWithIndex);
             } catch (error) {
                 console.error("Error fetching document data:", error);
@@ -93,7 +82,6 @@ const DocRequestList = () => {
         };
         fetchDocCount();
     }, []);
-    
 
     return (
         <div>
@@ -118,10 +106,10 @@ const DocRequestList = () => {
                             <tbody>
                                 {docountdata.map((document) => (
                                     <tr key={document.rownum}>
-                                        <td>{document.rownum}</td> {/* 번호 */}
-                                        <td>{memId}</td> {/* 작성자 */}
-                                        <td>{document.doctype}</td> {/* 문서 타입 */}
-                                        <td>{document.docCompleted}</td> {/* 생성 날짜 */}
+                                        <td>{document.rownum}</td>
+                                        <td>{memId}</td>
+                                        <td>{document.doctype}</td>
+                                        <td>{document.docCompleted}</td>
                                         <td>
                                             <button 
                                                 onClick={() => navigate(`/document/${document.rownum}`)} 
