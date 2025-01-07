@@ -14,22 +14,25 @@ const EnrollSelect = () => {
 
   const navigate = useNavigate();
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setMemType('');
-  };
-  const handleEnrollSuccess = () => {
-    setShowModal(false);
-    navigate('/loginmember');
-    setMemType('');
-  };
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  //   setMemType('');
+  // };
+  // const handleEnrollSuccess = () => {
+  //   setShowModal(false);
+  //   navigate('/loginmember');
+  //   setMemType('');
+  // };
+
   const handleMoveEnrollManager = () => {
     setMemType('MANAGER');
-    setShowModal(true);
+    // setShowModal(true);
+    navigate('/enrollmanager');
   };
   const handleMoveEnrollFamily = () => {
     setMemType('FAMILY');
-    setShowModal(true);
+    // setShowModal(true);
+    navigate('/enrollfamily');
   };
 
   return (
@@ -46,7 +49,7 @@ const EnrollSelect = () => {
           </button>
         </div>
       </div>
-      {/* 기관담당자 회원가입 */}
+      {/* 기관담당자 회원가입
       {showModal && (
         <Modal onClose={handleCloseModal}>
           {memType === 'MANAGER' && (
@@ -62,7 +65,7 @@ const EnrollSelect = () => {
             ></EnrollFamily>
           )}
         </Modal>
-      )}
+      )} */}
     </>
   );
 };
