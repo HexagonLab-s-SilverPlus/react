@@ -10,6 +10,20 @@ const DocRequestList = () => {
     const navigate = useNavigate();
     const { role, memId } = useContext(AuthContext); // 사용자 권한 정보
 
+    //페이징
+    const [pagingInfo,setDocPagingInfo] = useState({
+        pageNumber:1,
+        pageSize:10,
+        maxPage:1,
+        startPage:1,
+        endPage:1,
+        listCount:1,
+    })
+
+    //페이징 변경시
+    
+    
+
     // 권한 확인
     useEffect(() => {
         console.log("User role:", role); // 디버깅 로그
@@ -46,6 +60,8 @@ const DocRequestList = () => {
         }
     };
 
+
+
     // 데이터 fetch 및 상태 업데이트
     useEffect(() => {
         const fetchDocCount = async () => {
@@ -57,6 +73,9 @@ const DocRequestList = () => {
     
                 const docTypeMap = {
                     address: "전입신고서",
+                    death: "사망신고서",
+                    basic:"기초연금 신청서",
+                    medical:"의료급여 신청서"
                 };
     
                 const dataWithIndex = response.data.list.map((document, index) => {
@@ -84,7 +103,7 @@ const DocRequestList = () => {
     }, []);
 
     return (
-        <div>
+        
             <div className={dstyles.container}>
                 <SideBar />
                 <div className={dstyles.rsection}>
@@ -125,7 +144,7 @@ const DocRequestList = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        
     );
 };
 
