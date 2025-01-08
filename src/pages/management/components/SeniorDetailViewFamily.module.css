@@ -1,11 +1,11 @@
-/* src/pages/management/SeniorRegist.module.css */
+/* src/pages/managemnet/SeniorDetailViewFamily.module.css */
 
-.mdetailMainContainer {
+.sdetailMainContainer {
   display: flex;
 }
 
-.mdetailSubContainer {
-  width: calc(100% - 368px);
+.sdetailSubContainer {
+  width: calc(100% - 358px);
   position: absolute;
   top: 0;
   right: 0;
@@ -13,7 +13,7 @@
   padding: 72px 48px;
 }
 
-.mdetailHeader > p {
+.sdetailHeader > p {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
@@ -23,8 +23,8 @@
   cursor: pointer;
 }
 
-.mdetailSubHeader > p {
-  font-size: 28px;
+.sdetailSubHeader > p {
+  font-size: 40px;
   margin: 0;
   font-weight: bold;
   border-bottom: 1px solid #064420;
@@ -33,13 +33,13 @@
   padding-left: 24px;
 }
 
-.mdetailDiv {
+.sdetailDiv {
   margin-top: 80px;
   display: flex;
   gap: 20px;
 }
 
-.mdetailProfilephoto {
+.sdetailProfilephoto {
   width: 250px;
   height: 300px;
   flex-shrink: 0;
@@ -48,7 +48,7 @@
   /* border: 1px solid; */
 }
 
-.mdetailProfilephoto > button {
+.sdetailProfilephoto > button {
   position: relative;
   /* top: 310px; */
   left: 80px;
@@ -58,40 +58,61 @@
   height: 25px;
 }
 
-.sregistProfile {
+.sdetailProfile {
   width: 250px;
   height: 300px;
 }
 
-.mdetailTableDiv {
+.sdetailTableDiv {
   flex-grow: 1;
   margin-left: 50px;
   max-width: calc(100%-270px);
   display: flex;
 }
 
-.mdetailTable {
+.sdetailTable {
   font-size: 18px;
   table-layout: fixed;
   width: 70%;
 }
 
-.mdetailTable > tr {
+.sdetailTable > tr {
   height: 70px;
 }
 
-.mdetailTable > tr > th {
+.sdetailTable > tr > th {
   margin-left: 10px;
   width: 90px;
   line-height: 0;
   text-align: justify;
 }
 
-.mdetailTable > tr > td {
+.sdetailTable > tr > td {
   width: 300px;
 }
 
-.mdetailTable > tr > td > input {
+.sdetailTableAgeDiv {
+  width: 130px;
+  height: 75px;
+  vertical-align: middle;
+}
+
+.sdetailTableAgeDiv > td {
+  width: 130px;
+  height: 70px;
+}
+
+.sdetailTableAgeDiv > td > input {
+  background-color: #dddddd;
+  border: 3px solid #dddddd;
+  margin-left: 10px;
+  height: 36px;
+  padding: 0;
+  padding-left: 15px;
+  font-size: 18px;
+}
+
+.sdetailTable > tr > td > input {
   margin-left: 10px;
   height: 36px;
   width: 245px;
@@ -101,33 +122,28 @@
   border: 2px solid #dddddd;
 }
 
-.mdetailTable > tr > td > input[readonly] {
-  background-color: #dddddd;
-  border: 3px solid #dddddd;
-}
-
-.mdetailTable > tr > th::after {
+.sdetailTable > tr > th::after {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
-.mdetailTable > tr > th::before {
+.sdetailTable > tr > th::before {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
-.mdetailButtonDiv {
+.sdetailButtonDiv {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   width: 1325px;
   max-width: calc(100% - 150px);
   margin-top: 50px;
   margin-left: 50px;
 }
 
-.mdetailButton1 {
+.sdetailButton1 {
   border-radius: 3px;
   border: 0;
   background-color: #064420;
@@ -140,7 +156,7 @@
   cursor: pointer;
 }
 
-.mdetailButton2 {
+.sdetailButton2 {
   border-radius: 3px;
   background-color: #eeeeee;
   border: 0;
@@ -165,20 +181,20 @@
   font-size: 30px;
 }
 
-.mdetailSelectDiv {
+.sdetailSelectDiv {
   display: flex;
   align-items: center; /* 수직 중심 정렬 */
   gap: 10px; /* 요소 간 간격 */
 }
 
-.mdetailSelect {
+.sdetailSelect {
   width: 80px;
   height: 30px;
   font-size: 16px;
   text-align: center;
 }
 
-.mdetailTable > tr > td > div > input {
+.sdetailTable > tr > td > div > input {
   margin-left: 10px;
   height: 36px;
   width: 345px;
@@ -188,7 +204,7 @@
   border: 0;
 }
 
-.mdetailTable > tr > td > div > input[readonly] {
+.sdetailTable > tr > td > div > input[readonly] {
   background-color: #dddddd;
 }
 
@@ -198,17 +214,17 @@
 }
 
 /* 아이디 비밀번호 입력칸 */
-.sregistIdPwd {
+.sdetailIdPwd {
   width: 1200px;
   vertical-align: middle;
   margin-top: 20px;
 }
 
-.sregistIdPwd > td {
+.sdetailIdPwd > td {
   width: 250px;
 }
 
-.sregistIdPwd > th {
+.sdetailIdPwd > th {
   margin-left: 10px;
   width: 90px;
   height: 40px;
@@ -216,7 +232,7 @@
   text-align: justify;
 }
 
-.sregistIdPwd > td > input {
+.sdetailIdPwd > td > input {
   margin-left: 10px;
   height: 36px;
   width: 200px;
@@ -226,29 +242,29 @@
   border: 2px solid #dddddd;
 }
 
-.sregistIdPwd > th::after {
+.sdetailIdPwd > th::after {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
-.sregistIdPwd > th::before {
+.sdetailIdPwd > th::before {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
 /* 아이디 비밀번호 체크 메세지 출력*/
-.sregistIdPwdChk {
+.sdetailIdPwdChk {
   width: 1200px;
   vertical-align: middle;
 }
 
-.sregistIdPwdChk > td {
+.sdetailIdPwdChk > td {
   width: 250px;
 }
 
-.sregistIdPwdChk > th {
+.sdetailIdPwdChk > th {
   margin-left: 10px;
   width: 90px;
   /* height: 70px; */
@@ -256,14 +272,14 @@
   text-align: justify;
 }
 
-.sregistIdPwdChk > td > input {
+.sdetailIdPwdChk > td > input {
   margin-left: 10px;
   border: 0;
   background-color: #fff;
   font-size: 10px;
 }
 
-.sregistIdPwdChk > td > button {
+.sdetailIdPwdChk > td > button {
   margin-left: 10px;
   height: 25px;
   font-weight: bold;
@@ -275,17 +291,17 @@
 }
 
 /* 이메일 입력 칸*/
-.sregistEmailDiv {
+.sdetailEmailDiv {
   width: 700px;
   vertical-align: middle;
 }
 
-.sregistEmailDiv > td {
+.sdetailEmailDiv > td {
   height: 70;
   vertical-align: middle;
 }
 
-.sregistEmailDiv > th {
+.sdetailEmailDiv > th {
   margin-left: 10px;
   width: 90px;
   height: 70px;
@@ -293,7 +309,7 @@
   text-align: justify;
 }
 
-.sregistEmailDiv > td > input {
+.sdetailEmailDiv > td > input {
   margin-left: 10px;
   height: 36px;
   width: 200px;
@@ -303,20 +319,68 @@
   border: 2px solid #dddddd;
 }
 
-.sregistEmailDiv > th::after {
+.sdetailEmailDiv > th::after {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
-.sregistEmailDiv > th::before {
+.sdetailEmailDiv > th::before {
   content: '';
   display: inline-block;
   width: 100%;
 }
 
-.sregistEmailDiv > td > select {
+.sdetailEmailDiv > td > select {
   margin-left: 20px;
   width: 100px;
   height: 36px;
+}
+
+/* 가족 승인 여부 레이어 CSS */
+.sdetailFamilyDiv {
+  border: 1px, solid;
+  width: 100%;
+  position: relative;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+  margin-top: 100px;
+}
+
+/* 병력관리 여부 레이어 */
+.sdetailMedicalDiv {
+  border: 1px, solid;
+  width: 100%;
+  position: relative;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+  margin-top: 100px;
+}
+
+/* 공문서 확인 레이어 */
+.sdetailDocumentDiv {
+  border: 1px, solid;
+  width: 100%;
+  position: relative;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+  margin-top: 100px;
+}
+
+/* 위험상황 알림 기록 레이어 */
+.sdetailEmergencyDiv {
+  border: 1px, solid;
+  width: 100%;
+  position: relative;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+  margin-top: 100px;
 }

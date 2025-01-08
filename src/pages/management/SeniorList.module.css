@@ -1,8 +1,8 @@
 /* src/pages/managemnet/SeniorList.module.css */
-.mlistContainer {
+.slistContainer {
   display: flex;
 }
-.mlistSubContainer {
+.slistSubContainer {
   width: calc(100% - 368px);
   position: absolute;
   top: 0;
@@ -10,7 +10,7 @@
   box-sizing: border-box;
   padding: 72px 48px;
 }
-.mlistviewHeader > p {
+.slistviewHeader > p {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
@@ -19,48 +19,48 @@
   padding-left: 24px;
   cursor: pointer;
 }
-.mlistrSubLine {
+.slistrSubLine {
   display: flex;
   justify-content: end;
   margin-top: 80px;
   margin-bottom: 20px;
 }
-.mlistSearchbox {
+.slistSearchbox {
   display: flex;
   justify-content: flex-end;
   align-items: end;
   gap: 5px;
 }
-.mlistSearchOptions {
+.slistSearchOptions {
   border-bottom: 2px #064420 solid;
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
 }
-.mlistArrow {
+.slistArrow {
   width: 20px;
   height: 20px;
 }
-.mlistDropdown {
+.slistDropdown {
   position: absolute;
   z-index: 1000;
   margin-top: 5px;
   background-color: #ffffff;
 }
-.mlistDropdownOption {
+.slistDropdownOption {
   padding: 5px 0px;
   cursor: pointer;
   font-weight: normal;
   font-size: 20px;
 }
-.mlistDropdownOption:hover {
+.slistDropdownOption:hover {
   font-weight: bold;
 }
-.mlistSearchKeyword {
+.slistSearchKeyword {
   display: flex;
   align-items: center;
 }
-.mlistSearchKeywordBox {
+.slistSearchKeywordBox {
   font-family: 'Pretendard Variable';
   width: 320px;
   font-size: 18px;
@@ -69,12 +69,12 @@
   color: #333333;
   border-bottom: 2px #064420 solid;
 }
-.mlistSearch {
+.slistSearch {
   width: 30px;
   height: 30px;
   cursor: pointer;
 }
-/* .mlistInputButton {
+/* .slistInputButton {
     background-color: #064420;
     font-size: 16px;
     color: #ffffff;
@@ -82,11 +82,11 @@
     border-radius: 10px;
     text-decoration: none;
   } */
-.mlisttableDiv {
+.slisttableDiv {
   width: calc(100%);
   margin-top: 20px;
 }
-.mlistTable {
+.slistTable {
   table-layout: fixed;
   width: 100%;
   text-align: center;
@@ -94,10 +94,10 @@
   font-size: 18px;
   border-collapse: collapse;
 }
-.mlistTable > thead {
+.slistTable > thead {
   width: 100%;
 }
-.mlistTable > thead > tr > th {
+.slistTable > thead > tr > th {
   padding-top: 8px;
   padding-bottom: 8px;
   font-weight: bold;
@@ -112,12 +112,82 @@
 .thViews {
   width: 10%;
 }
-.mlistTable > tbody > tr > td {
+.slistTable > tbody > tr > td {
   padding-top: 8px;
   padding-bottom: 8px;
   border-bottom: 2px solid #999999;
   cursor: pointer;
 }
-.mlistPaging {
+
+.slistTable > tbody > tr:hover {
+  background-color: #d9d9d9d9;
+}
+
+.slistPaging {
   margin-top: 45px;
+}
+
+/* 표의 열 별 가로길이 설정 */
+.slistTable th.nameColumn,
+.slistTable td.nameColumn {
+  width: 15%; /* 이름 열: 전체 테이블의 15% */
+}
+
+.slistTable th.birthColumn,
+.slistTable td.birthColumn {
+  width: 15%; /* 생년월일 열: 20% */
+}
+
+.slistTable th.genderColumn,
+.slistTable td.genderColumn {
+  width: 15%; /* 성별 열: 10% */
+}
+
+.slistTable th.addressColumn,
+.slistTable td.addressColumn {
+  width: 45%; /* 주소 열: 35% */
+  word-break: break-word; /* 글자가 넘칠 경우 줄바꿈 */
+}
+
+.slistTable th.phoneColumn,
+.slistTable td.phoneColumn {
+  width: 20%; /* 연락처 열: 20% */
+}
+
+/* 성별 선택 레이어(검색용) */
+.slistGenderSelectContainer {
+  display: flex;
+  border-bottom: 2px #064420 solid;
+}
+
+.slistGenderSelectDiv {
+  width: 100px;
+}
+
+.slistGenderSelectLabel {
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.slistGenderSelectLabel > input {
+  margin-right: 10px;
+}
+
+/* 나이 선택 레이어(검색용) */
+.slistAgeSelectContainer {
+  display: flex;
+  border-bottom: 2px #064420 solid;
+}
+
+.slistAgeSelectDiv {
+  width: 400px;
+}
+
+.slistAgeSelectLabel {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.slistAgeSelectLabel > input {
+  margin-right: 10px;
 }
