@@ -178,7 +178,7 @@ const CompletedDocument = () => {
                                 </td>
 
 
-                                <td>{doc.document.approvedAt || '미정'}</td>
+                                <td>{doc.document.approvedAt || '승인전'}</td>
                                 <td>
                                     <button
                                         className={styles.downloadButton}
@@ -188,13 +188,14 @@ const CompletedDocument = () => {
                                     </button>
                                 </td>
                                 <td>
-
-                                    <button
-                                        className={styles.submitButton}
-                                        onClick={() => handleSubmit(doc.document.docId)}
-                                    >
-                                        제출
-                                    </button>
+                                    {doc.document.isApproved !== '대기중' && doc.document.isApproved !== '승인'? (
+                                        <button
+                                            className={styles.submitButton}
+                                            onClick={() => handleSubmit(doc.document.docId)}
+                                        >
+                                            제출
+                                        </button>
+                                    ) : '제출완료'}
                                 </td>
                             </tr>
                         ))}
