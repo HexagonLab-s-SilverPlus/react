@@ -92,16 +92,22 @@ const Medical = () => {
         }
     };
 
+    // useEffect(() => {
+    //     fetchMedical();
+    // }, [mediSnrUUID]);
     useEffect(() => {
-        fetchMedical();
-    }, [mediSnrUUID]);
+        // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
+        setIsAllChecked(false); // 전체선택 초기화
+        setMedicals((prev) => prev.map((item) => ({ ...item, isChecked: false }))); // 항목 선택 초기화
+        fetchMedical(pagingInfo.pageNumber);
+    }, [mediSnrUUID, pagingInfo.pageNumber]);
 
     const handlePageChange = (page) => {
         setPagingInfo((prev) => ({
             ...prev,
             pageNumber: page,
         }));
-        fetchMedical(page);
+        // fetchMedical(page);
     };
 
     //th 체크박스 클릭 시
@@ -278,6 +284,7 @@ const Medical = () => {
                 setMedicals((prev) => prev.filter((item) => !item.isChecked));
                 setIsAllChecked(false);
                 alert("선택한 항목이 삭제되었습니다.");
+                fetchMedical();
             } catch (error) {
                 console.error("handleDeleteClick Error:", error);
                 alert("삭제 중 오류가 발생했습니다.");
