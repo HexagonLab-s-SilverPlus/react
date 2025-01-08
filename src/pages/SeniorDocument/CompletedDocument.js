@@ -64,9 +64,42 @@ const CompletedDocument = () => {
         }
     }, [apiSpringBoot, member.memUUIDMgr]);
 
-    const handleSubmit = (id) => {
-        alert(`문서 ID ${id}가 제출되었습니다.`);
+
+
+    // 담당자에게 제출하는 핸들러
+    const handleSubmit = async (docId) => {
         // 제출 로직 구현
+        try {
+            const response = await apiSpringBoot.post(`api/document/${docId}/send`);
+
+            if (response.status === 200 && response.data.success) {
+                alert("문서가 담당자에게 성공적으로 제출되었습니다.");
+                console.log(`문서 ID ${docId} 제출 완료`);
+
+                const { submittedAt } = response.data.data.submittedAt; // 제출날짜 반환값
+
+                // 상태를 업데이트하여 제출된 문서의 상태를 변경
+                setDocuments((prevDocuments) =>
+                    prevDocuments.map((doc) =>
+                        doc.document.docId === docId
+                            ? {
+                                ...doc, document: {
+                                    ...doc.document,
+                                    isApproved: "대기중",
+                                    submittedAt: submittedAt || new Date().toISOString() // 반환값이 없으면 현재 시간 사용
+                                }
+                            }
+                            : doc
+                    )
+                );
+            } else {
+                alert("문서 제출에 실패했습니다. 다시 시도해주세요");
+            }
+            console.log("제출 결과: ", response.data);
+        } catch (error) {
+            console.error("문서 제출 중 에러 발생:", error);
+            alert("문서 제출 중 문제가 발생했습니다. 관리자에게 문의하세요.");
+        }
     };
 
 
@@ -114,6 +147,7 @@ const CompletedDocument = () => {
                             <th>처리여부</th>
                             <th>담당자 이름</th>
                             <th>담당자 전화번호</th>
+                            <th>제출날짜</th>
                             <th>승인날짜</th>
                             <th>파일 다운로드</th>
                             <th>제출</th>
@@ -130,6 +164,20 @@ const CompletedDocument = () => {
                                 <td>{doc.document.isApproved}</td>
                                 <td>{managerName || '담당자 미정'}</td>
                                 <td>{managerPhone || '담당자 미정'}</td>
+                                <td>
+                                    {doc.document.submittedAt
+                                        ? new Date(doc.document.submittedAt).toLocaleString('ko-KR', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        }).replace(/(?<=\d)(?=\.)/g, '') // 숫자 뒤의 점 앞에만 작동
+                                        : '미정'}
+                                </td>
+
+
                                 <td>{doc.document.approvedAt || '미정'}</td>
                                 <td>
                                     <button
@@ -143,7 +191,7 @@ const CompletedDocument = () => {
 
                                     <button
                                         className={styles.submitButton}
-                                        onClick={() => handleSubmit(doc.id)}
+                                        onClick={() => handleSubmit(doc.document.docId)}
                                     >
                                         제출
                                     </button>
@@ -153,7 +201,7 @@ const CompletedDocument = () => {
                     </tbody>
                 </table>
             </div>
-            <SeniorFooter/>
+            <SeniorFooter />
         </div>
     );
 }
