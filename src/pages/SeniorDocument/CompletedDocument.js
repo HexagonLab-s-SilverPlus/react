@@ -1,92 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from './CompletedDocument.module.css';
+import { AuthContext } from '../../AuthProvider';
+import Container from '../chat/Container';
+
 
 const CompletedDocument = () => {
-  const [documents, setDocuments] = useState([]);
+    const [documents, setDocuments] = useState([]);
+    const { apiSpringBoot, accessToken, member } = useContext(AuthContext);
 
-  useEffect(() => {
-    // 예시 데이터
-    const fetchDocuments = async () => {
-      const exampleData = [
-        {
-          id: 1,
-          documentType: '전입신고서',
-          submissionDate: '2025-01-05',
-          status: '승인',
-          officerName: '김담당',
-          approvalDate: '2025-01-06',
-          downloadLink: '/files/sample1.csv',
-        },
-        {
-          id: 2,
-          documentType: '사망신고서',
-          submissionDate: '2025-01-03',
-          status: '반려',
-          officerName: '박담당',
-          approvalDate: '',
-          downloadLink: '/files/sample2.csv',
-        },
-      ];
-      setDocuments(exampleData);
+
+    // 데이터 가져오기
+    useEffect(() => {
+        // 예시 데이터
+        const fetchDocuments = async () => {
+            try {
+                // 비동기 요청에서 응답 대기
+                const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/with-files`);
+                if (response.data && response.data.data && response.data.data.length > 0) {
+                    console.log("조회한 문서와 파일 데이터: ", response.data.data);
+                    setDocuments(response.data.data);
+                }
+                else {
+                    console.log('조회할 문서와 파일이 없습니다.');
+                    setDocuments([]);
+                }
+            } catch (error) {
+                console.error('문서 데이터를 가져오는 중 에러 발생:', error);
+            }
+        };
+
+        fetchDocuments();
+    }, [apiSpringBoot, member.memUUID]);
+
+    const handleSubmit = (id) => {
+        alert(`문서 ID ${id}가 제출되었습니다.`);
+        // 제출 로직 구현
     };
 
-    fetchDocuments();
-  }, []);
+    const handleDownload = (link) => {
+        window.location.href = link;
+    };
 
-  const handleSubmit = (id) => {
-    alert(`문서 ID ${id}가 제출되었습니다.`);
-    // 제출 로직 구현
-  };
-
-  const handleDownload = (link) => {
-    window.location.href = link;
-  };
-
-  return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>완료된 공문서</h2>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>작성일자</th>
-            <th>공문서 타입</th>
-            <th>처리여부</th>
-            <th>담당자 이름</th>
-            <th>승인날짜</th>
-            <th>파일 다운로드</th>
-            <th>제출</th>
-          </tr>
-        </thead>
-        <tbody>
-          {documents.map((doc) => (
-            <tr key={doc.id}>
-              <td>{doc.submissionDate}</td>
-              <td>{doc.documentType}</td>
-              <td>{doc.status}</td>
-              <td>{doc.officerName}</td>
-              <td>{doc.approvalDate || '미정'}</td>
-              <td>
-                <button
-                  className={styles.downloadButton}
-                  onClick={() => handleDownload(doc.downloadLink)}
-                >
-                  다운로드
-                </button>
-              </td>
-              <td>
-                <button
-                  className={styles.submitButton}
-                  onClick={() => handleSubmit(doc.id)}
-                >
-                  제출
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    return (
+        <div className={styles.container}>
+            <h2 className={styles.title}>완료된 공문서</h2>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th>작성일자</th>
+                        <th>공문서 타입</th>
+                        <th>처리여부</th>
+                        <th>담당자 이름</th>
+                        <th>승인날짜</th>
+                        <th>파일 다운로드</th>
+                        <th>제출</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {documents.map((doc) => (
+                        <tr key={doc.document.docId}>
+                            <td>{doc.document.docCompletedAt}</td>
+                            <td>{doc.document.docType}</td>
+                            <td>{doc.document.isApproved}</td>
+                            <td>{member.memUUIDMgr}</td>
+                            <td>{doc.document.approvedAt || '미정'}</td>
+                            <td>
+                                <button
+                                    className={styles.downloadButton}
+                                    onClick={() => handleDownload(doc.downloadLink)}
+                                >
+                                    다운로드
+                                </button>
+                            </td>
+                            <td>
+                                <button
+                                    className={styles.submitButton}
+                                    onClick={() => handleSubmit(doc.id)}
+                                >
+                                    제출
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
 };
 
 export default CompletedDocument;
