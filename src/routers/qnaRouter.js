@@ -7,6 +7,7 @@ import QnADetail from '../pages/qna/QnADetail';
 import QnAUpdate from '../pages/qna/QnAUpdate';
 import QnAAnswer from '../pages/qna/QnAAnswer';
 import EMGTest from '../pages/emg/EMGTest';
+import EMGList from '../components/emg/EMGList';
 
 
 const qnaRouter = [
@@ -17,6 +18,7 @@ const qnaRouter = [
         <Route path="/qna/update/:qnaUUID" element={<QnAUpdate />} />,
         <Route path="/qna/answer/:qnaUUID" element={<QnAAnswer />} />,
         <Route path="/emg" element={<EMGTest />} />,
+        <Route path="/emg/test" element={<EMGList />} />,
     </>
 ];
 

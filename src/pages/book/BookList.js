@@ -13,6 +13,9 @@ import SeniorFooter from "../../components/common/SeniorFooter";
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
+    const [playbutton, setPlaybutton] = useState(true);
+    const [playAudio, setPlayAudio] = useState(null);
+
     //페이징
     const [pagingInfo, setPagingInfo] = useState({
         pageNumber: 1,
@@ -28,7 +31,8 @@ const BookList = () => {
     const [tempKeyword, setTempKeyword] = useState('');
     
     const navigate = useNavigate();
-
+    // 인증 정보와 flask API URL 가져오기
+    const { apiFlask } = useContext(AuthContext);
     //토큰정보 가져오기(AuthProvider)
     const { role } = useContext(AuthContext);
 
@@ -54,8 +58,15 @@ const BookList = () => {
                         ...pagingInfo,
                     },
                 });
+
+                // books에 isPlaying 추가
+                const updateBooks = response.data.fileList.map((book)=>({
+                    ...book,
+                    isPlaying:false,// 초기 상태는 재생중 아님
+                }));
+
                 console.log("book",response.data.fileList.book);
-                setBooks(response.data.fileList);
+                setBooks(updateBooks);
                 //setFiles(response.data.fileList);
 
                 console.log("API Response:", response.data.list);
@@ -149,6 +160,109 @@ const BookList = () => {
         }));
         console.log("핸들서치클릭");
     };
+    
+    const handlePlayRecord = async (text,bookIndex) =>{
+        console.log(`playing text for book ${bookIndex}:${text}`);
+        alert("잠시만 기다려주세요.");
+
+        try{
+            // 2. TTS API 호출
+
+            const response = await apiFlask.post('/tts/pagereader', { text }, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            if (response.status===200){
+                // 3. 음성 재생
+                const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
+                const newAudio = new Audio(audioUrl);
+                newAudio.play();
+
+                // 특정 책의 isPlaying 상태를 true로 설정
+                setBooks((prevBooks) =>
+                    prevBooks.map((book, index) =>
+                        index === bookIndex ? { ...book, isPlaying: true } : book
+                    )
+                );
+
+                // 재생이 끝나면 상태 초기화
+                newAudio.onended = () => {
+                    setBooks((prevBooks) =>
+                        prevBooks.map((book, index) =>
+                            index === bookIndex ? { ...book, isPlaying: false } : book
+                        )
+                    );
+                    setPlayAudio(null);
+                };
+                setPlayAudio(newAudio);
+
+                // // 정지 버튼을 누르거나 오디오가 끝나면 상태 초기화
+                // newAudio.onended = () => {
+                //     setPlaybutton(true);
+                //     setPlayAudio(null);
+                // };
+            } else {
+                console.log("음성변환에 실패하였습니다. 다시 시도해주세요.");
+                alert("음성변환에 실패하였습니다. 다시 시도해주세요.");
+            }
+        } catch(error){
+            console.error("TTS 요청중 오류 : ", error);
+            alert("음성변환에 실패하였습니다. 다시 시도해주세요.")
+        }
+    };
+
+    const handleStopRecord = (bookIndex) => {
+        if (playAudio) {
+            playAudio.pause();
+            playAudio.currentTime=0;
+            // 특정 책의 isPlaying 상태를 false로 설정
+            setBooks((prevBooks) =>
+                prevBooks.map((book, index) =>
+                    index === bookIndex ? { ...book, isPlaying: false } : book
+                )
+            );
+
+            setPlayAudio(null);
+        }
+    };
+
+    // 페이지 이동 시 TTS 중지
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            // if (audio) {
+            //     audio.pause();
+            //     audio.currentTime = 0; // 오디오 재생 초기화
+            // }
+        };
+
+        // 이벤트 리스너 등록
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        // 페이지 이동 시 URL 변경 감지
+        const originalPushState = window.history.pushState;
+        const originalReplaceState = window.history.replaceState;
+
+        window.history.pushState = function (...args) {
+            handleBeforeUnload();
+            originalPushState.apply(window.history, args);
+        };
+
+        window.history.replaceState = function (...args) {
+            handleBeforeUnload();
+            originalReplaceState.apply(window.history, args);
+        };
+
+        return () => {
+            // 이벤트 리스너 제거
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.history.pushState = originalPushState;
+            window.history.replaceState = originalReplaceState;
+        };
+    }, [playAudio]);
+
 
     const renderSearchInputs = () => {
         //Enter 누르면 검색 버튼 클릭됨
@@ -168,6 +282,12 @@ const BookList = () => {
         );
         
     };
+
+    // if (!audio) {
+    //     // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+    //     return <div>Loading...</div>;
+    // };
+
     console.log(tempKeyword);
     //--------------------------------------------------
     if (role === "SENIOR") {
@@ -183,19 +303,28 @@ const BookList = () => {
                     </div>{/* snrBkLeft end */}
 
                     <div className={styles.snrBkRight}>
+                        <div className={styles.bkSearchWrap}>
+                            {renderSearchInputs()}
+
+                            <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
+                        </div>{/* bkSearchWrap end */}
                         <div className={styles.snrBkList}>
                                 <ul className={styles.pgBookList}>
-                                    {(books || []).map((book) => (
+                                    {(books || []).map((book,index) => (
                                             <li className={styles.pgBookItem} key={book.book.bookNum}>
                                                 <div>
-                                                    <div className={styles.pgBookImageWrap}>
+                                                    <div>
                                                         <img src={`data:${book.mimeType};base64,${book.fileContent}`} className={styles.pgBookImage}/>
                                                     </div>
                                                     <div className={styles.pgBookTextWrap}>
-                                                        <p>{book.book.bookTitle}</p>
+                                                        <div className={styles.pgBookTitleWrap}>{book.book.bookTitle}</div>
                                                     </div>
                                                     <div>
-                                                        <button className={styles.pgBookbutton}>재생</button>
+                                                        {book.isPlaying ?(
+                                                        <button className={styles.pgBookbuttonStop} onClick={() => handleStopRecord(index)}>정지</button>
+                                                        ):(
+                                                        <button className={styles.pgBookbutton} onClick={() => handlePlayRecord(book.textContexnt,index)}>재생</button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </li>
