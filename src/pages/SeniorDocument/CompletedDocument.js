@@ -68,9 +68,35 @@ const CompletedDocument = () => {
         // 제출 로직 구현
     };
 
-    const handleDownload = (link) => {
-        window.location.href = link;
+
+
+
+    const handleDownload = async (fileName) => {
+        try {
+            const response = await apiSpringBoot.get(`/api/doc-files/download/${fileName}`, {
+                responseType: 'blob', // 파일 다운로드를 위한 Blob 설정
+            });
+    
+            if (response.status !== 200) {
+                throw new Error('파일 다운로드 실패');
+            }
+    
+            const blob = new Blob([response.data]);
+            const downloadUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(downloadUrl);
+        } catch (error) {
+            console.error('파일 다운로드 중 오류 발생:', error);
+        }
     };
+    
+
+
 
     return (
         <div className={styles.container}>
@@ -103,7 +129,7 @@ const CompletedDocument = () => {
                             <td>
                                 <button
                                     className={styles.downloadButton}
-                                    onClick={() => handleDownload(doc.downloadLink)}
+                                    onClick={() => handleDownload(doc.file.dfRename)}
                                 >
                                     다운로드
                                 </button>
