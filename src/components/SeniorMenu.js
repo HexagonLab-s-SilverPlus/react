@@ -6,7 +6,6 @@ import gostop from "../assets/images/game/card/11_1.png";
 import activityIcon from "../assets/images/activityIcon.png";
 import noticeIcon from "../assets/images/noticeIcon.png";
 import documentIcon from "../assets/images/documentIcon.png";
-import Container from "../pages/chat/Container";
 import { useNavigate } from "react-router-dom";
 
 import SeniorNavbar from './common/SeniorNavbar';

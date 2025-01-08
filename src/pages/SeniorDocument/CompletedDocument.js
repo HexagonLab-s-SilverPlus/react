@@ -7,7 +7,7 @@ import Container from '../chat/Container';
 const CompletedDocument = () => {
     const [documents, setDocuments] = useState([]);
     const { apiSpringBoot, accessToken, member } = useContext(AuthContext);
-
+    const [managerName, setManagerName] = useState('');
 
     // 데이터 가져오기
     useEffect(() => {
@@ -31,6 +31,26 @@ const CompletedDocument = () => {
 
         fetchDocuments();
     }, [apiSpringBoot, member.memUUID]);
+
+
+
+        // 담당자 이름 가져오기
+        useEffect(() => {
+            const fetchManagerName = async () => {
+                try {
+                    const response  = await apiSpringBoot.get(`/api/document/mgrName/${member.memUUIDMgr}`);
+                    console.log("담당자 멤버 정보: ", response.data.data);
+                    setManagerName(response.data?.data.memName|| '담당자 미정');
+                } catch (error) {
+                    console.error('담당자 이름을 가져오는 중 에러 발생:', error);
+                    setManagerName('담당자 미정');
+                }
+            };
+    
+            if (member.memUUIDMgr) {
+                fetchManagerName();
+            }
+        }, [apiSpringBoot, member.memUUIDMgr]);
 
     const handleSubmit = (id) => {
         alert(`문서 ID ${id}가 제출되었습니다.`);
@@ -59,10 +79,13 @@ const CompletedDocument = () => {
                 <tbody>
                     {documents.map((doc) => (
                         <tr key={doc.document.docId}>
-                            <td>{doc.document.docCompletedAt}</td>
+                            <td>{new Date(doc.document.docCompletedAt).toLocaleString('ko-KR', {
+                                year: 'numeric', month: '2-digit', day: '2-digit',
+                                hour: '2-digit', minute: '2-digit'
+                            })}</td>
                             <td>{doc.document.docType}</td>
                             <td>{doc.document.isApproved}</td>
-                            <td>{member.memUUIDMgr}</td>
+                            <td>{managerName || '담당자 미정'}</td>
                             <td>{doc.document.approvedAt || '미정'}</td>
                             <td>
                                 <button
