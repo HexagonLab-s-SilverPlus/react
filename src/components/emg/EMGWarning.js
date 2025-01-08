@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EMGWarning.module.css'
 const EMGWarning = ({onCloseModal, emgUUID}) => {
-    const [timeLeft, setTimeLeft] = useState(30); // 남은 시간 (초)
+    const [timeLeft, setTimeLeft] = useState(5); // 남은 시간 (초)
 
     // 30초 타이머 시작
     useEffect(() => {
