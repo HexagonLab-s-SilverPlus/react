@@ -1,0 +1,42 @@
+/* src/components/emg/emg.module.css */
+.emgWrap {width: c(100% - 368px); border: 1px solid #000; padding: 0 96px;} /* width: 100%로 수정하기 */
+.emgWrap {font-family: "Pretendard Variable"; box-sizing: border-box;}
+.emgWrap input {font-family: "Pretendard Variable";}
+.emgWrap button {font-family: "Pretendard Variable";}
+
+.emgTop {display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; box-sizing: border-box; padding: 0 12px; font-size: 18px;}
+.emgTop > h1 {margin: 0; padding: 0; font-size: 40px;}
+/* emgTop end */
+
+.emgTable {width: 100%; border-top: 2px solid #064420; border-bottom: 2px solid #064420; margin-bottom: 24px; border-collapse: collapse; font-size: 20px;}
+.emgTable input {font-size: 20px;}
+.emgTable thead {width: 100%; height: 48px; border-bottom: 2px solid #064420; background: #FDFAF6;}
+.emgTable th {border: 1px solid #ddd;}
+.emgTable tr th:nth-child(1) {width: 25%; border-left: 0;}
+.emgTable tr th:nth-child(2) {width: 25%;}
+.emgTable tr th:nth-child(3) {width: 25%;}
+.emgTable tr th:nth-child(4) {width: 25%;}
+.emgTable tr th:nth-child(5) {width: 10%; border-right: 0;}
+/* emgTable thead end */
+
+.emgTable td {border: 1px solid #ddd; height: 48px;}
+.emgItem td:nth-child(1) { border-left: 0;}
+.emgItem td:last-child {border-right: 0;}
+/* .emgItem td:nth-child(1) input {display: block; width: 24px; height: 24px;} */
+.emgItem td input {width: 90%; display: block; margin: 0 auto; height: 36px; text-align: center; padding: 0 12px; box-sizing: border-box;}
+.emgItem td:last-child {text-align: center;}
+.emgItem td:last-child span {color: #368cfc;}
+.emgItem td:last-child button {cursor: pointer; width: 100px; height: 36px; background: #eee; border: 0; border-radius: 8px; font-size: 16px; margin: 0 auto; display: block;}
+.emgItem td:last-child button:hover {background: #064420; color: #fff;}
+.emgItem td:last-child button:disabled:hover {background: #eee; color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)); cursor: not-allowed;}
+
+.emgItem td input:disabled {border: 0; background: none; color: #333;}
+/* emgTable tbody end */
+
+.emgBtns {display: flex; justify-content: right; align-items: center;}
+.emgBtns > button {cursor: pointer; width: 144px; height: 36px; background: #eee; border: 0; border-radius: 8px; font-size: 16px; display: block; margin-left: 24px;}
+.emgBtns > button:hover {background: #064420; color: #fff;}
+/* emgBtns end */
+
+
+.ncancel {color: #ff0000;}
