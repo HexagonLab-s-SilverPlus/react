@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import ReactDOM from "react-dom";
@@ -8,7 +8,9 @@ import PropTypes from "prop-types";
 
 // 공통 모달 컴포넌트
 const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, title, navigate }) => {
+    console.log("hasMoreActive:", hasMore);
     if (!isOpen) return null;
+
 
     return ReactDOM.createPortal(
         <div className={styles.modalOverlay}>
@@ -17,13 +19,18 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
                 <button className={styles.closeButton} onClick={closeModal}>
                     닫기
                 </button>
-                <div className={styles.trashList}>
+
+                <div id="scrollable-modal" className={styles.trashList}>
                     <InfiniteScroll
                         dataLength={workspaces.length} // 현재까지 로드된 데이터 길이
-                        next={fetchMore} // 다음 데이터를 가져오는 함수
+                        next={() => {
+                            console.log("InfiniteScroll next 호출");
+                            fetchMore();
+                        }}
                         hasMore={hasMore} // 데이터가 더 있는지 여부
                         loader={<div className={styles.spinner}>로딩 중...</div>} // 로딩 상태 표시
                         height={300} // 스크롤 영역 높이
+                        scrollableTarget="scrollable-modal" // 스크롤할 대상
                     >
                         {workspaces.length > 0 ? (
                             workspaces.map((workspace) => (
@@ -87,6 +94,13 @@ const SeniorSideBar = ({ memUUID }) => {
     const [hasMoreArchived, setHasMoreArchived] = useState(true);
     const [hasMoreDeleted, setHasMoreDeleted] = useState(true);
 
+    // 페이지와 offset을 동기화
+    const [activePage, setActivePage] = useState(0); // 현재 offset (0-based index)
+    const [archivedPage, setArchivedPage] = useState(0); // 현재 offset (0-based index)
+    const [deletedPage, setDeletedPage] = useState(0); // 현재 offset (0-based index)
+
+    const [pageSize] = useState(5); // 한 페이지의 크기
+
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false); // 활성화 워크스페이스 모달 상태
     const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
     const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
@@ -94,15 +108,37 @@ const SeniorSideBar = ({ memUUID }) => {
 
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null);
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
-    const [openDropdownId, setOpenDropdownId] = useState(null);
 
+
+
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+    const dropdownRef = useRef(null); // 드롭다운 영역을 참조하기 위한 ref
 
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
 
 
+
+
     const { apiSpringBoot, memName } = useContext(AuthContext);
     const navigate = useNavigate();
+
+
+    // 드롭다운 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setOpenDropdownId(null); // 외부 클릭 시 드롭다운 닫기
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+
+
 
     // 초기 데이터 로드
     useEffect(() => {
@@ -214,70 +250,89 @@ const SeniorSideBar = ({ memUUID }) => {
     };
 
     const toggleDropdown = (workspaceId) => {
-        setOpenDropdownId(openDropdownId === workspaceId ? null : workspaceId);
+        setOpenDropdownId((prev) => (prev === workspaceId ? null : workspaceId));
     };
 
 
     const fetchMoreWorkspaces = async (type) => {
+        console.log(`Fetching more workspaces of type: ${type}`); // 호출 로그 추가
         try {
-            let page;
             if (type === "active") {
-                // 현재 로드된 데이터 길이를 기반으로 페이지 번호 기반
-                page = Math.ceil(activeWorkspaces.length / 5) + 1; // 다음 페이지 계산
-
+                const offset = activeWorkspaces.length; // 현재 데이터 길이를 기반으로 오프셋 계산
                 const response = await apiSpringBoot.get(
                     `/api/workspace/${memUUID}/status`,
-                    { params: { workspaceStatus: type.toUpperCase(), page, size: 5 } } // 쿼리 파라미터 전달
+                    { params: { workspaceStatus: type.toUpperCase(), offset, size: pageSize } } // 쿼리 파라미터 전달
                 );
 
+                console.log("API 응답 데이터:", response.data);
                 const newWorkspaces = response.data.data || [];
                 console.log("새로운 워크스페이스:", newWorkspaces);
 
-                if(newWorkspaces.length > 0){
-                    // 기존 데이터와 새 데이터를 병합
-                    setActiveWorkspaces((prev) => [...prev, ...newWorkspaces]); // 기존 데이터에 추가
 
-                    // 더 이상 데이터가 없으면 hasMoreActive를 false로 설정
-                    setHasMoreActive(newWorkspaces.length === 5); // 한 번에 가져올 데이터가 5개면 추가 데이터가 있다고 간주
-                }else{
-                    setHasMoreActive(false); // 더 이상 가져올 데이터가 없음
-                }
+                setActiveWorkspaces((prev) => {
+                    // prev에 없는 새로운 워크스페이스만 필터링
+                    const uniqueWorkspaces = newWorkspaces.filter(
+                        // 새로운 워크스페이스 중 기존 목록에 없는 워크스페이스만 필터링
+                        (newWorkspace) => !prev.some((prevWorkspace) => prevWorkspace.workspaceId === newWorkspace.workspaceId)
+                    );
+                    // 기존 워크스페이스와 고유한 새로운 워크스페이스를 병합
+                    return [...prev, ...uniqueWorkspaces];
 
-                
-                // 받은 데이터가 있다면 기존 데이터에 병합
-                if (response.data.data && response.data.data.length > 0) {
-                    // 데이터를 기존 배열에 병합
-                    setActiveWorkspaces((prev) => [...prev, ...response.data.data]); // 기존 데이터에 추가
-                    setHasMoreActive(response.data.data.length === 5); // 남은 데이터 유무 확인
-                } else {
-                    setHasMoreActive(false); // 더 이상 데이터가 없을 경우
-                }
+                }); // 기존 데이터에 추가
+                setActivePage((prev) => prev + 1);
+
+
+                const hasMore = newWorkspaces.length === pageSize;
+                console.log("hasMoreActive 업데이트:", hasMore);
+                setHasMoreActive(hasMore);
+
             } else if (type === "archived") {
-                page = Math.ceil(archivedWorkspaces.length / 5) + 1;
+                const offset = archivedWorkspaces.length; // 현재 데이터 길이를 기반으로 오프셋 계산
                 const response = await apiSpringBoot.get(
-                    `/api/workspace/${memUUID}/status?workspaceStatus=ARCHIVED&page=${page}&size=5`
+                    `/api/workspace/${memUUID}/status`,
+                    { params: { workspaceStatus: type.toUpperCase(), offset, size: pageSize } } // 쿼리 파라미터 전달
                 );
-                if (response.data.data) {
-                    setArchivedWorkspaces((prev) => [...prev, ...response.data.data]); // 기존 데이터에 추가
-                    setHasMoreArchived(response.data.data.length === 5);
-                } else {
-                    console.log("즐겨찾기가 비었습니다.");
-                    setArchivedWorkspaces([]);
-                    setHasMoreArchived(false);
-                }
+
+                console.log("API 응답 데이터:", response.data);
+                const newWorkspaces = response.data.data || [];
+                console.log("새로운 워크스페이스:", newWorkspaces);
+
+                setArchivedWorkspaces((prev) => {
+                    // prev에 없는 새로운 워크스페이스만 필터링
+                    const uniqueWorkspaces = newWorkspaces.filter(
+                        // 새로운 워크스페이스 중 기존 목록에 없는 워크스페이스만 필터링
+                        (newWorkspace) => !prev.some((prevWorkspace) => prevWorkspace.workspaceId === newWorkspace.workspaceId)
+                    );
+                    // 기존 워크스페이스와 고유한 새로운 워크스페이스를 병합
+                    return [...prev, ...uniqueWorkspaces];
+
+                }); // 기존 데이터에 추가
+                setArchivedPage((prev) => prev + 1);
+
+
+                const hasMore = newWorkspaces.length === pageSize;
+                console.log("hasMoreArchived 업데이트:", hasMore);
+                setHasMoreArchived(hasMore);
             } else if (type === "deleted") {
-                page = Math.ceil(deletedWorkspaces.length / 5) + 1;
+                const offset = deletedWorkspaces.length; // 현재 데이터 길이를 기반으로 오프셋 계산
                 const response = await apiSpringBoot.get(
-                    `/api/workspace/${memUUID}/status?workspaceStatus=DELETED&page=${page}&size=5`
+                    `/api/workspace/${memUUID}/status`,
+                    { params: { workspaceStatus: type.toUpperCase(), offset, size: pageSize } } // 쿼리 파라미터 전달
                 );
-                if (response.data.data) {
-                    setDeletedWorkspaces((prev) => [...prev, ...response.data.data]); // 기존 데이터에 추가
-                    setHasMoreDeleted(response.data.data.length === 5);
-                } else {
-                    console.log("휴지통이 비었습니다.");
-                    setDeletedWorkspaces([]);
-                    setHasMoreDeleted(false);
-                }
+
+
+                console.log("API 응답 데이터:", response.data);
+                const newWorkspaces = response.data.data || [];
+                console.log("새로운 워크스페이스:", newWorkspaces);
+
+                setDeletedWorkspaces((prev) => [...prev, ...newWorkspaces]);
+
+                setDeletedPage((prev) => prev + 1);
+
+
+                const hasMore = newWorkspaces.length === pageSize;
+                console.log("hasMoreDeleted 업데이트:", hasMore);
+                setHasMoreDeleted(hasMore);
             }
         } catch (error) {
             console.error(`${type} 워크스페이스 추가 로드 실패:`, error);
@@ -342,24 +397,89 @@ const SeniorSideBar = ({ memUUID }) => {
 
     return (
         <div className={styles.sidebar}>
-            <h2 className={styles.header}>{memName}님의 말동무</h2>
+            <h2 className={styles.firstHeader}>{memName}님의 말동무</h2>
 
             <button
                 className={styles.createWorkspaceButton}
-                onClick={() => navigate("/welcome-chat")}
-            >
+                onClick={() => navigate("/welcome-chat")}>
                 새 워크스페이스 생성
             </button>
 
-            {archivedWorkspaces.length > 0 && (
-                <>
-                    <h2 className={styles.header}>즐겨찾기</h2>
-                    <div className={styles.list}>
-                        {archivedWorkspaces.map((workspace) => (
+
+            <div className={styles.workspaceContainer}>
+                {archivedWorkspaces.length > 0 && (
+                    <>
+                        <h2 className={styles.header}>즐겨찾기⭐</h2>
+                        <div className={styles.list}>
+                            <div className={styles.archivedList}>
+                                {archivedWorkspaces.map((workspace) => (
+                                    <div
+                                        key={workspace.workspaceId}
+                                        className={styles.item}
+                                        onClick={() => navigate(`/w/${workspace.workspaceId}`)}
+                                    >
+                                        {workspace.workspaceName}
+                                        <button
+                                            className={styles.menuButton}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // 클릭 이벤트 전파 방지
+                                                toggleDropdown(workspace.workspaceId); // 드랍다운 토글
+                                            }}
+                                        >
+                                            ⋮
+                                        </button>
+                                        {openDropdownId === workspace.workspaceId && (
+                                            <div className={styles.dropdownMenu} ref={dropdownRef}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // 클릭 이벤트 전파 방지
+                                                        setWorkspaceAsActive(workspace.workspaceId); // 활성화 메소드 호출
+                                                        setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
+                                                    }}
+                                                >
+                                                    즐겨찾기 해제
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setWorkspaceToDelete(workspace); // 삭제할 워크스페이스 설정
+                                                        setIsDeleteConfirmationOpen(true); // 삭제 확인 모달 열기
+                                                        setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
+                                                    }}
+                                                >
+                                                    삭제
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                                {hasMoreArchived && (
+                                    <button
+                                        className={styles.button}
+                                        onClick={() => fetchMoreWorkspaces("archived")}
+                                    >
+                                        더보기
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                    </>
+                )}
+
+                <h2 className={styles.header}>워크스페이스</h2>
+                <div className={styles.list}>
+                    <div className={styles.activeList}>
+                        {activeWorkspaces.map((workspace) => (
                             <div
                                 key={workspace.workspaceId}
-                                className={styles.item}
-                                onClick={() => navigate(`/w/${workspace.workspaceId}`)}
+                                className={`${styles.item} ${selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ""
+                                    }`}
+                                onClick={() => {
+                                    setSelectedWorkspaceId(workspace.workspaceId);
+                                    navigate(`/w/${workspace.workspaceId}`)
+                                }
+                                }
                             >
                                 {workspace.workspaceName}
                                 <button
@@ -372,20 +492,21 @@ const SeniorSideBar = ({ memUUID }) => {
                                     ⋮
                                 </button>
                                 {openDropdownId === workspace.workspaceId && (
-                                    <div className={styles.dropdownMenu}>
+                                    <div className={styles.dropdownMenu} ref={dropdownRef}>
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation(); // 클릭 이벤트 전파 방지
-                                                setWorkspaceAsActive(workspace.workspaceId); // 활성화 메소드 호출
-                                            }}
-                                        >
-                                            즐겨찾기 해제
+                                                setWorkspaceAsFavorite(workspace.workspaceId); // 즐겨찾기 메소드 호출
+                                                setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
+                                            }}>
+                                            즐겨찾기
                                         </button>
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                setWorkspaceToDelete(workspace); // 삭제할 워크스페이스 설정
-                                                setIsDeleteConfirmationOpen(true); // 삭제 확인 모달 열기
+                                                setWorkspaceToDelete(workspace);
+                                                setIsDeleteConfirmationOpen(true);
+                                                setOpenDropdownId(null); // 버튼 클릭 시 드롭다운 닫기
                                             }}
                                         >
                                             삭제
@@ -394,69 +515,19 @@ const SeniorSideBar = ({ memUUID }) => {
                                 )}
                             </div>
                         ))}
-                        {hasMoreArchived && (
-                            <button
-                                className={styles.button}
-                                onClick={() => setIsArchivedModalOpen(true)}
-                            >
+                        {hasMoreActive && (
+                            <button className={styles.button} onClick={() => fetchMoreWorkspaces("active")}>
                                 더보기
                             </button>
                         )}
                     </div>
-
-                </>
-            )}
-
-            <div className={styles.list}>
-                {activeWorkspaces.map((workspace) => (
-                    <div
-                        key={workspace.workspaceId}
-                        className={`${styles.item} ${selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ""
-                            }`}
-                        onClick={() => {
-                            setSelectedWorkspaceId(workspace.workspaceId);
-                            navigate(`/w/${workspace.workspaceId}`)
-                        }
-                        }
-                    >
-                        {workspace.workspaceName}
-                        <button
-                            className={styles.menuButton}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                toggleDropdown(workspace.workspaceId);
-                            }}
-                        >
-                            ⋮
-                        </button>
-                        {openDropdownId === workspace.workspaceId && (
-                            <div className={styles.dropdownMenu}>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // 클릭 이벤트 전파 방지
-                                        setWorkspaceAsFavorite(workspace.workspaceId); // 즐겨찾기 메소드 호출
-                                    }}>
-                                    즐겨찾기
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setWorkspaceToDelete(workspace);
-                                        setIsDeleteConfirmationOpen(true);
-                                    }}
-                                >
-                                    삭제
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                ))}
-                {hasMoreActive && (
-                    <button className={styles.button} onClick={() => setIsActiveModalOpen(true)}>
-                        더보기
-                    </button>
-                )}
+                </div>
             </div>
+
+
+
+
+
 
             <button
                 className={styles.trashButton}
@@ -468,15 +539,18 @@ const SeniorSideBar = ({ memUUID }) => {
                 휴지통
             </button>
 
-            <WorkspaceModal
+            {/* <WorkspaceModal
                 isOpen={isActiveModalOpen}
                 closeModal={() => setIsActiveModalOpen(false)}
                 workspaces={activeWorkspaces}
-                fetchMore={() => fetchMoreWorkspaces("active")}
-                hasMore={hasMoreActive}
+                fetchMore={() => fetchMoreWorkspaces("active")} // 올바른 함수 전달
+                hasMore={
+                    hasMoreActive
+                }
                 title="활성 워크스페이스"
                 navigate={navigate}
             />
+
             <WorkspaceModal
                 isOpen={isArchivedModalOpen}
                 closeModal={() => setIsArchivedModalOpen(false)}
@@ -485,7 +559,7 @@ const SeniorSideBar = ({ memUUID }) => {
                 hasMore={hasMoreArchived}
                 title="즐겨찾기"
                 navigate={navigate}
-            />
+            /> */}
             <WorkspaceModal
                 isOpen={isTrashModalOpen}
                 closeModal={() => setIsTrashModalOpen(false)}
