@@ -150,8 +150,8 @@ function DocumentChatPage() {
 
       // 파일 이름 추출: '_' 뒤의 문자열만 추출
       const fileName = filePath.includes('_')
-      ? filePath.split('_').pop() // '_' 뒤의 문자열 추출
-      : filePath.split('/').pop(); // 기본 파일 이름 추출
+        ? filePath.split('_').pop() // '_' 뒤의 문자열 추출
+        : filePath.split('/').pop(); // 기본 파일 이름 추출
 
       // 파일 다운로드 처리
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -175,7 +175,10 @@ function DocumentChatPage() {
   };
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatEndRef.current) {
+      console.log('스크롤 이동: ', chatEndRef.current);
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
 
   return (
@@ -206,7 +209,7 @@ function DocumentChatPage() {
                             } else {
                               console.error("첨부 파일 경로가 비어 있습니다:", attachment);
                             }
-                          
+
                           }} // 파일 경로만 전달
                         >
                           {attachment.label}
@@ -220,6 +223,8 @@ function DocumentChatPage() {
               )}
             </div>
           ))}
+            {/* 이 위치에 항상 chatEndRef를 배치 */}
+           <div ref={chatEndRef} />
         </div>
 
         <div className={styles['input-container']}>
