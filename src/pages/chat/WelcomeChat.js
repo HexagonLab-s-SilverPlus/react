@@ -2,9 +2,9 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './WelcomeChat.module.css';
 import Container from './Container.js';
-import { AuthContext } from '../../../AuthProvider.js';
+import { AuthContext } from '../../AuthProvider.js';
 // 사이드바 컴포넌트 가져오기
-import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
+import SeniorSideBar from '../../components/common/SeniorSideBar.js';
 
 function WelcomeChat() {
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null); // 선택된 워크스페이스 ID

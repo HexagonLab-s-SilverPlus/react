@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './ChatPage.module.css';
 import Container from './Container.js';
-import { AuthContext } from '../../../AuthProvider.js';
-import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
+import { AuthContext } from '../../AuthProvider.js';
+import SeniorSideBar from '../../components/common/SeniorSideBar.js';
 import { marked } from 'marked';
 
 function ChatPage() {
