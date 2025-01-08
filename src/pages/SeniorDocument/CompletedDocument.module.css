@@ -1,5 +1,5 @@
 .container {
-    max-width: 1200px;
+    max-width: 1700px;
     margin: 0 auto;
     padding: 20px;
     font-size: 18px; /* 기본 폰트 크기 확대 */
@@ -7,7 +7,7 @@
   
   .title {
     text-align: center;
-    font-size: 24px;
+    font-size: 33px;
     font-weight: bold;
     margin-bottom: 20px;
   }
@@ -21,8 +21,8 @@
   .table th, .table td {
     border: 1px solid #ddd;
     text-align: center;
-    padding: 10px;
-    font-size: 18px; /* 테이블 폰트 크기 */
+    padding: 20px;
+    font-size: 23px; /* 테이블 폰트 크기 */
   }
   
   .table th {

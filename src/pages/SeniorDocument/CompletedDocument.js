@@ -4,10 +4,20 @@ import { AuthContext } from '../../AuthProvider';
 import Container from '../chat/Container';
 
 
+// 문서 유형 매핑 테이블
+const documentTypeMap = {
+    address: '전입신고서',
+    death: '사망신고서',
+    medical: '의료급여 신청서',
+    basic: '기초연금 신청서',
+};
+
 const CompletedDocument = () => {
     const [documents, setDocuments] = useState([]);
     const { apiSpringBoot, accessToken, member } = useContext(AuthContext);
     const [managerName, setManagerName] = useState('');
+    const [managerPhone, setManagerPhone] = useState('');
+
 
     // 데이터 가져오기
     useEffect(() => {
@@ -34,23 +44,24 @@ const CompletedDocument = () => {
 
 
 
-        // 담당자 이름 가져오기
-        useEffect(() => {
-            const fetchManagerName = async () => {
-                try {
-                    const response  = await apiSpringBoot.get(`/api/document/mgrName/${member.memUUIDMgr}`);
-                    console.log("담당자 멤버 정보: ", response.data.data);
-                    setManagerName(response.data?.data.memName|| '담당자 미정');
-                } catch (error) {
-                    console.error('담당자 이름을 가져오는 중 에러 발생:', error);
-                    setManagerName('담당자 미정');
-                }
-            };
-    
-            if (member.memUUIDMgr) {
-                fetchManagerName();
+    // 담당자 이름 가져오기
+    useEffect(() => {
+        const fetchManager = async () => {
+            try {
+                const response = await apiSpringBoot.get(`/api/document/mgrName/${member.memUUIDMgr}`);
+                console.log("담당자 멤버 정보: ", response.data.data);
+                setManagerName(response.data?.data.memName || '미제공');
+                setManagerPhone(response.data?.data?.memCellphone || '미제공')
+            } catch (error) {
+                console.error('담당자 이름을 가져오는 중 에러 발생:', error);
+                setManagerName('담당자 미정');
             }
-        }, [apiSpringBoot, member.memUUIDMgr]);
+        };
+
+        if (member.memUUIDMgr) {
+            fetchManager();
+        }
+    }, [apiSpringBoot, member.memUUIDMgr]);
 
     const handleSubmit = (id) => {
         alert(`문서 ID ${id}가 제출되었습니다.`);
@@ -71,6 +82,7 @@ const CompletedDocument = () => {
                         <th>공문서 타입</th>
                         <th>처리여부</th>
                         <th>담당자 이름</th>
+                        <th>담당자 전화번호</th>
                         <th>승인날짜</th>
                         <th>파일 다운로드</th>
                         <th>제출</th>
@@ -83,9 +95,10 @@ const CompletedDocument = () => {
                                 year: 'numeric', month: '2-digit', day: '2-digit',
                                 hour: '2-digit', minute: '2-digit'
                             })}</td>
-                            <td>{doc.document.docType}</td>
+                            <td>{documentTypeMap[doc.document.docType]}</td>
                             <td>{doc.document.isApproved}</td>
                             <td>{managerName || '담당자 미정'}</td>
+                            <td>{managerPhone || '담당자 미정'}</td>
                             <td>{doc.document.approvedAt || '미정'}</td>
                             <td>
                                 <button
