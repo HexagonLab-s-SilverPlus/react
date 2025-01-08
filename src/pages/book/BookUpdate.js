@@ -35,10 +35,28 @@ const BookUpdate = () => {
         bookImage: "",
         bookNum: "",
         bookTitle: '',
-        bookCreatedBy: "",
-        bookUpdateAt: "",
         bookUpdatedBy: member.memUUID,
     });
+
+    const convertToKST = (utcTimestamp) => {
+        // UTC timestamp를 Date 객체로 변환
+        const utcDate = new Date(utcTimestamp);
+      
+        // KST로 변환 (UTC + 9시간)
+        const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+      
+        // 'YYYY-MM-DD HH:mm:ss.sss' 형식으로 변환
+        const year = kstDate.getFullYear();
+        const month = String(kstDate.getMonth() + 1).padStart(2, '0');
+        const date = String(kstDate.getDate()).padStart(2, '0');
+        const hours = String(kstDate.getHours()).padStart(2, '0');
+        const minutes = String(kstDate.getMinutes()).padStart(2, '0');
+        const seconds = String(kstDate.getSeconds()).padStart(2, '0');
+        const milliseconds = String(kstDate.getMilliseconds()).padStart(3, '0');
+
+        return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+      }
+
 
     useEffect(() => {
         const loadBooks = async () => {
@@ -49,6 +67,14 @@ const BookUpdate = () => {
                 setFileContent(response.data.fileContent);
                 setImageFileSelect(response.data.book.bookImage);
                 setFileSelect(response.data.book.bookDetail);
+                setFormData((prev) => ({
+                    ...prev,
+                    bookCreateAt:convertToKST(response.data.book.bookCreateAt),
+                    bookCreatedBy:response.data.book.bookCreatedBy,
+                    bookImage:response.data.book.bookImage,
+                    bookNum:response.data.book.bookNum,
+                    bookDetail:response.data.book.bookDetail,
+                }));
                 console.log(response.data);
             } catch (error) {
                 console.error('handleBookView Error:', error);
@@ -64,7 +90,9 @@ const BookUpdate = () => {
         e.preventDefault(); //submit 취소
         if(window.confirm('책을 수정하시겠습니까?')) {
             const data = new FormData();
-
+            console.log(file);
+            console.log(imageFiles)
+            console.log(formData)
             if (file){
                 data.append('bookfile',file); // 첨부파일 추가
             }
@@ -74,8 +102,9 @@ const BookUpdate = () => {
             Object.entries(formData).forEach(([key, value]) => data.append(key, value)); 
             
             try {
-                await apiSpringBoot.put('/book', data,{
-                    headers: {'Content-Type':'multipart/form-data',
+                await apiSpringBoot.put(`/book/${formData.bookNum}`, data,{
+                    headers: {
+                        'Content-Type':'multipart/form-data',
                     }}
                 );
                 alert('Book 수정 성공');
@@ -139,7 +168,7 @@ const BookUpdate = () => {
         // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
         return <div>Loading...</div>;
     };
-
+    console.log("타임 ; ", formData.bookCreateAt);
     return(
         <div className={styles.bkContainer}>
             <SideBar />

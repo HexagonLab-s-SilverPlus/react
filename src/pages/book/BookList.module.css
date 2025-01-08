@@ -115,12 +115,30 @@ body {background: #fff; color: #333;}
 .pgBookList {margin: 48px 0; padding: 0; display: flex; flex-wrap: wrap; align-content: flex-start;}
 .pgBookItem {list-style: none; padding: 0; width: 24%; margin-right: calc(4% / 3); margin-bottom: 48px; }
 .pgBookItem:nth-child(4n) {margin-right: 0;}
-.pgBookItem > div {display: block; width: 100%; height: 100%; cursor: pointer;}
+.pgBookItem > div {width: 100%; height: 100%;}
 .pgBookImage {width: 100%; aspect-ratio: 1 / 1; object-fit: cover;}
+
 .pgBookbutton {background: #eee; font-size: 36px; width: 100%; height: 48px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 4px; border: 0; cursor: pointer;}
 .pgBookbutton:hover {background: #064420; color: #fff;}
-.pgBookTextWrap {font-size: 48px; margin: 0; color: #000; width: fit-content; max-width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.pgBookTextWrap > p:nth-child(1) {font-weight: bold; font-size: 32px; color: #333; margin-bottom: 8px; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: all 0.3s;}
+
+.pgBookbuttonStop {background: red; color: #eee; font-size: 36px; width: 100%; height: 48px; border-radius: 8px; font-family: "Pretendard Variable"; margin-right: 4px; border: 0; cursor: pointer;}
+.pgBookbuttonStop:hover {background: #eee; color: #000;}
+
+.pgBookTextWrap {display: flex; flex:0 0 auto;  white-space: nowrap; overflow: hidden;transition: 0.3s;  color:#000; font-weight: bold;margin:0;padding:10px 0; font-size: 36px; color: #333;width: 100%;}
+.pgBookItem:hover .pgBookTitleWrap{animation: textLoop 10s linear infinite;}
+.pgBookTitleWrap{animation-play-state: paused;}
+
+
+@keyframes textLoop{
+    0% {
+        -webkit-transform: translate3d(0,0,0);
+        transform:translate3d(0,0,0);
+    }
+    100% {
+        -webkit-transform: translate3d(-100%,0,0);
+        transform:translate3d(-100%,0,0);
+    }
+}
+
 
 .bkListBtn {border: 0; background: #618264; color: #fff; width: 144px; font-size: 32px; height: 60px; font-family: "Pretendard Variable"; letter-spacing: 1px; border-radius: 8px; display: block; margin-right: 0; margin-left: auto; cursor: pointer;}
-/* snrBkRight end */

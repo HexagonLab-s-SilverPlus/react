@@ -35,7 +35,12 @@ const BookDetail = () => {
 
     const handleDelete = async () => {
         if(window.confirm('책을 삭제하시겠습니까?')) {
-            await apiSpringBoot.delete(`/book/${bookUUID}`);
+            await apiSpringBoot.delete(`/book/${bookUUID}`,{
+                params:{
+                    text:book.bookDetail,
+                    image:book.bookImage,
+                },
+            });
             navigate(-1)
         }
     }
