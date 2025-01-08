@@ -11,6 +11,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { FaTrashAlt } from 'react-icons/fa';
 
 const DashList = () => {
+    const [documentCount, setDocumentCount] = useState(0);
     const [todolist, setTodolist] = useState([]);
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [filteredTodos, setFilteredTodos] = useState([]);
@@ -29,6 +30,18 @@ const DashList = () => {
 
     const { member, memId } = useContext(AuthContext);
     const navigate = useNavigate();
+
+    const fetchDocumentCount = async () => {
+        try{
+            const response = await apiSpringBoot.get('/dashboard/count');
+            setDocumentCount(response.data.documentCount);
+        } catch (error){
+            console.error('문서 카운트 가져오기 실패:', error);
+        }
+    };
+    useEffect(() => {
+        fetchDocumentCount(); // 컴포넌트 마운트 시 카운트 가져오기
+    }, []);
 
 
     // 목록
@@ -264,7 +277,7 @@ const DashList = () => {
                             onClick={() => navigate('/docrequest')}
                         >
                             <span>공문서 요청수</span>
-                            <strong>10건</strong>
+                            <strong>{documentCount}건</strong>
                         </button>
                     </div>
 
