@@ -1,0 +1,63 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 18px; /* 기본 폰트 크기 확대 */
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .table th, .table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px; /* 테이블 폰트 크기 */
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .downloadButton, .submitButton {
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .downloadButton {
+    background-color: #2196f3;
+    color: white;
+  }
+  
+  .downloadButton:hover {
+    background-color: #1976d2;
+  }
+  
+  .submitButton {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .submitButton:hover {
+    background-color: #388e3c;
+  }
+  

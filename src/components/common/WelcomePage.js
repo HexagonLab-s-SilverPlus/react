@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './WelcomePage.module.css';
 import arrowIcon from '../../assets/images/Arrow up-circle.png'
-import Container from '../../pages/ey/chat/Container';
+import Container from '../../pages/chat/Container';
 import { useNavigate } from 'react-router-dom';
 
 const WelcomePage = () => {
