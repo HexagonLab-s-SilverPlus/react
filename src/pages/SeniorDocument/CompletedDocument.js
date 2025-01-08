@@ -135,6 +135,7 @@ const CompletedDocument = () => {
                                 </button>
                             </td>
                             <td>
+                                
                                 <button
                                     className={styles.submitButton}
                                     onClick={() => handleSubmit(doc.id)}
