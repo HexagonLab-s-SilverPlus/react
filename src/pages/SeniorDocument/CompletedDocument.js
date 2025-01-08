@@ -174,7 +174,7 @@ const CompletedDocument = () => {
                                             minute: '2-digit',
                                             hour12: true,
                                         }).replace(/(?<=\d)(?=\.)/g, '') // 숫자 뒤의 점 앞에만 작동
-                                        : '미정'}
+                                        : '제출전'}
                                 </td>
 
 

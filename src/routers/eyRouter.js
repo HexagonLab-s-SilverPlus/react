@@ -7,6 +7,7 @@ import WelcomeChat from '../pages/chat/WelcomeChat';
 import NotFound from '../pages/common/NotFound';
 import DocumentChatPage from '../pages/SeniorDocument/DocumentChatPage';
 import CompletedDocument from '../pages/SeniorDocument/CompletedDocument';
+import TestLottie from '../pages/SeniorDocument/TestLottie';
 
 const eyRouter = [
   <>
@@ -16,6 +17,7 @@ const eyRouter = [
     <Route path="*" element={<NotFound />} />
     <Route path="/document/:documentType" element={<DocumentChatPage />} />
     <Route path="/d/:memUUID" element={<CompletedDocument/>} />
+    <Route path="/lottie" element={<TestLottie/>} />
   </>
 ];
 
