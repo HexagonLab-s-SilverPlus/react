@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './DocumentChatPage.module.css';
-import { AuthContext } from '../../../AuthProvider.js';
+import { AuthContext } from '../../AuthProvider.js';
 import { marked } from 'marked';
 import DocumentService from './DocumentService.js';
 import Container from '../chat/Container.js';
