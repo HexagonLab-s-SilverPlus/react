@@ -38,6 +38,24 @@ const BookUpdate = () => {
         bookUpdatedBy: member.memUUID,
     });
 
+    const convertToKST = (utcTimestamp) => {
+        // UTC timestamp를 Date 객체로 변환
+        const utcDate = new Date(utcTimestamp);
+      
+        // KST로 변환 (UTC + 9시간)
+        const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+      
+        // 'YYYY-MM-DD HH:mm:ss.sss' 형식으로 변환
+        const year = kstDate.getFullYear();
+        const month = String(kstDate.getMonth() + 1).padStart(2, '0');
+        const date = String(kstDate.getDate()).padStart(2, '0');
+        const hours = String(kstDate.getHours()).padStart(2, '0');
+        const minutes = String(kstDate.getMinutes()).padStart(2, '0');
+        const seconds = String(kstDate.getSeconds()).padStart(2, '0');
+        const milliseconds = String(kstDate.getMilliseconds()).padStart(3, '0');
+
+        return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+      }
 
 
     useEffect(() => {
@@ -51,7 +69,7 @@ const BookUpdate = () => {
                 setFileSelect(response.data.book.bookDetail);
                 setFormData((prev) => ({
                     ...prev,
-                    bookCreateAt:response.data.book.bookCreateAt,
+                    bookCreateAt:convertToKST(response.data.book.bookCreateAt),
                     bookCreatedBy:response.data.book.bookCreatedBy,
                     bookImage:response.data.book.bookImage,
                     bookNum:response.data.book.bookNum,
