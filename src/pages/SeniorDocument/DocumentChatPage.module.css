@@ -403,3 +403,54 @@
   .markdown a:hover {
     text-decoration: underline;
   }
+
+
+
+
+
+
+
+
+
+  .attachment-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #28a745; /* 녹색 계열로 CSV 파일 느낌 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.attachment-button:hover {
+    background-color: #218838; /* 호버 시 약간 어두운 녹색 */
+    transform: scale(1.05); /* 살짝 확대 */
+}
+
+.attachment-button:active {
+    background-color: #1e7e34; /* 클릭 시 더 어두운 녹색 */
+    transform: scale(0.98); /* 살짝 축소 */
+}
+
+.attachment-button::before {
+    content: '📄'; /* 파일 아이콘 */
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+
+
+
+
+.lottie-player {
+  display: block; /* 플렉스 대신 블록으로 설정 */
+  margin: auto; /* 가운데 정렬 */
+  width: 100px;
+  height: 100px;
+}
