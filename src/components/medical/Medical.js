@@ -92,16 +92,22 @@ const Medical = () => {
         }
     };
 
+    // useEffect(() => {
+    //     fetchMedical();
+    // }, [mediSnrUUID]);
     useEffect(() => {
-        fetchMedical();
-    }, [mediSnrUUID]);
+        // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
+        setIsAllChecked(false); // 전체선택 초기화
+        setMedicals((prev) => prev.map((item) => ({ ...item, isChecked: false }))); // 항목 선택 초기화
+        fetchMedical(pagingInfo.pageNumber);
+    }, [mediSnrUUID, pagingInfo.pageNumber]);
 
     const handlePageChange = (page) => {
         setPagingInfo((prev) => ({
             ...prev,
             pageNumber: page,
         }));
-        fetchMedical(page);
+        // fetchMedical(page);
     };
 
     //th 체크박스 클릭 시
@@ -278,6 +284,7 @@ const Medical = () => {
                 setMedicals((prev) => prev.filter((item) => !item.isChecked));
                 setIsAllChecked(false);
                 alert("선택한 항목이 삭제되었습니다.");
+                fetchMedical();
             } catch (error) {
                 console.error("handleDeleteClick Error:", error);
                 alert("삭제 중 오류가 발생했습니다.");
@@ -286,108 +293,187 @@ const Medical = () => {
     };
 
     //--------------------------------------------------
-    // if (role == 'MANAGER') {
-    return (
-        <div className={styles.medicalWrap}>
-            <div className={styles.mediTop}>
-                <h1>병력관리</h1>
-                <div className={styles.mediPrivacy}>
-                    <span>가족 공개</span>
-                    <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
-                    <label><input type="radio" name="mediPrivacy" value="F" checked={isPublic === "F"} onChange={handlePrivacyChange} />비공개</label>
-                </div>{/* mediPrivacy end */}
-            </div>{/* medi_top end */}
+    if (role == 'MANAGER') {
+        return (
+            <div className={styles.medicalWrap}>
+                <div className={styles.mediTop}>
+                    <h1>병력관리</h1>
+                    <div className={styles.mediPrivacy}>
+                        <span>가족 공개</span>
+                        <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
+                        <label><input type="radio" name="mediPrivacy" value="F" checked={isPublic === "F"} onChange={handlePrivacyChange} />비공개</label>
+                    </div>{/* mediPrivacy end */}
+                </div>{/* medi_top end */}
 
-            <table className={styles.mediTable}>
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" checked={isAllChecked} onChange={handleSelectAll} /></th>
-                        <th>진단일</th>
-                        <th>병명</th>
-                        <th>최근 진료일</th>
-                        <th>수정</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {medicals.map((item, index) => (
-                        <tr key={index} className={styles.mediItem}>
-                            <td><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
-                            <td><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}
-                                disabled={!isEditing.includes(index)}
-                                onChange={(e) =>
-                                    handleRowInputChange(index, e.target.name, e.target.value)
-                                } /></td>
-                            <td><input type="text" name="mediDiseaseName" value={item.mediDiseaseName}
-                                disabled={!isEditing.includes(index)}
-                                onChange={(e) =>
-                                    handleRowInputChange(index, e.target.name, e.target.value)
-                                } /></td>
-                            <td><input type="date" name="mediLastTreatDate" value={item.mediLastTreatDate.split('T')[0]}
-                                disabled={!isEditing.includes(index)}
-                                onChange={(e) =>
-                                    handleRowInputChange(index, e.target.name, e.target.value)
-                                } /></td>
-                            <td>
-                                {!isEditing.includes(index) ? (
-                                    <button onClick={() => handleUpdateClick(index)} disabled={isEditing.length > 0 || newMedical !== null}>수정</button>
-                                ) : (
-                                    <span>수정중</span>
-                                )}
-                            </td>
+                <table className={styles.mediTable}>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" checked={isAllChecked} onChange={handleSelectAll} /></th>
+                            <th>진단일</th>
+                            <th>병명</th>
+                            <th>최근 진료일</th>
+                            <th>수정</th>
                         </tr>
-                    ))}
+                    </thead>
 
-                    {newMedical && (
-                        <tr className={styles.mediItem}>
-                            <td></td>
-                            <td><input type="date" name="mediDiagDate" onChange={handleInputChange} /></td>
-                            <td><input type="text" name="mediDiseaseName" placeholder="병명 입력" onChange={handleInputChange} /></td>
-                            <td><input type="date" name="mediLastTreatDate" onChange={handleInputChange} /></td>
-                            <td><span>작성중</span></td>
-                        </tr>
-                    )}
+                    <tbody>
+                        {medicals.map((item, index) => (
+                            <tr key={index} className={styles.mediItem}>
+                                <td><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
+                                <td><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}
+                                    disabled={!isEditing.includes(index)}
+                                    onChange={(e) =>
+                                        handleRowInputChange(index, e.target.name, e.target.value)
+                                    } /></td>
+                                <td><input type="text" name="mediDiseaseName" value={item.mediDiseaseName}
+                                    disabled={!isEditing.includes(index)}
+                                    onChange={(e) =>
+                                        handleRowInputChange(index, e.target.name, e.target.value)
+                                    } /></td>
+                                <td><input type="date" name="mediLastTreatDate" value={item.mediLastTreatDate.split('T')[0]}
+                                    disabled={!isEditing.includes(index)}
+                                    onChange={(e) =>
+                                        handleRowInputChange(index, e.target.name, e.target.value)
+                                    } /></td>
+                                <td>
+                                    {!isEditing.includes(index) ? (
+                                        <button onClick={() => handleUpdateClick(index)} disabled={isEditing.length > 0 || newMedical !== null}>수정</button>
+                                    ) : (
+                                        <span>수정중</span>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
 
-                </tbody>
-            </table>
+                        {newMedical && (
+                            <tr className={styles.mediItem}>
+                                <td></td>
+                                <td><input type="date" name="mediDiagDate" onChange={handleInputChange} /></td>
+                                <td><input type="text" name="mediDiseaseName" placeholder="병명 입력" onChange={handleInputChange} /></td>
+                                <td><input type="date" name="mediLastTreatDate" onChange={handleInputChange} /></td>
+                                <td><span>작성중</span></td>
+                            </tr>
+                        )}
 
-            {!newMedical && !isEditing.length ? (
-                <div className={styles.mediBtns}>
-                    <button onClick={handleDeleteClick}>삭제</button>
-                    <button onClick={handleInsertClick}>추가</button>
-                </div>
-            ) : (
-                <div className={styles.mediBtns}>
-                    {newMedical && (
-                        <>
-                            <button onClick={handleInsertCancelClick}>취소</button>
-                            <button onClick={handleInsert}>저장</button>
-                        </>
-                    )}
-                    {isEditing.length > 0 && (
-                        <>
-                            {isEditing.map((editingIndex) => (
-                                <div className={styles.mediBtns} key={editingIndex}>
-                                    <button onClick={() => handleUpdateCancleClick(editingIndex)}>취소</button>
-                                    <button onClick={() => handleUpdate(editingIndex)}>저장</button>
-                                </div>
+                    </tbody>
+                </table>
+
+                {!newMedical && !isEditing.length ? (
+                    <div className={styles.mediBtns}>
+                        <button onClick={handleDeleteClick}>삭제</button>
+                        <button onClick={handleInsertClick}>추가</button>
+                    </div>
+                ) : (
+                    <div className={styles.mediBtns}>
+                        {newMedical && (
+                            <>
+                                <button onClick={handleInsertCancelClick}>취소</button>
+                                <button onClick={handleInsert}>저장</button>
+                            </>
+                        )}
+                        {isEditing.length > 0 && (
+                            <>
+                                {isEditing.map((editingIndex) => (
+                                    <div className={styles.mediBtns} key={editingIndex}>
+                                        <button onClick={() => handleUpdateCancleClick(editingIndex)}>취소</button>
+                                        <button onClick={() => handleUpdate(editingIndex)}>저장</button>
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                    </div>
+                )}
+
+                <Paging
+                    pageNumber={pagingInfo.pageNumber}
+                    listCount={pagingInfo.listCount}
+                    maxPage={pagingInfo.maxPage}
+                    startPage={pagingInfo.startPage}
+                    endPage={pagingInfo.endPage}
+                    onPageChange={(page) => handlePageChange(page)}
+                />
+            </div>//medical_wrap end
+        );
+    } else if (role == 'FAMILY') {    //가족일때
+        if (isPublic === 'T') {
+            return (
+                <div className={styles.medicalWrap}>
+                    <div className={styles.mediTop}>
+                        <h1>병력관리</h1>
+                        <div className={styles.mediPrivacy} style={{ display: 'none' }}>
+                            <span>가족 공개</span>
+                            <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
+                            <label><input type="radio" name="mediPrivacy" value="F" checked={isPublic === "F"} onChange={handlePrivacyChange} />비공개</label>
+                        </div>{/* mediPrivacy end */}
+                    </div>{/* medi_top end */}
+
+                    <table className={styles.mediTable}>
+                        <thead>
+                            <tr>
+                                <th className={styles.hiddenColumn}><input type="checkbox" checked={isAllChecked} onChange={handleSelectAll} /></th>
+                                <th style={{ borderLeft: '1px solid #fff' }}>진단일</th>
+                                <th>병명</th>
+                                <th style={{ borderRight: '1px solid #fff' }}>최근 진료일</th>
+                                <th className={styles.hiddenColumn}>수정</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {medicals.map((item, index) => (
+                                <tr key={index} className={styles.mediItem}>
+                                    <td className={styles.hiddenColumn}><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
+                                    <td style={{ borderLeft: '1px solid #fff' }}><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}
+                                        disabled={!isEditing.includes(index)}
+                                        onChange={(e) =>
+                                            handleRowInputChange(index, e.target.name, e.target.value)
+                                        } /></td>
+                                    <td><input type="text" name="mediDiseaseName" value={item.mediDiseaseName}
+                                        disabled={!isEditing.includes(index)}
+                                        onChange={(e) =>
+                                            handleRowInputChange(index, e.target.name, e.target.value)
+                                        } /></td>
+                                    <td style={{ borderRight: '1px solid #fff' }}><input type="date" name="mediLastTreatDate" value={item.mediLastTreatDate.split('T')[0]}
+                                        disabled={!isEditing.includes(index)}
+                                        onChange={(e) =>
+                                            handleRowInputChange(index, e.target.name, e.target.value)
+                                        } /></td>
+                                    <td className={styles.hiddenColumn}>
+                                        {!isEditing.includes(index) ? (
+                                            <button onClick={() => handleUpdateClick(index)} disabled={isEditing.length > 0 || newMedical !== null}>수정</button>
+                                        ) : (
+                                            <span>수정중</span>
+                                        )}
+                                    </td>
+                                </tr>
                             ))}
-                        </>
-                    )}
-                </div>
-            )}
 
-            <Paging
-                pageNumber={pagingInfo.pageNumber}
-                listCount={pagingInfo.listCount}
-                maxPage={pagingInfo.maxPage}
-                startPage={pagingInfo.startPage}
-                endPage={pagingInfo.endPage}
-                onPageChange={(page) => handlePageChange(page)}
-            />
-        </div>//medical_wrap end
-    );
+                            {newMedical && (
+                                <tr className={styles.mediItem}>
+                                    <td></td>
+                                    <td><input type="date" name="mediDiagDate" onChange={handleInputChange} /></td>
+                                    <td><input type="text" name="mediDiseaseName" placeholder="병명 입력" onChange={handleInputChange} /></td>
+                                    <td><input type="date" name="mediLastTreatDate" onChange={handleInputChange} /></td>
+                                    <td><span>작성중</span></td>
+                                </tr>
+                            )}
 
+                        </tbody>
+                    </table>
+
+                    <Paging
+                        pageNumber={pagingInfo.pageNumber}
+                        listCount={pagingInfo.listCount}
+                        maxPage={pagingInfo.maxPage}
+                        startPage={pagingInfo.startPage}
+                        endPage={pagingInfo.endPage}
+                        onPageChange={(page) => handlePageChange(page)}
+                    />
+                </div>//medical_wrap end
+            );
+        } else {
+            return null;
+        }
+    }
 };
 
 export default Medical;
