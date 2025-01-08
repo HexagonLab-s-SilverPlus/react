@@ -1,5 +1,6 @@
 /* 부모 컨테이너 */
 .chat-container {
+  
     display: flex;
     flex-direction: column;
     /* 수직 배치 */
@@ -7,6 +8,14 @@
     /* 화면 전체 높이 */
     transition: margin-left 0.3s ease; /* 부드러운 이동 효과 */
   }
+
+  .pageWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 화면 전체 높이 */
+}
+
+
   
   /* 사이드바가 열렸을 때의 상태 */
   .chat-container.sidebar-open {

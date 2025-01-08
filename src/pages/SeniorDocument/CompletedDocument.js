@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import styles from './CompletedDocument.module.css';
 import { AuthContext } from '../../AuthProvider';
 import Container from '../chat/Container';
-
+import SeniorNavbar from '../../components/common/SeniorNavbar';
+import SeniorFooter from '../../components/common/SeniorFooter';
 
 // 문서 유형 매핑 테이블
 const documentTypeMap = {
@@ -14,7 +15,7 @@ const documentTypeMap = {
 
 const CompletedDocument = () => {
     const [documents, setDocuments] = useState([]);
-    const { apiSpringBoot, accessToken, member } = useContext(AuthContext);
+    const { apiSpringBoot, member } = useContext(AuthContext);
     const [managerName, setManagerName] = useState('');
     const [managerPhone, setManagerPhone] = useState('');
 
@@ -76,11 +77,11 @@ const CompletedDocument = () => {
             const response = await apiSpringBoot.get(`/api/doc-files/download/${fileName}`, {
                 responseType: 'blob', // 파일 다운로드를 위한 Blob 설정
             });
-    
+
             if (response.status !== 200) {
                 throw new Error('파일 다운로드 실패');
             }
-    
+
             const blob = new Blob([response.data]);
             const downloadUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -94,61 +95,69 @@ const CompletedDocument = () => {
             console.error('파일 다운로드 중 오류 발생:', error);
         }
     };
-    
+
 
 
 
     return (
-        <div className={styles.container}>
-            <h2 className={styles.title}>완료된 공문서</h2>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>작성일자</th>
-                        <th>공문서 타입</th>
-                        <th>처리여부</th>
-                        <th>담당자 이름</th>
-                        <th>담당자 전화번호</th>
-                        <th>승인날짜</th>
-                        <th>파일 다운로드</th>
-                        <th>제출</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {documents.map((doc) => (
-                        <tr key={doc.document.docId}>
-                            <td>{new Date(doc.document.docCompletedAt).toLocaleString('ko-KR', {
-                                year: 'numeric', month: '2-digit', day: '2-digit',
-                                hour: '2-digit', minute: '2-digit'
-                            })}</td>
-                            <td>{documentTypeMap[doc.document.docType]}</td>
-                            <td>{doc.document.isApproved}</td>
-                            <td>{managerName || '담당자 미정'}</td>
-                            <td>{managerPhone || '담당자 미정'}</td>
-                            <td>{doc.document.approvedAt || '미정'}</td>
-                            <td>
-                                <button
-                                    className={styles.downloadButton}
-                                    onClick={() => handleDownload(doc.file.dfRename)}
-                                >
-                                    다운로드
-                                </button>
-                            </td>
-                            <td>
-                                
-                                <button
-                                    className={styles.submitButton}
-                                    onClick={() => handleSubmit(doc.id)}
-                                >
-                                    제출
-                                </button>
-                            </td>
+        <div className={styles.pageWrapper}>
+            {/* SeniorNavbar 추가 */}
+            <SeniorNavbar />
+
+            <div className={styles.container}>
+                <h2 className={styles.title}>완료된 공문서</h2>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>작성일자</th>
+                            <th>공문서 타입</th>
+                            <th>처리여부</th>
+                            <th>담당자 이름</th>
+                            <th>담당자 전화번호</th>
+                            <th>승인날짜</th>
+                            <th>파일 다운로드</th>
+                            <th>제출</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {documents.map((doc) => (
+                            <tr key={doc.document.docId}>
+                                <td>{new Date(doc.document.docCompletedAt).toLocaleString('ko-KR', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit'
+                                })}</td>
+                                <td>{documentTypeMap[doc.document.docType]}</td>
+                                <td>{doc.document.isApproved}</td>
+                                <td>{managerName || '담당자 미정'}</td>
+                                <td>{managerPhone || '담당자 미정'}</td>
+                                <td>{doc.document.approvedAt || '미정'}</td>
+                                <td>
+                                    <button
+                                        className={styles.downloadButton}
+                                        onClick={() => handleDownload(doc.file.dfRename)}
+                                    >
+                                        다운로드
+                                    </button>
+                                </td>
+                                <td>
+
+                                    <button
+                                        className={styles.submitButton}
+                                        onClick={() => handleSubmit(doc.id)}
+                                    >
+                                        제출
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <SeniorFooter/>
         </div>
     );
-};
+}
+
+
 
 export default CompletedDocument;

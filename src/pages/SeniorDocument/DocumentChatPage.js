@@ -5,7 +5,7 @@ import { AuthContext } from '../../AuthProvider.js';
 import { marked } from 'marked';
 import DocumentService from './DocumentService.js';
 import Container from '../chat/Container.js';
-
+import SeniorNavbar from '../../components/common/SeniorNavbar.js';
 
 
 function DocumentChatPage() {
@@ -182,7 +182,10 @@ function DocumentChatPage() {
   }, [messages]);
 
   return (
-    <Container>
+    <div className={styles.pageWrapper}>
+      <SeniorNavbar />
+      <Container>
+
       <div className={styles['chat-container']}>
         <div className={styles['chat-page']}>
           {messages.map((message, index) => (
@@ -223,8 +226,8 @@ function DocumentChatPage() {
               )}
             </div>
           ))}
-            {/* 이 위치에 항상 chatEndRef를 배치 */}
-           <div ref={chatEndRef} />
+          {/* 이 위치에 항상 chatEndRef를 배치 */}
+          <div ref={chatEndRef} />
         </div>
 
         <div className={styles['input-container']}>
@@ -245,7 +248,8 @@ function DocumentChatPage() {
           </button>
         </div>
       </div>
-    </Container>
+      </Container>
+    </div>
   );
 }
 
