@@ -12,7 +12,7 @@ const Medical = () => {
     const mediSnrUUID = '146a5b0c-04a0-4cd7-b680-863457102479';
 
     const [isEditing, setIsEditing] = useState(false);  //작성 상태관리(작성중이면 true)
-    const [isPublic, setIsPublic] = useState(false);    //공개 상태관리
+    const [isPublic, setIsPublic] = useState('F');    //공개 상태관리
 
     //토큰정보 가져오기(AuthProvider)
     const { role, member } = useContext(AuthContext);
@@ -48,7 +48,10 @@ const Medical = () => {
                 const response = await apiSpringBoot.get(`/program/medical/${mediSnrUUID}`);
                 console.log('fetchMedical Response : ', response.data);
                 setMedicals(response.data.list);
-
+                // 서버에서 가져온 데이터를 기준으로 공개 상태 설정
+                if (response.data.list.length > 0) {
+                    setIsPublic(response.data.list[0].mediPrivacy); // "T" 또는 "F" 설정
+                }
             } catch (error) {
                 console.error('Medical useEffect Error : ', error);
             }
@@ -66,8 +69,23 @@ const Medical = () => {
         }));
     }
 
-    const handlePrivacyChange = (e) => {
+    //가족 공개 설정
+    const handlePrivacyChange = async (e) => {
+        const isPublicValue = e.target.value;
 
+        try {
+            await apiSpringBoot.put(`/program/medical/${mediSnrUUID}`, {
+                mediPrivacy: isPublicValue,
+            });
+
+            // 상태 업데이트
+            setIsPublic(isPublicValue); // 선택한 값에 따라 상태 업데이트
+
+            alert(`가족 공개 설정이 ${isPublicValue === "T" ? "공개" : "비공개"}로 변경되었습니다.`);
+        } catch (error) {
+            console.error("handlePrivacyChange Error:", error);
+            alert('가족 공개 설정 변경 중 오류가 발생했습니다.');
+        }
     };
 
     const handleInsertClick = () => {
@@ -97,7 +115,7 @@ const Medical = () => {
             };
 
             // API 호출하여 데이터 저장
-            const response = await apiSpringBoot.post(`/program/medical/${mediSnrUUID}`, updatedMedical);
+            const response = await apiSpringBoot.post(`/ program / medical / ${mediSnrUUID} `, updatedMedical);
             // 저장 성공 시 `medicals` 리스트 업데이트
             setMedicals((prev) => [...prev, response.data]);
 
@@ -121,8 +139,8 @@ const Medical = () => {
                 <h1>병력관리</h1>
                 <div className={styles.mediPrivacy}>
                     <span>가족 공개</span>
-                    <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic} onChange={handlePrivacyChange} />공개</label>
-                    <label><input type="radio" name="mediPrivacy" value="F" checked={!isPublic} onChange={handlePrivacyChange} />비공개</label>
+                    <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
+                    <label><input type="radio" name="mediPrivacy" value="F" checked={isPublic === "F"} onChange={handlePrivacyChange} />비공개</label>
                 </div>{/* mediPrivacy end */}
             </div>{/* medi_top end */}
 
