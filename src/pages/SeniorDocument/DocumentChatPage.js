@@ -5,7 +5,8 @@ import { AuthContext } from '../../AuthProvider.js';
 import { marked } from 'marked';
 import DocumentService from './DocumentService.js';
 import Container from '../chat/Container.js';
-
+import SeniorNavbar from '../../components/common/SeniorNavbar.js';
+import { Player } from '@lottiefiles/react-lottie-player'; // Lottie import
 
 
 function DocumentChatPage() {
@@ -20,7 +21,6 @@ function DocumentChatPage() {
   const [answers, setAnswers] = useState({});
   const [fileName, setFileName] = useState(""); // 동적 파일 이름 저장
   const [questions, setQuestions] = useState([]); // 질문과 키를 함께 저장
-
 
   // 문서 유형 매핑 테이블
   const documentTypeMap = {
@@ -40,23 +40,41 @@ function DocumentChatPage() {
         return;
       }
 
+
+      // AI의 첫 질문 로딩 상태 추가
+      setMessages([{ sender: 'AI', loading: true }]);
+
+
+
       try {
         const response = await documentService.generateQuestion(serverDocumentType);
         console.log('API 응답:', response);
 
         if (!response || !Array.isArray(response) || response.length === 0) {
           console.error('유효하지 않은 질문 응답:', response);
-          setMessages([{ sender: 'AI', text: '질문 생성에 실패했습니다. 다시 시도해주세요.' }]);
+          setMessages([{ sender: 'AI', text: '질문 생성에 실패했습니다. 다시 시도해주세요.', loading: false }]);
           return;
         }
 
         // setKeys(response.map((q) => q.key)); // keys에는 key만 저장
         setQuestions(response); // 질문과 키를 함께 저장
-        setMessages([{ sender: 'AI', text: response[0]?.question || '질문이 없습니다.' }]); // 첫 번째 질문 설정
+
+
+        // 첫 번째 질문 추가 및 로딩 해제
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            sender: 'AI',
+            text: response[0]?.question || '질문이 없습니다.',
+            loading: false,
+          };
+          return updatedMessages;
+        });
+
         setFileName(`${serverDocumentType}`); // 동적 파일 이름 설정
       } catch (error) {
         console.error('질문 생성 오류:', error);
-        setMessages([{ sender: 'AI', text: '질문 생성 중 오류가 발생했습니다.' }]);
+        setMessages([{ sender: 'AI', text: '질문 생성 중 오류가 발생했습니다.', loading: false }]);
       }
     };
 
@@ -67,59 +85,66 @@ function DocumentChatPage() {
 
   const handleInputChange = (e) => setInputText(e.target.value);
 
+
+
+
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
 
     const userMessage = { sender: 'USER', text: inputText };
     setMessages((prev) => [...prev, userMessage]);
 
-    const currentQuestion = questions[currentKeyIndex]; // 현재 질문 가져오기
+    const currentQuestion = questions[currentKeyIndex];
     if (!currentQuestion) {
       console.error('현재 질문이 정의되지 않았습니다.');
       return;
     }
 
-    // 사용자 응답을 answers에 저장
-    setAnswers((prev) => ({ ...prev, [currentQuestion.key]: inputText })); // key-value 저장
+    // 사용자 응답 저장
+    setAnswers((prev) => ({ ...prev, [currentQuestion.key]: inputText }));
+
+
+    setMessages((prev) => [...prev, { sender: 'AI', loading: true }]); // 로딩 상태 추가
 
     const nextKeyIndex = currentKeyIndex + 1;
 
     if (nextKeyIndex < questions.length) {
-      const nextQuestion = questions[nextKeyIndex]?.question || '질문이 없습니다.';
-      setMessages((prev) => [...prev, { sender: 'AI', text: nextQuestion }]);
-      setCurrentKeyIndex(nextKeyIndex);
+      setTimeout(() => {
+        const nextQuestion = questions[nextKeyIndex].question;
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            ...updatedMessages[updatedMessages.length - 1], // 이전 메시지 복사
+            text: nextQuestion, // AI질문 텍스트 추가
+            loading: false, // 로딩 상태 해제
+          };
+          return updatedMessages;
+        });
+        setCurrentKeyIndex(nextKeyIndex);
+      }, 2000); // 로딩 애니메이션 유지
     } else {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const response = await documentService.submitDocument(documentType, answers);
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            sender: 'AI',
+            text: response.csvPath
+              ? '성공적으로 문서가 생성되었습니다. 아래 버튼을 클릭해 다운로드하세요.'
+              : '문서 작성 중 오류가 발생했습니다. 다시 시도해주세요.',
+            attachments: response.csvPath
+              ? [{ label: 'CSV 파일', url: `${response.csvPath}` }]
+              : [],
+            loading: false, // 로딩 상태 해제
+          };
+          return updatedMessages;
+        });
 
-        console.log("서버 응답:", response);
-
-
-        if (response.csvPath) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              sender: 'AI',
-              text: '성공적으로 문서가 생성되었습니다. 아래 링크를 클릭해 다운로드하세요.',
-              attachments: [
-                {
-                  label: 'CSV 파일',
-                  url: `${response.csvPath}`, // Flask 응답의 csvPath를 attachment.url로 설정
-                },
-              ],
-            },
-          ]);
-
-        } else {
-          throw new Error('CSV 경로가 반환되지 않았습니다.');
-        }
-        // window.location.href = response.file_path; // 다운로드 링크
       } catch (error) {
-        console.error('문서 제출 오류:', error);
         setMessages((prev) => [
           ...prev,
-          { sender: 'AI', text: '문서 작성 중 오류가 발생했습니다. 다시 시도해주세요.' },
+          { sender: 'AI', text: '문서 제출 중 오류가 발생했습니다.', loading: false },
         ]);
       } finally {
         setIsLoading(false);
@@ -182,71 +207,80 @@ function DocumentChatPage() {
   }, [messages]);
 
   return (
-    <Container>
-      <div className={styles['chat-container']}>
-        <div className={styles['chat-page']}>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
-                }`}
-            >
-              {message.sender === 'AI' ? (
-                <div>
+    <div className={styles.pageWrapper}>
+      <SeniorNavbar />
+      <Container>
+        <div className={styles['chat-container']}>
+          <div className={styles['chat-page']}>
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
+                  }`}
+              >
+                {/* 로딩 상태일 때 Lottie 애니메이션 */}
+                {message.loading ? (
+                  <Player
+                    autoplay
+                    loop
+                    src="/lottie/doc-loading-anime.json" // Lottie 파일 경로
+                    style={{ height: '150px', width: '150px' }}
+                    className={styles['lottie-player']}
+                  />
+                ) : (
                   <div
                     className={styles['markdown']}
                     dangerouslySetInnerHTML={{ __html: marked(message.text || '') }}
                   ></div>
-                  {message.attachments && (
-                    <div className={styles['attachments']}>
-                      {message.attachments.map((attachment, idx) => (
-                        <button
-                          key={idx}
-                          className={styles['attachment-button']}
-                          onClick={() => {
-                            if (attachment.url) {
-                              downloadFile(attachment.url); // 파일 경로 전달
-                            } else {
-                              console.error("첨부 파일 경로가 비어 있습니다:", attachment);
-                            }
+                )}
 
-                          }} // 파일 경로만 전달
-                        >
-                          {attachment.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p>{message.text || '잘못된 메시지 형식입니다.'}</p>
-              )}
-            </div>
-          ))}
+                {/* 첨부파일 */}
+                {message.attachments && (
+                  <div className={styles['attachments']}>
+                    {message.attachments.map((attachment, idx) => (
+                      <button
+                        key={idx}
+                        className={styles['attachment-button']}
+                        onClick={() => {
+                          if (attachment.url) {
+                            downloadFile(attachment.url); // 파일 다운로드 실행
+                          } else {
+                            console.error('첨부 파일 경로가 비어 있습니다:', attachment);
+                          }
+                        }}
+                      >
+                        {attachment.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
             {/* 이 위치에 항상 chatEndRef를 배치 */}
-           <div ref={chatEndRef} />
-        </div>
+            <div ref={chatEndRef} />
+          </div>
 
-        <div className={styles['input-container']}>
-          <input
-            type="text"
-            placeholder="메시지를 입력하세요."
-            className={styles['text-input']}
-            value={inputText}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            className={styles['send-button']}
-            onClick={handleSendMessage}
-            disabled={!inputText.trim() || isLoading}
-          >
-            <span className={styles['arrow-icon']}>➤</span>
-          </button>
+          <div className={styles['input-container']}>
+            <input
+              type="text"
+              placeholder="메시지를 입력하세요."
+              className={styles['text-input']}
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+            <button
+              className={styles['send-button']}
+              onClick={handleSendMessage}
+              disabled={!inputText.trim() || isLoading}
+            >
+              <span className={styles['arrow-icon']}>➤</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
-}
 
+}
 export default DocumentChatPage;

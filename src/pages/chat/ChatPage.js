@@ -5,6 +5,8 @@ import Container from './Container.js';
 import { AuthContext } from '../../AuthProvider.js';
 import SeniorSideBar from '../../components/common/SeniorSideBar.js';
 import { marked } from 'marked';
+import SeniorNavbar from '../../components/common/SeniorNavbar.js';
+
 
 function ChatPage() {
   const location = useLocation();
@@ -133,66 +135,70 @@ function ChatPage() {
 
 
   return (
-    <div className={styles.container}>
-      <div className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : ''}`}>
-        <SeniorSideBar
-          memUUID={member?.memUUID}
-          selectedWorkspaceId={selectedWorkspaceId}
-          setSelectedWorkspaceId={setSelectedWorkspaceId}
-        />
-      </div>
-
-      <button className={styles.sidebarToggle} onClick={toggleSidebar}>
-        {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
-      </button>
-      <Container>
-        <div className={`${styles['chat-container']} ${isSidebarVisible ? 'sidebar-open' : ''}`}>
-          <div className={styles['chat-page']}>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
-                  }`}
-              >
-                {/* USER 메시지와 AI 메시지의 스타일을 다르게 적용 */}
-                {message.sender === 'AI' ? (
-                  <div
-                    className={styles['markdown']}
-                    dangerouslySetInnerHTML={{ __html: marked(message.text) }}
-                  ></div>
-                ) : (
-                  <p>{message.text}</p>
-                )}
-              </div>
-            ))}
-            <div ref={chatEndRef}></div>
-
-
-            {/* 세션 종료 버튼임 */}
-            <button onClick={handleEndSession} className={styles.endSessionButton}>
-              세션 종료
-            </button>
-          </div>
-
-          <div className={styles['input-container']}>
-            <input
-              type="text"
-              placeholder="메시지를 입력하세요."
-              className={styles['text-input']}
-              value={inputText}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-            />
-            <button
-              className={styles['send-button']}
-              onClick={handleSendMessage}
-              disabled={!inputText.trim()}
-            >
-              <span className={styles['arrow-icon']}>➤</span>
-            </button>
-          </div>
+    <div>
+      <SeniorNavbar />
+      <div className={styles.container}>
+        <div
+          className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden}`} >
+          <SeniorSideBar
+            memUUID={member?.memUUID}
+            selectedWorkspaceId={selectedWorkspaceId}
+            setSelectedWorkspaceId={setSelectedWorkspaceId}
+          />
         </div>
-      </Container>
+
+        <button className={styles.sidebarToggle} onClick={toggleSidebar}>
+          {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
+        </button>
+        <Container>
+          <div className={`${styles['chat-container']} ${isSidebarVisible ? 'sidebar-open' : ''}`}>
+            <div className={styles['chat-page']}>
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']
+                    }`}
+                >
+                  {/* USER 메시지와 AI 메시지의 스타일을 다르게 적용 */}
+                  {message.sender === 'AI' ? (
+                    <div
+                      className={styles['markdown']}
+                      dangerouslySetInnerHTML={{ __html: marked(message.text) }}
+                    ></div>
+                  ) : (
+                    <p>{message.text}</p>
+                  )}
+                </div>
+              ))}
+              <div ref={chatEndRef}></div>
+
+
+              {/* 세션 종료 버튼임 */}
+              <button onClick={handleEndSession} className={styles.endSessionButton}>
+                세션 종료
+              </button>
+            </div>
+
+            <div className={styles['input-container']}>
+              <input
+                type="text"
+                placeholder="메시지를 입력하세요."
+                className={styles['text-input']}
+                value={inputText}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                className={styles['send-button']}
+                onClick={handleSendMessage}
+                disabled={!inputText.trim()}
+              >
+                <span className={styles['arrow-icon']}>➤</span>
+              </button>
+            </div>
+          </div>
+        </Container>
+      </div>
     </div>
   );
 }

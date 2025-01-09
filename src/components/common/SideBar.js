@@ -84,7 +84,7 @@ function SideBar() {
             <Link to="/dashlist">대시보드</Link>
           </li>
           <li>
-            <Link to="/">어르신관리</Link>
+            <Link to="/seniorlist">어르신관리</Link>
           </li>
           <li>
             <Link to="/notice">공지사항</Link>
@@ -141,7 +141,7 @@ function SideBar() {
             <Link to="/">검색</Link>
           </li>
           <li>
-            <Link to="/">어르신관리</Link>
+            <Link to="/seniorlist">어르신관리</Link>
           </li>
           <li>
             <Link to="/notice">공지사항</Link>

@@ -3,14 +3,21 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFlask, apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
+import styles from './FaceLogin.module.css';
+import SeniorFooter from '../../components/common/SeniorFooter';
+import SeniorNavbar from '../../components/common/SeniorNavbar';
 
 const FaceLogin = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState();
   const [captured, setCaptured] = useState(false); // 캡처 완료 여부
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleMoveIdLogin = () => {
+    navigate('/loginsenior');
+  };
 
   useEffect(() => {
     const startCamera = async () => {
@@ -71,11 +78,10 @@ const FaceLogin = () => {
       const response = await apiFlask.post('/compare', {
         image: imageData,
       });
-
-      setResult(response.data); // 결과 저장
       const serverResponse = await apiSpringBoot.post('/member/facelogin', {
         memSeniorProfile: response.data.best_match,
       });
+      setResult(serverResponse.data);
       const accessToken = serverResponse.headers['authorization'];
       const refreshToken = serverResponse.headers['response'];
       login({ accessToken, refreshToken });
@@ -86,27 +92,31 @@ const FaceLogin = () => {
   };
 
   return (
-    <div>
-      <h1>Face Comparison</h1>
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        style={{ width: '100%', maxWidth: '600px' }}
-      ></video>
-      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+    <>
+      <SeniorNavbar />
+      <div className={styles.floginMainContainer}>
+        <div className={styles.floginSubContainer}>
+          <h1>카메라를 5초간 정면으로 바라봐 주세요. </h1>
+          {!result ? (
+            <>
+              <video ref={videoRef} autoPlay muted></video>
+              <canvas ref={canvasRef}></canvas>
+            </>
+          ) : (
+            <span class="material-symbols-outlined" style={{ color: 'green' }}>
+              check_circle
+            </span>
+          )}
 
-      {!captured && <p>Camera is on. Capturing image in 5 seconds...</p>}
-      {captured && !result && <p>Processing image...</p>}
-      {result && (
-        <div>
-          <h2>Result:</h2>
-          <p>Best Match: {result.best_match}</p>
-          <p>Distance: {result.distance}</p>
-          <p>Status: {result.status}</p>
+          <div className={styles.floginBtnDiv}>
+            <button onClick={handleMoveIdLogin}>아 이 디 로 그 인</button>
+          </div>
         </div>
-      )}
-    </div>
+      </div>
+      <div className={styles.footer}>
+        <SeniorFooter></SeniorFooter>
+      </div>
+    </>
   );
 };
 

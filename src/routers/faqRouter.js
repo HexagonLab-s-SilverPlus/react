@@ -2,12 +2,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import FAQList from '../pages/faq/FAQList';
-
+import ProtectedRoute from '../components/common/ProtectedRoute';
 
 
 const faqRouter = [
     <>
-        <Route path="/faq" element={<FAQList />} />,
+        <Route path="/faq" element={<ProtectedRoute element={<FAQList />} />} />,
     </>
 ];
 

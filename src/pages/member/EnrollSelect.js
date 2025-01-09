@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import styles from './EnrollSelect.module.css';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../components/common/Modal';
-import EnrollManager from './EnrollManager';
-import EnrollFamily from './EnrollFamily';
+import Header from '../../components/common/Header';
+import SeniorFooter from '../../components/common/SeniorFooter';
 
 const EnrollSelect = () => {
   // 버튼 클릭시 모달창이 열리게 하는 상태변수
@@ -14,26 +13,30 @@ const EnrollSelect = () => {
 
   const navigate = useNavigate();
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setMemType('');
-  };
-  const handleEnrollSuccess = () => {
-    setShowModal(false);
-    navigate('/loginmember');
-    setMemType('');
-  };
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  //   setMemType('');
+  // };
+  // const handleEnrollSuccess = () => {
+  //   setShowModal(false);
+  //   navigate('/loginmember');
+  //   setMemType('');
+  // };
+
   const handleMoveEnrollManager = () => {
     setMemType('MANAGER');
-    setShowModal(true);
+    // setShowModal(true);
+    navigate('/enrollmanager');
   };
   const handleMoveEnrollFamily = () => {
     setMemType('FAMILY');
-    setShowModal(true);
+    // setShowModal(true);
+    navigate('/enrollfamily');
   };
 
   return (
     <>
+      <Header />
       <div className={styles.enrollButton}>
         <div>
           <button onClick={handleMoveEnrollManager} className={styles.button1}>
@@ -46,7 +49,7 @@ const EnrollSelect = () => {
           </button>
         </div>
       </div>
-      {/* 기관담당자 회원가입 */}
+      {/* 기관담당자 회원가입
       {showModal && (
         <Modal onClose={handleCloseModal}>
           {memType === 'MANAGER' && (
@@ -62,7 +65,10 @@ const EnrollSelect = () => {
             ></EnrollFamily>
           )}
         </Modal>
-      )}
+      )} */}
+      <div className={styles.footer}>
+        <SeniorFooter />
+      </div>
     </>
   );
 };

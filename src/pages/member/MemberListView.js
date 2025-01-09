@@ -299,7 +299,7 @@ const MemberListView = () => {
               maxPage={pagingInfo.maxPage}
               startPage={pagingInfo.startPage}
               endPage={pagingInfo.endPage}
-              onPageChange={(page) => handlePageChange(page)}
+              onPageChange={(page) => handleUpdateView(page)}
             />
           </div>
         </div>

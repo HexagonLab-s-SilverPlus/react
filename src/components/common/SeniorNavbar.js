@@ -1,6 +1,6 @@
 // src/components/sm/senior/common/SeniorNavBar.js
 import React,{useState, useEffect, useContext} from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // css
 import Styles from "./SeniorNavbar.module.css";
 // image
@@ -16,6 +16,10 @@ const SeniorNavbar = () => {
 
     // 토큰 정보가져오기
     const { isLoggedIn, logout, refreshToken, authInfo } = useContext(AuthContext);
+
+    const navigate=useNavigate();
+
+
 
     // 프로필 이미지를 클릭할 때 모달을 열거나 닫음
     const toggleModal = () => setModalVisible((prev) => !prev);
@@ -35,6 +39,11 @@ const SeniorNavbar = () => {
           }
     };
 
+    // 시니어 메뉴로 이동하는 핸들러
+    const handleMenu=()=>{
+        navigate('/senior-menu');
+    };
+
 
     // 모달 외부 클릭 감지
     useEffect(()=>{
@@ -50,7 +59,7 @@ const SeniorNavbar = () => {
         <nav className={Styles.navbar}>
             <Link to="/" className={Styles.navbarlogo}>실버플러스</Link>
             <div className={Styles.navbarright}>
-                <div className={Styles.navbarmenu}>메뉴</div>
+                <div className={Styles.navbarmenu} onClick={handleMenu}>메뉴</div>
                 <img 
                     className={Styles.navbarprofile}
                     src={profile}

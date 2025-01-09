@@ -4,6 +4,8 @@ import { React, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './DocMain.module.css';
 import { AuthContext } from '../../AuthProvider';
+import SeniorFooter from '../../components/common/SeniorFooter';
+import SeniorNavbar from '../../components/common/SeniorNavbar';
 
 const DocMain = () => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const DocMain = () => {
   };
 
   return (
+   <div className={styles.pageWrapper}>
+      <SeniorNavbar/>
     <div className={styles['card-container']}>
       <h2 className={styles.title}>원하시는 공문서를 선택해주세요!</h2>
       {/* CSV 파일 버튼 추가 */}
@@ -32,6 +36,8 @@ const DocMain = () => {
         <button className={styles.card} onClick={() => handleNavigate('medical')}>의료급여 신청서</button>
         <button className={styles.card} onClick={() => handleNavigate('basic')}>기초연금 신청서</button>
       </div>
+    </div>
+    <SeniorFooter/>
     </div>
   );
 };

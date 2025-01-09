@@ -7,6 +7,13 @@ body {background: #fff;}
     
 }
 
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 화면 전체 높이 */
+}
+
+
 .csvBtn {
   display: block; /* 중앙 정렬을 위해 block으로 설정 */
   margin: 20px auto; /* 수평 중앙 정렬 */
@@ -53,6 +60,7 @@ body {background: #fff;}
 }
 
 .cardWrap{
+  flex: 1; /* 남은 공간을 채움 */
   display: flex;
   width: 950px;
   height: 540px;
