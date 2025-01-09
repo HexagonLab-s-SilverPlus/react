@@ -4,77 +4,22 @@ import React,{useState,useEffect} from 'react';
 import styles from './PlayGame.module.css';
 // components
 import SeniorNavbar from '../../components/common/SeniorNavbar';
+// resources
+import hwatuCard from './cardInfo';
+// function
+import { selectCard, chooseCard, moveCard } from './playAction'
+
+
 
 const PlayGame = () => {
   // 카드정보
-  const cards = ([
-    //1월
-    { id:1, month : 1, type : "광", detailType:"광", image:"1_1.png"},
-    { id:2, month : 1, type : "띠", detailType:"홍단", image:"1_2.png"},
-    { id:3, month : 1, type : "피", detailType:"피", image:"1_3.png"},
-    { id:4, month : 1, type : "피", detailType:"피", image:"1_4.png"},
-    //2월
-    { id:5, month : 2, type : "열끗", detailType:"고도리", image:"2_1.png"},
-    { id:6, month : 2, type : "띠", detailType:"홍단", image:"2_2.png"},
-    { id:7, month : 2, type : "피", detailType:"피", image:"2_3.png"},
-    { id:8, month : 2, type : "피", detailType:"피", image:"2_4.png"},
-    //3월
-    { id:9, month : 3, type : "광", detailType:"광", image:"3_1.png"},
-    { id:10, month : 3, type : "띠", detailType:"홍단", image:"3_2.png"},
-    { id:11, month : 3, type : "피", detailType:"피", image:"3_3.png"},
-    { id:12, month : 3, type : "피", detailType:"피", image:"3_4.png"},
-    //4월
-    { id:13, month : 4, type : "열끗", detailType:"고도리", image:"4_1.png"},
-    { id:14, month : 4, type : "띠", detailType:"초단", image:"4_2.png"},
-    { id:15, month : 4, type : "피", detailType:"피", image:"4_3.png"},
-    { id:16, month : 4, type : "피", detailType:"피", image:"4_4.png"},
-    //5월
-    { id:17, month : 5, type : "열끗", detailType:"열끗", image:"5_1.png"},
-    { id:18, month : 5, type : "띠", detailType:"초단", image:"5_2.png"},
-    { id:19, month : 5, type : "피", detailType:"피", image:"5_3.png"},
-    { id:20, month : 5, type : "피", detailType:"피", image:"5_4.png"},
-    //6월
-    { id:21, month : 6, type : "열끗", detailType:"열끗", image:"6_1.png"},
-    { id:22, month : 6, type : "띠", detailType:"청단", image:"6_2.png"},
-    { id:23, month : 6, type : "피", detailType:"피", image:"6_3.png"},
-    { id:24, month : 6, type : "피", detailType:"피", image:"6_4.png"},
-    //7월
-    { id:25, month : 7, type : "열끗", detailType:"열끗", image:"7_1.png"},
-    { id:26, month : 7, type : "띠", detailType:"초단", image:"7_2.png"},
-    { id:27, month : 7, type : "피", detailType:"피", image:"7_3.png"},
-    { id:28, month : 7, type : "피", detailType:"피", image:"7_4.png"},
-    //8월
-    { id:29, month : 8, type : "광", detailType:"광", image:"8_1.png"},
-    { id:30, month : 8, type : "열끗", detailType:"고도리", image:"8_2.png"},
-    { id:31, month : 8, type : "피", detailType:"피", image:"8_3.png"},
-    { id:32, month : 8, type : "피", detailType:"피", image:"8_4.png"},
-    //9월
-    { id:33, month : 9, type : "띠", detailType:"청단", image:"9_1.png"},
-    { id:34, month : 9, type : "피", detailType:"피", image:"9_2.png"},
-    { id:35, month : 9, type : "피", detailType:"피", image:"9_3.png"},
-    { id:36, month : 9, type : "피", detailType:"쌍피", image:"9_4.png"},
-    //10월
-    { id:37, month : 10, type : "열끗", detailType:"열끗", image:"10_1.png"},
-    { id:38, month : 10, type : "띠", detailType:"청단", image:"10_2.png"},
-    { id:39, month : 10, type : "피", detailType:"피", image:"10_3.png"},
-    { id:40, month : 10, type : "피", detailType:"피", image:"10_4.png"},
-    //11월
-    { id:41, month : 11, type : "광", detailType:"광", image:"11_1.png"},
-    { id:42, month : 11, type : "피", detailType:"피", image:"11_2.png"},
-    { id:43, month : 11, type : "피", detailType:"피", image:"11_3.png"},
-    { id:44, month : 11, type : "피", detailType:"쌍피", image:"11_4.png"},
-    //12월
-    { id:45, month : 12, type : "광", detailType:"비광", image:"12_1.png"},
-    { id:46, month : 12, type : "열끗", detailType:"열끗", image:"12_2.png"},
-    { id:47, month : 12, type : "띠", detailType:"띠", image:"12_3.png"},
-    { id:48, month : 12, type : "피", detailType:"쌍피", image:"12_4.png"},
-  ]);
-
+  const cards = hwatuCard;
+  // 기타카드
   const otherCard = ([
     // 뒷면
-    {type:"back", image:"back.png"},
+    {month : 99, type:"back", image:"back.png"},
     // 폭탄
-    {type:"bomb", image:"bomb.png"},
+    {month : 99, type:"bomb", image:"bomb.png"},
   ]);
 
 
@@ -86,17 +31,25 @@ const PlayGame = () => {
   const [tableCards, setTableCards] = useState([]);
   // 덱 카드 목록
   const [deckCards, setDeckCards] = useState([]);
+  // 플레이어가 획득한 패
+  const [getPlayerCards, setGetPlayerCards] = useState([]);
+  // 상대방이 획득한 패
+  const [getOpponentCards, setGetOpponentCards] = useState([]);
+  // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
+  const [isTwoCards, setIsTwoCards] = useState(false);
+  // 테이블에 같은카드 두장일때 선택할 옵션
+  const [choiceOptions, setChoiceOptions] = useState([]);
 
   // turn 저장 변수(player or opponent)
   const [currentTurn, setCurrentTurn] = useState('player');
 
   // 초기 카드 세팅(한번실행)
   useEffect(()=>{
-    const initialCards = generateInitialCards();
-    setPlayerCards(initialCards.player);
-    setOpponentCards(initialCards.opponent);
-    setTableCards(initialCards.table);
-    setDeckCards(initialCards.deck);
+    const initialCards = generateInitialCards();// 카드 섞고 분배
+    setPlayerCards(initialCards.player);  // 플레이어 카드 세팅
+    setOpponentCards(initialCards.opponent);  // 상대방 카드 세팅
+    setTableCards(initialCards.table);  // 테이블 카드 세팅
+    setDeckCards(initialCards.deck);  // 덱 카드 세팅
   },[]);
 
   // 카드 초기화 로직
@@ -114,93 +67,172 @@ const PlayGame = () => {
   // 카드 섞기
   const shuffle = (array) => {
     for (let i = array.length - 1; i>0 ; i--){
-      const j = Math.floor(Math.random()*(i+1));
+      const j = Math.floor(Math.random()*(i+1));  // 랜덤위치 뽑기
       [array[i], array[j]] = [array[j],array[i]]; // swap
     }
     return array;
   };
 
-  // // 플레이어가 카드를 낼 때
-  // const handleCardPlay = (card) => {
-  //   if (currentTurn !== 'player') return; // 플레이어 턴이 아닐 경우 무시
-  //   console.log(`플레어가 ${card} 카드를 냈습니다.`);
+  // 테이블 오픈된 카드 월별로 묶기 함수
+  const groupByMonth = (cards) => {
+    return cards.reduce((groups, card) => {
+      const { month } = card; // 각 카드의 month 값을 가져옴
+      // 기존배열이 없으면 해당월 배열 만들기
+      if (!groups[month]) {groups[month] = [];}
+      groups[month].push(card);  // 월별 배열에 카드 추가
+      return groups;  // 그룹 리턴
+    }, {});
+  };
 
-  //   // 카드 플레이 로직 (세부구현 필요)
-  //   setTableCards([...tableCards,card]); // 카드 테이블에 추가
-  //   setPlayerCards(playerCards.filter((c)=>c !== card)); // 플레이어 카드 제거
+  // 카드 id순서대로 정렬
+  const sortCard = (cards) => {
+    const ascCard = [...cards].sort((a,b) => a.id - b.id);
+    return ascCard;
+  }
 
-  //   // 턴 넘기기
-  //   setCurrentTurn('opponent');
-  // };
 
-  // // 컴퓨터 턴 처리
-  // useEffect(()=>{
-  //   if (currentTurn ==='opponent'){
-  //     const timer = setTimeout(() =>{
-  //       handleComputerPlay();
-  //     }, 1000); // 1초 대기후 실행
-  //     return () => clearTimeout(timer);
-  //   }
-  // },[currentTurn]);
+  const handleSelectCard = (card) => {
+    // 테이블에 있는 같은카드 가져오기
+    let cards = selectCard(card,tableCards);
 
-  // const handleComputerPlay = () => {
-  //   if (opponentCards.length === 0 ) return; // 컴퓨터 카드가 없으면 종료
-  //   const card = opponentCards[0]; // 간단히 첫 번째 카드 선택
-  //   console.log(`컴퓨터가 ${card} 카드를 냈습니다.`);
+    // 플레이어가 먹은패에 카드 가져오기
+    let myCards = chooseCard(cards);
 
-  //   setTableCards([...tableCards,card]); // 카드 테이블에 추가
-  //   setOpponentCards(opponentCards.slice(1)); // 컴퓨터 카드제거( 첫번째 카드 )
+    // 카드 처리
+    // 동일카드가 없을시
+    if (myCards === 0) {
+      // 플레이어 패에서 카드빼기
+      const updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+      setPlayerCards(updatedPlayerCards);
+      // 플레이어 패를 테이블에 깔기
+      setTableCards((prev) => [...prev,card]);
+    } else if(myCards ===1) {
+      // 플레이어 패에서 카드빼기
+      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+      setPlayerCards(updatedPlayerCards);
+      // 테이블 패에서 카드빼기
+      updatedPlayerCards = tableCards.filter((tableCard) => tableCard.id !== cards[0].id);
+      setTableCards(updatedPlayerCards);
+      // 플레이어 패와 테이블의 일치하는 패를 내가 먹은 테이블에 넣기
+      setGetPlayerCards((prev)=>[...prev,card,cards[0]]);
+    } else if(myCards === 2){
+      // 둘중 하나 고르기
+      setIsTwoCards(true);
+      setChoiceOptions(cards);
+      // 뒤집을카드 같은거면 두개다 내가 가져가고 
 
-  //   // 턴 넘기기
-  //   setCurrentTurn('player');
-  // };
+      // 아니면 하나만 가져가기
+    } else if(myCards === 3){
+      // 플레이어 패에서 카드빼기
+      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+      setPlayerCards(updatedPlayerCards);
+      // 테이블 패에서 카드빼기
+      const updatedTableCards = tableCards.filter(
+        (tableCard) => !cards.some((matchCard) => matchCard.id === tableCard.id));
+      setTableCards(updatedTableCards);
+      // 내가 가져간 패에 추가
+      setGetPlayerCards((prev) => [...prev, ...cards, card]);
+    }
+    
+  
+    // 덱에서 한장꺼내서 뒤집기
+    if (deckCards!==0){
+      const [newCard, ...remainingDeck] = deckCards;
+      setDeckCards(remainingDeck); // 덱 상태 업데이트
+      setTableCards((prev)=>[...prev,newCard]);  // 테이블 추가
+    }
+
+    // 턴오버 처리
+    setCurrentTurn("opponent")
+  }
 
   return (
     <div className={styles.mainPage}>
+      {/* 상단 네비바 */}
       <div className={styles.gameNavBar}>
         <SeniorNavbar/>
       </div>
+
+      {/* 전체뷰 */}
       <div className={styles.gameArea}>
         {/* 상대방 카드 */}
         <div className={styles.opponentArea}>
           {/* 상대방이 먹은패 */}
-          <div className={styles.getOpponentCards}> 상대방이 먹은패 </div>
+          <div className={styles.getOpponentCards}>
+            상대방이 먹은패
+          </div>{/* 상대방이 먹은패 */}
+          {/* 상대방 가지고 있는패(갯수에 맞게 뒷면으로 표시) */}
           <div className={styles.opponentCards}>
-            {opponentCards.map((_, index) => (
-              <>
-              <img key={index} src={`/assets/images/game/card/back.png`} alt="상대방 카드" /> &nbsp;
+            {opponentCards.map((card, index) => (
+              <React.Fragment key={card.id}>
+              <img src={`/assets/images/game/card/back.png`} alt="상대방 카드" /> &nbsp;
               {index===4 && <br/>}
-              </>
+              </React.Fragment>
             ))}
-          </div>
-        </div>
+          </div>{/* 상대방 가지고 있는패(갯수에 맞게 뒷면으로 표시) */}
+        </div>{/* 상대방이 먹은패 */}
 
         {/* 테이블 카드 */}
         <div className={styles.tableArea}>
           {/* 덱카드 */}
           <div className={styles.deckCards}>
-            <img src={`/assets/images/game/card/back.png`} alt="덱 카드" className={styles.card}/>
-          </div>
+            {}
+            <img src={`/assets/images/game/card/back.png`} alt="덱 카드" className={styles.deckCard}/>
+          </div>{/* 덱카드 */}
+          {/* 테이블 카드 */}
           <div className={styles.openCards}>
-            {tableCards.map((card, index)=>(
-              <>
-                <img key={index} src={`/assets/images/game/card/${card.image}`} alt="테이블 카드" className={styles.card}/> &nbsp;
-              </>
+            {Object.entries(groupByMonth(tableCards)).map(([month, cards]) => (
+              // 월별 카드 가져오기
+              <div key={month} className={styles.tableMonthGroup}>
+                {cards.map((card) => (
+                  <img
+                    key={card.id} // 고유한 id 사용
+                    src={`/assets/images/game/card/${card.image}`}
+                    alt={`${card.month}월 ${card.type} 카드`}
+                  />
+                ))}
+              </div> // 월별 카드 가져오기
             ))}
-          </div>
+          </div>{/* 테이블 카드 */}
+
+          {/* 내가 가져온 패 */}
           <div className={styles.getPlayerArea}>
-            내가먹은패
-          </div>
-        </div>
+            {getPlayerCards.map((card)=>(
+              <img
+                src={`/assets/images/game/card/${card.image}`}
+                alt={`${card.month}월 ${card.type} 카드`}
+              />
+            ))}
+          </div>{/* 내가 가져온 패 */}
+        </div>{/* 테이블 카드 */}
 
         {/* 플레이어 카드 */}
         <div className={styles.playerArea}>
-          {playerCards.map((card,index)=>(
-            <>
-              <img key={index} src={`/assets/images/game/card/${card.image}`} alt="플레이어 카드" className={styles.card} onClick={()=>handleCardPlay(card)}/> &nbsp;
-            </>
-          ))}
-        </div>
+                {sortCard(playerCards).map((card)=>(
+                  <img
+                    key={card.id}
+                    src={`/assets/images/game/card/${card.image}`} 
+                    alt="플레이어 카드" 
+                    onClick={()=>handleSelectCard(card)}
+                  />
+                ))}
+        </div>{/* 플레이어 카드 */}
+        {isTwoCards &&
+          <div className={styles.isTwoCards}>
+            <div className={styles.twoCardsTitle}>카드를 선택하세요</div>
+            <div>
+              <div className={styles.twoCards}>
+                {choiceOptions.map((option)=>(
+                  <img
+                    key={option.id}
+                    src={`/assets/images/game/card/${option.image}`}
+                    alt={`${option.month}월 ${option.type}카드`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        }
       </div>
     </div>
   );
