@@ -459,3 +459,29 @@
 .markdown a:hover {
   text-decoration: underline;
 }
+
+
+
+
+
+.emergencyButton {
+  position: fixed;
+  bottom: 200px;
+  right: 20px;
+  width: 120px;
+  height: 50px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emergencyButton:hover {
+  background-color: #d9363e;
+  transform: scale(1.1);
+}
