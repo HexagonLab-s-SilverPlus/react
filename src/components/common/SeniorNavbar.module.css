@@ -62,6 +62,7 @@
   padding: 20px;
   min-width: 180px; /* 최소 너비 */
   z-index: 100;
+  display: block;
 }
 
 .modal p {
