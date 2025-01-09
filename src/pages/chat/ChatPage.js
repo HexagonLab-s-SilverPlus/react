@@ -324,9 +324,6 @@ function ChatPage() {
                 </div>
               ))}
               <div ref={chatEndRef}></div>
-              <button onClick={handleEndSession} className={styles.endSessionButton}>
-                세션 종료
-              </button>
             </div>
           </div>
         </div>
