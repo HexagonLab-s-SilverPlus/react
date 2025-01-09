@@ -1,11 +1,13 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import ChatPage from '../pages/ey/chat/ChatPage';
+import ChatPage from '../pages/chat/ChatPage';
 import SeniorMenu from '../components/SeniorMenu';
 import ProtectedRoute from '../components/common/ProtectedRoute';
-import WelcomeChat from '../pages/ey/chat/WelcomeChat';
+import WelcomeChat from '../pages/chat/WelcomeChat';
 import NotFound from '../pages/common/NotFound';
-import DocumentChatPage from '../pages/ey/document/DocumentChatPage';
+import DocumentChatPage from '../pages/SeniorDocument/DocumentChatPage';
+import CompletedDocument from '../pages/SeniorDocument/CompletedDocument';
+import TestLottie from '../pages/SeniorDocument/TestLottie';
 
 const eyRouter = [
   <>
@@ -14,6 +16,8 @@ const eyRouter = [
     <Route path="/w/:workspaceId" element={<ProtectedRoute element={<ChatPage />} />} />
     <Route path="*" element={<NotFound />} />
     <Route path="/document/:documentType" element={<DocumentChatPage />} />
+    <Route path="/d/:memUUID" element={<CompletedDocument/>} />
+    <Route path="/lottie" element={<TestLottie/>} />
   </>
 ];
 

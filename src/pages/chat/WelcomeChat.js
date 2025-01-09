@@ -2,9 +2,11 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './WelcomeChat.module.css';
 import Container from './Container.js';
-import { AuthContext } from '../../../AuthProvider.js';
+import { AuthContext } from '../../AuthProvider.js';
 // 사이드바 컴포넌트 가져오기
-import SeniorSideBar from '../../../components/common/SeniorSideBar.js';
+import SeniorSideBar from '../../components/common/SeniorSideBar.js';
+import SeniorNavbar from '../../components/common/SeniorNavbar.js';
+
 
 function WelcomeChat() {
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null); // 선택된 워크스페이스 ID
@@ -40,8 +42,8 @@ function WelcomeChat() {
             Authorization: `Bearer ${accessToken}`,
             RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
           },
-         withCredentials: true // 인증 정보를 요청에 포함
-         // credentials: true // 쿠키를 요청에 포함
+          withCredentials: true // 인증 정보를 요청에 포함
+          // credentials: true // 쿠키를 요청에 포함
         },
       );
 
@@ -72,50 +74,50 @@ function WelcomeChat() {
   }
 
   return (
-    <div className={styles.container}>
-      {/* 사이드바 */}
-      <div
-        className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden
-          }`}
-      >
-        <SeniorSideBar
-          memUUID={member?.memUUID}
-        />
-      </div>
+    <div>
+      <SeniorNavbar />
+      <div className={styles.container}>
+        {/* 사이드바 */}
+        <div
+          className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden }`} >
+          <SeniorSideBar
+            memUUID={member?.memUUID}
+          />
+        </div>
 
-      {/* 토글 버튼 */}
-      <button className={styles.sidebarToggle} onClick={toggleSidebar}>
-        {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
-      </button>
+        {/* 토글 버튼 */}
+        <button className={styles.sidebarToggle} onClick={toggleSidebar}>
+          {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
+        </button>
 
-      <Container>
-        <div className={styles['welcome-container']}>
-          <h1 className={styles['welcome-title']}>
-            점심은 드셨나요?<br />오늘 드신 점심메뉴를 이야기해주세요!
-          </h1>
-          <p className={styles['welcome-description']}>
-            말씀해 주시면 목소리가 자동으로 입력됩니다. 편하게 대화해 보세요.
-          </p>
-          <div className={styles['input-container']}>
-            <input
-              type="text"
-              placeholder="오늘 날씨가 참 좋네."
-              className={styles['text-input']}
-              aria-label="대화 입력창"
-              value={inputText}
-              onChange={handleInputChange}
-            />
-            <button
-              className={`${styles['send-button']} ${styles['button']}`}
-              aria-label="전송 버튼"
-              onClick={handleSend}
-            >
-              <span className={styles['arrow-icon']}>➤</span>
-            </button>
-          </div>
+        <Container>
+          <div className={styles['welcome-container']}>
+            <h1 className={styles['welcome-title']}>
+              점심은 드셨나요?<br />오늘 드신 점심메뉴를 이야기해주세요!
+            </h1>
+            <p className={styles['welcome-description']}>
+              말씀해 주시면 목소리가 자동으로 입력됩니다. 편하게 대화해 보세요.
+            </p>
+            <div className={styles['input-container']}>
+              <input
+                type="text"
+                placeholder="오늘 날씨가 참 좋네."
+                className={styles['text-input']}
+                aria-label="대화 입력창"
+                value={inputText}
+                onChange={handleInputChange}
+              />
+              <button
+                className={`${styles['send-button']} ${styles['button']}`}
+                aria-label="전송 버튼"
+                onClick={handleSend}
+              >
+                <span className={styles['arrow-icon']}>➤</span>
+              </button>
+            </div>
 
-          {/* 워크스페이스 목록 조회용용 */}
-          {/* <div className={styles['workspace-list']}>
+            {/* 워크스페이스 목록 조회용용 */}
+            {/* <div className={styles['workspace-list']}>
             <h3>워크스페이스 목록</h3>
             <ul>
               {workspaces.map((workspace) => (
@@ -127,8 +129,9 @@ function WelcomeChat() {
           </div> */}
 
 
-        </div>
-      </Container>
+          </div>
+        </Container>
+      </div>
     </div>
   );
 }

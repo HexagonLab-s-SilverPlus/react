@@ -3,6 +3,8 @@
     display: flex;
     justify-content: center;
   }
+
+  .pagingContainer button:disabled {cursor: not-allowed;}
   
   .pageButton {
     background: none;
@@ -15,5 +17,18 @@
     background: none;
     border: none;     
     cursor: pointer;
-    font-size: 28px;
+    font-size: 20px;
+  }
+
+  .adminbutton:hover {
+    text-decoration: underline;
+  }
+
+  .activebutton{
+    background: none;
+    border: none;     
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #368cfc;
   }

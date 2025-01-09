@@ -7,15 +7,14 @@ import styles from './BookList.module.css';
 import SideBar from "../../components/common/SideBar";
 import PagingDiv8 from '../../components/common/PagingDiv8';
 import { PagingDiv8Calculate } from "../../components/common/PagingDiv8Calculate";
-import bkImage from '../../assets/images/pgImage.png';
 
 import SeniorNavbar from "../../components/common/SeniorNavbar";
 import SeniorFooter from "../../components/common/SeniorFooter";
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
+    const [playbutton, setPlaybutton] = useState(true);
+    const [playAudio, setPlayAudio] = useState(null);
 
     //페이징
     const [pagingInfo, setPagingInfo] = useState({
@@ -27,56 +26,21 @@ const BookList = () => {
         endPage: 1,
         action: 'all',
         keyword: '',
-        startDate: formattedDate,
-        endDate: formattedDate,
     });
+
+    const [tempKeyword, setTempKeyword] = useState('');
     
     const navigate = useNavigate();
-
+    // 인증 정보와 flask API URL 가져오기
+    const { apiFlask } = useContext(AuthContext);
     //토큰정보 가져오기(AuthProvider)
     const { role } = useContext(AuthContext);
-
-    //--------------------------------------------------
-    //데이터 포맷(한국)
-    const formatDate = (w) => {
-        const date = new Date(w);
-
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;  //월은 0부터 시작하므로 1더해야 함
-        const day = date.getDate();
-
-        return `${year}-${month}-${day}`;
-    };
-
-    // 날짜 포맷 함수 추가
-    const formatKoreanDate = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // 두 자리로 포맷
-        const day = String(date.getDate()).padStart(2, '0'); // 두 자리로 포맷
-        return `${year}년 ${month}월 ${day}일`;
-    };
-    const formattedToday = formatKoreanDate(today); // 오늘 날짜 포맷
 
     //등록하기 페이지로 이동 핸들러
     const handleWriteClick = () => {
         navigate('/book/write');
     };
 
-    //목록 페이지로 이동
-    // const handleListClick = () => {
-        
-    //     // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
-    //     setPagingInfo((prev) => ({
-    //         ...prev,
-    //         pageNumber: 1,
-    //         action: 'all', // 전체 검색으로 초기화
-    //         keyword: '',   // 검색어 초기화
-    //         startDate: formattedDate,
-    //         endDate: formattedDate,
-    //     }));
-    //     handleBookView(1, 'all'); // 전체 목록 로드
-        
-    // };
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrBookId) => {
@@ -92,14 +56,17 @@ const BookList = () => {
                 let response = await apiSpringBoot.get(`/book`, {
                     params: {
                         ...pagingInfo,
-                        pageNumber: pagingInfo.pageNumber,
-                        keyword: pagingInfo.keyword,
-                        startDate: pagingInfo.startDate + " 00:00:00",
-                        endDate: pagingInfo.endDate + " 00:00:00",
                     },
                 });
+
+                // books에 isPlaying 추가
+                const updateBooks = response.data.fileList.map((book)=>({
+                    ...book,
+                    isPlaying:false,// 초기 상태는 재생중 아님
+                }));
+
                 console.log("book",response.data.fileList.book);
-                setBooks(response.data.fileList);
+                setBooks(updateBooks);
                 //setFiles(response.data.fileList);
 
                 console.log("API Response:", response.data.list);
@@ -129,72 +96,173 @@ const BookList = () => {
         };
 
         loadBooks();
-    }, [pagingInfo.pageNumber, pagingInfo.action]);
+    }, [pagingInfo.pageNumber,pagingInfo.keyword]);
 
     const handlePageChange = async (page) => {
-        const pageNumber = page || 1; // page 값이 없을 경우 기본값으로 1 설정
+        //const pageNumber = page || 1; // page 값이 없을 경우 기본값으로 1 설정
         //console.log("Current Page:", currentPage);
         console.log("핸들인풋체인지");
         setPagingInfo((prev) => ({
             ...prev,
             pageNumber: page, // 선택된 페이지 번호로 업데이트
         }));
-
-        handleBookView(pageNumber, pagingInfo.action);
+        // handleBookView(pageNumber, pagingInfo.action);
     };
 
     //페이지 불러오기
-    const handleBookView = async (page, action) => {
-        const groupSize = 8; // 그룹 크기 정의
-        console.log("핸들 북 뷰");
-        try {
-            const params = {
-                ...pagingInfo,
-                pageNumber: page,
-                action: action,
-                keyword: pagingInfo.keyword,
-            };
+    // const handleBookView = async (page, action) => {
+    //     const groupSize = 8; // 그룹 크기 정의
+    //     console.log("핸들 북 뷰");
+    //     try {
+    //         const params = {
+    //             ...pagingInfo,
+    //             pageNumber: page,
+    //             action: action,
+    //             keyword: pagingInfo.keyword,
+    //         };
 
-            let response = await apiSpringBoot.get(`/book`, params);
+    //         let response = await apiSpringBoot.get(`/book`, params);
 
 
-            setBooks(response.data.list);
-            console.log("API Response:", response.data.list);
+    //         setBooks(response.data.list);
+    //         console.log("API Response:", response.data.list);
 
-            //페이지 계산
-            const { maxPage, startPage, endPage } = PagingDiv8Calculate(response.data.search.pageNumber,
-                response.data.search.listCount, response.data.search.pageSize, groupSize);
-            console.log("Paging Calculation:", { maxPage, startPage, endPage });
+    //         //페이지 계산
+    //         const { maxPage, startPage, endPage } = PagingDiv8Calculate(response.data.search.pageNumber,
+    //             response.data.search.listCount, response.data.search.pageSize, groupSize);
+    //         console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
-            setPagingInfo((prev) => ({
-                ...prev,
-                maxPage: maxPage,
-                startPage: startPage,
-                endPage: endPage,
-                startDate: formatDate(response.data.search.startDate),
-                endDate: formatDate(response.data.search.endDate),
-            }));
+    //         setPagingInfo((prev) => ({
+    //             ...prev,
+    //             maxPage: maxPage,
+    //             startPage: startPage,
+    //             endPage: endPage,
+    //         }));
 
-        } catch (error) {
-            console.log('handleBookView Error : {}', error);
-        }
-    };
+    //     } catch (error) {
+    //         console.log('handleBookView Error : {}', error);
+    //     }
+    // };
 
     //input 에 입력 시 paging훅에 저장
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
         console.log("핸들인풋체인지");
-        setPagingInfo((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setTempKeyword(e.target.value);
     };
 
     //검색 버튼 클릭
     const handleSearchClick = () => {
-        handleBookView(1, pagingInfo.action);
+        setPagingInfo((prev)=>({
+            ...prev,
+            pageNumber:1,
+            keyword:tempKeyword,
+
+        }));
         console.log("핸들서치클릭");
     };
+    
+    const handlePlayRecord = async (text,bookIndex) =>{
+        console.log(`playing text for book ${bookIndex}:${text}`);
+        alert("잠시만 기다려주세요.");
+
+        try{
+            // 2. TTS API 호출
+
+            const response = await apiFlask.post('/tts/pagereader', { text }, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            if (response.status===200){
+                // 3. 음성 재생
+                const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
+                const newAudio = new Audio(audioUrl);
+                newAudio.play();
+
+                // 특정 책의 isPlaying 상태를 true로 설정
+                setBooks((prevBooks) =>
+                    prevBooks.map((book, index) =>
+                        index === bookIndex ? { ...book, isPlaying: true } : book
+                    )
+                );
+
+                // 재생이 끝나면 상태 초기화
+                newAudio.onended = () => {
+                    setBooks((prevBooks) =>
+                        prevBooks.map((book, index) =>
+                            index === bookIndex ? { ...book, isPlaying: false } : book
+                        )
+                    );
+                    setPlayAudio(null);
+                };
+                setPlayAudio(newAudio);
+
+                // // 정지 버튼을 누르거나 오디오가 끝나면 상태 초기화
+                // newAudio.onended = () => {
+                //     setPlaybutton(true);
+                //     setPlayAudio(null);
+                // };
+            } else {
+                console.log("음성변환에 실패하였습니다. 다시 시도해주세요.");
+                alert("음성변환에 실패하였습니다. 다시 시도해주세요.");
+            }
+        } catch(error){
+            console.error("TTS 요청중 오류 : ", error);
+            alert("음성변환에 실패하였습니다. 다시 시도해주세요.")
+        }
+    };
+
+    const handleStopRecord = (bookIndex) => {
+        if (playAudio) {
+            playAudio.pause();
+            playAudio.currentTime=0;
+            // 특정 책의 isPlaying 상태를 false로 설정
+            setBooks((prevBooks) =>
+                prevBooks.map((book, index) =>
+                    index === bookIndex ? { ...book, isPlaying: false } : book
+                )
+            );
+
+            setPlayAudio(null);
+        }
+    };
+
+    // 페이지 이동 시 TTS 중지
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            // if (audio) {
+            //     audio.pause();
+            //     audio.currentTime = 0; // 오디오 재생 초기화
+            // }
+        };
+
+        // 이벤트 리스너 등록
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        // 페이지 이동 시 URL 변경 감지
+        const originalPushState = window.history.pushState;
+        const originalReplaceState = window.history.replaceState;
+
+        window.history.pushState = function (...args) {
+            handleBeforeUnload();
+            originalPushState.apply(window.history, args);
+        };
+
+        window.history.replaceState = function (...args) {
+            handleBeforeUnload();
+            originalReplaceState.apply(window.history, args);
+        };
+
+        return () => {
+            // 이벤트 리스너 제거
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.history.pushState = originalPushState;
+            window.history.replaceState = originalReplaceState;
+        };
+    }, [playAudio]);
+
 
     const renderSearchInputs = () => {
         //Enter 누르면 검색 버튼 클릭됨
@@ -206,7 +274,6 @@ const BookList = () => {
         return (
             <input
                 type="search"
-                name="keyword"
                 placeholder="검색어를 입력하세요."
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
@@ -216,6 +283,12 @@ const BookList = () => {
         
     };
 
+    // if (!audio) {
+    //     // 데이터가 없을 경우 로딩 상태나 다른 처리를 할 수 있도록 추가
+    //     return <div>Loading...</div>;
+    // };
+
+    console.log(tempKeyword);
     //--------------------------------------------------
     if (role === "SENIOR") {
         return (
@@ -225,26 +298,38 @@ const BookList = () => {
                 <section className={styles.snrBkSection}>
                     <div className={styles.snrBkLeft}>
                         <div className={styles.snrBkLTop}>
-                            <p>{formattedToday}</p>
-                            <h1>오늘의<br />어르신 프로그램</h1>
+                            <h1>전자책</h1>
                         </div>{/* snrBkLTop end */}
                     </div>{/* snrBkLeft end */}
 
                     <div className={styles.snrBkRight}>
-                        <div className={[styles.snrBkList, 'masked-overflow'].join(' ')}
-                            style={{ height: '90%' }}>
-                            {(books || []).map((book) => {
+                        <div className={styles.bkSearchWrap}>
+                            {renderSearchInputs()}
 
-                                return (
-                                    <div className={styles.snrBkListItem} key={book.bookNum}>
-                                        <a onClick={() => handleMoveDetailView(book.bookNum)}>
-                                            <h1>{book.bookTitle}</h1>
-                                            <span>내용이 궁금하면 클릭해보세요!</span>
-                                        </a>
-                                    </div>
-                                );
-                            })}
-
+                            <button type="button" onClick={handleSearchClick} className={styles.searchButton}>검색</button>
+                        </div>{/* bkSearchWrap end */}
+                        <div className={styles.snrBkList}>
+                                <ul className={styles.pgBookList}>
+                                    {(books || []).map((book,index) => (
+                                            <li className={styles.pgBookItem} key={book.book.bookNum}>
+                                                <div>
+                                                    <div>
+                                                        <img src={`data:${book.mimeType};base64,${book.fileContent}`} className={styles.pgBookImage}/>
+                                                    </div>
+                                                    <div className={styles.pgBookTextWrap}>
+                                                        <div className={styles.pgBookTitleWrap}>{book.book.bookTitle}</div>
+                                                    </div>
+                                                    <div>
+                                                        {book.isPlaying ?(
+                                                        <button className={styles.pgBookbuttonStop} onClick={() => handleStopRecord(index)}>정지</button>
+                                                        ):(
+                                                        <button className={styles.pgBookbutton} onClick={() => handlePlayRecord(book.textContexnt,index)}>재생</button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                    ))}
+                                </ul>
                             <button type="button" className={styles.bkListBtn} onClick={()=>(window.location.href ="/book")}>목록</button>
 
                             <PagingDiv8
@@ -319,7 +404,6 @@ const BookList = () => {
 
                     <PagingDiv8
                         pageNumber={pagingInfo.pageNumber || 1}
-                        pageSize={pagingInfo.pageSize}
                         maxPage={pagingInfo.maxPage || 1}
                         startPage={pagingInfo.startPage || 1}
                         endPage={pagingInfo.endPage || 1}
