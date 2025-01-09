@@ -21,7 +21,7 @@ const SearchSenior = ({ onSelectMultiple }) => {
     action: '',
     listCount: 1,
     maxPage: 1,
-    pageSize: 10,
+    pageSize: 7,
     startPage: 1,
     endPage: 1,
     keyword: '',
@@ -36,6 +36,7 @@ const SearchSenior = ({ onSelectMultiple }) => {
   const [isSearch, setIsSearch] = useState(false);
 
   const [selectedRows, setSelectedRows] = useState([]); // 선택된 데이터 관리
+  const [relationships, setRelationships] = useState({}); // 관계 데이터 관리
 
   // 어르신 선택 함수
   const toggleRowSelection = (senior, isDisabled) => {
@@ -51,6 +52,14 @@ const SearchSenior = ({ onSelectMultiple }) => {
         return [...prevSelected, senior];
       }
     });
+  };
+
+  // 관계 설정 핸들러
+  const handleRelationshipChange = (memUUID, relationship) => {
+    setRelationships((prev) => ({
+      ...prev,
+      [memUUID]: relationship, // 어르신 ID를 키로, 관계를 값으로 저장
+    }));
   };
 
   // 페이지 랜더링 시 출력할 리스트
@@ -148,7 +157,7 @@ const SearchSenior = ({ onSelectMultiple }) => {
         {/* 검색 창 레이어 */}
         <div className={styles.sSearchDiv}>
           <input
-            placeholder="검색어를 입력하세요."
+            placeholder="이름으로 검색해주세요."
             onChange={handleChangeKeyword}
             value={tempKeyword}
           />
@@ -164,19 +173,27 @@ const SearchSenior = ({ onSelectMultiple }) => {
             <table className={styles.sSearchTable}>
               <thead>
                 <tr>
-                  <th>
+                  <th className={styles.select}></th>
+                  <th className={styles.name}>이름</th>
+                  <th className={styles.gender}>성별</th>
+                  <th className={styles.birthdate}>생년월일(나이)</th>
+                  <th className={styles.famid}>가족계정</th>
+                  <th className={styles.approval}>계정승인여부</th>
+                  <th className={styles.relationship}>
                     <button
-                      onClick={() => onSelectMultiple(selectedRows)}
+                      onClick={() =>
+                        onSelectMultiple(
+                          selectedRows.map((senior) => ({
+                            ...senior,
+                            relationship: relationships[senior.memUUID] || '', // 관계 설정 정보 추가
+                          }))
+                        )
+                      }
                       className={styles.sSearchSelect}
                     >
                       선택완료
                     </button>
                   </th>
-                  <th>이름</th>
-                  <th>성별</th>
-                  <th>생년월일(나이)</th>
-                  <th>가족계정</th>
-                  <th>계정승인여부</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,7 +218,7 @@ const SearchSenior = ({ onSelectMultiple }) => {
                         opacity: isDisabled ? 0.5 : 1, // 비활성화된 항목 흐리게
                       }}
                     >
-                      <td>
+                      <td className={styles.select}>
                         <input
                           type="checkbox"
                           checked={selectedRows.some(
@@ -210,14 +227,44 @@ const SearchSenior = ({ onSelectMultiple }) => {
                           readOnly
                         />
                       </td>
-                      <td>{senior.memName}</td>
-                      <td>{parseResidentNumber(senior.memRnn).gender}</td>
-                      <td>
+                      <td className={styles.name}>{senior.memName}</td>
+                      <td className={styles.gender}>
+                        {parseResidentNumber(senior.memRnn).gender}
+                      </td>
+                      <td className={styles.birthdate}>
                         {parseResidentNumber(senior.memRnn).birthDate}&nbsp;
                         <br />({calculateAge(senior.memRnn)}세)
                       </td>
-                      <td>{family?.memId || '없음'}</td>
-                      <td>{senior?.memFamilyApproval || ''}</td>
+                      <td className={styles.famid}>
+                        {family?.memId || '없음'}
+                      </td>
+                      <td className={styles.approval}>
+                        {senior?.memFamilyApproval || ''}
+                      </td>
+                      <td className={styles.relationship}>
+                        <select
+                          onClick={(e) => e.stopPropagation()} // 이벤트 전파 중지
+                          onChange={(e) =>
+                            handleRelationshipChange(
+                              senior.memUUID,
+                              e.target.value
+                            )
+                          }
+                          value={relationships[senior.memUUID] || ''}
+                          disabled={
+                            !selectedRows.some(
+                              (item) => item.memUUID === senior.memUUID
+                            )
+                          }
+                        >
+                          <option value="">관계 선택</option>
+                          <option value="자녀">자녀</option>
+                          <option value="형제자매">형제자매</option>
+                          <option value="배우자">배우자</option>
+                          <option value="며느리">며느리</option>
+                          <option value="사위">사위</option>
+                        </select>
+                      </td>
                     </tr>
                   );
                 })}
@@ -225,7 +272,7 @@ const SearchSenior = ({ onSelectMultiple }) => {
             </table>
             <div className={styles.sSearchPaging}>
               <Paging
-                currentPage={pagingInfo.currentPage}
+                pageNumber={pagingInfo.pageNumber}
                 maxPage={pagingInfo.maxPage}
                 startPage={pagingInfo.startPage}
                 endPage={pagingInfo.endPage}

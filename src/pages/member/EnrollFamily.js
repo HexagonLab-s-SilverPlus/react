@@ -6,7 +6,7 @@ import styles from './Enroll.module.css';
 import Modal from '../../components/common/Modal';
 import SearchSenior from './SearchSenior';
 
-function EnrollFamily({ memType }) {
+function EnrollFamily() {
   // Modal 관리 상태변수
   const [showModal, setShowModal] = useState(false);
   const [selectSeniorData, SetSelectSeniorData] = useState([]);
@@ -21,7 +21,7 @@ function EnrollFamily({ memType }) {
     memCellphoneCheck: '', // 인증번호
     // memPhone: '',       // 일반전화
     // memGovCode: '', // 관공서 코드
-    memType: memType, // 회원타입
+    memType: 'FAMILY', // 회원타입
     memPwChk: '',
   });
 
@@ -170,10 +170,10 @@ function EnrollFamily({ memType }) {
     }
 
     // 전송 전에 유효성 검사 확인
-    if (!validate()) {
-      alert('비밀번호 일치 확인을 해주세요.');
-      return;
-    }
+    // if (!validate()) {
+    //   alert('비밀번호 일치 확인을 해주세요.');
+    //   return;
+    // }
 
     if (!validateCellphone()) {
       alert('휴대전화 인증을 해주세요.');
@@ -191,6 +191,16 @@ function EnrollFamily({ memType }) {
     data.append('memType', formData.memType);
     data.append('memStatus', 'ACTIVE');
 
+    const seniorRelationshipData = selectSeniorData.map((senior) => ({
+      memUUID: senior.memUUID,
+      relationship: senior.relationship || '',
+    }));
+
+    data.append(
+      'seniorRelationshipData',
+      JSON.stringify(seniorRelationshipData)
+    );
+
     // 선택된 파일 추가
     selectedFiles.forEach((file) => {
       data.append('memFiles', file); // 파일 배열로 전송
@@ -204,7 +214,6 @@ function EnrollFamily({ memType }) {
       });
       alert('가입 성공');
       console.log('memType', memType);
-      onEnrollSuccess();
     } catch (error) {
       console.error('가입 실패');
       console.log(formData);
@@ -522,7 +531,9 @@ function EnrollFamily({ memType }) {
               {selectSeniorData.length > 0 && (
                 <ul>
                   {selectSeniorData.map((senior) => (
-                    <li key={senior.memUUID}>{senior.memName}</li>
+                    <li key={senior.memUUID}>
+                      {senior.memName} - {senior.relationship || '관계 미설정'}
+                    </li>
                   ))}
                 </ul>
               )}
