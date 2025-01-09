@@ -1,4 +1,13 @@
 /* src/pages/managemnet/SeniorDetailView.module.css */
+.snrDetailViewWrap {
+  display: flex;
+}
+.snrDetailViewRight {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
 .sdetailMainContainer {
   display: flex;

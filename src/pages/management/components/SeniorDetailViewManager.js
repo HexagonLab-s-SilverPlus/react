@@ -360,328 +360,328 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
   }
 
   return (
-    <div className={styles.sdetailMainContainer}>
-      <SideBar />
-      <div className={styles.sdetailSubContainer}>
-        <div className={styles.sdetailHeader}>
-          <p>어르신 관리</p>
-        </div>
-        <div className={styles.sdetailSubHeader}>
-          <p>인적 사항</p>
-        </div>
-        {/* 어르신 인적사항(수정가능) 레이어 시작 */}
-        <div className={styles.sdetailDiv}>
-          <form
-            encType="multipart/form-data"
-            onSubmit={handleSubmit}
-            className={styles.sdetailForm}
-          >
-            <div className={styles.sdetailTableDiv}>
-              <div className={styles.sdetailProfilephoto}>
-                {profile ? (
-                  <img
-                    src={profile}
-                    className={styles.sdetailProfile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('profile').click();
-                    }}
-                  />
-                ) : (
-                  <img
-                    src={`data:${fData.mimeType};base64,${fData.fileContent}`}
-                    className={styles.sdetailProfile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('profile').click();
-                    }}
-                  />
-                )}
-
-                <input
-                  type="file"
-                  name="profile"
-                  id="profile"
-                  onChange={handleFileChange}
-                ></input>
-                <button
+    // <div className={styles.sdetailMainContainer}>
+    <div className={styles.sdetailSubContainer}>
+      <div className={styles.sdetailHeader}>
+        <p>어르신 관리</p>
+      </div>
+      <div className={styles.sdetailSubHeader}>
+        <p>인적 사항</p>
+      </div>
+      {/* 어르신 인적사항(수정가능) 레이어 시작 */}
+      <div className={styles.sdetailDiv}>
+        <form
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
+          className={styles.sdetailForm}
+        >
+          <div className={styles.sdetailTableDiv}>
+            <div className={styles.sdetailProfilephoto}>
+              {profile ? (
+                <img
+                  src={profile}
+                  className={styles.sdetailProfile}
                   onClick={(e) => {
                     e.preventDefault();
                     document.getElementById('profile').click();
                   }}
-                >
-                  프로필 사진
-                </button>
-                <button
-                  style={{
-                    marginLeft: '5px',
-                    color: 'red',
-                    border: 0,
+                />
+              ) : (
+                <img
+                  src={`data:${fData.mimeType};base64,${fData.fileContent}`}
+                  className={styles.sdetailProfile}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('profile').click();
                   }}
-                  onClick={handleFileDelete}
-                >
-                  X
-                </button>
-              </div>
+                />
+              )}
 
-              <table className={styles.sdetailTable}>
-                <tr>
-                  <th>이 름</th>
+              <input
+                type="file"
+                name="profile"
+                id="profile"
+                onChange={handleFileChange}
+              ></input>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('profile').click();
+                }}
+              >
+                프로필 사진
+              </button>
+              <button
+                style={{
+                  marginLeft: '5px',
+                  color: 'red',
+                  border: 0,
+                }}
+                onClick={handleFileDelete}
+              >
+                X
+              </button>
+            </div>
+
+            <table className={styles.sdetailTable}>
+              <tr>
+                <th>이 름</th>
+                <td>
+                  <input
+                    name="memName"
+                    value={seniorFormData.memName}
+                    onChange={handleInfoChange}
+                  />
+                </td>
+                <th style={{ fontSize: '17px', textAlign: 'center' }}>
+                  주민등록번호
+                </th>
+                <td>
+                  <input
+                    name="memRnn"
+                    value={seniorFormData.memRnn}
+                    onChange={handleInfoChange}
+                  />
+                </td>
+                <th>나 이</th>
+                <div className={styles.sdetailTableAgeDiv}>
                   <td>
                     <input
-                      name="memName"
-                      value={seniorFormData.memName}
-                      onChange={handleInfoChange}
+                      style={{ width: '124px' }}
+                      value={`${age}세`}
+                      readOnly
                     />
                   </td>
-                  <th style={{ fontSize: '17px', textAlign: 'center' }}>
-                    주민등록번호
-                  </th>
-                  <td>
-                    <input
-                      name="memRnn"
-                      value={seniorFormData.memRnn}
-                      onChange={handleInfoChange}
-                    />
-                  </td>
-                  <th>나 이</th>
-                  <div className={styles.sdetailTableAgeDiv}>
-                    <td>
-                      <input
-                        style={{ width: '100px' }}
-                        value={`${age}세`}
-                        readOnly
-                      />
-                    </td>
-                  </div>
-                </tr>
-                <tr>
-                  <th>성 별</th>
-                  <td>
-                    {seniorFormData.memRnn === '' ? (
-                      <input />
-                    ) : seniorFormData.memRnn.length > 13 ? (
-                      <input
-                        value={
-                          seniorFormData.memRnn.split('-')[1][0] === '1' ||
-                          seniorFormData.memRnn.split('-')[1][0] === '3'
-                            ? '남성'
-                            : '여성'
-                        }
-                        readOnly
-                      />
-                    ) : (
-                      <input />
-                    )}
-                  </td>
-                  <div className={styles.sdetailEmailDiv}>
-                    <th>이 메 일</th>
-                    <td>
-                      <input
-                        name="emailId"
-                        style={{ width: '160px' }}
-                        value={emailId}
-                        onChange={handleEmailIdChange}
-                      />
-                      <span style={{ margin: '0 10px' }}>@</span>
-
-                      <input
-                        name="domain"
-                        style={{ width: '160px', margin: 0 }}
-                        value={domain}
-                        onChange={handleEmailDomainChange}
-                      />
-
-                      <select
-                        name="domainOption"
-                        onChange={handleEmailDomainChange}
-                      >
-                        <option value="">직접입력</option>
-                        <option value="naver.com">네이버</option>
-                        <option value="google.com">구글</option>
-                        <option value="hanmail.net">한메일</option>
-                        <option value="nate.com">네이트</option>
-                      </select>
-                    </td>
-                  </div>
-                </tr>
-                <tr>
-                  <th>연 락 처</th>
-                  <td>
+                </div>
+              </tr>
+              <tr>
+                <th>성 별</th>
+                <td>
+                  {seniorFormData.memRnn === '' ? (
+                    <input />
+                  ) : seniorFormData.memRnn.length > 13 ? (
                     <input
                       value={
-                        seniorFormData.memCellphone &&
-                        /^\d{11}$/.test(seniorFormData.memCellphone)
-                          ? seniorFormData.memCellphone.replace(
-                              /(\d{3})(\d{4})(\d{4})/,
-                              '$1-$2-$3'
-                            )
-                          : seniorFormData.memCellphone || ''
+                        seniorFormData.memRnn.split('-')[1][0] === '1' ||
+                          seniorFormData.memRnn.split('-')[1][0] === '3'
+                          ? '남성'
+                          : '여성'
                       }
-                      onChange={handleInfoChange}
-                      name="memCellphone"
-                      placeholder=" - 없이 숫자만 입력"
-                      maxLength={11}
+                      readOnly
+                    />
+                  ) : (
+                    <input />
+                  )}
+                </td>
+                <div className={styles.sdetailEmailDiv}>
+                  <th>이 메 일</th>
+                  <td>
+                    <input
+                      name="emailId"
+                      style={{ width: '160px' }}
+                      value={emailId}
+                      onChange={handleEmailIdChange}
+                    />
+                    <span style={{ margin: '0 10px' }}>@</span>
+
+                    <input
+                      name="domain"
+                      style={{ width: '160px', margin: 0 }}
+                      value={domain}
+                      onChange={handleEmailDomainChange}
+                    />
+
+                    <select
+                      name="domainOption"
+                      onChange={handleEmailDomainChange}
+                    >
+                      <option value="">직접입력</option>
+                      <option value="naver.com">네이버</option>
+                      <option value="google.com">구글</option>
+                      <option value="hanmail.net">한메일</option>
+                      <option value="nate.com">네이트</option>
+                    </select>
+                  </td>
+                </div>
+              </tr>
+              <tr>
+                <th>연 락 처</th>
+                <td>
+                  <input
+                    value={
+                      seniorFormData.memCellphone &&
+                        /^\d{11}$/.test(seniorFormData.memCellphone)
+                        ? seniorFormData.memCellphone.replace(
+                          /(\d{3})(\d{4})(\d{4})/,
+                          '$1-$2-$3'
+                        )
+                        : seniorFormData.memCellphone || ''
+                    }
+                    onChange={handleInfoChange}
+                    name="memCellphone"
+                    placeholder=" - 없이 숫자만 입력"
+                    maxLength={11}
+                  />
+                </td>
+                <th style={{ fontSize: '17px', textAlign: 'center' }}>
+                  자택전화번호
+                </th>
+                <td>
+                  <input
+                    value={seniorFormData.memPhone}
+                    name="memPhone"
+                    style={{ width: '524px' }}
+                    onChange={handleInfoChange}
+                    type="tel"
+                    placeholder=" - 없이 숫자만 입력"
+                    maxLength={11}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>주 소</th>
+                <td>
+                  <input
+                    name="memAddress"
+                    value={seniorFormData.memAddress}
+                    onChange={handleInfoChange}
+                    style={{ width: '924px' }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>기 관</th>
+                <td>
+                  <input readOnly />
+                </td>
+                <th>기 관 코 드</th>
+                <td>
+                  <input value={seniorFormData.memGovCode} readOnly />
+                </td>
+                <th>담 당 자</th>
+                <div className={styles.sdetailTableAgeDiv}>
+                  <td>
+                    <input
+                      style={{ width: '120px' }}
+                      value={manager.memName}
+                      readOnly
+                    />
+                  </td>
+                </div>
+              </tr>
+              <tr style={{ height: '40px' }}>
+                <div className={styles.sdetailIdPwd}>
+                  <th>아 이 디</th>
+                  <td>
+                    <input
+                      name="memId"
+                      value={seniorFormData.memId}
+                      readOnly
+                      style={{
+                        backgroundColor: '#ddd',
+                        border: '3px solid #ddd',
+                      }}
+                    />
+                  </td>
+                  <th>비 밀 번 호</th>
+                  <td>
+                    <input
+                      type="password"
+                      name="memPwd"
+                      // value={pwd.memPwd}
+                      onChange={(e) => {
+                        handlePwdChange(e);
+                        handleCheckPassword();
+                      }}
                     />
                   </td>
                   <th style={{ fontSize: '17px', textAlign: 'center' }}>
-                    자택전화번호
+                    비밀번호확인
                   </th>
                   <td>
                     <input
-                      value={seniorFormData.memPhone}
-                      name="memPhone"
-                      style={{ width: '500px' }}
-                      onChange={handleInfoChange}
-                      type="tel"
-                      placeholder=" - 없이 숫자만 입력"
-                      maxLength={11}
+                      type="password"
+                      name="memPwdChk"
+                      // value={pwd.memPwdChk}
+                      onChange={handlePwdChange}
+                      style={{ width: '224px' }}
                     />
                   </td>
-                </tr>
-                <tr>
-                  <th>주 소</th>
+                </div>
+              </tr>
+              <tr>
+                <div className={styles.sdetailIdPwdChk}>
+                  <th></th>
+                  <td></td>
+                  <th></th>
                   <td>
-                    <input
-                      name="memAddress"
-                      value={seniorFormData.memAddress}
-                      onChange={handleInfoChange}
-                      style={{ width: '900px' }}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>기 관</th>
-                  <td>
-                    <input readOnly />
-                  </td>
-                  <th>기 관 코 드</th>
-                  <td>
-                    <input value={seniorFormData.memGovCode} readOnly />
-                  </td>
-                  <th>담 당 자</th>
-                  <div className={styles.sdetailTableAgeDiv}>
-                    <td>
+                    {!passwordValidate ? (
                       <input
-                        style={{ width: '100px' }}
-                        value={manager.memName}
-                        readOnly
-                      />
-                    </td>
-                  </div>
-                </tr>
-                <tr style={{ height: '40px' }}>
-                  <div className={styles.sdetailIdPwd}>
-                    <th>아 이 디</th>
-                    <td>
-                      <input
-                        name="memId"
-                        value={seniorFormData.memId}
-                        readOnly
+                        disabled
+                        value="영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요."
                         style={{
-                          backgroundColor: '#ddd',
-                          border: '3px solid #ddd',
+                          textAlign: 'left',
+                          fontSize: '9px',
+                          color: 'red',
+                          height: '20px',
+                          width: '250px',
                         }}
                       />
-                    </td>
-                    <th>비 밀 번 호</th>
-                    <td>
+                    ) : (
                       <input
-                        type="password"
-                        name="memPwd"
-                        // value={pwd.memPwd}
-                        onChange={(e) => {
-                          handlePwdChange(e);
-                          handleCheckPassword();
+                        style={{
+                          textAlign: 'left',
+                          fontSize: '9px',
+                          color: 'green',
+                          height: '20px',
+                          width: '250px',
+                        }}
+                        disabled
+                        value="사용가능한 비밀번호입니다."
+                      />
+                    )}
+                  </td>
+                  <th></th>
+                  <td>
+                    {seniorFormData.memPwChk === '' ? (
+                      <input value="" disabled />
+                    ) : (
+                      <input
+                        disabled
+                        value={passwordCheckMsg}
+                        style={{
+                          color: messagePwdColor,
+                          width: '250px',
+                          fontSize: '9px',
                         }}
                       />
-                    </td>
-                    <th style={{ fontSize: '17px', textAlign: 'center' }}>
-                      비밀번호확인
-                    </th>
-                    <td>
-                      <input
-                        type="password"
-                        name="memPwdChk"
-                        // value={pwd.memPwdChk}
-                        onChange={handlePwdChange}
-                      />
-                    </td>
-                  </div>
-                </tr>
-                <tr>
-                  <div className={styles.sdetailIdPwdChk}>
-                    <th></th>
-                    <td></td>
-                    <th></th>
-                    <td>
-                      {!passwordValidate ? (
-                        <input
-                          disabled
-                          value="영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요."
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '9px',
-                            color: 'red',
-                            height: '20px',
-                            width: '250px',
-                          }}
-                        />
-                      ) : (
-                        <input
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '9px',
-                            color: 'green',
-                            height: '20px',
-                            width: '250px',
-                          }}
-                          disabled
-                          value="사용가능한 비밀번호입니다."
-                        />
-                      )}
-                    </td>
-                    <th></th>
-                    <td>
-                      {seniorFormData.memPwChk === '' ? (
-                        <input value="" disabled />
-                      ) : (
-                        <input
-                          disabled
-                          value={passwordCheckMsg}
-                          style={{
-                            color: messagePwdColor,
-                            width: '250px',
-                            fontSize: '9px',
-                          }}
-                        />
-                      )}
-                    </td>
-                  </div>
-                </tr>
-              </table>
+                    )}
+                  </td>
+                </div>
+              </tr>
+            </table>
+          </div>
+          <div className={styles.sdetailButtonDiv}>
+            <div>
+              <input
+                type="reset"
+                value="초 기 화"
+                className={styles.sdetailButton2}
+                onClick={() => seniorFormData(initialData)}
+              />
+              <input
+                type="submit"
+                value="수 정"
+                className={styles.sdetailButton1}
+                style={{ margin: '0' }}
+              />
             </div>
-            <div className={styles.sdetailButtonDiv}>
-              <div>
-                <input
-                  type="reset"
-                  value="초 기 화"
-                  className={styles.sdetailButton2}
-                  onClick={() => seniorFormData(initialData)}
-                />
-                <input
-                  type="submit"
-                  value="수 정"
-                  className={styles.sdetailButton1}
-                  style={{ margin: '0' }}
-                />
-              </div>
-            </div>
-          </form>
-        </div>
-        {/* 어르신 인적사항(수정가능) 레이어 끝 */}
+          </div>
+        </form>
       </div>
+      {/* 어르신 인적사항(수정가능) 레이어 끝 */}
     </div>
+    // </div>
   );
 };
 

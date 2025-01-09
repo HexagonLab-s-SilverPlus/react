@@ -17,7 +17,7 @@ import google from '../../assets/images/icon/Google Icon.png';
 const LoginMember = () => {
   const [memId, setMemId] = useState('');
   const [memPw, setMemPw] = useState('');
-  const { login, isLoggedIn } = useContext(AuthContext);
+  const { login, isLoggedIn, member } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -59,7 +59,8 @@ const LoginMember = () => {
           withCredentials: true,
         }
       );
-      console.log(response.data);
+      // console.log('이거머지: ', response);
+
       console.log('엑세스토큰확인 : ', response.headers['authorization']);
       const authorizationHeader = response.headers['authorization'];
       console.log('authorizationHeader ', authorizationHeader);
@@ -71,9 +72,8 @@ const LoginMember = () => {
 
         login({ accessToken, refreshToken });
         alert('로그인 성공');
-        navigate('/');
-      }
 
+      }
       // if (response.data.errorCode === '')
     } catch (error) {
       console.error('Login Failed : ', error);
@@ -90,6 +90,17 @@ const LoginMember = () => {
     e.preventDefault();
     navigate('/loginsenior');
   };
+
+
+  // 멤버 타입에 따른 리다이렉트 처리
+  useEffect(() => {
+    if (!member || !member.memType) return;
+
+    if (member.memType === 'SENIOR') navigate('/senior-menu');
+    else if (member.memType === 'MANAGER') navigate('/dashlist');
+    else if (member.memType === 'FAMILY') navigate('/seniorlist');
+    else if (member.memType === 'ADMIN') navigate('/mlistview');
+  }, [member, navigate]);
 
   return (
     <>

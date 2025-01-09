@@ -10,6 +10,10 @@ import loading from '../../assets/images/loading.gif';
 import { apiSpringBoot } from '../../utils/axios';
 import { convertUTCToKST } from '../../fuction/function';
 
+//병력관리
+import Medical from './components/Medical';
+import SideBar from '../../components/common/SideBar';
+
 const SeniorDetailView = () => {
   const { UUID } = useParams();
   const { role } = useContext(AuthContext);
@@ -37,6 +41,8 @@ const SeniorDetailView = () => {
       }
     };
 
+
+
     SeniorDetail();
   }, [UUID]);
 
@@ -50,9 +56,10 @@ const SeniorDetailView = () => {
   }
 
   return (
-    <>
+    <div className={styles.snrDetailViewWrap}>
+      <SideBar />
       {role === 'MANAGER' ? (
-        <>
+        <div className={styles.snrDetailViewRight}>
           <SeniorDetailViewManager
             UUID={UUID}
             senior={senior}
@@ -60,11 +67,15 @@ const SeniorDetailView = () => {
             profileData={profileData}
           />
           <SeniorDetailViewFamilyApproval UUID={UUID} family={family} />
-        </>
+          <Medical UUID={UUID} />
+        </div>
       ) : (
-        <SeniorDetailViewFamily UUID={UUID} />
+        <div className={styles.snrDetailViewRight}>
+          <SeniorDetailViewFamily UUID={UUID} />
+          <Medical UUID={UUID} />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

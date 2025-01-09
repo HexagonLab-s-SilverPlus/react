@@ -13,39 +13,32 @@
 }
 
 .sdvfaMainContainer {
-  display: flex;
+  width: 100%;
 }
 
 .sdvfaSubContainer {
-  width: calc(100% - 358px);
-  position: absolute;
-  top: 900px;
-  right: 0;
+  width: 100%;
   box-sizing: border-box;
-  padding: 72px 48px;
+  padding: 0px 48px 72px;
 }
 
 .sdvfaHeader > p {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
-  border-bottom: 1px solid #064420;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   padding-left: 24px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .sdvfaTableDiv {
-  width: calc(95%);
-  margin-top: 20px;
-  margin-left: 40px;
+  width: 100%;
 }
 
 .sdvfaTable {
   table-layout: fixed;
   width: 100%;
   text-align: center;
-  margin-top: 40px;
   font-size: 18px;
   border-collapse: collapse;
 }
@@ -55,17 +48,27 @@
 }
 
 .sdvfaTable > thead > tr > th {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  /* padding-top: 8px; */
+  /* padding-bottom: 8px; */
   font-weight: bold;
-  border-bottom: 2px solid #999999;
+  border-bottom: 2px solid #064420;
+  border-top: 2px solid #064420;
+  background: #FDFAF6;
+  border-left: 1px solid #ddd;
+  height: 46px;
+  box-sizing: border-box;
 }
+
+.sdvfaTable > thead > tr > th:nth-child(1) {border-left: 0;}
 
 .sdvfaTable > tbody > tr > td {
   padding-top: 8px;
   padding-bottom: 8px;
   border-bottom: 2px solid #999999;
+  border-left: 1px solid #ddd;
 }
+
+.sdvfaTable > tbody > tr > td:nth-child(1) {border-left: 0;}
 
 .sdvfaTable > tbody > tr > td > button {
   margin: 0 10px;

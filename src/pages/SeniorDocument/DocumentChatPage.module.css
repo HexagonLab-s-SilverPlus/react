@@ -447,10 +447,16 @@
 
 
 
-
 .lottie-player {
-  display: block; /* 플렉스 대신 블록으로 설정 */
-  margin: auto; /* 가운데 정렬 */
-  width: 100px;
-  height: 100px;
+  margin: auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

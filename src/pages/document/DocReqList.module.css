@@ -56,7 +56,7 @@
 }
 
 /* 테이블 헤더 스타일 */
-.dTable th, .dTd {
+.dTable th, .dTable .dTd {
     border: 1px solid #618264;
     border-left: none;
     border-right: none;

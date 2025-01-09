@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './SeniorDetailViewManager.module.css';
-import SideBar from '../../../components/common/SideBar';
 import { AuthContext } from '../../../AuthProvider';
 import { apiSpringBoot } from '../../../utils/axios';
 import loading from '../../../assets/images/loading.gif';
@@ -153,7 +152,6 @@ const SeniorDetailViewFamily = ({ UUID }) => {
 
   return (
     <div className={styles.sdetailMainContainer}>
-      <SideBar />
       <div className={styles.sdetailSubContainer}>
         <div className={styles.sdetailHeader}>
           <p>어르신 관리</p>
@@ -212,7 +210,7 @@ const SeniorDetailViewFamily = ({ UUID }) => {
                       <input
                         value={
                           seniorFormData.memRnn.split('-')[1][0] === '1' ||
-                          seniorFormData.memRnn.split('-')[1][0] === '3'
+                            seniorFormData.memRnn.split('-')[1][0] === '3'
                             ? '남성'
                             : '여성'
                         }
@@ -248,11 +246,11 @@ const SeniorDetailViewFamily = ({ UUID }) => {
                     <input
                       value={
                         seniorFormData.memCellphone &&
-                        /^\d{11}$/.test(seniorFormData.memCellphone)
+                          /^\d{11}$/.test(seniorFormData.memCellphone)
                           ? seniorFormData.memCellphone.replace(
-                              /(\d{3})(\d{4})(\d{4})/,
-                              '$1-$2-$3'
-                            )
+                            /(\d{3})(\d{4})(\d{4})/,
+                            '$1-$2-$3'
+                          )
                           : seniorFormData.memCellphone || ''
                       }
                       disabled
