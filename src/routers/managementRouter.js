@@ -8,8 +8,8 @@ import SeniorRegist from '../pages/management/SeniorRegist';
 const managementRouter = [
   <>
     <Route path="/seniorlist" element={<SeniorList />} />
-    <Route path="/sdetailview/:UUID" element={<SeniorDetailView />} />
-    <Route path="/seniorregist" element={<SeniorRegist />} />
+    <Route path="/seniorlist/sdetailview/:UUID" element={<SeniorDetailView />} />
+    <Route path="/seniorlist/seniorregist" element={<SeniorRegist />} />
   </>,
 ];
 

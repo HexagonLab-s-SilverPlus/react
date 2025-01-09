@@ -306,7 +306,7 @@ const Medical = ({ UUID }) => {
         return (
             <div className={styles.medicalWrap}>
                 <div className={styles.mediTop}>
-                    <h1>병력관리</h1>
+                    <h1>병력 관리</h1>
                     <div className={styles.mediPrivacy}>
                         <span>가족 공개</span>
                         <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
@@ -410,7 +410,7 @@ const Medical = ({ UUID }) => {
             return (
                 <div className={styles.medicalWrap}>
                     <div className={styles.mediTop}>
-                        <h1>병력관리</h1>
+                        <h1>병력 관리</h1>
                         <div className={styles.mediPrivacy} style={{ display: 'none' }}>
                             <span>가족 공개</span>
                             <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
