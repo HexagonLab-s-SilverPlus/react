@@ -9,7 +9,7 @@ import SearchSenior from './SearchSenior';
 function EnrollFamily({ memType }) {
   // Modal 관리 상태변수
   const [showModal, setShowModal] = useState(false);
-  const [selectSeniorData, SetSelectSeniorData] = useState();
+  const [selectSeniorData, SetSelectSeniorData] = useState([]);
 
   const [formData, setFormData] = useState({
     memId: '', // 아이디
@@ -280,8 +280,8 @@ function EnrollFamily({ memType }) {
     setShowModal(true);
   };
 
-  const handleSelect = (data) => {
-    SetSelectSeniorData(data);
+  const handleSelect = (selectData) => {
+    SetSelectSeniorData(selectData);
     setShowModal(false);
   };
 
@@ -503,13 +503,8 @@ function EnrollFamily({ memType }) {
                 {cellphoneCheckMsg}
               </span>
             )}
-            <tr className={styles.valuebox}>어르신</tr>
-            <tr>
-              <input
-                className={styles.textbox}
-                style={{ width: '350px' }}
-                value={selectSeniorData}
-              />
+            <tr className={styles.valuebox}>
+              어르신
               <button
                 className={styles.button2}
                 style={{ marginLeft: '20px' }}
@@ -517,6 +512,20 @@ function EnrollFamily({ memType }) {
               >
                 검색
               </button>
+            </tr>
+            <tr>
+              {/* <input
+                className={styles.textbox}
+                style={{ width: '350px' }}
+                value={selectSeniorData}
+              /> */}
+              {selectSeniorData.length > 0 && (
+                <ul>
+                  {selectSeniorData.map((senior) => (
+                    <li key={senior.memUUID}>{senior.memName}</li>
+                  ))}
+                </ul>
+              )}
             </tr>
 
             <tr>
@@ -593,7 +602,7 @@ function EnrollFamily({ memType }) {
       {/* 검색 창 Modal */}
       {showModal && (
         <Modal onClose={handleCloseModal}>
-          <SearchSenior onSelect={handleSelect} />
+          <SearchSenior onSelectMultiple={handleSelect} />
         </Modal>
       )}
     </>

@@ -29,13 +29,28 @@ const SeniorDetailView = () => {
     const SeniorDetail = async () => {
       try {
         const response = await apiSpringBoot.get(`/member/sdetail/${UUID}`);
-        console.log('서버에서 온 정보 객체 확인 : ', response.data.member);
+        console.log(
+          '서버에서 온 어르신 정보 객체 확인 : ',
+          response.data.member
+        );
+        console.log(
+          '서버에서 온 담당자 정보 객체 확인 : ',
+          response.data.managerInfo
+        );
+        console.log(
+          '서버에서 온 가족 정보 객체 확인 : ',
+          response.data.familyInfo
+        );
         const updateSeniorData = {
           ...response.data.member,
           memEnrollDate: convertUTCToKST(response.data.member.memEnrollDate),
         };
-        setFamily(response.data.familyInfo);
-        setManager(response.data.managerInfo);
+        if (response.data.familyInfo) {
+          setFamily(response.data.familyInfo);
+        }
+        if (response.data.managerInfo) {
+          setManager(response.data.managerInfo);
+        }
         setSenior(updateSeniorData);
         setProfileData(response.data.profileData);
       } catch (error) {
@@ -43,12 +58,10 @@ const SeniorDetailView = () => {
       }
     };
 
-
-
     SeniorDetail();
   }, [UUID]);
 
-  if (!family) {
+  if (!senior) {
     return (
       <div className={styles.loading}>
         <img src={loading} />
@@ -68,7 +81,11 @@ const SeniorDetailView = () => {
             manager={manager}
             profileData={profileData}
           />
-          <SeniorDetailViewFamilyApproval UUID={UUID} family={family} />
+          <SeniorDetailViewFamilyApproval
+            UUID={UUID}
+            family={family}
+            senior={senior}
+          />
           <Medical UUID={UUID} />
         </div>
       ) : (

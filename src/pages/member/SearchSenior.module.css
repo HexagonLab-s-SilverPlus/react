@@ -69,6 +69,11 @@
   cursor: pointer;
 }
 
+.sSearchSelect {
+  border: 0;
+  cursor: pointer;
+}
+
 .sSearchPaging {
   /* border: 1px solid; */
   position: relative;
