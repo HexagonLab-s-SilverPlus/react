@@ -17,10 +17,12 @@ import SideBar from '../../components/common/SideBar';
 const SeniorDetailView = () => {
   const { UUID } = useParams();
   const { role } = useContext(AuthContext);
+
+  // 서버에서 받아오는 데이터 저장 상태변수 목록
   const [family, setFamily] = useState(); // 가족 데이터 저장 상태변수
   const [senior, setSenior] = useState(); // 어르신 데이터 저장 상태변수
   const [manager, setManager] = useState(); // 담당자 데이터 저장 상태변수
-  const [profileData, setProfileData] = useState();
+  const [profileData, setProfileData] = useState(); // 어르신 프로필 데이터 저장 상태변수
 
   // 페이지 렌더링 시 정보 받아오기
   useEffect(() => {

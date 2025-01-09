@@ -12,7 +12,7 @@ import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 
 const SeniorList = () => {
-  const { role } = useContext(AuthContext);
+  const { role, member } = useContext(AuthContext);
 
   const [seniorList, setSeniorList] = useState([]);
   const [isDropdown, setIsDropdown] = useState('false');
@@ -72,7 +72,11 @@ const SeniorList = () => {
     const SeniorList = async () => {
       try {
         if (role === 'MANAGER' || role === 'FAMILY') {
-          const response = await apiSpringBoot.get(`/member/seniorList`);
+          const response = await apiSpringBoot.get(`/member/seniorList`, null, {
+            params: {
+              UUID: member.memUUID,
+            },
+          });
           console.log('search 값 확인 : ', response.data.search);
           const { maxPage, startPage, endPage } = PagingCalculate(
             response.data.search.pageNumber,
