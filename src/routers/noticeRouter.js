@@ -10,9 +10,9 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 const noticeRouter = [
     <>
     <Route path="/notice" element={<ProtectedRoute element={<NoticeList />} />} />,
-    <Route path="/noticewrite" element={<ProtectedRoute element={<NoticeWrite />} />} />,
-    <Route path="/noticedetail/:notId" element={<ProtectedRoute element={<NoticeDetail />} />} />,
-    <Route path="/noticeupdate/:notId" element={<ProtectedRoute element={<NoticeUpdate />} />} />,
+    <Route path="/notice/noticewrite" element={<ProtectedRoute element={<NoticeWrite />} />} />,
+    <Route path="/notice/noticedetail/:notId" element={<ProtectedRoute element={<NoticeDetail />} />} />,
+    <Route path="/notice/noticeupdate/:notId" element={<ProtectedRoute element={<NoticeUpdate />} />} />,
     </>
 
 

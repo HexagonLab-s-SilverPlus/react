@@ -1,19 +1,20 @@
-// src/components/medical/Medical.js
+// src/pages/management/components//Medical.js
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider";
-import { apiSpringBoot } from "../../utils/axios";
+import { AuthContext } from "../../../AuthProvider";
+import { apiSpringBoot } from "../../../utils/axios";
 import styles from './Medical.module.css';
-import Paging from '../../components/common/Paging';
-import { PagingCalculate } from '../../components/common/PagingCalculate ';
+import Paging from '../../../components/common/Paging';
+import { PagingCalculate } from '../../../components/common/PagingCalculate ';
 
-const Medical = () => {
+const Medical = ({ UUID }) => {
     const [medicals, setMedicals] = useState([]);
     const [newMedical, setNewMedical] = useState(null); // 새 항목 상태
     const [backupMedical, setBackupMedical] = useState(null);  //수정 전 데이터 저장
 
     // const { mediSnrUUID } = useParams();
-    const mediSnrUUID = '146a5b0c-04a0-4cd7-b680-863457102479';
+    // const mediSnrUUID = '146a5b0c-04a0-4cd7-b680-863457102479';
+    const mediSnrUUID = UUID;
 
     const [isEditing, setIsEditing] = useState([]);  //작성 상태관리(수정 중인 항목의 index를 관리)
     const [isPublic, setIsPublic] = useState('F');    //공개 상태관리
@@ -58,13 +59,13 @@ const Medical = () => {
 
     const fetchMedical = async (page = 1) => {
         try {
-            const response = await apiSpringBoot.get(`/program/medical/${mediSnrUUID}`, {
+            const response = await apiSpringBoot.get(`/medical/${mediSnrUUID}`, {
                 params: {
                     ...pagingInfo,
                     pageNumber: page,
                 },
             });
-            console.log('fetchMedical Response : ', response.data);
+            // console.log('fetchMedical Response : ', response.data);
             // 리스트 데이터를 상태에 설정
             if (response.data.list) {
                 setMedicals(response.data.list);
@@ -72,12 +73,20 @@ const Medical = () => {
                 setMedicals([]);
             }
 
-            const { maxPage, startPage, endPage } = PagingCalculate(response.data.search.pageNumber,
-                response.data.search.listCount, response.data.search.pageSize);
+            //response.data.search 가 undefined일 때
+            const searchData = response.data.search || {
+                pageNumber: 1,
+                listCount: 0,
+                pageSize: 5,
+            };
+
+            const { maxPage, startPage, endPage } = PagingCalculate(searchData.pageNumber,
+                searchData.listCount, searchData.pageSize);
 
             setPagingInfo((prev) => ({
                 ...prev,
-                pageNumber: response.data.search.pageNumber,
+                pageNumber: searchData.pageNumber,
+                listCount: searchData.listCount,
                 maxPage: maxPage,
                 startPage: startPage,
                 endPage: endPage,
@@ -150,7 +159,7 @@ const Medical = () => {
         const isPublicValue = e.target.value;
 
         try {
-            await apiSpringBoot.put(`/program/medical/privacy/${mediSnrUUID}`, {
+            await apiSpringBoot.put(`/medical/privacy/${mediSnrUUID}`, {
                 mediPrivacy: isPublicValue,
             });
 
@@ -170,6 +179,17 @@ const Medical = () => {
             mediDiseaseName: "",
             mediLastTreatDate: ""
         });
+
+        // 선택된 체크박스 초기화
+        setMedicals((prev) =>
+            prev.map((item) => ({
+                ...item,
+                isChecked: false, // 모든 항목의 체크 상태를 해제
+            }))
+        );
+
+        // 전체 선택 상태 초기화
+        setIsAllChecked(false);
     };
 
     const handleInsertCancelClick = () => {
@@ -192,7 +212,7 @@ const Medical = () => {
                 };
 
                 // API 호출하여 데이터 저장
-                const response = await apiSpringBoot.post(`/program/medical/${mediSnrUUID}`, updatedMedical);
+                const response = await apiSpringBoot.post(`/medical/${mediSnrUUID}`, updatedMedical);
                 // 저장 성공 시 `medicals` 리스트 업데이트
                 setMedicals((prev) => [...prev, response.data]);
 
@@ -241,11 +261,11 @@ const Medical = () => {
                 //수정할 데이터 추출
                 const updatedMedical = medicals[index];
 
-                await apiSpringBoot.put(`/program/medical/${mediSnrUUID}`, updatedMedical);
+                await apiSpringBoot.put(`/medical/${mediSnrUUID}`, updatedMedical);
                 alert("수정이 완료되었습니다.");
 
                 // // 목록 다시 불러오기
-                // const response = await apiSpringBoot.get(`/program/medical/${mediSnrUUID}`);
+                // const response = await apiSpringBoot.get(`/medical/${mediSnrUUID}`);
                 // setMedicals(response.data.list);
                 fetchMedical();
 
@@ -273,7 +293,7 @@ const Medical = () => {
             try {
                 const mediIds = checkedItems.map((item) => item.mediId);
 
-                await apiSpringBoot.delete(`/program/medical`, {
+                await apiSpringBoot.delete(`/medical`, {
                     data: mediIds,
                     headers: {
                         'Content-Type': 'application/json',
@@ -297,7 +317,7 @@ const Medical = () => {
         return (
             <div className={styles.medicalWrap}>
                 <div className={styles.mediTop}>
-                    <h1>병력관리</h1>
+                    <h1>병력 관리</h1>
                     <div className={styles.mediPrivacy}>
                         <span>가족 공개</span>
                         <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
@@ -384,14 +404,16 @@ const Medical = () => {
                     </div>
                 )}
 
-                <Paging
-                    pageNumber={pagingInfo.pageNumber}
-                    listCount={pagingInfo.listCount}
-                    maxPage={pagingInfo.maxPage}
-                    startPage={pagingInfo.startPage}
-                    endPage={pagingInfo.endPage}
-                    onPageChange={(page) => handlePageChange(page)}
-                />
+                {pagingInfo && pagingInfo.listCount > 0 && (
+                    <Paging
+                        pageNumber={pagingInfo.pageNumber}
+                        listCount={pagingInfo.listCount}
+                        maxPage={pagingInfo.maxPage}
+                        startPage={pagingInfo.startPage}
+                        endPage={pagingInfo.endPage}
+                        onPageChange={(page) => handlePageChange(page)}
+                    />
+                )}
             </div>//medical_wrap end
         );
     } else if (role == 'FAMILY') {    //가족일때
@@ -399,7 +421,7 @@ const Medical = () => {
             return (
                 <div className={styles.medicalWrap}>
                     <div className={styles.mediTop}>
-                        <h1>병력관리</h1>
+                        <h1>병력 관리</h1>
                         <div className={styles.mediPrivacy} style={{ display: 'none' }}>
                             <span>가족 공개</span>
                             <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>

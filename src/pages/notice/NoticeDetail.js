@@ -280,7 +280,7 @@ const NoticeDetail = () => {
                     </div>
                     {role==="ADMIN" && (
                         <div className={styles.rightButtons}>
-                            <button className={styles.noticebutton} onClick={()=>{navigate(`/noticeupdate/${notice.notId}`)}}>수정</button>
+                            <button className={styles.noticebutton} onClick={()=>{navigate(`/notice/noticeupdate/${notice.notId}`)}}>수정</button>
                             <button
                                 className={styles.noticebutton}
                                 onClick={handleDelete}
