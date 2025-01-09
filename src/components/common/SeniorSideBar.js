@@ -415,8 +415,13 @@ const SeniorSideBar = ({ memUUID }) => {
                                 {archivedWorkspaces.map((workspace) => (
                                     <div
                                         key={workspace.workspaceId}
-                                        className={styles.item}
-                                        onClick={() => navigate(`/w/${workspace.workspaceId}`)}
+                                        className={`${styles.item} ${selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ""
+                                        }`}
+                                        onClick={() => {
+                                            setSelectedWorkspaceId(workspace.workspaceId);
+                                            navigate(`/w/${workspace.workspaceId}`)
+                                        }
+                                        }
                                     >
                                         {workspace.workspaceName}
                                         <button

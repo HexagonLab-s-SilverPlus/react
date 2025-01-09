@@ -19,11 +19,11 @@ const DocManaged = () => {
         try {
             const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`);
             if (response.data && response.data.data && response.data.data.length > 0) {
-                console.log("대기중 상태의 문서 조회:", response.data.data);
-                setDmData(response.data.data);
+                console.log(`${status} 상태의 문서 조회:`, response.data.data);
+                setDmData(response.data.data);  // 상태에 맞는 문서만 업데이트
             } else {
-                console.log('조회할 대기중 문서가 없습니다.');
-                setDmData([]);
+                console.log('조회할 문서가 없습니다.');
+                setDmData([]);  // 데이터가 없으면 빈 배열로 상태 변경
             }
         } catch (error) {
             console.error('문서 데이터를 가져오는 중 에러 발생:', error);
@@ -33,12 +33,17 @@ const DocManaged = () => {
     // 문서 상태 업데이트 (승인 또는 반려)
     const updateDocumentStatus = async (docId, status) => {
         try {
+            // 상태 변경 API 호출
             const response = await apiSpringBoot.put(`/api/document/${docId}/approve`, null, {
                 params: { status }, // 상태 업데이트 (승인 또는 반려)
             });
+
+            // 백엔드에서 성공적으로 처리된 경우
             if (response.data.success) {
                 console.log("문서 상태 업데이트 성공");
-                fetchDocManaged(); // 상태 업데이트 후 다시 대기중 문서 목록 가져오기
+                // 문서 목록을 갱신하여 상태 변경을 반영
+                fetchDocManaged(status); // 상태 업데이트 후 해당 상태의 문서만 가져오기
+                window.location.reload();  // 페이지 새로고침
             }
         } catch (error) {
             console.error('문서 상태 업데이트 중 에러 발생:', error);
@@ -47,7 +52,7 @@ const DocManaged = () => {
 
     // 컴포넌트 로드 시 대기중 상태 문서 가져오기
     useEffect(() => {
-        fetchDocManaged(); // 대기중 상태의 문서만 가져옴
+        fetchDocManaged(); // 기본적으로 대기중 상태의 문서만 가져옴
     }, [apiSpringBoot, member.memUUID]);
 
     // 파일 다운로드 함수
@@ -77,6 +82,11 @@ const DocManaged = () => {
         }
     };
 
+    // 상태 변경 버튼 보이기 여부 결정
+    const isStatusChangeVisible = (status) => {
+        return status === "대기중"; // "대기중" 상태에서만 상태 변경 버튼이 보이게 함
+    };
+
     return (
         <div className={styles.dmcontainer}>
             <div className={styles.dmTop}>
@@ -95,7 +105,8 @@ const DocManaged = () => {
                         <th>공문서 유형</th>
                         <th>처리 여부</th>
                         <th>파일 다운로드</th>
-                        <th>상태 변경</th>
+                        {/* 상태 변경 열을 동적으로 표시 */}
+                        {isStatusChangeVisible(dmData[0]?.document?.isApproved) && <th>상태 변경</th>}
                     </tr>
                 </thead>
 
@@ -116,24 +127,23 @@ const DocManaged = () => {
                                     다운로드
                                 </button>
                             </td>
-                            <td>
-                                {doc.document.isApproved === "대기중" && (
-                                    <>
-                                        <button
-                                            className={styles.approveButton}
-                                            onClick={() => updateDocumentStatus(doc.document.docId, "승인")}
-                                        >
-                                            승인
-                                        </button>
-                                        <button
-                                            className={styles.rejectButton}
-                                            onClick={() => updateDocumentStatus(doc.document.docId, "반려")}
-                                        >
-                                            반려
-                                        </button>
-                                    </>
-                                )}
-                            </td>
+                            {/* 상태 변경 버튼을 "대기중"일 경우에만 보이도록 설정 */}
+                            {doc.document.isApproved === "대기중" && (
+                                <td>
+                                    <button
+                                        className={styles.approveButton}
+                                        onClick={() => updateDocumentStatus(doc.document.docId, "승인")}
+                                    >
+                                        승인
+                                    </button>
+                                    <button
+                                        className={styles.rejectButton}
+                                        onClick={() => updateDocumentStatus(doc.document.docId, "반려")}
+                                    >
+                                        반려
+                                    </button>
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>
