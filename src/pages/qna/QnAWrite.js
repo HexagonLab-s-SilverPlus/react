@@ -109,11 +109,15 @@
                         <h1 className={styles.qnaWriteContent}>질문내용</h1>
                         <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaWriteContentTxt}></textarea>
                     </div>
-                    <button
-                    onClick={(e)=>handleFileInsertBox(e)}
-                        >첨부파일추가
-                    </button>
-                    {newFiles.map((file, index) => (
+                    <hr/>
+                    <div className={styles.filesDiv}>
+                        <button
+                        className={styles.upLoadFiles}
+                        onClick={(e)=>handleFileInsertBox(e)}
+                            >파일 추가
+                        </button>
+                        <div>
+                        {newFiles.map((file, index) => (
                         <tr key={index}>
                             <td colSpan="2">
                                 <span>{file.name}</span>
@@ -124,13 +128,17 @@
                                 />
                             </td>
                         </tr>
-                    ))}
+                        ))}
+                        </div>
+                        <hr/>
+                    </div>
                     <div className={styles.qnaWriteBTN}>
                         <input type='submit' value="등 록"/>
                         <button onClick={(event) => {navigate(-1); event.preventDefault();}}>취 소</button>
                     </div>
-                    </form>    
-                </div>        
+                    </form>           
+                </div>       
+                <div style={{marginBottom: "50px"}}></div> 
             </div>
         );
     }

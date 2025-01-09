@@ -18,9 +18,11 @@ const FAQList = () => {
         faqTitle: "",
         faqContent: "",
     }); // 동적으로 입력 필드 관리
-    const [isInsertPage, setIsInsertPage] = useState(false)
-    const [isInsert, setIsInsert] = useState(false)
-    const [isUpdate, setIsUpdate] = useState(false)
+    const [isInsertPage, setIsInsertPage] = useState(false);
+    const [isInsert, setIsInsert] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+
+    const [readContent, setReadContent] =useState(null);
 
     const listRef = useRef(null);   // 스크롤 이동용
         const [pagingInfo, setPagingInfo] = useState({
@@ -52,9 +54,9 @@ const FAQList = () => {
     
       
       // FAQ 항목 클릭 시 해당 항목 열기/닫기 처리
-    const toggleFAQ = (index) => {
+    const toggleFAQ = (index, faqContent) => {
+        setReadContent(() => (openFAQ === index ? null :faqContent));
         setOpenFAQ((prev) => (isInsertPage ? null :(prev === index ? null : index))); // 이미 열려있으면 닫고, 아니면 열기
-        console.log(openFAQ);
     };
 
     const toggleUpdateFAQ = (index) => {
@@ -188,7 +190,6 @@ const FAQList = () => {
     },[isInsertPage, faq]);
 
 
-
     if (!member) {
         return <div>Loading...</div>; // 로그인 정보가 없으면 로딩 화면
     };
@@ -208,7 +209,7 @@ const FAQList = () => {
                         {faqList.map((faqOne, index) =>(
                             <>
                                 <div>
-                                    <div className={styles.object} onClick={() => toggleFAQ(index)}>
+                                    <div className={styles.object} onClick={() => toggleFAQ(index, faqOne.faqContent)}>
                                         <div className={styles.title}>
                                             {faqOne.faqTitle}
                                         </div>
@@ -229,6 +230,7 @@ const FAQList = () => {
                                 </div>
                             </>
                             ))}
+                            <div id="read" style={{display: "none"}}>{readContent}</div>
                             <Paging 
                                 pageNumber={pagingInfo.pageNumber }
                                 listCount={pagingInfo.listCount}
@@ -298,7 +300,6 @@ const FAQList = () => {
                         </button>
                     </div>
                     )}
-
                     <Paging 
                         pageNumber={pagingInfo.pageNumber }
                         listCount={pagingInfo.listCount}
