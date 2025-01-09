@@ -70,11 +70,12 @@ const SeniorList = () => {
   // 최초 페이지 로딩 시 전체 리스트 출력
   useEffect(() => {
     const SeniorList = async () => {
+      console.log(member.memUUID);
       try {
         if (role === 'MANAGER' || role === 'FAMILY') {
-          const response = await apiSpringBoot.get(`/member/seniorList`, null, {
+          const response = await apiSpringBoot.get(`/member/seniorList`, {
             params: {
-              UUID: member.memUUID,
+              memUUID: member.memUUID,
             },
           });
           console.log('search 값 확인 : ', response.data.search);

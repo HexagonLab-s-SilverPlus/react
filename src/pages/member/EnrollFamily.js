@@ -6,9 +6,11 @@ import styles from './Enroll.module.css';
 import Modal from '../../components/common/Modal';
 import SearchSenior from './SearchSenior';
 
-function EnrollFamily({ onEnrollSuccess, memType }) {
+function EnrollFamily({ memType }) {
   // Modal 관리 상태변수
   const [showModal, setShowModal] = useState(false);
+  const [selectSeniorData, SetSelectSeniorData] = useState();
+
   const [formData, setFormData] = useState({
     memId: '', // 아이디
     memPw: '', // 비밀번호
@@ -273,6 +275,16 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     setShowModal(false);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
+
+  const handleSelect = (data) => {
+    SetSelectSeniorData(data);
+    setShowModal(false);
+  };
+
   return (
     <>
       <div className={styles.enrollMainContainer}>
@@ -493,8 +505,16 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
             )}
             <tr className={styles.valuebox}>어르신</tr>
             <tr>
-              <input className={styles.textbox} style={{ width: '350px' }} />
-              <button className={styles.button2} style={{ marginLeft: '20px' }}>
+              <input
+                className={styles.textbox}
+                style={{ width: '350px' }}
+                value={selectSeniorData}
+              />
+              <button
+                className={styles.button2}
+                style={{ marginLeft: '20px' }}
+                onClick={(e) => handleSearch(e)}
+              >
                 검색
               </button>
             </tr>
@@ -573,7 +593,7 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
       {/* 검색 창 Modal */}
       {showModal && (
         <Modal onClose={handleCloseModal}>
-          <SearchSenior></SearchSenior>
+          <SearchSenior onSelect={handleSelect} />
         </Modal>
       )}
     </>

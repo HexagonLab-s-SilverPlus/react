@@ -283,8 +283,10 @@ function ChatPage() {
 
         {/* EMG 컴포넌트 */}
         <div>
-          {onCamera && (
-            <EMG onCamera={onCamera} sessId="b3f3c1b9-e34f-45e9-a8c6-8d1e2b3d2ab4" />
+          {onCamera ? (
+            <EMG onCamera={onCamera} sessId={session} />
+          ): (
+            <EMG onCamera={onCamera} sessId={session} />
           )}
         </div>
 
@@ -322,9 +324,6 @@ function ChatPage() {
                 </div>
               ))}
               <div ref={chatEndRef}></div>
-              <button onClick={handleEndSession} className={styles.endSessionButton}>
-                세션 종료
-              </button>
             </div>
           </div>
         </div>

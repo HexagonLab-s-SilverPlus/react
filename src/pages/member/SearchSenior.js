@@ -5,10 +5,16 @@ import { apiSpringBoot } from '../../utils/axios';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
 import styles from './SearchSenior.module.css';
 import Paging from '../../components/common/Paging';
-import { convertUTCToKST } from '../../fuction/function';
+import {
+  convertUTCToKST,
+  parseResidentNumber,
+  calculateAge,
+} from '../../fuction/function';
+import searchImag from '../../assets/images/search.png';
 
-const SearchSenior = () => {
+const SearchSenior = ({ onSelect }) => {
   const [seniorData, setSeniorData] = useState();
+  const [familyData, setFamilyData] = useState();
   const [pagingInfo, setPagingInfo] = useState({
     // 스프링 부터 search를 보낼때 담을 상태훅
     pageNumber: 1,
@@ -27,6 +33,24 @@ const SearchSenior = () => {
     keyword: '',
   });
 
+  const [isSearch, setIsSearch] = useState(false);
+
+  const [selectedRows, setSelectedRows] = useState([]); // 선택된 데이터 관리
+
+  // 어르신 선택 함수
+  const toggleRowSelection = (senior) => {
+    setSelectedRows((prevSelected) => {
+      // 이미 선택된 데이터인지 확인
+      if (prevSelected.some((item) => item.memUUID === senior.memUUID)) {
+        // 선택 해제: 배열에서 제거
+        return prevSelected.filter((item) => item.memUUID !== senior.memUUID);
+      } else {
+        // 선택 추가
+        return [...prevSelected, senior];
+      }
+    });
+  };
+
   // 페이지 랜더링 시 출력할 리스트
   useEffect(() => {
     const Search = async () => {
@@ -44,11 +68,14 @@ const SearchSenior = () => {
           startPage: startPage,
           endPage: endPage,
         }));
-        const updateList = response.data.list.map((senior) => ({
+        const updateList = response.data.senior.map((senior) => ({
           ...senior,
-          memEnrollDate: formatDate(senior.memEnrollDate),
+          memEnrollDate: convertUTCToKST(senior.memEnrollDate),
         }));
         setSeniorData(updateList);
+        setFamilyData(response.data.family);
+        console.log('서버에서 가져온 어르신 데이터 : ', response.data.senior);
+        console.log('서버에서 가져온 가족 데이터 : ', response.data.family);
       } catch (error) {
         console.error('리스트 출력 실패 : ', error);
       }
@@ -79,7 +106,7 @@ const SearchSenior = () => {
         listCount: response.data.search.listCount,
         pageSize: response.data.search.pageSize,
       }));
-      const updateList = response.data.list.map((senior) => ({
+      const updateList = response.data.senior.map((senior) => ({
         ...senior,
         memEnrollDate: convertUTCToKST(senior.memEnrollDate),
       }));
@@ -92,7 +119,7 @@ const SearchSenior = () => {
   // 키워드 변경 함수
   const handleSearch = () => {
     const updatedSearch = {
-      ...search,
+      action: '이름',
       keyword: tempKeyword,
     };
     setSearch(updatedSearch);
@@ -100,6 +127,7 @@ const SearchSenior = () => {
       ...prev,
       pageNumber: 1,
     }));
+    setIsSearch(true);
     handleUpdateList(1, updatedSearch);
   };
 
@@ -107,18 +135,90 @@ const SearchSenior = () => {
     setTempKeyword(e.target.value);
   };
 
+  if (!seniorData || !familyData) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       {/* 랜더링 파트 */}
       <div className={styles.sSearchMainContainer}>
         {/* 검색 창 레이어 */}
-        <div className={styles.sSearchInputDiv}>
-          <div></div>
+        <div className={styles.sSearchDiv}>
+          <input
+            placeholder="검색어를 입력하세요."
+            onChange={handleChangeKeyword}
+            value={tempKeyword}
+          />
+          <img
+            className={styles.sSearchIcon}
+            src={searchImag}
+            onClick={handleSearch}
+          />
         </div>
         {/* 리스트 출력 레이어 */}
-        <div className={styles.sSearchTable}>
-          <div></div>
-        </div>
+        {isSearch && (
+          <div className={styles.sSearchTableDiv}>
+            <table className={styles.sSearchTable}>
+              <thead>
+                <tr>
+                  <th>이름</th>
+                  <th>성별</th>
+                  <th>생년월일(나이)</th>
+                  <th>가족계정</th>
+                  <th>계정승인여부</th>
+                </tr>
+              </thead>
+              <tbody>
+                {seniorData.map((senior) => {
+                  const family = familyData.find(
+                    (fam) => fam.memUUID === senior.memUUIDFam
+                  );
+                  return (
+                    <tr
+                      key={senior.memUUID}
+                      onClick={() => toggleRowSelection(senior)}
+                      style={{
+                        backgroundColor: selectedRows.some(
+                          (item) => item.memUUID === senior.memUUID
+                        )
+                          ? '#d3f8d3'
+                          : 'white', // 선택된 행 색상 변경
+                      }}
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedRows.some(
+                            (item) => item.memUUID === senior.memUUID
+                          )}
+                          readOnly
+                        />
+                      </td>
+                      <td>{senior.memName}</td>
+                      <td>{parseResidentNumber(senior.memRnn).gender}</td>
+                      <td>
+                        {parseResidentNumber(senior.memRnn).birthDate}&nbsp;
+                        <br />({calculateAge(senior.memRnn)}세)
+                      </td>
+                      <td>{family.memId}</td>
+                      <td>{family.memFamilyApproval}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className={styles.sSearchPaging}>
+              <Paging
+                currentPage={pagingInfo.currentPage}
+                maxPage={pagingInfo.maxPage}
+                startPage={pagingInfo.startPage}
+                endPage={pagingInfo.endPage}
+                onPageChange={(page) => handleUpdateList(page)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
