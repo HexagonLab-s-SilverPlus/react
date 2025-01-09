@@ -218,18 +218,22 @@ const FindPwdMemberResult = () => {
                       style={{ marginBottom: '0' }}
                     />
                   </tr>
-                  <tr
-                    style={{
-                      textAlign: 'left',
-                      fontSize: '10px',
-                      color: messagePwdColor,
-                      height: '20px',
-                    }}
-                    name="pwdCheck"
-                  >
-                    {messagePwdColor === 'green' && <span>&#x2714;</span>}
-                    {passwordCheckMsg}
-                  </tr>
+                  {memPwd.memPwChk === '' ? (
+                    <tr></tr>
+                  ) : (
+                    <tr
+                      style={{
+                        textAlign: 'left',
+                        fontSize: '10px',
+                        color: messagePwdColor,
+                        height: '20px',
+                      }}
+                      name="pwdCheck"
+                    >
+                      {messagePwdColor === 'green' && <span>&#x2714;</span>}
+                      {passwordCheckMsg}
+                    </tr>
+                  )}
                 </table>
               </div>
             </>

@@ -1,0 +1,128 @@
+/* src/pages/managemnet/SeniorDetailViewFamilyApproval.module.css */
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading > p {
+  text-align: center;
+  font-size: 30px;
+}
+
+.sdvfaMainContainer {
+  display: flex;
+}
+
+.sdvfaSubContainer {
+  width: calc(100% - 358px);
+  position: absolute;
+  top: 900px;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+
+.sdvfaHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 1px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+
+.sdvfaTableDiv {
+  width: calc(95%);
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
+.sdvfaTable {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 18px;
+  border-collapse: collapse;
+}
+
+.sdvfaTable > thead {
+  width: 100%;
+}
+
+.sdvfaTable > thead > tr > th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: bold;
+  border-bottom: 2px solid #999999;
+}
+
+.sdvfaTable > tbody > tr > td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #999999;
+}
+
+.sdvfaTable > tbody > tr > td > button {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.approvalBtn {
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: #e4efe7;
+  border-radius: 5px;
+  border: 0;
+  width: 45px;
+  height: 25px;
+}
+
+.rejectlBtn {
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: #eee;
+  border-radius: 5px;
+  border: 0;
+  width: 45px;
+  height: 25px;
+}
+
+.sdvfaTable th.separateCol,
+.sdvfaTable td.separateCol {
+  width: 10%;
+}
+
+.sdvfaTable th.genderCol,
+.sdvfaTable td.genderCol {
+  width: 10%;
+}
+
+.sdvfaTable th.nameCol,
+.sdvfaTable td.nameCol {
+  width: 15%;
+}
+
+.sdvfaTable th.addressCol,
+.sdvfaTable td.addressCol {
+  width: 35%;
+}
+
+.sdvfaTable th.idCol,
+.sdvfaTable td.idCol {
+  width: 10%;
+}
+
+.sdvfaTable th.fileCol,
+.sdvfaTable td.fileCol {
+  width: 10%;
+}
+
+.sdvfaTable th.approvalCol,
+.sdvfaTable td.approvalCol {
+  width: 10%;
+}

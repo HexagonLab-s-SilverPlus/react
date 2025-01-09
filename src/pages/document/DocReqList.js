@@ -23,7 +23,7 @@ const DocRequestList = () => {
 
     // 권한 확인
     useEffect(() => {
-        if (role?.toLowerCase() !== 'manager') {
+        if (role !== 'MANAGER') { // 모두 대문자로 비교
             alert('접근 권한이 없습니다.');
             navigate('/'); // 홈 페이지로 리다이렉트
         }
@@ -95,9 +95,9 @@ const DocRequestList = () => {
 
             const adjustedData = list.map((document, index) => ({
                 rownum: index + 1 + (paging.currentPage - 1) * 10,
-                username: document.writtenBy,
+                username: document.memberName,
                 doctype: docTypeMap[document.docType] || document.docType,
-                docCompleted: adjustTimeZone(document.docCompletedAt),
+                docCompleted: adjustTimeZone(document.createAt),
             }));
             console.log("Adjusted Data:", adjustedData);
 

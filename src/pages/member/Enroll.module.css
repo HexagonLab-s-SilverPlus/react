@@ -1,3 +1,16 @@
+/* src/pages/member/Enroll.module.css*/
+.enrollMainContainer {
+  position: absolute;
+  width: 1300px;
+  height: 900px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+  /* border: 1px solid; */
+}
+
 .enrollForm {
   margin-left: auto;
   margin-right: auto;
@@ -29,13 +42,23 @@
   cursor: pointer;
 }
 
-.textbox {
+.enrollForm > tr > input {
   width: 480px;
   height: 30px;
   margin-bottom: 5px;
   font-size: 16px;
   border: 1px solid;
   border-radius: 3px;
+}
+
+.enrollForm > tr > span {
+  margin: 0 15px;
+}
+
+.enrollForm > tr > select {
+  margin-left: 10px;
+  width: 100px;
+  height: 30px;
 }
 
 .valuebox {
@@ -57,12 +80,13 @@
 
 .fileinputbox {
   flex: 1;
-  padding: 8px;
+  /* padding: 8px; */
   border: none;
   outline: none;
   color: #555;
   margin-right: 20px;
-  width: 340px;
+  width: 350px !important;
+  height: 30px !important;
   border-radius: 3px;
   border: 1px solid;
 }
@@ -88,7 +112,7 @@ input[type='file'] {
 }
 
 .filelist {
-  max-height: 150px; /* 최대 높이 설정 */
+  max-height: 80px; /* 최대 높이 설정 */
   max-width: 340px;
   overflow-y: auto; /* 세로 스크롤 활성화 */
   margin-top: 3px;

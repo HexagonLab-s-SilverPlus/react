@@ -2,21 +2,38 @@
 .mainPage {background-image: url('../../assets/images/game/other/background.png');background-size: cover;background-position: center;height: 100vh;display:flex;align-items: center;
     justify-content: center;}
 .gameNavBar{position:fixed;top:0; width: 100%;}
-.gameArea{width:calc(100% - 48px);height:calc(100vh - 96px - 48px);box-sizing:border-box;margin-top:96px;display:grid;grid-template-rows: 20% 60% 20%;}
+.gameArea{width:calc(100% - 48px);height:calc(100vh - 96px - 48px);box-sizing:border-box;margin-top:96px;display:grid;grid-template-rows: 20% 58% 22%;}
 
 .opponentArea {width:100%;display: flex; box-sizing: border-box; background-color: rgba(255, 255, 255, 0.1);}
 .getOpponentCards {height: 100%; width: 85%;}
 .opponentCards {height:100%;width: 15%;align-content: center;text-align: center;}
-.opponentCards img {height:45%;}
+.opponentCards img {width: 15%;max-width: 40px}
 
 .tableArea{display:flex;align-items: center; width:100%;}
 .deckCards{width:20%;text-align: center;}
-.openCards{width:50%;}
-.getPlayerArea{width:30%;background-color: rgba(255, 255, 255, 0.1);height: 100%;}
+.deckCards img{width:35%; max-width: 100px;}
+.openCards{display: flex;flex-wrap: wrap;justify-content: flex-start;gap:20px;width:50%; height: 90%;}
+.tableMonthGroup {position:relative; width:20%; margin: 10px 10px;}
+.tableMonthGroup img{position: absolute; top:0; bottom: 0; margin: auto 0; width:100%; max-width: 100px; display: block;}
+.tableMonthGroup img:nth-child(1){left:0%; z-index: 1;}
+.tableMonthGroup img:nth-child(2){left:30%; z-index: 2;}
+.tableMonthGroup img:nth-child(3){left:60%; z-index: 3;}
+.tableMonthGroup img:nth-child(4){left:90%; z-index: 4;}
 
 
-.playerArea{display: flex;background-color: rgba(255, 255, 255, 0.1);align-items: center;}
-.playerArea img {height: 95%;}
 
-/* .card {width: 100px;height: auto;cursor: pointer;transition: transform 0.3s;}
-.card:hover {transform:scale(1.2);} */
+.getPlayerArea{width:30%;background-color: rgba(255, 255, 255, 0.1);height: 100%;box-sizing: border-box; padding : 10px 10px;}
+.getPlayerArea img {width:15%;max-width: 100px; margin:2px}
+
+
+.playerArea{display: flex; background-color: rgba(255, 255, 255, 0.1);align-items: center;gap:10px;}
+.playerArea img {width: 10%;max-width: 100px; transition:transform 0.3s;}
+.playerArea img:hover {transform:scale(1.2);}
+
+
+/* 카드 두장일때 */
+.isTwoCards{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto; width:40%; height: 40%;background-color: aliceblue;border-radius: 30px;z-index: 2000;}
+.twoCardsTitle{width: 100%;text-align: center;font-size: 60px;margin: 20px 0;}
+.twoCards{width: 100%; display: flex; justify-content: center; gap: 50px;}
+.isTwoCards img{width:20%; max-width: 100px;cursor: pointer;transition:transform 0.3s;}
+.isTwoCards img:hover{transform:scale(1.2);}

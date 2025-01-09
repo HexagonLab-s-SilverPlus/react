@@ -20,8 +20,14 @@ const MemberDetailView = () => {
       try {
         const response = await apiSpringBoot.get(`/member/mdetail/${UUID}`);
         console.log('최초 화면출력시 가져오는 데이터 : ', response.data);
-        setFormData(response.data);
-        setInitialData(response.data);
+
+        const updatedData = {
+          ...response.data,
+          memEnrollDate: convertUTCToKST(response.data.memEnrollDate),
+        };
+
+        setFormData(updatedData);
+        setInitialData(updatedData);
       } catch (error) {
         console.error('회원데이터 조회 실패 : ', error);
       }
@@ -31,6 +37,41 @@ const MemberDetailView = () => {
 
   // 임시비밀번호 발급 함수
   const handleTemporaryPassword = () => {};
+
+  // 날짜시간 데이터 UTC -> KST 변환 함수
+  const convertUTCToKST = (utcDate) => {
+    if (!utcDate) {
+      console.error('Invalid date input:', utcDate);
+      return null;
+    }
+
+    try {
+      let date;
+
+      // ISO 8601 형식인지 확인
+      if (utcDate.includes('T') && utcDate.endsWith('Z')) {
+        date = new Date(utcDate); // 이미 ISO 형식인 경우
+      } else {
+        // 서버 형식(`yyyy-MM-dd HH:mm:ss.SSS`)을 ISO 형식으로 변환
+        const isoDateString = utcDate.replace(' ', 'T') + 'Z';
+        date = new Date(isoDateString);
+      }
+
+      if (isNaN(date.getTime())) {
+        throw new Error('Invalid Date object');
+      }
+
+      // UTC → KST 변환
+      const kstOffset = 9 * 60; // +9시간 (분 단위)
+      const kstDate = new Date(date.getTime() + kstOffset * 60 * 1000);
+
+      // 변환된 시간을 `yyyy-MM-dd HH:mm:ss` 형식으로 반환
+      return kstDate.toISOString().replace('T', ' ').split('.')[0];
+    } catch (error) {
+      console.error('Error in convertUTCToKST:', error, 'Input:', utcDate);
+      return null;
+    }
+  };
 
   // formData 값 변경 함수
   const handleInfoChange = (e) => {
@@ -44,14 +85,8 @@ const MemberDetailView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentTimestamp = new Date();
-    console.log('memChangeStatus 에 넣을 현재시간 : ', currentTimestamp);
-    const currentTimestampKST = new Date(
-      currentTimestamp.getTime() + 9 * 60 * 60 * 1000
-    )
-      .toISOString()
-      .replace('T', ' ')
-      .replace(/\..*/, '');
+    const currentTimestamp = convertUTCToKST(new Date().toISOString());
+    console.log('수정 날짜 확인 : ', currentTimestamp);
 
     // FormData 객체 생성
     const data = new FormData();
@@ -59,7 +94,7 @@ const MemberDetailView = () => {
     // formData 상태의 최신 값으로 FormData에 추가
     const updatedFormData = {
       ...formData, // 기존 상태 값
-      memChangeStatus: currentTimestampKST, // 새로운 값 추가
+      memChangeStatus: currentTimestamp, // 새로운 값 추가
     };
 
     // FormData 객체에 값 추가
