@@ -249,7 +249,7 @@ function NoticeList() {
                             ))}
                         <div className={styles.noticePaging}>
                                 <Paging 
-                                    currentPag={pagingInfo.pageNumber || 1}
+                                    pageNumber={pagingInfo.pageNumber || 1}
                                     maxPage={pagingInfo.maxPage || 1}
                                     startPage={pagingInfo.startPage || 1}
                                     endPage={pagingInfo.endPage || 1}
@@ -367,7 +367,7 @@ function NoticeList() {
                     </div>
                     <div className={styles.memberNoticePaging}>
                         <Paging 
-                            currentPag={pagingInfo.pageNumber || 1}
+                            pageNumber={pagingInfo.pageNumber || 1}
                             maxPage={pagingInfo.maxPage || 1}
                             startPage={pagingInfo.startPage || 1}
                             endPage={pagingInfo.endPage || 1}

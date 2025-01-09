@@ -6,16 +6,11 @@ import styles from './EMGList.module.css';
 import Paging from '../../components/common/Paging';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
 
-function EmgList({emgSnrUUI}){
+function EmgList({emgSnrUUID}){
     const [emgs, setEmgs] = useState([]);
-    //토큰정보 가져오기(AuthProvider)
-    const { member } = useContext(AuthContext);
-
-    const today = new Date();
-    const formattedDate = today.toISOString();        // 현재 날짜 가져오기
     
     const [pagingInfo, setPagingInfo] = useState({                  // 스프링 부터 search를 보낼때 담을 상태훅
-        uuid: "146a5b0c-04a0-4cd7-b680-863457102479",
+        uuid: "",
         pageNumber: 1,
         action: "all",
         listCount: 1,
@@ -46,6 +41,7 @@ function EmgList({emgSnrUUI}){
             let response = await apiSpringBoot.get(`/emg`, {
                 params: {
                     ...pagingInfo,
+                    uuid: emgSnrUUID,
                     pageNumber: page
                 },
             });
@@ -112,13 +108,13 @@ function EmgList({emgSnrUUI}){
                 </tbody>
             </table>
             <Paging 
-            pageNumber={pagingInfo.pageNumber }
-            listCount={pagingInfo.listCount}
-            maxPage={pagingInfo.maxPage}
-            startPage={pagingInfo.startPage }
-            endPage={pagingInfo.endPage}
-            onPageChange={(page) => handlePageChange(page)}
-          />
+                pageNumber={pagingInfo.pageNumber }
+                listCount={pagingInfo.listCount}
+                maxPage={pagingInfo.maxPage}
+                startPage={pagingInfo.startPage }
+                endPage={pagingInfo.endPage}
+                onPageChange={(page) => handlePageChange(page)}
+            />
         </div>//emg_wrap end
     );
 };
