@@ -12,7 +12,7 @@ import {
 } from '../../fuction/function';
 import searchImag from '../../assets/images/search.png';
 
-const SearchSenior = ({ onSelect }) => {
+const SearchSenior = ({ onSelectMultiple }) => {
   const [seniorData, setSeniorData] = useState();
   const [familyData, setFamilyData] = useState();
   const [pagingInfo, setPagingInfo] = useState({
@@ -38,7 +38,9 @@ const SearchSenior = ({ onSelect }) => {
   const [selectedRows, setSelectedRows] = useState([]); // 선택된 데이터 관리
 
   // 어르신 선택 함수
-  const toggleRowSelection = (senior) => {
+  const toggleRowSelection = (senior, isDisabled) => {
+    if (isDisabled) return; // 가족 계정이 있는 경우 선택 불가
+
     setSelectedRows((prevSelected) => {
       // 이미 선택된 데이터인지 확인
       if (prevSelected.some((item) => item.memUUID === senior.memUUID)) {
@@ -162,6 +164,14 @@ const SearchSenior = ({ onSelect }) => {
             <table className={styles.sSearchTable}>
               <thead>
                 <tr>
+                  <th>
+                    <button
+                      onClick={() => onSelectMultiple(selectedRows)}
+                      className={styles.sSearchSelect}
+                    >
+                      선택완료
+                    </button>
+                  </th>
                   <th>이름</th>
                   <th>성별</th>
                   <th>생년월일(나이)</th>
@@ -171,19 +181,24 @@ const SearchSenior = ({ onSelect }) => {
               </thead>
               <tbody>
                 {seniorData.map((senior) => {
-                  const family = familyData.find(
-                    (fam) => fam.memUUID === senior.memUUIDFam
-                  );
+                  const family = Array.isArray(familyData)
+                    ? familyData.find(
+                        (fam) => fam?.memUUID === senior?.memUUIDFam
+                      )
+                    : null; // familyData 배열 검증
+                  const isDisabled = family && family.memId !== 'N/A';
                   return (
                     <tr
                       key={senior.memUUID}
-                      onClick={() => toggleRowSelection(senior)}
+                      onClick={() => toggleRowSelection(senior, isDisabled)}
                       style={{
                         backgroundColor: selectedRows.some(
                           (item) => item.memUUID === senior.memUUID
                         )
                           ? '#d3f8d3'
                           : 'white', // 선택된 행 색상 변경
+                        pointerEvents: isDisabled ? 'none' : 'auto', // 클릭 방지
+                        opacity: isDisabled ? 0.5 : 1, // 비활성화된 항목 흐리게
                       }}
                     >
                       <td>
@@ -201,8 +216,8 @@ const SearchSenior = ({ onSelect }) => {
                         {parseResidentNumber(senior.memRnn).birthDate}&nbsp;
                         <br />({calculateAge(senior.memRnn)}세)
                       </td>
-                      <td>{family.memId}</td>
-                      <td>{family.memFamilyApproval}</td>
+                      <td>{family?.memId || '없음'}</td>
+                      <td>{senior?.memFamilyApproval || ''}</td>
                     </tr>
                   );
                 })}
