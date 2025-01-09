@@ -101,7 +101,7 @@ const ProgramList = () => {
     useEffect(() => {
         const loadPrograms = async () => {
             const action = isNearby && role === "SENIOR" ? 'nearby' : pagingInfo.action;
-            console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
+            // console.log('Initial API Call with Page:', pagingInfo.pageNumber, 'and Action:', action);
 
             try {
                 const params = {
@@ -121,8 +121,8 @@ const ProgramList = () => {
                 let response = await apiSpringBoot.get(`/program`, { params });
 
                 setPrograms(response.data.list);
-                console.log("API Response:", response.data.list);
-                console.log("listCount:", response.data.search.listCount);
+                // console.log("API Response:", response.data.list);
+                // console.log("listCount:", response.data.search.listCount);
 
                 // 페이지 계산
                 const { maxPage, startPage, endPage } = PagingDiv8Calculate(
@@ -132,7 +132,7 @@ const ProgramList = () => {
                     8 // 그룹 크기
                 );
 
-                console.log("Paging Calculation:", { maxPage, startPage, endPage });
+                // console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
                 setPagingInfo((prev) => ({
                     ...prev,
@@ -145,7 +145,8 @@ const ProgramList = () => {
                 }));
 
             } catch (error) {
-                console.error('handleProgramView Error:', error);
+                // console.error('handleProgramView Error:', error);
+                alert('어르신 프로그램 목록을 불러오는데 실패하였습니다.');
             }
         };
 
@@ -180,11 +181,11 @@ const ProgramList = () => {
 
     //isNearby 상태 변경 이벤트 핸들러
     const toggleNearbyView = () => {
-        console.log('before isNearby status : ', isNearby);
+        // console.log('before isNearby status : ', isNearby);
 
         setIsNearby((prev) => {
             const updated = !prev; // 상태를 반전
-            console.log('after isNearby status : ', updated); // 상태 변경 후 값 확인
+            // console.log('after isNearby status : ', updated); // 상태 변경 후 값 확인
             return updated; // 새로운 상태 반환
         });
 
@@ -226,12 +227,12 @@ const ProgramList = () => {
             let response = await apiSpringBoot.get(`/program`, { params });
 
             setPrograms(response.data.list);
-            console.log("API Response:", response.data.list);
+            // console.log("API Response:", response.data.list);
 
             //페이지 계산
             const { maxPage, startPage, endPage } = PagingDiv8Calculate(response.data.search.pageNumber,
                 response.data.search.listCount, response.data.search.pageSize, groupSize);
-            console.log("Paging Calculation:", { maxPage, startPage, endPage });
+            // console.log("Paging Calculation:", { maxPage, startPage, endPage });
 
             setPagingInfo((prev) => ({
                 ...prev,
@@ -244,12 +245,10 @@ const ProgramList = () => {
             }));
 
         } catch (error) {
-            console.log('handleProgramView Error : {}', error);
+            // console.log('handleProgramView Error : {}', error);
+            alert('어르신 프로그램 목록을 불러오는데 실패하였습니다.');
         }
     };
-
-
-
 
     //input 에 입력 시 paging훅에 저장
     const handleInputChange = (e) => {
@@ -373,7 +372,6 @@ const ProgramList = () => {
                                 startPage={pagingInfo.startPage || 1}
                                 endPage={pagingInfo.endPage || 1}
                                 onPageChange={(page) => {
-                                    console.log("Page change triggered:", page);
                                     handlePageChange(page);
                                 }}
                             />
@@ -457,7 +455,6 @@ const ProgramList = () => {
                         startPage={pagingInfo.startPage || 1}
                         endPage={pagingInfo.endPage || 1}
                         onPageChange={(page) => {
-                            console.log("Page change triggered:", page);
                             handlePageChange(page);
                         }}
                     />

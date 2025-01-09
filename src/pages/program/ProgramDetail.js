@@ -90,11 +90,12 @@ const ProgramDetail = () => {
     const handleProgramDetailView = async () => {
         try {
             const response = await apiSpringBoot.get(`/program/detail/${snrProgramId}`);
-            console.log('API Response:', response.data);
+            // console.log('API Response:', response.data);
             setProgram(response.data.program);
             setFiles(response.data.files || []);
-        } catch {
-            console.error('handleProgramDetailView Error:', error);
+        } catch (error) {
+            // console.error('프로그램 목록 불러오기 실패 : ', error);
+            alert('프로그램 상세보기 페이지를 불러오는데 실패하였습니다.');
         }
     };
 
@@ -141,7 +142,7 @@ const ProgramDetail = () => {
                 alert("프로그램이 삭제되었습니다.");
                 navigate(`/program`); // 삭제 후 목록 페이지로 이동
             } catch (error) {
-                console.error("프로그램 삭제 실패:", error);
+                // console.error("프로그램 삭제 실패 : ", error);
                 alert("프로그램 삭제에 실패하였습니다. 관리자에게 문의하세요.");
             }
         }

@@ -1,14 +1,8 @@
 /* src/pages/managemnet/SeniorDetailViewManager.module.css */
-
-.sdetailMainContainer {
-  display: flex;
-}
+.sdetailMainContainer {width: 100%;}
 
 .sdetailSubContainer {
-  width: calc(100% - 358px);
-  position: absolute;
-  top: 0;
-  right: 0;
+  width: 100%;
   box-sizing: border-box;
   padding: 72px 48px;
 }
@@ -27,15 +21,13 @@
   font-size: 40px;
   margin: 0;
   font-weight: bold;
-  border-bottom: 1px solid #064420;
   padding-top: 40px;
-  padding-bottom: 5px;
   padding-left: 24px;
 }
 
 .sdetailDiv {
-  margin-top: 80px;
-  display: flex;
+  margin-top: 12px;
+  /* display: flex; */
   gap: 20px;
 }
 
@@ -43,8 +35,8 @@
   width: 250px;
   height: 300px;
   flex-shrink: 0;
-  margin-top: 17px;
-  margin-right: 50px;
+  margin-top: 20px;
+  /* margin-right: 50px; */
   /* border: 1px solid; */
 }
 
@@ -61,12 +53,14 @@
 .sdetailProfile {
   width: 250px;
   height: 300px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
 }
 
 .sdetailTableDiv {
   flex-grow: 1;
-  margin-left: 50px;
-  max-width: calc(100%-270px);
+  margin-left: 24px;
+  /* max-width: calc(100%-270px); */
   display: flex;
 }
 
@@ -74,6 +68,7 @@
   font-size: 18px;
   table-layout: fixed;
   width: 70%;
+  margin-left: 76px;
 }
 
 .sdetailTable > tr {
@@ -142,10 +137,11 @@
 .sdetailButtonDiv {
   display: flex;
   justify-content: end;
-  width: 1425px;
+  /* width: 1425px;
   max-width: calc(100% - 150px);
   margin-top: 50px;
-  margin-left: 50px;
+  margin-left: 50px; */
+  margin-right: 24px;
 }
 
 .sdetailButton1 {
@@ -159,6 +155,7 @@
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .sdetailButton2 {
@@ -172,6 +169,7 @@
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .loading {
@@ -338,7 +336,7 @@
 
 .sdetailEmailDiv > td > select {
   margin-left: 20px;
-  width: 100px;
+  width: 128px;
   height: 36px;
 }
 
