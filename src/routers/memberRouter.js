@@ -23,52 +23,58 @@ import Oauth2 from '../pages/member/oauth2';
 import FaceLogin from '../pages/member/FaceLogin';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
+import Test from '../pages/member/test';
+
 const memberRouter = [
   <>
     {/* 회원가입 관련 */}
-    <Route path="/enrollselect" element={<EnrollSelect />} /> ,
-    <Route path="/enrollmanager" element={<EnrollManager />} /> ,
-    <Route path="/enrollfamily" element={<EnrollFamily />} /> ,
+    <Route path="/enrollselect" element={<EnrollSelect />} />
+    <Route path="/enrollmanager" element={<EnrollManager />} />
+    <Route path="/enrollfamily" element={<EnrollFamily />} />
+
     {/* 로그인 관련 */}
-    <Route path="/loginmember" element={<LoginMember />} /> ,
-    <Route path="/loginsenior" element={<LoginSenior />} /> ,
-    <Route path="/facelogin" element={<FaceLogin />} />,
-    <Route path="/oauth2" element={<Oauth2 />} />,{/* 소셜 */}
+    <Route path="/loginmember" element={<LoginMember />} />
+    <Route path="/loginsenior" element={<LoginSenior />} />
+    <Route path="/facelogin" element={<FaceLogin />} />
+
+    {/* 소셜 */}
+    <Route path="/oauth2" element={<Oauth2 />} />
+
     {/* 아이디, 비밀번호찾기 관련 */}
-    <Route path="/findpwdsenior" element={<FindPwdSenior />} /> ,
-    <Route path="/findpwdmember" element={<FindPwdMember />} /> ,
-    <Route path="/findidsenior" element={<FindIdSenior />} /> ,
-    <Route path="/findidmember" element={<FindIdMember />} /> ,
-    <Route path="/fimResult" element={<FindIdMemberResult />} /> ,
-    <Route path="/fisResult" element={<FindIdSeniorResult />} /> ,
-    <Route path="/fpmResult" element={<FindPwdMemberResult />} /> ,
-    <Route path="/fpsResult" element={<FindPwdSeniorResult />} /> ,
+    <Route path="/findpwdsenior" element={<FindPwdSenior />} />
+    <Route path="/findpwdmember" element={<FindPwdMember />} />
+    <Route path="/findidsenior" element={<FindIdSenior />} />
+    <Route path="/findidmember" element={<FindIdMember />} />
+    <Route path="/fimResult" element={<FindIdMemberResult />} />
+    <Route path="/fisResult" element={<FindIdSeniorResult />} />
+    <Route path="/fpmResult" element={<FindPwdMemberResult />} />
+    <Route path="/fpsResult" element={<FindPwdSeniorResult />} />
+
     {/* 마이페이지 관련 */}
     <Route
       path="/myinfomanager"
       element={<ProtectedRoute element={<MyInfoManager />} />}
     />
-    ,
     <Route
       path="/myinfofamily"
       element={<ProtectedRoute element={<MyInfoFamily />} />}
     />
-    ,
     <Route
       path="/myinfoadmin"
       element={<ProtectedRoute element={<MyInfoAdmin />} />}
     />
-    ,{/* 회원관리(관리자) 관련 */}
+
+    {/* 회원관리(관리자) 관련 */}
     <Route
       path="/mlistview"
       element={<ProtectedRoute element={<MemberListView />} />}
     />
-    ,
     <Route
       path="/mdetailview/:UUID"
       element={<ProtectedRoute element={<MemberDetailView />} />}
     />
-    ,
+
+    <Route path="/test/:UUID" element={<Test />} />
   </>,
 ];
 
