@@ -7,7 +7,7 @@ import SeniorNavbar from '../../components/common/SeniorNavbar';
 // resources
 import hwatuCard from './cardInfo';
 // function
-import { selectCard, chooseCard, moveCard } from './playAction'
+import { selectCard, chooseCard} from './playAction'
 
 
 
@@ -35,10 +35,10 @@ const PlayGame = () => {
   const [getPlayerCards, setGetPlayerCards] = useState([]);
   // 상대방이 획득한 패
   const [getOpponentCards, setGetOpponentCards] = useState([]);
-  // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
-  const [isTwoCards, setIsTwoCards] = useState(false);
-  // 테이블에 같은카드 두장일때 선택할 옵션
-  const [choiceOptions, setChoiceOptions] = useState([]);
+  // // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
+  // const [isTwoCards, setIsTwoCards] = useState(false);
+  // // 테이블에 같은카드 두장일때 선택할 옵션
+  // const [choiceOptions, setChoiceOptions] = useState([]);
 
   // turn 저장 변수(player or opponent)
   const [currentTurn, setCurrentTurn] = useState('player');
@@ -91,60 +91,60 @@ const PlayGame = () => {
   }
 
 
-  const handleSelectCard = (card) => {
-    // 테이블에 있는 같은카드 가져오기
-    let cards = selectCard(card,tableCards);
+  // const handleSelectCard = (card) => {
+  //   // 테이블에 있는 같은카드 가져오기
+  //   let cards = selectCard(card,tableCards);
 
-    // 플레이어가 먹은패에 카드 가져오기
-    let myCards = chooseCard(cards);
+  //   // 플레이어가 먹은패에 카드 가져오기
+  //   let myCards = chooseCard(cards);
 
-    // 카드 처리
-    // 동일카드가 없을시
-    if (myCards === 0) {
-      // 플레이어 패에서 카드빼기
-      const updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 플레이어 패를 테이블에 깔기
-      setTableCards((prev) => [...prev,card]);
-    } else if(myCards ===1) {
-      // 플레이어 패에서 카드빼기
-      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 테이블 패에서 카드빼기
-      updatedPlayerCards = tableCards.filter((tableCard) => tableCard.id !== cards[0].id);
-      setTableCards(updatedPlayerCards);
-      // 플레이어 패와 테이블의 일치하는 패를 내가 먹은 테이블에 넣기
-      setGetPlayerCards((prev)=>[...prev,card,cards[0]]);
-    } else if(myCards === 2){
-      // 둘중 하나 고르기
-      setIsTwoCards(true);
-      setChoiceOptions(cards);
-      // 뒤집을카드 같은거면 두개다 내가 가져가고 
+  //   // 카드 처리
+  //   // 동일카드가 없을시
+  //   if (myCards === 0) {
+  //     // 플레이어 패에서 카드빼기
+  //     const updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+  //     setPlayerCards(updatedPlayerCards);
+  //     // 플레이어 패를 테이블에 깔기
+  //     setTableCards((prev) => [...prev,card]);
+  //   } else if(myCards ===1) {
+  //     // 플레이어 패에서 카드빼기
+  //     let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+  //     setPlayerCards(updatedPlayerCards);
+  //     // 테이블 패에서 카드빼기
+  //     updatedPlayerCards = tableCards.filter((tableCard) => tableCard.id !== cards[0].id);
+  //     setTableCards(updatedPlayerCards);
+  //     // 플레이어 패와 테이블의 일치하는 패를 내가 먹은 테이블에 넣기
+  //     setGetPlayerCards((prev)=>[...prev,card,cards[0]]);
+  //   } else if(myCards === 2){
+  //     // 둘중 하나 고르기
+  //     setIsTwoCards(true);
+  //     setChoiceOptions(cards);
+  //     // 뒤집을카드 같은거면 두개다 내가 가져가고 
 
-      // 아니면 하나만 가져가기
-    } else if(myCards === 3){
-      // 플레이어 패에서 카드빼기
-      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 테이블 패에서 카드빼기
-      const updatedTableCards = tableCards.filter(
-        (tableCard) => !cards.some((matchCard) => matchCard.id === tableCard.id));
-      setTableCards(updatedTableCards);
-      // 내가 가져간 패에 추가
-      setGetPlayerCards((prev) => [...prev, ...cards, card]);
-    }
+  //     // 아니면 하나만 가져가기
+  //   } else if(myCards === 3){
+  //     // 플레이어 패에서 카드빼기
+  //     let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
+  //     setPlayerCards(updatedPlayerCards);
+  //     // 테이블 패에서 카드빼기
+  //     const updatedTableCards = tableCards.filter(
+  //       (tableCard) => !cards.some((matchCard) => matchCard.id === tableCard.id));
+  //     setTableCards(updatedTableCards);
+  //     // 내가 가져간 패에 추가
+  //     setGetPlayerCards((prev) => [...prev, ...cards, card]);
+  //   }
     
   
-    // 덱에서 한장꺼내서 뒤집기
-    if (deckCards!==0){
-      const [newCard, ...remainingDeck] = deckCards;
-      setDeckCards(remainingDeck); // 덱 상태 업데이트
-      setTableCards((prev)=>[...prev,newCard]);  // 테이블 추가
-    }
+  //   // 덱에서 한장꺼내서 뒤집기
+  //   if (deckCards!==0){
+  //     const [newCard, ...remainingDeck] = deckCards;
+  //     setDeckCards(remainingDeck); // 덱 상태 업데이트
+  //     setTableCards((prev)=>[...prev,newCard]);  // 테이블 추가
+  //   }
 
-    // 턴오버 처리
-    setCurrentTurn("opponent")
-  }
+  //   // 턴오버 처리
+  //   setCurrentTurn("opponent")
+  // }
 
   return (
     <div className={styles.mainPage}>
