@@ -14,6 +14,9 @@ import { convertUTCToKST } from '../../fuction/function';
 import Medical from './components/Medical';
 import SideBar from '../../components/common/SideBar';
 
+//
+import EMGList from '../../components/emg/EMGList';
+
 const SeniorDetailView = () => {
   const { UUID } = useParams();
   const { role } = useContext(AuthContext);
@@ -23,6 +26,8 @@ const SeniorDetailView = () => {
   const [senior, setSenior] = useState(); // 어르신 데이터 저장 상태변수
   const [manager, setManager] = useState(); // 담당자 데이터 저장 상태변수
   const [profileData, setProfileData] = useState(); // 어르신 프로필 데이터 저장 상태변수
+
+  const navigate = useNavigate();
 
   // 페이지 렌더링 시 정보 받아오기
   useEffect(() => {
@@ -87,11 +92,15 @@ const SeniorDetailView = () => {
             senior={senior}
           />
           <Medical UUID={UUID} />
+          <EMGList emgSnrUUID={UUID} />
+          <button className={styles.moveSnrDetailBtn} onClick={() => navigate(-1)}>목록</button>
         </div>
       ) : (
         <div className={styles.snrDetailViewRight}>
           <SeniorDetailViewFamily UUID={UUID} />
           <Medical UUID={UUID} />
+          <EMGList emgSnrUUID={UUID} />
+          <button className={styles.moveSnrDetailBtn} onClick={() => navigate(-1)}>목록</button>
         </div>
       )}
     </div>

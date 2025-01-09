@@ -174,7 +174,7 @@ const ProgramDetail = () => {
                     </div>{/* snrPgSubTop end */}
 
                     <div className={styles.pgSubBottom}>
-                        <div className={styles.pgSubContent}>
+                        <div className={styles.pgSubContent} id="read">
                             {renderContentWithLinks(program.snrContent)}
                         </div>{/* pgSubInfo end */}
 
