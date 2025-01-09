@@ -1,5 +1,5 @@
 // src/pages/member/LoginSenior.js
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './LoginSenior.module.css';
@@ -17,7 +17,7 @@ import google from '../../assets/images/icon/Google Icon.png';
 const LoginSenior = () => {
   const [memId, setMemId] = useState('');
   const [memPw, setMemPw] = useState('');
-  const { login, isLoggedIn } = useContext(AuthContext);
+  const { login, isLoggedIn, member } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -70,6 +70,21 @@ const LoginSenior = () => {
     e.preventDefault();
     navigate('/loginsenior');
   };
+
+
+
+  
+    // 멤버 타입에 따른 리다이렉트 처리
+    useEffect(() => {
+      if (!member || !member.memType) return;
+  
+      if (member.memType === 'SENIOR') navigate('/senior-menu');
+      else if (member.memType === 'MANAGER') navigate('/dashlist');
+      else if (member.memType === 'FAMILY') navigate('/seniorlist');
+      else if (member.memType === 'ADMIN') navigate('/mlistview');
+    }, [member, navigate]);
+
+
 
   return (
     <>
