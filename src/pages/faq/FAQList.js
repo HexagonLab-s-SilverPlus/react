@@ -6,6 +6,8 @@ import styles from './FAQList.module.css';
 import { AuthContext } from '../../AuthProvider';
 import SeniorNavbar from '../../components/common/SeniorNavbar';
 import SeniorFooter from '../../components/common/SeniorFooter';
+import Paging from '../../components/common/Paging';
+import { PagingCalculate } from '../../components/common/PagingCalculate ';
 
 const FAQList = () => {
     const { member, role } = useContext(AuthContext); // AuthProvider 에서 데이터 가져오기
@@ -21,7 +23,14 @@ const FAQList = () => {
     const [isUpdate, setIsUpdate] = useState(false)
 
     const listRef = useRef(null);   // 스크롤 이동용
-    const textareaRefs = useRef([]);  // 각 FAQ에 대해 ref 배열을 관리
+        const [pagingInfo, setPagingInfo] = useState({
+            pageNumber:1,
+            pageSize:10,
+            maxPage:1,
+            startPage:1,
+            endPage:1,
+            listCount:1,
+        });
 
     const handleChange = (e) => {
         const { name, value} = e.target;
@@ -38,7 +47,7 @@ const FAQList = () => {
         const month = date.getMonth() + 1;  // 월은 0부터 시작하므로 1을 더해야 합니다.
         const day = date.getDate();
         
-        return `${year}-${month}-${day}`;
+        return `${year}년 ${month}월 ${day}일`;
     };
     
       
@@ -62,11 +71,11 @@ const FAQList = () => {
         setIsInsert(true)
     };
 
-    const handleFAQInsert = async () => {
+    const handleFAQInsert = async (page = 1) => {
         console.info("faqInser : " + JSON.stringify(faq));
         try {
             await apiSpringBoot.post('/faq', faq, {
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
             });
         alert('FAQ 등록 성공');
         handleFAQView();
@@ -80,15 +89,38 @@ const FAQList = () => {
     };
 
 
-    const handleFAQView = async () => {
+    const handleFAQView = async (page = 1) => {
         try {
             const response = await apiSpringBoot.get('/faq',{
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                params: {
+                    ...pagingInfo,
+                    pageNumber: page
+                }
             });
-            setFAQList(response.data);
-            console.log(JSON.stringify(response.data));
+            setFAQList(response.data.list);
+            const {maxPage, startPage, endPage} = PagingCalculate(response.data.search.pageNumber, 
+                                                            response.data.search.listCount, response.data.search.pageSize);
+            setPagingInfo((pre) => ({
+                ...pre,
+                pageNumber: response.data.search.pageNumber,
+                maxPage: maxPage,
+                startPage: startPage,
+                endPage: endPage,
+            }));
+
+            console.log(JSON.stringify(response.data.list));
         } catch {
             console.error('qna 뷰 불러오기 실패', error);
+        }
+    };
+
+    const handlePageChange = (page) => {          // 페이지 눌렀을때 뷰 바꾸기
+        setPagingInfo((pre) => ({...pre, pageNumber: page}));  
+        setOpenFAQ(null);
+        handleFAQView(page);
+        if (listRef.current) {
+            listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
@@ -107,7 +139,7 @@ const FAQList = () => {
             faqId: faqId,
             faqUpdatedBy: member.memUUID
         }));
-        setIsUpdate(true);
+        setIsUpdate(true); 
     };
 
     const handleFAQUpdate = async () => {
@@ -155,25 +187,10 @@ const FAQList = () => {
         }
     },[isInsertPage, faq]);
 
-    // 최초 렌더링 시 자동 크기 조정
-    useEffect(() => {
-        // FAQ 내용이 있을 때 자동 크기 조정
-        textareaRefs.current.forEach((textarea, index) => {
-            if (textarea && openFAQ === index) {
-                autoResize(textarea);
-            }
-        });
-    }, [faqList]); // faqList가 변경될 때마다 실행
 
-    // 자동 크기 조정 함수
-    const autoResize = (textarea) => {
-        textarea.style.height = 'auto';  // 크기 초기화
-        textarea.style.height = `${textarea.scrollHeight}px`;  // scrollHeight에 맞게 높이 조정
-    };
 
     if (!member) {
         return <div>Loading...</div>; // 로그인 정보가 없으면 로딩 화면
-        
     };
     if(role ==="SENIOR"){
 
@@ -189,43 +206,38 @@ const FAQList = () => {
                         {/* 리스트 출력 */}
                         <div className={styles.list} ref={listRef}>
                         {faqList.map((faqOne, index) =>(
-                            <div>
-                                <div className={styles.object} onClick={() => toggleFAQ(index)}>
-                                    <div className={styles.title}>
-                                        {faqOne.faqTitle}
-                                    </div>
-                                    <div className={styles.message}>
-                                        <div className={styles.messagement}>
-                                            내용이 궁금하면 클릭해보세요!
+                            <>
+                                <div>
+                                    <div className={styles.object} onClick={() => toggleFAQ(index)}>
+                                        <div className={styles.title}>
+                                            {faqOne.faqTitle}
                                         </div>
                                         <div className={styles.message}>
-                                            <div className={styles.date}>
-                                                등록일 &nbsp; {formatDate(faqOne.faqUpdatedAt)}
-                                            </div> &nbsp;&nbsp;&nbsp;
+                                            <div className={styles.messagement}>
+                                                내용이 궁금하면 클릭해보세요!
+                                            </div>
+                                            <div className={styles.message}>
+                                                <div className={styles.date}>
+                                                    등록일 &nbsp; {formatDate(faqOne.faqUpdatedAt)}
+                                                </div> &nbsp;&nbsp;&nbsp;
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                              
-                                <textarea 
-                                ref={(el) => (textareaRefs.current[index] = el)} // 각 FAQ에 고유한 ref 할당
-                                onInput={(e) => autoResize(e.target)} // 입력 시 크기 조정
-                                defaultValue={faqOne.faqContent} 
-                                className={`${styles.objectAnswer} ${openFAQ === index ? styles.open : ''}`} 
-                                readOnly 
-                                disabled
-                                id="read"/> 
-                         
-                            </div>
+                                <div className={`${styles.objectAnswer} ${openFAQ === index ? styles.open : ''}`}>
+                                        {faqOne.faqContent}  
+                                </div>
+                            </>
                             ))}
-                        {/* <div className={styles.faqPaging}>
-                                <Paging 
-                                    currentPag={pagingInfo.pageNumber || 1}
-                                    maxPage={pagingInfo.maxPage || 1}
-                                    startPage={pagingInfo.startPage || 1}
-                                    endPage={pagingInfo.endPage || 1}
-                                    onPageChange={(page) => handleUpdateView(page)}
-                                />
-                        </div> */}
+                            <Paging 
+                                pageNumber={pagingInfo.pageNumber }
+                                listCount={pagingInfo.listCount}
+                                maxPage={pagingInfo.maxPage}
+                                startPage={pagingInfo.startPage }
+                                endPage={pagingInfo.endPage}
+                                onPageChange={(page) => handlePageChange(page)}
+                            />
+                            <div className={styles.marginBottom}></div> 
                         </div>
 
                     </div>
@@ -286,7 +298,18 @@ const FAQList = () => {
                         </button>
                     </div>
                     )}
+
+                    <Paging 
+                        pageNumber={pagingInfo.pageNumber }
+                        listCount={pagingInfo.listCount}
+                        maxPage={pagingInfo.maxPage}
+                        startPage={pagingInfo.startPage }
+                        endPage={pagingInfo.endPage}
+                        onPageChange={(page) => handlePageChange(page)}
+                    />
+                    <div className={styles.marginBottom}></div> 
                 </div>
+                
             </div>
         );
     }

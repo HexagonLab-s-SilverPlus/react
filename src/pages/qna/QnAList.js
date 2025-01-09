@@ -213,7 +213,7 @@ const QnAList = () => {
         </table>
         <div className={styles.pagingDiv}>
           <Paging 
-            currentPag={pagingInfo.currentPage }
+            pageNumber={pagingInfo.pageNumber }
             maxPage={pagingInfo.maxPage}
             startPage={pagingInfo.startPage }
             endPage={pagingInfo.endPage}
