@@ -1,34 +1,14 @@
-/* src/components/common/PagingView.module.css */
-.pagingContainer {
-    display: flex;
-    justify-content: center;
-  }
 
-  .pagingContainer button:disabled {cursor: not-allowed;}
-  
-  .pageButton {
-    background: none;
-    border: none;     
-    cursor: pointer;
-    font-size: 20px;
-  }
-  
-  .adminbutton{
-    background: none;
-    border: none;     
-    cursor: pointer;
-    font-size: 20px;
-  }
+.pagingContainer {display: flex; justify-content: center; align-items: center; gap: 4px;}
+.pagingContainer button {cursor: pointer; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; font-family: "Pretendard Variable"; font-size: 18px; padding: 2px 3px; border: 0; background: none;}
+.pagingContainer button:hover {font-weight: bold;}
+.pagingContainer button:disabled {cursor: not-allowed; color: #999;}
+.pagingContainer button:disabled:hover {font-weight: normal;}
+.pagingContainer .activePage1 {font-weight: bold; color: #fff; background: #064420; border-radius: 8px;}
 
-  .adminbutton:hover {
-    text-decoration: underline;
-  }
-
-  .activebutton{
-    background: none;
-    border: none;     
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    color: #368cfc;
-  }
+.pagingSeniorContainer {display: flex; justify-content: center; align-items: center; gap: 4px;}
+.pagingSeniorContainer button {cursor: pointer; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; font-family: "Pretendard Variable"; font-size: 20px; padding: 2px 3px; border: 0; background: none;}
+.pagingSeniorContainer button:hover {font-weight: bold;}
+.pagingSeniorContainer button:disabled {cursor: not-allowed; color: #999;}
+.pagingSeniorContainer button:disabled:hover {font-weight: normal;}
+.pagingSeniorContainer .activePage1 {font-weight: bold; color: #fff; background: #064420; border-radius: 8px;}

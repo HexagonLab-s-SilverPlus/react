@@ -70,8 +70,8 @@
     display: flex;
     border: solid 2px rgb(189, 189, 189);
     height: 102px; /* 충분히 큰 값을 설정하여 펼쳐짐 */
-    margin: -1px;
-
+    margin: -2px -1px ;
+    white-space: pre-wrap;
 }
   
   
@@ -116,6 +116,9 @@
     margin: 30px;
 }
 
+.marginBottom {
+    height: 100px;
+}
 
 /*senior*/
 .faqList {width: 100%; height: 100vh; }
@@ -158,8 +161,28 @@
 .object:hover{background-color: #FDFAF6;cursor:pointer;}
 .object .messagement {opacity:0;}
 .object:hover .messagement {opacity:1; }
-.objectAnswer{height: 0px; display: block; padding: 0; border: 0;}
-.objectAnswer.open{font-size:36px;font-weight:bold;color:#333333;display:block;overflow:hidden;align-content:center;margin:20px 0px;width:92%;max-width: 1400px; margin-left:auto;padding:20px 50px;background-color:rgb(219, 219, 219);box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15);border-radius:10px;min-height:108px;resize: none;font-family: "Pretendard Variable";}
+.objectAnswer {height: 0px; font-size: 0;overflow: hidden; transition: max-height 0.2s linear, padding 0.2s linear;overflow: hidden;}
+.objectAnswer.open {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333333;
+    display: block;
+    align-content: center;
+    margin: 20px 0px;
+    width: 92%;
+    max-width: 1400px;
+    margin-left: auto;
+    padding: 20px 50px;
+    background-color: rgb(219, 219, 219);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    min-height: 150px;
+    resize: none;
+    font-family: "Pretendard Variable";
+    white-space: pre-wrap;
+    height: auto;
+    max-height: 1000px; /* 필요한 크기로 설정 */
+  }
 
 .title{font-size:36px;font-weight:bold;color:#333333;padding-bottom: 30px;}
 .message{display:flex;justify-content:space-between;align-items:end;margin-top:10px;font-size:24px;color:#999999;}
