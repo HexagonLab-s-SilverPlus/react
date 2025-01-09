@@ -124,7 +124,7 @@ const MemberListView = () => {
   };
 
   const handleDetailView = (memUUID) => {
-    navigate(`/mdetailview/${memUUID}`);
+    navigate(`/mlistview/mdetailview/${memUUID}`);
   };
 
   // 검색 옵션 드롭다운 함수

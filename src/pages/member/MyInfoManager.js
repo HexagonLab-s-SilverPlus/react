@@ -205,6 +205,10 @@ const MyInfoManager = () => {
     }
   };
 
+  const handleTest = () => {
+    navigate(`/test/${member.memUUID}`);
+  };
+
   return (
     <div className={styles.myfoMainContainer}>
       <SideBar />
@@ -216,7 +220,9 @@ const MyInfoManager = () => {
           <p>내정보</p>
           <div className={styles.myinfoRemove}>
             {isVerify === 'true' && (
-              <button onClick={handleRemove}>회원 탈퇴</button>
+              <>
+                <button onClick={handleRemove}>회원 탈퇴</button>
+              </>
             )}
           </div>
         </div>

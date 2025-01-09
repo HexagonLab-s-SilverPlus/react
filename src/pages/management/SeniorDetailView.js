@@ -10,13 +10,19 @@ import loading from '../../assets/images/loading.gif';
 import { apiSpringBoot } from '../../utils/axios';
 import { convertUTCToKST } from '../../fuction/function';
 
+//병력관리
+import Medical from './components/Medical';
+import SideBar from '../../components/common/SideBar';
+
 const SeniorDetailView = () => {
   const { UUID } = useParams();
   const { role } = useContext(AuthContext);
+
+  // 서버에서 받아오는 데이터 저장 상태변수 목록
   const [family, setFamily] = useState(); // 가족 데이터 저장 상태변수
   const [senior, setSenior] = useState(); // 어르신 데이터 저장 상태변수
   const [manager, setManager] = useState(); // 담당자 데이터 저장 상태변수
-  const [profileData, setProfileData] = useState();
+  const [profileData, setProfileData] = useState(); // 어르신 프로필 데이터 저장 상태변수
 
   // 페이지 렌더링 시 정보 받아오기
   useEffect(() => {
@@ -37,6 +43,8 @@ const SeniorDetailView = () => {
       }
     };
 
+
+
     SeniorDetail();
   }, [UUID]);
 
@@ -50,9 +58,10 @@ const SeniorDetailView = () => {
   }
 
   return (
-    <>
+    <div className={styles.snrDetailViewWrap}>
+      <SideBar />
       {role === 'MANAGER' ? (
-        <>
+        <div className={styles.snrDetailViewRight}>
           <SeniorDetailViewManager
             UUID={UUID}
             senior={senior}
@@ -60,11 +69,15 @@ const SeniorDetailView = () => {
             profileData={profileData}
           />
           <SeniorDetailViewFamilyApproval UUID={UUID} family={family} />
-        </>
+          <Medical UUID={UUID} />
+        </div>
       ) : (
-        <SeniorDetailViewFamily UUID={UUID} />
+        <div className={styles.snrDetailViewRight}>
+          <SeniorDetailViewFamily UUID={UUID} />
+          <Medical UUID={UUID} />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

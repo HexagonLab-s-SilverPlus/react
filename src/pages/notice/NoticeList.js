@@ -224,7 +224,7 @@ function NoticeList() {
                         {notices.map((noticeList) =>(
                             <div
                                 key={noticeList.notId}
-                                onClick={()=>(navigate(`/noticedetail/${noticeList.notId}`))}
+                                onClick={()=>(navigate(`/notice/noticedetail/${noticeList.notId}`))}
                                 className={styles.object}
                             >
                                 <div className={styles.title}>
@@ -278,7 +278,7 @@ function NoticeList() {
                     <div className={styles.memberSubLine}>
                         {role ==="ADMIN"&&(
                         <div>
-                            <button className={styles.memberInputButton} onClick={()=>(navigate("/noticewrite"))}>공지사항 등록</button>
+                            <button className={styles.memberInputButton} onClick={()=>(navigate("/notice/noticewrite"))}>공지사항 등록</button>
                         </div>)
                         }
                         {role !=="ADMIN"&&(
@@ -355,7 +355,7 @@ function NoticeList() {
                                 {notices.map((noticeList) =>(
                                     <tr 
                                         key={noticeList.notId}
-                                        onClick={()=>(navigate(`/noticedetail/${noticeList.notId}`))}
+                                        onClick={()=>(navigate(`/notice/noticedetail/${noticeList.notId}`))}
                                     >
                                         <td>{noticeList.notTitle}</td>
                                         <td>{adjustTimeZone(noticeList.notCreateAt).split('T')[0]}</td>

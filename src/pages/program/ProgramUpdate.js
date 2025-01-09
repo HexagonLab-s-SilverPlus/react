@@ -38,23 +38,23 @@ const ProgramUpdate = () => {
 
     // const formatDate = (w) => {     // 데이터 포멧(우리나라 시간으로)
     //     const date = new Date(w);
-      
+
     //     // 연도에서 앞 2자리를 제거하고, 초는 제외한 형식으로 출력
     //     const year = date.getFullYear();
     //     const month = date.getMonth() + 1;  // 월은 0부터 시작하므로 1을 더해야 합니다.
     //     const day = date.getDate();
-      
+
     //     return `${year}-${month}-${day}`;
     // };
 
     const formatDate = (dateString) => {
         if (!dateString) return ''; // 빈 값 처리
         const date = new Date(dateString);
-    
+
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // 두 자리로 포맷
         const day = String(date.getDate()).padStart(2, '0'); // 두 자리로 포맷
-    
+
         return `${year}-${month}-${day}`;
     };
 
@@ -68,7 +68,7 @@ const ProgramUpdate = () => {
                     ...file,
                     fileId: file.fileId || null, // fileId가 없으면 null로 설정
                 })) || [];
-                
+
                 const loadedFormData = {
                     snrOrgName: programData.snrOrgName || '',
                     snrOrgPhone: programData.snrOrgPhone || '',
@@ -82,21 +82,21 @@ const ProgramUpdate = () => {
                     snrCreatedBy: member.memUUID,
                     snrUpdatedBy: member.memUUID,
                 };
-    
-                
+
+
                 // 상태 업데이트
                 setFormData(loadedFormData);
                 setFiles(loadedFiles);
-    
+
                 // 초기 상태 저장
                 setOriginalFormData(loadedFormData);
                 setOriginalFiles(loadedFiles);
             } catch (error) {
-                console.error('fetchProgramData Error : ', error);
+                // console.error('fetchProgramData Error : ', error);
                 alert('데이터를 불러오는 데 실패했습니다.');
             }
         };
-    
+
         fetchProgramData();
     }, [snrProgramId, member.memUUID]);
 
@@ -111,7 +111,7 @@ const ProgramUpdate = () => {
     //input 값 변경
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({...prev, [name] : value,}));
+        setFormData((prev) => ({ ...prev, [name]: value, }));
     };
 
     //파일 추가 핸들러
@@ -125,43 +125,43 @@ const ProgramUpdate = () => {
 
         setFiles((prev) => {
             const updatedFiles = [...prev, ...selectedFiles];
-            console.log("Updated files after addition:", updatedFiles);
+            // console.log("Updated files after addition:", updatedFiles);
             return updatedFiles;
         });
-    
+
         setNewFiles((prev) => {
             const updatedNewFiles = [...prev, ...selectedFiles];
-            console.log("Updated newFiles after addition:", updatedNewFiles);
+            // console.log("Updated newFiles after addition:", updatedNewFiles);
             return updatedNewFiles;
         });
     };
 
     // 파일 삭제 핸들러
     const handleFileDelete = (index) => {
-        console.log("Files state before deletion:", files); // 삭제 전 파일 상태
-        console.log("Delete index:", index); // 삭제하려는 파일의 인덱스
-    
+        // console.log("Files state before deletion:", files); // 삭제 전 파일 상태
+        // console.log("Delete index:", index); // 삭제하려는 파일의 인덱스
+
         const fileToDelete = files[index];
-        console.log("File to delete:", fileToDelete); // 삭제하려는 파일 데이터
-    
+        // console.log("File to delete:", fileToDelete); // 삭제하려는 파일 데이터
+
         if (fileToDelete?.fileId) {
             // 기존 파일 삭제
-            console.log("Deleting existing file:", fileToDelete.fileId);
+            // console.log("Deleting existing file:", fileToDelete.fileId);
             setDeleteFileIds((prev) => [...prev, fileToDelete.fileId]);
         } else if (fileToDelete instanceof File) {
             // 새로 추가된 파일 삭제
-            console.log("Deleting newly added file:", fileToDelete.name);
+            // console.log("Deleting newly added file:", fileToDelete.name);
             setNewFiles((prev) => prev.filter((file) => file !== fileToDelete));
-        } else {
+        } /* else {
             console.error("Unknown file structure:", fileToDelete);
-        }
-    
+        } */
+
         // `files` 상태에서 삭제
         setFiles((prev) => prev.filter((_, i) => i !== index));
-    
-        console.log("Files state after deletion:", files);
+
+        // console.log("Files state after deletion:", files);
     };
-    
+
     //초기화 버튼 클릭 핸들러
     const handleReset = () => {
         if (originalFormData && originalFiles) {
@@ -193,7 +193,7 @@ const ProgramUpdate = () => {
                 // '2024-12-24' 형식을 '2024-12-24 00:00:00'으로 변환
                 return `${dateString} 12:00:00`;
             };
-            
+
             // FormData에 입력값 추가
             Object.entries(formData).forEach(([key, value]) => {
                 if (key === 'snrStartedAt' || key === 'snrEndedAt') {
@@ -201,12 +201,12 @@ const ProgramUpdate = () => {
                 } else {
                     data.append(key, value);
                 }
-            }); 
-            
+            });
+
             deleteFileIds.forEach(fileId => data.append('deleteFileIds', fileId));
             newFiles.forEach(file => data.append('files', file));
 
-            console.log('FormData Entries:', Array.from(data.entries()));
+            // console.log('FormData Entries:', Array.from(data.entries()));
 
             try {
                 await apiSpringBoot.put(`/program/${snrProgramId}`, data, {
@@ -217,12 +217,12 @@ const ProgramUpdate = () => {
                 alert('프로그램 수정에 성공하였습니다.');
                 navigate(-1);
             } catch (error) {
-                console.error('프로그램 수정 실패 : ', error);
+                // console.error('프로그램 수정 실패 : ', error);
                 alert('프로그램 수정에 실패하였습니다. 관리자에게 문의하세요.');
             }
         }
     };
-    
+
     return (
         <div className={styles.pgContainer}>
             <SideBar />
@@ -236,34 +236,34 @@ const ProgramUpdate = () => {
                     <form onReset={handleReset} onSubmit={handleSubmit} encType='multipart/form-data'>
                         <div className={styles.pgBox}>
                             <label>기관명<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrOrgName" id="snrOrgName" value={formData.snrOrgName} required onChange={handleChange} placeholder="기관명을 입력해 주세요"/>
+                            <input type="text" name="snrOrgName" id="snrOrgName" value={formData.snrOrgName} required onChange={handleChange} placeholder="기관명을 입력해 주세요" />
                         </div>
 
                         <div className={styles.pgBox}>
                             <label>기관 전화번호<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="tel" name="snrOrgPhone" id="snrOrgPhone" value={formData.snrOrgPhone} required onChange={handleChange} placeholder="예) 02-123-4567"/>
+                            <input type="tel" name="snrOrgPhone" id="snrOrgPhone" value={formData.snrOrgPhone} required onChange={handleChange} placeholder="예) 02-123-4567" />
                         </div>
-                        
+
                         <div className={styles.pgBox}>
                             <label>기관 주소<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrOrgAddress" id="snrOrgAddress" value={formData.snrOrgAddress} required onChange={handleChange} placeholder="예) 서울 서초구 서초대로 77길 41 4층"/>
+                            <input type="text" name="snrOrgAddress" id="snrOrgAddress" value={formData.snrOrgAddress} required onChange={handleChange} placeholder="예) 서울 서초구 서초대로 77길 41 4층" />
                         </div>
 
                         <div className={styles.pgBox}>
                             <label>담당자명<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrMgrName" id="snrMgrName" value={formData.snrMgrName} required onChange={handleChange} placeholder="프로그램 담당자명을 입력해 주세요"/>
+                            <input type="text" name="snrMgrName" id="snrMgrName" value={formData.snrMgrName} required onChange={handleChange} placeholder="프로그램 담당자명을 입력해 주세요" />
                         </div>
-                        
+
                         <div className={styles.pgBox}>
                             <label>담당자 이메일<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="tel" name="snrMgrEmail" id="snrMgrEmail" value={formData.snrMgrEmail} required onChange={handleChange} placeholder="예) silverplus2024@hexalab.com"/>
+                            <input type="tel" name="snrMgrEmail" id="snrMgrEmail" value={formData.snrMgrEmail} required onChange={handleChange} placeholder="예) silverplus2024@hexalab.com" />
                         </div>
 
                         <div className={styles.pgLine}></div>
 
                         <div className={styles.pgBox}>
                             <label>제 목<span className={styles.redTxt}>&#42;</span></label>
-                            <input type="text" name="snrTitle" id="snrTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요"/>
+                            <input type="text" name="snrTitle" id="snrTitle" value={formData.snrTitle} required onChange={handleChange} placeholder="제목을 입력해 주세요" />
                         </div>
 
                         <div className={styles.pgBox}>
@@ -285,7 +285,7 @@ const ProgramUpdate = () => {
                             <div className={styles.pgFileLeft}>
                                 <p>첨부파일</p>
                                 <button type="button" onClick={() => fileInputRef.current.click()} className={styles.fileBtn}>파일 선택</button>
-                                <input type="file" ref={fileInputRef} multiple accept="*/*" onChange={handleFileChange} style={{display: "none"}} />
+                                <input type="file" ref={fileInputRef} multiple accept="*/*" onChange={handleFileChange} style={{ display: "none" }} />
 
                                 {/* 파일 목록 및 삭제 */}
                                 <div className={styles.pgFileListContainer}>
@@ -300,7 +300,7 @@ const ProgramUpdate = () => {
                                     </ul>{/* .pgFileList end */}
                                 </div>
                             </div>{/* .pgFileLeft end */}
-                            
+
                             {/* 사진 미리보기 */}
                             <div className={styles.pgFileRight}>
                                 <p>사진 미리보기</p>
@@ -310,7 +310,7 @@ const ProgramUpdate = () => {
                                         const fileUrl = file instanceof File
                                             ? URL.createObjectURL(file) // 새로 추가된 파일
                                             : `data:${file.mimeType};base64,${file.fileContent}`; // 기존 업로드된 파일
-                                        
+
                                         return (
                                             <div key={index} className={styles.pgPrevItem}>
                                                 <img src={fileUrl} alt={`preview-${index}`} className={styles.pgPrevImage} />
@@ -327,7 +327,7 @@ const ProgramUpdate = () => {
                                 </div>{/* .preImgContainer end */}
                             </div>{/* .pgFileRight end */}
                         </div>{/* .pgFileWrap end */}
-                        
+
                         <div className={styles.pgBtnWrap}>
                             <input type="submit" value="수정하기" />
                             <input type="reset" value="초기화" />

@@ -12,7 +12,7 @@ import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 
 const SeniorList = () => {
-  const { role } = useContext(AuthContext);
+  const { role, member } = useContext(AuthContext);
 
   const [seniorList, setSeniorList] = useState([]);
   const [isDropdown, setIsDropdown] = useState('false');
@@ -72,7 +72,11 @@ const SeniorList = () => {
     const SeniorList = async () => {
       try {
         if (role === 'MANAGER' || role === 'FAMILY') {
-          const response = await apiSpringBoot.get(`/member/seniorList`);
+          const response = await apiSpringBoot.get(`/member/seniorList`, null, {
+            params: {
+              UUID: member.memUUID,
+            },
+          });
           console.log('search 값 확인 : ', response.data.search);
           const { maxPage, startPage, endPage } = PagingCalculate(
             response.data.search.pageNumber,
@@ -112,7 +116,7 @@ const SeniorList = () => {
 
   // 어르신 상세보기 이동 핸들러
   const handleDetailView = (UUID) => {
-    navigate(`/sdetailview/${UUID}`);
+    navigate(`/seniorlist/sdetailview/${UUID}`);
   };
 
   // 검색 옵션 드롭다운 함수
