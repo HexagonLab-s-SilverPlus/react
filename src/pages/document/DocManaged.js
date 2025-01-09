@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider";
 import styles from './DocManaged.module.css';
 
-
 const DocManaged = () => {
     const [dmData, setDmData] = useState([]);
     const { apiSpringBoot, member } = useContext(AuthContext);
@@ -15,9 +14,11 @@ const DocManaged = () => {
     };
 
     // 문서 목록을 가져오는 함수
-    const fetchDocManaged = async () => {
+    const fetchDocManaged = async (status = "대기중") => {
         try {
-            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`);
+            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`, {
+                params: { status }, // 상태에 따라 필터링
+            });
             if (response.data && response.data.data && response.data.data.length > 0) {
                 console.log("대기중 상태의 문서 조회:", response.data.data);
                 setDmData(response.data.data);
@@ -53,7 +54,6 @@ const DocManaged = () => {
     // 파일 다운로드 함수
     const handleDownload = async (fileName) => {
         try {
-            // 파일 다운로드 요청 (Blob 형식으로 반환)
             const response = await apiSpringBoot.get(`/api/doc-files/download/${fileName}`, {
                 responseType: 'blob', // 파일 다운로드를 위한 Blob 설정
             });
@@ -62,16 +62,15 @@ const DocManaged = () => {
                 throw new Error('파일 다운로드 실패');
             }
 
-            // Blob 데이터를 다운로드 링크로 변환하여 파일 다운로드 처리
             const blob = new Blob([response.data]);
             const downloadUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = downloadUrl;
-            link.download = fileName; // 다운로드할 파일 이름 지정
+            link.download = fileName;
             document.body.appendChild(link);
-            link.click(); // 링크 클릭하여 다운로드 시작
-            link.remove(); // 다운로드 후 링크 제거
-            URL.revokeObjectURL(downloadUrl); // URL 객체 메모리 해제
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(downloadUrl);
         } catch (error) {
             console.error('파일 다운로드 중 오류 발생:', error);
         }
@@ -82,7 +81,7 @@ const DocManaged = () => {
             <div className={styles.dmTop}>
                 <h1>공문서 확인</h1>
                 <div className={styles.dmline}>
-                    <button onClick={fetchDocManaged}>공문서 승인 요청</button>
+                    <button onClick={() => fetchDocManaged("대기중")}>공문서 승인 요청</button>
                     <button onClick={() => fetchDocManaged("승인")}>공문서 승인 완료</button>
                     <button onClick={() => fetchDocManaged("반려")}>공문서 승인 반려</button>
                 </div>
@@ -111,7 +110,7 @@ const DocManaged = () => {
                             <td>
                                 <button
                                     className={styles.downloadButton}
-                                    onClick={() => handleDownload(doc.file.dfRename)} // 파일 다운로드
+                                    onClick={() => handleDownload(doc.file.dfRename)}
                                 >
                                     다운로드
                                 </button>
