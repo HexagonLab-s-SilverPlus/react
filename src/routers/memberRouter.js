@@ -70,7 +70,7 @@ const memberRouter = [
       element={<ProtectedRoute element={<MemberListView />} />}
     />
     <Route
-      path="/mdetailview/:UUID"
+      path="/mlistview/mdetailview/:UUID"
       element={<ProtectedRoute element={<MemberDetailView />} />}
     />
 
