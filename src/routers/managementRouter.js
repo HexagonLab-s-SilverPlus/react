@@ -8,9 +8,9 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const managementRouter = [
   <>
-    <Route path="/seniorlist" element={<SeniorList />} />
-    <Route path="/seniorlist/sdetailview/:UUID" element={<SeniorDetailView />} />
-    <Route path="/seniorlist/seniorregist" element={<SeniorRegist />} />
+    <Route path="/seniorlist" element={<ProtectedRoute element={<SeniorList />} />} />,
+    <Route path="/seniorlist/sdetailview/:UUID" element={<ProtectedRoute element={<SeniorDetailView />} />} />,
+    <Route path="/seniorlist/seniorregist" element={<ProtectedRoute element={<SeniorRegist />} />} />,
   </>,
 ];
 
