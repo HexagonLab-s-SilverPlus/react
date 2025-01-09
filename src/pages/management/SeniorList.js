@@ -116,7 +116,7 @@ const SeniorList = () => {
 
   // 어르신 상세보기 이동 핸들러
   const handleDetailView = (UUID) => {
-    navigate(`/sdetailview/${UUID}`);
+    navigate(`/seniorlist/sdetailview/${UUID}`);
   };
 
   // 검색 옵션 드롭다운 함수
