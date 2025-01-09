@@ -12,8 +12,8 @@
   border-right: 2px solid #ddd;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* 그림자*/
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 */
+  transition: transform 0.3s ease; /* 부드러운 열림/닫힘 애니메이션 */
 }
 
 
@@ -29,7 +29,13 @@
   background-color: #ffffff;
   /* 배경색 설정 */
 }
+.sidebarVisible {
+  transform: translateX(0);
+}
 
+.sidebarHidden {
+  transform: translateX(-100%);
+}
 
 .archivedList,
 .activeList {
