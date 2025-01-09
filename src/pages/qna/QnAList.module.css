@@ -1,189 +1,22 @@
-.qnaContent {
-    height: 911px;
-    width: 1456px;
-    padding-top: 69px;
-    padding-left: 61px;
-    position: relative;
-    left: 368px;
-}
-
-.qnaSeachdiv {
-    padding-top: 85px;
-    padding-left: 1016px;
-    position: relative;
-    height: 41px;
-}
-
-.qnaSeachdiv img {
-    position: absolute;
-    right: 0;
-    bottom: 0px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-}
-
-.qnaSearchAllSelect {
-    height: 33px;
-    width: 83px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    font-weight: bold;
-    font-size: 20px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    font-family: "Pretendard Variable";
-    font-weight: bold;
-}
-
-.qnaSearchTitleSelect {
-    height: 33px;
-    width: 83px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    font-weight: bold;
-    font-size: 20px;
-    position: absolute;
-    right: 270px;
-    bottom: 0;
-    font-family: "Pretendard Variable";
-    font-weight: bold;
-}
-
-.qnaSearchDateSelect {
-    height: 33px;
-    width: 83px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    font-weight: bold;
-    font-size: 20px;
-    position: absolute;
-    right: 310px;
-    bottom: 0;
-    font-family: "Pretendard Variable";
-    font-weight: bold;
-}
-
-.qnaTitleInput {
-    height: 33px;
-    width: 217px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    position: absolute;
-    right: 40px;
-    bottom: 0;
-}
-
-.qnaDateInput {
-    position: absolute;
-    right: 40px;
-    bottom: 0px;
-}
-
-.qnaDate {
-    height: 30px;
-    width: 110px;
-    font-family: "Pretendard Variable";
-    font-weight: bold;
-}
-
-.qnaInputBTN {
-    display: inline-block;
-    height: 41px;
-    width: 89px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    background-color: #064420;
-    font-weight: bold;
-    color: #ffffff;
-    border-radius: 10px;
-    font-size: 18px;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    cursor: pointer;
-    font-family: "Pretendard Variable";
-    font-weight: bold;
-}
-
-.qnaListTable {
-    margin-top: 100px;
-    width: 1456px;
-    padding-top: 80px;
-    font-size: 18px;
-    border-collapse: collapse;
-}
-
-.qnaListTable tr {
-    height: 44px;
-}
-
-.qnaListTable tr th {
-    border-bottom: 2px solid #0000004b;
-}
-
-.qnaListTable tr td {
-    border-bottom: 2px solid #0000004b;
-}
-
-.qnaListTable tr td button {
-    font-size: 18px;
-    background: none; 
-    border: none;
-    color: rgb(0, 0, 0);
-    text-decoration: underline;
-    cursor: pointer;
-    text-decoration-line: none;
-}
-
-.qnaTitle {
-    width: 956px;
-    text-align: left;
-}
-
-.memberName {
-    width: 200px;
-}
-
-.memberNameTd {
-    text-align: center;
-}
-
-.qnaWCreateAt {
-    width: 200px;
-}
-
-.qnaWCreateAtTd {
-    text-align: center;
-}
-
-.qnaStateN {
-    width: 100px;
-    text-align: center;
-    color: #ff0000;
-    font-weight: bolder;
-}
-
-.qnaStateY {
-    width: 100px;
-    text-align: center;
-    font-weight: bolder;
-}
-
-.qnaStateYss { 
-    background: 'none'; 
-    border: 'none';
-    color: 'blue';
-    text-decoration: 'underline';
-    cursor: 'pointer';
- }
- 
- .pagingDiv {
-    
- }
+.qnaContent {height: 911px; width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
+.qnaSeachdiv {padding-top: 85px; padding-left: 1016px; position: relative; height: 41px;}
+.qnaSeachdiv img {position: absolute; right: 0; bottom: 0px; width: 30px; height: 30px; cursor: pointer;}
+.qnaSearchAllSelect, .qnaSearchTitleSelect, .qnaSearchDateSelect {height: 33px; width: 83px; border-top: none; border-left: none; border-right: none; font-weight: bold; font-size: 20px; position: absolute; font-family: "Pretendard Variable"; font-weight: bold;}
+.qnaSearchAllSelect {right: 0; bottom: 0;}
+.qnaSearchTitleSelect {right: 270px; bottom: 0;}
+.qnaSearchDateSelect {right: 310px; bottom: 0;}
+.qnaTitleInput {height: 33px; width: 217px; border-top: none; border-left: none; border-right: none; position: absolute; right: 40px; bottom: 0;}
+.qnaDateInput {position: absolute; right: 40px; bottom: 0px;}
+.qnaDate {height: 30px; width: 110px; font-family: "Pretendard Variable"; font-weight: bold;}
+.qnaInputBTN {display: inline-block; height: 41px; width: 89px; border-top: none; border-left: none; border-right: none; background-color: #064420; font-weight: bold; color: #ffffff; border-radius: 10px; font-size: 18px; position: absolute; left: 0; bottom: 0; cursor: pointer; font-family: "Pretendard Variable";}
+.qnaListTable {margin-top: 100px; width: 1456px; padding-top: 80px; font-size: 18px; border-collapse: collapse;}
+.qnaListTable tr {height: 44px;}
+.qnaListTable tr th, .qnaListTable tr td {border-bottom: 2px solid #0000004b;}
+.qnaListTable tr td button {font-size: 18px; background: none; border: none; color: rgb(0, 0, 0); text-decoration: underline; cursor: pointer; text-decoration-line: none;}
+.qnaTitle {width: 956px; text-align: left;}
+.memberName {width: 200px;}
+.memberNameTd, .qnaWCreateAtTd {text-align: center;}
+.qnaWCreateAt {width: 200px;}
+.qnaStateN {width: 100px; text-align: center; color: #ff0000; font-weight: bolder;}
+.qnaStateY {width: 100px; text-align: center; font-weight: bolder;}
+.qnaStateYss {background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;}

@@ -150,8 +150,9 @@ const QnAUpdate = () => {
                     <hr />
                     <div className={styles.filesDiv}>
                         <button
+                        className={styles.upLoadFilesBTN}
                         onClick={(e)=>handleFileInsertBox(e)}
-                            >첨부파일추가
+                            >파일추가
                         </button>
                         <div>
                         {files && files.map((file, index) => (
@@ -159,6 +160,7 @@ const QnAUpdate = () => {
                                 <td colSpan="2">
                                     <span>qna_file_{index}</span>
                                     <input 
+                                        className={styles.xMark}
                                         type="button"
                                         onClick={()=>handleDeleteOriginFile(index, file)}
                                         value="x"

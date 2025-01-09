@@ -112,7 +112,7 @@
                     <hr/>
                     <div className={styles.filesDiv}>
                         <button
-                        className={styles.upLoadFiles}
+                        className={styles.upLoadFilesBTN}
                         onClick={(e)=>handleFileInsertBox(e)}
                             >파일 추가
                         </button>
@@ -121,7 +121,7 @@
                         <tr key={index}>
                             <td colSpan="2">
                                 <span>{file.name}</span>
-                                <input 
+                                <input className={styles.xMark}
                                     type="button"
                                     onClick={()=>handleDeleteFile(index)}
                                     value="x"
