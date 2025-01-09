@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider";
 import styles from './DocManaged.module.css';
 
+
 const DocManaged = () => {
     const [dmData, setDmData] = useState([]);
     const { apiSpringBoot, member } = useContext(AuthContext);
