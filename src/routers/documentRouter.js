@@ -7,7 +7,7 @@ import DocRequestList from '../pages/document/DocReqList';
 import DocManaged from '../pages/document/DocManaged';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
-const dashboardRouter = [
+const documentRouter = [
     <>
     <Route path="/docmain" element={<ProtectedRoute element={<DocMain/>}/>}/>,
     <Route path="/docrequest" element={<ProtectedRoute element={<DocRequestList/>}/>}/>,
@@ -16,4 +16,4 @@ const dashboardRouter = [
 
 ];
 
-export default dashboardRouter;
+export default documentRouter;
