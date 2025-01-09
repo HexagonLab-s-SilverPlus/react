@@ -104,7 +104,11 @@ function DocumentChatPage() {
     setAnswers((prev) => ({ ...prev, [currentQuestion.key]: inputText }));
 
 
+    // AI 질문 저장
     setMessages((prev) => [...prev, { sender: 'AI', loading: true }]); // 로딩 상태 추가
+
+    // 입력창 초기화
+    setInputText(''); // 입력창 초기화
 
     const nextKeyIndex = currentKeyIndex + 1;
 
@@ -144,7 +148,7 @@ function DocumentChatPage() {
       } catch (error) {
         setMessages((prev) => [
           ...prev,
-          { sender: 'AI', text: '문서 제출 중 오류가 발생했습니다.', loading: false },
+          { sender: 'AI', text: '네트워크 문제로 질문을 생성하지 못했습니다. 잠시 후 다시 시도해주세요.', loading: false },
         ]);
       } finally {
         setIsLoading(false);
