@@ -179,6 +179,17 @@ const Medical = ({ UUID }) => {
             mediDiseaseName: "",
             mediLastTreatDate: ""
         });
+
+        // 선택된 체크박스 초기화
+        setMedicals((prev) =>
+            prev.map((item) => ({
+                ...item,
+                isChecked: false, // 모든 항목의 체크 상태를 해제
+            }))
+        );
+
+        // 전체 선택 상태 초기화
+        setIsAllChecked(false);
     };
 
     const handleInsertCancelClick = () => {
