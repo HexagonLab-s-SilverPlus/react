@@ -49,14 +49,14 @@
 }
 
 /* 중앙 열에 세로선 추가 */
-.dTable th:not(:first-child):not(:last-child),
-.dTable .dTd:not(:first-child):not(:last-child) {
+th:not(:first-child):not(:last-child),
+.dTd:not(:first-child):not(:last-child) {
     border-left: 1px solid #DDDDDD;
     border-right: 1px solid #DDDDDD;
 }
 
 /* 테이블 헤더 스타일 */
-.dTable th, .dTd {
+th, .dTd {
     border: 1px solid #618264;
     border-left: none;
     border-right: none;
@@ -65,14 +65,14 @@
 }
 
 /* 헤더 배경색 */
-.dTable th {
+th {
     border-top: 2px solid #618264;
     border-bottom: 2px solid #618264;
     font-weight: bold;
 }
 
 /* 행 스타일 */
-.dTable tr:hover {
+tr:hover {
     background-color: #f9f9f9;
 }
 
