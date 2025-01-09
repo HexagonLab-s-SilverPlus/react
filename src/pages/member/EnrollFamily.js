@@ -3,8 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './Enroll.module.css';
+import Modal from '../../components/common/Modal';
+import SearchSenior from './SearchSenior';
 
 function EnrollFamily({ onEnrollSuccess, memType }) {
+  // Modal 관리 상태변수
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     memId: '', // 아이디
     memPw: '', // 비밀번호
@@ -264,301 +268,315 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     setSelectedFiles(updatedFiles);
   };
 
+  // Modal 관련 함수
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <div className={styles.enrollMainContainer}>
-      <h3 style={{ textAlign: 'center', color: '#064420' }}>
-        가족 계정 회원가입
-      </h3>
-      <form enctype="multipart/form-data" onSubmit={handleSubmit}>
-        <table className={styles.enrollForm}>
-          <tr className={styles.valuebox}>이름</tr>
-          <tr>
-            <input
-              type="text"
-              name="memName"
-              onChange={handleChange}
-              className={styles.textbox}
-            />
-          </tr>
-          <tr className={styles.valuebox}>아이디</tr>
+    <>
+      <div className={styles.enrollMainContainer}>
+        <h3 style={{ textAlign: 'center', color: '#064420' }}>
+          가족 계정 회원가입
+        </h3>
+        <form enctype="multipart/form-data" onSubmit={handleSubmit}>
+          <table className={styles.enrollForm}>
+            <tr className={styles.valuebox}>이름</tr>
+            <tr>
+              <input
+                type="text"
+                name="memName"
+                onChange={handleChange}
+                className={styles.textbox}
+              />
+            </tr>
+            <tr className={styles.valuebox}>아이디</tr>
 
-          <tr>
-            <input
-              type="text"
-              name="memId"
-              onChange={handleChange}
-              className={styles.textbox}
-              style={{
-                width: '350px',
-                borderStyle: 'solid',
-                height: '30px',
-                marginRight: '20px',
-                marginBottom: 0,
-              }}
-            />
-            <button className={styles.button2} onClick={handleIdCheck}>
-              중복확인
-            </button>
-          </tr>
-          <tr>
-            {isIdAvailable ? (
-              <span
+            <tr>
+              <input
+                type="text"
+                name="memId"
+                onChange={handleChange}
+                className={styles.textbox}
                 style={{
-                  color: messageIdColor,
-                  fontSize: '10px',
-                  margin: 0,
+                  width: '350px',
+                  borderStyle: 'solid',
+                  height: '30px',
+                  marginRight: '20px',
+                  marginBottom: 0,
                 }}
-              >
-                {idCheckMsg}
-              </span>
-            ) : (
-              <span
-                style={{
-                  color: messageIdColor,
-                  fontSize: '10px',
-                  margin: 0,
-                }}
-              >
-                {idCheckMsg}
-              </span>
-            )}
-          </tr>
-          <tr className={styles.valuebox}>비밀번호</tr>
-          <tr>
-            <input
-              type="password"
-              name="memPw"
-              onChange={(e) => {
-                handleChange(e);
-                handleCheckPassword();
-              }}
-              className={styles.textbox}
-              style={{ marginBottom: '0' }}
-            />
-          </tr>
-          {!passwordValidate ? (
-            <tr
-              style={{
-                textAlign: 'left',
-                fontSize: '10px',
-                color: 'red',
-                height: '20px',
-              }}
-            >
-              영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
+              />
+              <button className={styles.button2} onClick={handleIdCheck}>
+                중복확인
+              </button>
             </tr>
-          ) : (
-            <tr
-              style={{
-                textAlign: 'left',
-                fontSize: '10px',
-                color: 'green',
-                height: '20px',
-              }}
-            >
-              사용가능한 비밀번호입니다.
-            </tr>
-          )}
-          <tr className={styles.valuebox}>비밀번호 확인</tr>
-          <tr>
-            <input
-              type="password"
-              name="memPwChk"
-              className={styles.textbox}
-              onChange={handleChange}
-              style={{ marginBottom: '0' }}
-            />
-          </tr>
-          {formData.memPwChk === '' ? (
-            <tr></tr>
-          ) : (
-            <tr
-              style={{
-                textAlign: 'left',
-                fontSize: '10px',
-                color: messagePwdColor,
-                height: '20px',
-              }}
-              name="pwdCheck"
-            >
-              {messagePwdColor === 'green'}
-              {passwordCheckMsg}
-            </tr>
-          )}
-          <tr className={styles.valuebox}>이메일</tr>
-          <tr>
-            <input
-              name="emailId"
-              style={{ width: '160px' }}
-              onChange={handleEmailIdChange}
-            />
-            <span className={styles.findIdEmailSpan}>@</span>
-            <input
-              name="domain"
-              style={{ width: '160px' }}
-              value={domain}
-              onChange={handleEmailDomainChange}
-            />
-            <select name="domainOption" onChange={handleEmailDomainChange}>
-              <option value="">직접입력</option>
-              <option value="naver.com">네이버</option>
-              <option value="google.com">구글</option>
-              <option value="hanmail.net">한메일</option>
-              <option value="nate.com">네이트</option>
-            </select>
-          </tr>
-          <tr className={styles.valuebox}>주소</tr>
-          <tr>
-            <input
-              type="text"
-              name="memAddress"
-              onChange={handleChange}
-              className={styles.textbox}
-            />
-          </tr>
-          <tr className={styles.valuebox}>주민등록번호</tr>
-          <tr>
-            <input
-              type="text"
-              name="memRnnFront"
-              onChange={handleRnnChange}
-              className={styles.textbox}
-              style={{ width: '219px' }}
-              maxLength={6}
-            />
-            <span>-</span>
-            <input
-              type="text"
-              name="memRnnEnd"
-              onChange={handleRnnChange}
-              style={{ width: '219px' }}
-              maxLength={7}
-            />
-          </tr>
-          <tr className={styles.valuebox}>휴대전화</tr>
-          <tr>
-            <input
-              type="text"
-              name="memCellphone"
-              onChange={handleChange}
-              className={styles.textbox}
-              placeholder="'-' 없이 입력"
-              style={{ width: '350px' }}
-            />
-            <button
-              className={styles.button2}
-              style={{
-                marginLeft: '20px',
-              }}
-              onClick={handleVerifyPhone}
-            >
-              인증번호받기
-            </button>
-          </tr>
-          <tr style={{ marginBottom: 0 }}>
-            <input
-              type="text"
-              name="memCellphoneCheck"
-              onChange={handleChange}
-              className={styles.textbox}
-              placeholder="인증번호 입력"
-              style={{ width: '350px' }}
-            />
-            <button
-              className={styles.button2}
-              style={{ marginLeft: '20px' }}
-              onClick={handlePhoneCheck}
-            >
-              인증
-            </button>
-          </tr>
-          {!cellphoneCheck ? (
-            <span style={{ color: 'red', fontSize: '10px', marginTop: 0 }}>
-              {cellphoneCheckMsg}
-            </span>
-          ) : (
-            <span style={{ color: 'green', fontSize: '10px', marginTop: 0 }}>
-              {cellphoneCheckMsg}
-            </span>
-          )}
-          <tr className={styles.valuebox}>어르신</tr>
-          <tr>
-            <input className={styles.textbox} style={{ width: '350px' }} />
-            <button className={styles.button2} style={{ marginLeft: '20px' }}>
-              검색
-            </button>
-          </tr>
-
-          <tr>
-            <input
-              type="text"
-              className={styles.fileinputbox}
-              value={
-                selectedFiles.length > 0
-                  ? `${selectedFiles.length}개의 파일 선택됨`
-                  : '선택된 파일 없음'
-              }
-              disabled
-            />
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              accept="*/*"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            <button
-              type="button"
-              className={styles.button2}
-              onClick={() => document.getElementById('file-upload').click()}
-            >
-              파일 선택
-            </button>
-          </tr>
-          <span style={{ color: 'red', fontSize: '10px' }}>
-            어르신과의 보호자 관계 확인을 위해{' '}
-            <span style={{ textDecoration: 'underline', fontSize: '11px' }}>
-              가족관계증명서
-            </span>{' '}
-            를 제출해 주시기 바랍니다.
-          </span>
-          <div className={styles.filelist}>
-            {selectedFiles.map((file, index) => (
-              <div className={styles.filelistitem} key={index}>
-                <span className={styles.filename}>{file.name}</span>
-                <button
-                  type="button" // 버튼이 form의 기본 동작(submit)을 막아줌
-                  className={styles.fileremovebutton}
-                  onClick={(e) => {
-                    e.preventDefault(); // 기본 동작 방지
-                    removeFile(index);
+            <tr>
+              {isIdAvailable ? (
+                <span
+                  style={{
+                    color: messageIdColor,
+                    fontSize: '10px',
+                    margin: 0,
                   }}
                 >
-                  x
-                </button>
-              </div>
-            ))}
-          </div>
+                  {idCheckMsg}
+                </span>
+              ) : (
+                <span
+                  style={{
+                    color: messageIdColor,
+                    fontSize: '10px',
+                    margin: 0,
+                  }}
+                >
+                  {idCheckMsg}
+                </span>
+              )}
+            </tr>
+            <tr className={styles.valuebox}>비밀번호</tr>
+            <tr>
+              <input
+                type="password"
+                name="memPw"
+                onChange={(e) => {
+                  handleChange(e);
+                  handleCheckPassword();
+                }}
+                className={styles.textbox}
+                style={{ marginBottom: '0' }}
+              />
+            </tr>
+            {!passwordValidate ? (
+              <tr
+                style={{
+                  textAlign: 'left',
+                  fontSize: '10px',
+                  color: 'red',
+                  height: '20px',
+                }}
+              >
+                영문 소문자, 숫자, 특수문자 포함 8 ~ 16자로 입력해주세요.
+              </tr>
+            ) : (
+              <tr
+                style={{
+                  textAlign: 'left',
+                  fontSize: '10px',
+                  color: 'green',
+                  height: '20px',
+                }}
+              >
+                사용가능한 비밀번호입니다.
+              </tr>
+            )}
+            <tr className={styles.valuebox}>비밀번호 확인</tr>
+            <tr>
+              <input
+                type="password"
+                name="memPwChk"
+                className={styles.textbox}
+                onChange={handleChange}
+                style={{ marginBottom: '0' }}
+              />
+            </tr>
+            {formData.memPwChk === '' ? (
+              <tr></tr>
+            ) : (
+              <tr
+                style={{
+                  textAlign: 'left',
+                  fontSize: '10px',
+                  color: messagePwdColor,
+                  height: '20px',
+                }}
+                name="pwdCheck"
+              >
+                {messagePwdColor === 'green'}
+                {passwordCheckMsg}
+              </tr>
+            )}
+            <tr className={styles.valuebox}>이메일</tr>
+            <tr>
+              <input
+                name="emailId"
+                style={{ width: '160px' }}
+                onChange={handleEmailIdChange}
+              />
+              <span className={styles.findIdEmailSpan}>@</span>
+              <input
+                name="domain"
+                style={{ width: '160px' }}
+                value={domain}
+                onChange={handleEmailDomainChange}
+              />
+              <select name="domainOption" onChange={handleEmailDomainChange}>
+                <option value="">직접입력</option>
+                <option value="naver.com">네이버</option>
+                <option value="google.com">구글</option>
+                <option value="hanmail.net">한메일</option>
+                <option value="nate.com">네이트</option>
+              </select>
+            </tr>
+            <tr className={styles.valuebox}>주소</tr>
+            <tr>
+              <input
+                type="text"
+                name="memAddress"
+                onChange={handleChange}
+                className={styles.textbox}
+              />
+            </tr>
+            <tr className={styles.valuebox}>주민등록번호</tr>
+            <tr>
+              <input
+                type="text"
+                name="memRnnFront"
+                onChange={handleRnnChange}
+                className={styles.textbox}
+                style={{ width: '219px' }}
+                maxLength={6}
+              />
+              <span>-</span>
+              <input
+                type="text"
+                name="memRnnEnd"
+                onChange={handleRnnChange}
+                style={{ width: '219px' }}
+                maxLength={7}
+              />
+            </tr>
+            <tr className={styles.valuebox}>휴대전화</tr>
+            <tr>
+              <input
+                type="text"
+                name="memCellphone"
+                onChange={handleChange}
+                className={styles.textbox}
+                placeholder="'-' 없이 입력"
+                style={{ width: '350px' }}
+              />
+              <button
+                className={styles.button2}
+                style={{
+                  marginLeft: '20px',
+                }}
+                onClick={handleVerifyPhone}
+              >
+                인증번호받기
+              </button>
+            </tr>
+            <tr style={{ marginBottom: 0 }}>
+              <input
+                type="text"
+                name="memCellphoneCheck"
+                onChange={handleChange}
+                className={styles.textbox}
+                placeholder="인증번호 입력"
+                style={{ width: '350px' }}
+              />
+              <button
+                className={styles.button2}
+                style={{ marginLeft: '20px' }}
+                onClick={handlePhoneCheck}
+              >
+                인증
+              </button>
+            </tr>
+            {!cellphoneCheck ? (
+              <span style={{ color: 'red', fontSize: '10px', marginTop: 0 }}>
+                {cellphoneCheckMsg}
+              </span>
+            ) : (
+              <span style={{ color: 'green', fontSize: '10px', marginTop: 0 }}>
+                {cellphoneCheckMsg}
+              </span>
+            )}
+            <tr className={styles.valuebox}>어르신</tr>
+            <tr>
+              <input className={styles.textbox} style={{ width: '350px' }} />
+              <button className={styles.button2} style={{ marginLeft: '20px' }}>
+                검색
+              </button>
+            </tr>
 
-          <div className={styles.buttonContainer}>
-            <button
-              className={styles.button1}
-              onClick={handleGoBack}
-              style={{ backgroundColor: '#d9d9d9', color: '#333333' }}
-            >
-              이전
-            </button>
-            <input
-              type="submit"
-              value="가입"
-              className={styles.button1}
-              style={{ marginLeft: '90px' }}
-            />
-          </div>
-        </table>
-      </form>
-    </div>
+            <tr>
+              <input
+                type="text"
+                className={styles.fileinputbox}
+                value={
+                  selectedFiles.length > 0
+                    ? `${selectedFiles.length}개의 파일 선택됨`
+                    : '선택된 파일 없음'
+                }
+                disabled
+              />
+              <input
+                type="file"
+                id="file-upload"
+                multiple
+                accept="*/*"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <button
+                type="button"
+                className={styles.button2}
+                onClick={() => document.getElementById('file-upload').click()}
+              >
+                파일 선택
+              </button>
+            </tr>
+            <span style={{ color: 'red', fontSize: '10px' }}>
+              어르신과의 보호자 관계 확인을 위해{' '}
+              <span style={{ textDecoration: 'underline', fontSize: '11px' }}>
+                가족관계증명서
+              </span>{' '}
+              를 제출해 주시기 바랍니다.
+            </span>
+            <div className={styles.filelist}>
+              {selectedFiles.map((file, index) => (
+                <div className={styles.filelistitem} key={index}>
+                  <span className={styles.filename}>{file.name}</span>
+                  <button
+                    type="button" // 버튼이 form의 기본 동작(submit)을 막아줌
+                    className={styles.fileremovebutton}
+                    onClick={(e) => {
+                      e.preventDefault(); // 기본 동작 방지
+                      removeFile(index);
+                    }}
+                  >
+                    x
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.button1}
+                onClick={handleGoBack}
+                style={{ backgroundColor: '#d9d9d9', color: '#333333' }}
+              >
+                이전
+              </button>
+              <input
+                type="submit"
+                value="가입"
+                className={styles.button1}
+                style={{ marginLeft: '90px' }}
+              />
+            </div>
+          </table>
+        </form>
+      </div>
+
+      {/* 검색 창 Modal */}
+      {showModal && (
+        <Modal onClose={handleCloseModal}>
+          <SearchSenior></SearchSenior>
+        </Modal>
+      )}
+    </>
   );
 }
 

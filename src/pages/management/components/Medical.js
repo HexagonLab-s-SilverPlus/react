@@ -179,6 +179,17 @@ const Medical = ({ UUID }) => {
             mediDiseaseName: "",
             mediLastTreatDate: ""
         });
+
+        // 선택된 체크박스 초기화
+        setMedicals((prev) =>
+            prev.map((item) => ({
+                ...item,
+                isChecked: false, // 모든 항목의 체크 상태를 해제
+            }))
+        );
+
+        // 전체 선택 상태 초기화
+        setIsAllChecked(false);
     };
 
     const handleInsertCancelClick = () => {
@@ -306,7 +317,7 @@ const Medical = ({ UUID }) => {
         return (
             <div className={styles.medicalWrap}>
                 <div className={styles.mediTop}>
-                    <h1>병력관리</h1>
+                    <h1>병력 관리</h1>
                     <div className={styles.mediPrivacy}>
                         <span>가족 공개</span>
                         <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>
@@ -410,7 +421,7 @@ const Medical = ({ UUID }) => {
             return (
                 <div className={styles.medicalWrap}>
                     <div className={styles.mediTop}>
-                        <h1>병력관리</h1>
+                        <h1>병력 관리</h1>
                         <div className={styles.mediPrivacy} style={{ display: 'none' }}>
                             <span>가족 공개</span>
                             <label><input type="radio" name="mediPrivacy" value="T" checked={isPublic === "T"} onChange={handlePrivacyChange} />공개</label>

@@ -103,11 +103,13 @@ const SearchSenior = () => {
     handleUpdateList(1, updatedSearch);
   };
 
-  {
-    /* 랜더링 파트 */
-  }
+  const handleChangeKeyword = (e) => {
+    setTempKeyword(e.target.value);
+  };
+
   return (
     <>
+      {/* 랜더링 파트 */}
       <div className={styles.sSearchMainContainer}>
         {/* 검색 창 레이어 */}
         <div className={styles.sSearchInputDiv}>
