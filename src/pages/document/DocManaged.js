@@ -1,11 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthProvider";
 import styles from './DocManaged.module.css';
+import Paging from '../../components/common/Paging';
+import { PagingCalculate } from '../../components/common/PagingCalculate ';
 
 
 const DocManaged = () => {
     const [dmData, setDmData] = useState([]);
     const { apiSpringBoot, member } = useContext(AuthContext);
+    const memUuid = 'CECE02F57F344658B7482F5F59F7F998';///
+
+    //페이징 
+    
+    const [pagingInfo, setPagingInfo] = useState({
+        memUuid: memUuid,
+        pageNumber: 1,
+        action: 'all',
+        listCount: 1,
+        maxPage: 1,
+        pageSize: 5,
+        startPage: 1,
+        endPage: 1,
+        keyword: '',
+    });
 
     const docTypeMap = {
         address: "전입신고서",
@@ -15,29 +32,112 @@ const DocManaged = () => {
     };
 
     // 문서 목록을 가져오는 함수
-    const fetchDocManaged = async () => {
+    // 문서 목록을 가져오는 함수
+    const fetchDocManaged = async (status = "대기중") => {
+        console.log("Sending request with pageNumber:", pagingInfo.pageNumber);  // pageNumber 확인
         try {
-            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`);
-            if (response.data && response.data.data && response.data.data.length > 0) {
-                console.log(`${status} 상태의 문서 조회:`, response.data.data);
-                setDmData(response.data.data);  // 상태에 맞는 문서만 업데이트
+
+            const action = status === "대기중" ? 'all' : status;
+
+            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`, {
+                params: {
+                    status,
+                    action,
+                    pageNumber: pagingInfo.pageNumber,
+                    pageSize: pagingInfo.pageSize,
+                    listCount: pagingInfo.listCount,  // 기본값 설정
+                    keyword: pagingInfo.keyword,
+                },
+            });
+    
+            if (response.data && response.data.data) {
+                setDmData(response.data.data);
             } else {
-                console.log('조회할 문서가 없습니다.');
-                setDmData([]);  // 데이터가 없으면 빈 배열로 상태 변경
+                setDmData([]);
+            }
+    
+            // 페이징 관련 정보 업데이트
+            if (response.data.search) {
+                const { maxPage, startPage, endPage } = PagingCalculate(
+                    response.data.search.pageNumber || 1,
+                    response.data.search.listCount || 0,
+                    response.data.search.pageSize || 5
+                );
+    
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    pageNumber: response.data.search.pageNumber || 1,
+                    maxPage,
+                    startPage,
+                    endPage,
+                }));
+            } else {
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    pageNumber: 1,
+                    maxPage: 1,
+                    startPage: 1,
+                    endPage: 1,
+                }));
             }
         } catch (error) {
             console.error('문서 데이터를 가져오는 중 에러 발생:', error);
         }
     };
 
+useEffect(() => {
+    // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
+    
+    fetchDocManaged(pagingInfo.pageNumber); // 페이지 번호로 데이터를 가져옴
+}, [memUuid, pagingInfo.pageNumber]);  // memUuid와 pageNumber가 변경될 때마다 호출
+
+const handlePageChange = (page) => {
+    setPagingInfo((prev) => ({
+        ...prev,
+        pageNumber: page,
+    }));
+};
+
+
+
+
+
+
     // 문서 상태 업데이트 (승인 또는 반려)
+    // const updateDocumentStatus = async (docId, status) => {
+    //     try {
+    //         // 상태 변경 API 호출
+    //         const response = await apiSpringBoot.put(`/api/document/${docId}/approve`, null, {
+    //             params: { status }, // 상태 업데이트 (승인 또는 반려)
+    //         });
+
+    //         // 백엔드에서 성공적으로 처리된 경우
+    //         if (response.data.success) {
+    //             console.log("문서 상태 업데이트 성공");
+    //             // 문서 목록을 갱신하여 상태 변경을 반영
+    //             fetchDocManaged(status); // 상태 업데이트 후 해당 상태의 문서만 가져오기
+    //             window.location.reload();  // 페이지 새로고침
+    //         }
+    //     } catch (error) {
+    //         console.error('문서 상태 업데이트 중 에러 발생:', error);
+    //     }
+    // };
+
     const updateDocumentStatus = async (docId, status) => {
         try {
+            // 승인자 UUID와 승인 시각 설정
+            const approvedBy = member.memUUID;  // 현재 로그인한 사용자의 UUID
+            const approvedAt = new Date().toISOString();  // 현재 시간
+    
             // 상태 변경 API 호출
             const response = await apiSpringBoot.put(`/api/document/${docId}/approve`, null, {
-                params: { status }, // 상태 업데이트 (승인 또는 반려)
+                params: { 
+                    status,
+                    approvedBy,  // 승인자 UUID
+                    approvedAt   // 승인 시각
+                },
             });
-
+    
             // 백엔드에서 성공적으로 처리된 경우
             if (response.data.success) {
                 console.log("문서 상태 업데이트 성공");
@@ -148,6 +248,14 @@ const DocManaged = () => {
                     ))}
                 </tbody>
             </table>
+            <Paging
+                    pageNumber={pagingInfo.pageNumber}
+                    listCount={pagingInfo.listCount}
+                    maxPage={pagingInfo.maxPage}
+                    startPage={pagingInfo.startPage}
+                    endPage={pagingInfo.endPage}
+                    onPageChange={(page) => handlePageChange(page)}
+                />
         </div>
     );
 };
