@@ -115,3 +115,55 @@
 .faqUpdateBTN {
     margin: 30px;
 }
+
+
+/*senior*/
+.faqList {width: 100%; height: 100vh; }
+.faqListBody{width: 100%; height: calc(100vh - 96px - 48px); box-sizing: border-box; padding: 0px 96px 24px; display: flex;}
+.faqLeftMenu{width: 30%; height: 100%; box-sizing: border-box; padding-top: 48px; position: relative;}
+.menuName {display:flex; font-size:72px; font-weight : bold; color:#064420;cursor: pointer;}
+.faqRightMenu{width: 100%; box-sizing: border-box;}
+.top {display:flex;align-items: center; width: 100%; padding-top : 55px;}
+.searchbox{width:100%; display:flex;margin-left:auto;gap:5px;font-size:32px;font-weight : bold;color:#333333;}
+.searchOptions{width:12%; border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px; padding: 20px 5px; display: flex; justify-content: center;align-items: center;}
+.arrow{width:32px;height:32px;cursor:pointer;}
+.searchKeyword{width: 88%; display:flex;align-items:center;border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px;}
+.search{width:32px;height:24px;cursor:pointer;}
+.searchKeywordBox{width:81%;font-size:32px;border:0px;color:#333333;}
+.dropdown{position:absolute;z-index:1000;margin-top: 85px;padding: 20px 30px ;border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px; background-color: #fff;}
+.dropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
+.dropdownOption:hover{font-weight:bold;}
+.faqSeniorButton{background: #eee; font-size: 16px; width: 192px; height: 72px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer; font-size: 32px;}
+.faqSeniorButton:hover{background: #064420; color: #fff;}
+
+.list{width: 100% ;
+    max-height: 95%; /* 리스트의 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    padding-right: 16px; /* 스크롤바와 내용 간 간격 조정 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+/* 스크롤바 스타일 */
+.list::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 */
+}
+.list::-webkit-scrollbar-thumb {
+    background-color: #064420; /* 스크롤바 색상 */
+    border-radius: 4px; /* 스크롤바 끝을 둥글게 */
+}
+.list::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* 스크롤바 배경 색상 */
+}
+.object{align-content: center; height:150px;margin:20px 0px;width:92%;max-width: 1400px; margin-left:auto;padding:20px 50px;background-color:#fff;box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15);border-radius:10px;}
+.object:hover{background-color: #FDFAF6;cursor:pointer;}
+.object .messagement {opacity:0;}
+.object:hover .messagement {opacity:1; }
+.objectAnswer{height: 0px; display: block; padding: 0; border: 0;}
+.objectAnswer.open{font-size:36px;font-weight:bold;color:#333333;display:block;overflow:hidden;align-content:center;margin:20px 0px;width:92%;max-width: 1400px; margin-left:auto;padding:20px 50px;background-color:rgb(219, 219, 219);box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15);border-radius:10px;min-height:108px;resize: none;font-family: "Pretendard Variable";}
+
+.title{font-size:36px;font-weight:bold;color:#333333;padding-bottom: 30px;}
+.message{display:flex;justify-content:space-between;align-items:end;margin-top:10px;font-size:24px;color:#999999;}
+.date{color:#333333;font-weight:bold;font-size:24px;}
+footer {margin-top: auto;}
+.faqPaging {margin-top: 45px; margin-bottom: 200px;}
+
