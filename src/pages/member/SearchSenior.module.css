@@ -1,0 +1,76 @@
+/* src/pages/member/SearchSenior.module.css */
+.sSearchMainContainer {
+  position: relative;
+  /* border: 1px solid; */
+  width: 600px;
+  height: 600px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  justify-items: center;
+  align-items: center;
+}
+
+.sSearchDiv {
+  width: 340px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  border-bottom: 1px solid;
+}
+
+.sSearchDiv > input {
+  width: 300px;
+  height: 25px;
+  border: 0px;
+  /* text-align: center; */
+}
+
+.sSearchDiv > input::placeholder {
+  padding-left: 60px;
+}
+
+.sSearchIcon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.sSearchTableDiv {
+  /* border: 1px solid; */
+  margin-top: 10px;
+  height: 500px;
+  justify-items: center;
+}
+
+.sSearchTable {
+  /* border: 1px solid; */
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 95%;
+  text-align: center;
+}
+
+.sSearchTable > thead {
+  width: 100%;
+}
+
+.sSearchTable > thead > tr > th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: bold;
+  border-bottom: 2px solid #999999;
+}
+
+.sSearchTable > tbody > tr > td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #999999;
+  cursor: pointer;
+}
+
+.sSearchPaging {
+  /* border: 1px solid; */
+  position: relative;
+  top: 0;
+}
