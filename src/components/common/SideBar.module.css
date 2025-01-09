@@ -14,50 +14,72 @@
     font-size: 48px;
     font-weight: 700;
     color: white;
-    text-decoration-line: none;
+    text-decoration: none;
 }
 
 .sideBar {
     list-style-type: none;
     position: relative;
-    left: 100px;
+    left: 68px;
     top: 171px;
-    width: 268px;
+    width: 300px;
     font-size: 28px;
     font-weight: 500;
     margin: 0; 
     padding: 0;
 }
 
-.sideBar li {
-    margin-bottom: 36px;
+.sideBar li a {
+    text-decoration: none;
+    color: white;
+    width: 232px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    padding:10px 15px;
+    transition: all 0.3s ease;
 }
 
-.sideBar li a {
-    position: relative;
-    text-decoration-line: none;
-    color: white;
+.sideBar li a:hover,
+.sideBar li .activeLink {
+    background-color: #fff;
+    font-weight: bold;
+    color: #064420;
 }
 
 .logout {
     list-style-type: none;
     margin: 0; 
     padding: 0;
-    position: relative;
-    left: 100px;
-    top: 241px;
+    position: fixed;
+    left: 68px;
+    bottom: 50px;
     width: 268px;
-    font-size: 28px;
-    margin: 0; 
-    padding: 0;
 }
 
-.logout li {
-    margin-bottom: 36px;
-}
 
-.logout a {
-    position: relative;
-    text-decoration-line: none;
+.logout button {
+    display: flex;
+    width: 252px;
+    height: 60px;
     color: white;
+    background-color: #064420;
+    font-size: 28px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 18px;
+    padding:10px 15px;
+    font-family: "Pretendard Variable";
+    align-items: center;
+}
+
+.logout li:hover button {
+    font-weight: bold;
+    color: #064420;
+    background-color: #fff;
 }
