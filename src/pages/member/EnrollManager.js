@@ -14,9 +14,9 @@ function EnrollManager({ onEnrollSuccess, memType }) {
     memCellphone: '', // 휴대전화
     memCellphoneCheck: '', // 인증번호
     // memPhone: '',       // 일반전화
-    memRnn: '', // 주민등록번호
     // memGovCode: '', // 관공서 코드
     memType: memType, // 회원타입
+    memPwChk: '',
   });
 
   const navigate = useNavigate();
@@ -38,11 +38,46 @@ function EnrollManager({ onEnrollSuccess, memType }) {
   const [cellphoneCheckMsg, setCellphoneCheckMsg] =
     useState('휴대전화 인증을 진행해주세요.');
 
+  // 이메일 인증관련 데이터 관리 상태변수
+  const [emailId, setEmailId] = useState('');
+  const [domain, setDomain] = useState('');
+
+  const [rnn, setRnn] = useState({
+    memRnnFront: '',
+    memRnnEnd: '',
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target; // 이벤트에서 name과 value를 추출
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value, // name에 해당하는 값을 업데이트
+    setFormData((prevFormData) => {
+      const updateFormData = {
+        ...prevFormData,
+        [name]: value, // name에 해당하는 값을 업데이트
+      };
+      // 비밀번호 확인 칸이 입력 중일 때만 유효성 검사 실행
+      if (name === 'memPwChk') {
+        validate(updateFormData);
+      }
+
+      return updateFormData;
+    });
+  };
+
+  // input 에 이메일정보(아이디부분) 입력시 저장하는 함수
+  const handleEmailIdChange = (e) => {
+    setEmailId(e.target.value);
+  };
+
+  // input 에 이메일정보(도메인부분) 입력시 저장하는 함수
+  const handleEmailDomainChange = (e) => {
+    setDomain(e.target.value);
+  };
+
+  const handleRnnChange = (e) => {
+    const { name, value } = e.target;
+    setRnn((prevRnn) => ({
+      ...prevRnn, // 이전 상태를 복사
+      [name]: value, // 변경할 키와 값만 업데이트
     }));
   };
 
@@ -61,7 +96,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
       });
       if (response.data === 'ok') {
         setIsAvailable(true);
-        setIdCheckMsg('✔ 사용가능한 아이디입니다.');
+        setIdCheckMsg('사용가능한 아이디입니다.');
         setMessageIdColor('green');
       } else {
         setIsAvailable(false);
@@ -74,16 +109,18 @@ function EnrollManager({ onEnrollSuccess, memType }) {
   };
 
   // formdata 전송 전 input 값 유효성 검사 처리용 함수
-  const validate = () => {
-    // 비밀번호 일치 확인
-    if (formData.memPw !== formData.memPwChk) {
-      setPasswordCheckMsg('비밀번호가 일치하지 않습니다.');
-      setMessagePwdColor('red');
-      return false;
-    } else {
-      setPasswordCheckMsg('✔ 비밀번호가 일치합니다.');
-      setMessagePwdColor('green');
-      return true;
+  const validate = (updateFormData) => {
+    if (updateFormData) {
+      // 비밀번호 일치 확인
+      if (updateFormData.memPw !== updateFormData.memPwChk) {
+        setPasswordCheckMsg('비밀번호가 일치하지 않습니다.');
+        setMessagePwdColor('red');
+        return false;
+      } else {
+        setPasswordCheckMsg('비밀번호가 일치합니다.');
+        setMessagePwdColor('green');
+        return true;
+      }
     }
   };
 
@@ -103,13 +140,6 @@ function EnrollManager({ onEnrollSuccess, memType }) {
       return false;
     } else {
       return true;
-    }
-  };
-
-  // 비밀번호 확인 input 의 포커스가 사라지면 유효성검사를 작동시키는 함수
-  const handleConfirmPwd = () => {
-    if (formData.memPwChk) {
-      validate();
     }
   };
 
@@ -148,10 +178,10 @@ function EnrollManager({ onEnrollSuccess, memType }) {
     data.append('memId', formData.memId);
     data.append('memPw', formData.memPw);
     data.append('memName', formData.memName);
-    data.append('memEmail', formData.memEmail);
+    data.append('memEmail', `${emailId}@${domain}`);
     data.append('memAddress', formData.memAddress);
     data.append('memCellphone', formData.memCellphone);
-    data.append('memRnn', formData.memRnn);
+    data.append('memRnn', `${rnn.memRnnFront}-${rnn.memRnnEnd}`);
     data.append('memType', formData.memType);
     data.append('memStatus', 'ACTIVE');
 
@@ -206,7 +236,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
       if (verify === 'true') {
         alert('인증성공');
         setCellphoneCheck(true);
-        setCellphoneCheckMsg('✔ 휴대전화 인증이 완료되었습니다.');
+        setCellphoneCheckMsg('휴대전화 인증이 완료되었습니다.');
       } else if (verify === 'false') {
         alert('인증 실패. 인증시간이 만료되었거나 인증번호를 틀렸습니다.');
         setCellphoneCheck(false);
@@ -218,7 +248,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
   };
 
   return (
-    <div>
+    <div className={styles.enrollMainContainer}>
       <h3 style={{ textAlign: 'center', color: '#064420' }}>
         기관 담당자 회원가입
       </h3>
@@ -281,10 +311,12 @@ function EnrollManager({ onEnrollSuccess, memType }) {
             <input
               type="password"
               name="memPw"
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                handleCheckPassword();
+              }}
               className={styles.textbox}
               style={{ marginBottom: '0' }}
-              onBlur={handleCheckPassword}
             />
           </tr>
           {!passwordValidate && (
@@ -319,29 +351,46 @@ function EnrollManager({ onEnrollSuccess, memType }) {
               className={styles.textbox}
               onChange={handleChange}
               style={{ marginBottom: '0' }}
-              onBlur={handleConfirmPwd}
             />
           </tr>
-          <tr
-            style={{
-              textAlign: 'left',
-              fontSize: '10px',
-              color: messagePwdColor,
-              height: '20px',
-            }}
-            name="pwdCheck"
-          >
-            {messagePwdColor === 'green'}
-            {passwordCheckMsg}
-          </tr>
+          {formData.memPwChk === '' ? (
+            <tr></tr>
+          ) : (
+            <tr
+              style={{
+                textAlign: 'left',
+                fontSize: '10px',
+                color: messagePwdColor,
+                height: '20px',
+              }}
+              name="pwdCheck"
+            >
+              {messagePwdColor === 'green'}
+              {passwordCheckMsg}
+            </tr>
+          )}
+
           <tr className={styles.valuebox}>이메일</tr>
           <tr>
             <input
-              type="email"
-              name="memEmail"
-              onChange={handleChange}
-              className={styles.textbox}
+              name="emailId"
+              style={{ width: '160px' }}
+              onChange={handleEmailIdChange}
             />
+            <span className={styles.findIdEmailSpan}>@</span>
+            <input
+              name="domain"
+              style={{ width: '160px' }}
+              value={domain}
+              onChange={handleEmailDomainChange}
+            />
+            <select name="domainOption" onChange={handleEmailDomainChange}>
+              <option value="">직접입력</option>
+              <option value="naver.com">네이버</option>
+              <option value="google.com">구글</option>
+              <option value="hanmail.net">한메일</option>
+              <option value="nate.com">네이트</option>
+            </select>
           </tr>
           <tr className={styles.valuebox}>주소</tr>
           <tr>
@@ -356,9 +405,19 @@ function EnrollManager({ onEnrollSuccess, memType }) {
           <tr>
             <input
               type="text"
-              name="memRnn"
-              onChange={handleChange}
+              name="memRnnFront"
+              onChange={handleRnnChange}
               className={styles.textbox}
+              style={{ width: '219px' }}
+              maxLength={6}
+            />
+            <span>-</span>
+            <input
+              type="text"
+              name="memRnnEnd"
+              onChange={handleRnnChange}
+              style={{ width: '219px' }}
+              maxLength={7}
             />
           </tr>
           <tr className={styles.valuebox}>기관 코드</tr>
@@ -386,7 +445,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
               name="memCellphone"
               onChange={handleChange}
               className={styles.textbox}
-              placeholder="'-' 없이 입력"
+              placeholder=" '-' 없이 입력"
               style={{ width: '350px' }}
             />
             <button
@@ -396,7 +455,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
               }}
               onClick={handleVerifyPhone}
             >
-              인증번호 받기
+              인증번호받기
             </button>
           </tr>
           <tr>
@@ -405,7 +464,7 @@ function EnrollManager({ onEnrollSuccess, memType }) {
               name="memCellphoneCheck"
               onChange={handleChange}
               className={styles.textbox}
-              placeholder="인증번호 입력"
+              placeholder=" 인증번호 입력"
               style={{ width: '350px' }}
             />
             <button
@@ -437,12 +496,13 @@ function EnrollManager({ onEnrollSuccess, memType }) {
             >
               이전
             </button>
-            <input
+            <button
               type="submit"
-              value="가입"
               className={styles.button1}
               style={{ marginLeft: '90px' }}
-            />
+            >
+              가입
+            </button>
           </tr>
         </table>
       </form>

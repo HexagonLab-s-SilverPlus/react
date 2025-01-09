@@ -7,12 +7,7 @@ import styles from './LoginSenior.module.css';
 import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 
-import SideBar from '../../components/common/SideBar';
 import SeniorFooter from '../../components/common/SeniorFooter';
-
-import kakao from '../../assets/images/icon/Kakao Icon.png';
-import naver from '../../assets/images/icon/Naver Icon.png';
-import google from '../../assets/images/icon/Google Icon.png';
 
 const LoginSenior = () => {
   const [memId, setMemId] = useState('');
@@ -54,6 +49,7 @@ const LoginSenior = () => {
 
         login({ accessToken, refreshToken });
         alert('로그인 성공');
+        navigate('/');
       }
     } catch (error) {
       console.error('Login Failed : ', error);
@@ -69,6 +65,11 @@ const LoginSenior = () => {
   const handleMoveLoginSenior = (e) => {
     e.preventDefault();
     navigate('/loginsenior');
+  };
+
+  const handleMoveFaceLogin = (e) => {
+    e.preventDefault();
+    navigate('/facelogin');
   };
 
   return (
@@ -153,6 +154,15 @@ const LoginSenior = () => {
             <div>
               <button type="submit" className={styles.loginbutton}>
                 로 그 인
+              </button>
+            </div>
+            <div>
+              <button
+                style={{ marginTop: '20px' }}
+                className={styles.loginbutton}
+                onClick={handleMoveFaceLogin}
+              >
+                페 이 스 로 그 인
               </button>
             </div>
           </form>

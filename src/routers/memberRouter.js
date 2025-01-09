@@ -3,6 +3,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import EnrollSelect from '../pages/member/EnrollSelect';
 import EnrollManager from '../pages/member/EnrollManager';
+import EnrollFamily from '../pages/member/EnrollFamily';
 import LoginMember from '../pages/member/LoginMember';
 import LoginSenior from '../pages/member/LoginSenior';
 import MyInfoManager from '../pages/member/MyInfoManager';
@@ -25,6 +26,7 @@ const memberRouter = [
   <>
     <Route path="/enrollselect" element={<EnrollSelect />} />,
     <Route path="/enrollmanager" element={<EnrollManager />} />,
+    <Route path="/enrollfamily" element={<EnrollFamily />} />,
     <Route path="/loginmember" element={<LoginMember />} />,
     <Route path="/loginsenior" element={<LoginSenior />} />,
     <Route path="/myinfomanager" element={<MyInfoManager />} />,
