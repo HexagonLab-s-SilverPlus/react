@@ -16,7 +16,7 @@ const QnAUpdate = () => {
     const [deleteFiles, setDeleteFiles] = useState([]);
     const [qna, setQna] = useState(null);
     const [qnaMember, setQnaMember] = useState(null);
-    const {member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
+    const {member, role} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
 
     // 첨부파일 입력박스 추가
     const handleFileInsertBox = (e) => {
@@ -55,8 +55,9 @@ const QnAUpdate = () => {
         setQna((prev) => ({
             ...prev,
             [name]: value,
-
         }));
+        console.log(name);
+        console.log(value);
     };
 
     const handleSubmit = async (e) => {
@@ -108,7 +109,7 @@ const QnAUpdate = () => {
         );
         setQnaMember(response.data.member)
         setFiles(response.data.files)
-        if(member.memType === "ADMIN"){
+        if(role === "ADMIN"){
             setQna((pre) =>({
                 ...pre,
                 qnaADUpdateBy: member.memUUID,
@@ -136,7 +137,7 @@ const QnAUpdate = () => {
 
                     <div className={styles.qnaUpdateTitleDiv}>
                         <h1 className={styles.qnaUpdateTitle}>제 목</h1>
-                        <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaUpdateTitleTxt} defaultValue={qna.qnaTitle} />
+                        <input type="text" name="qnaTitle" onChange={handleChange} className={styles.qnaUpdateTitleTxt} defaultValue={qna.qnaTitle} readOnly={role === "ADMIN"}/>
                     </div>
                     <hr/>
                     <div className={styles.memberIdDiv}>
@@ -145,15 +146,15 @@ const QnAUpdate = () => {
                     </div>
                     <div className={styles.qnaUpdateContentDiv}>
                         <h1 className={styles.qnaUpdateContent}>질문내용</h1>
-                        <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaUpdateContentTxt} defaultValue={qna.qnaWContent}></textarea>
+                        <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaUpdateContentTxt} defaultValue={qna.qnaWContent} readOnly={role === "ADMIN"}></textarea>
                     </div>
-                    <hr />
+                    {role !== "ADMIN" && <hr />}
                     <div className={styles.filesDiv}>
-                        <button
+                        {role !== "ADMIN" && <button
                         className={styles.upLoadFilesBTN}
                         onClick={(e)=>handleFileInsertBox(e)}
                             >파일추가
-                        </button>
+                        </button>}
                         <div>
                         {files && files.map((file, index) => (
                             <tr key={index}>
