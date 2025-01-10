@@ -1,0 +1,122 @@
+.mlistContainer {
+  display: flex;
+}
+.mlistSubContainer {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+.mlistviewHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+.mlistrSubLine {
+  display: flex;
+  justify-content: end;
+  margin-top: 80px;
+  margin-bottom: 20px;
+}
+.mlistSearchbox {
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  gap: 5px;
+}
+.mlistSearchOptions {
+  border-bottom: 2px #064420 solid;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+.mlistArrow {
+  width: 20px;
+  height: 20px;
+}
+.mlistDropdown {
+  position: absolute;
+  z-index: 1000;
+  margin-top: 5px;
+  background-color: #ffffff;
+}
+.mlistDropdownOption {
+  padding: 5px 0px;
+  cursor: pointer;
+  font-weight: normal;
+  font-size: 20px;
+}
+.mlistDropdownOption:hover {
+  font-weight: bold;
+}
+.mlistSearchKeyword {
+  display: flex;
+  align-items: center;
+}
+.mlistSearchKeywordBox {
+  font-family: 'Pretendard Variable';
+  width: 320px;
+  font-size: 18px;
+  border: 0px;
+  background-color: #ffffff;
+  color: #333333;
+  border-bottom: 2px #064420 solid;
+}
+.mlistSearch {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+/* .mlistInputButton {
+    background-color: #064420;
+    font-size: 16px;
+    color: #ffffff;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+  } */
+.mlisttableDiv {
+  width: calc(100%);
+  margin-top: 20px;
+}
+.mlistTable {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+  margin-top: 80px;
+  font-size: 18px;
+  border-collapse: collapse;
+}
+.mlistTable > thead {
+  width: 100%;
+}
+.mlistTable > thead > tr > th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: bold;
+  border-bottom: 2px solid #999999;
+}
+.thTitle {
+  width: 70px;
+}
+.thDate {
+  width: 20%;
+}
+.thViews {
+  width: 10%;
+}
+.mlistTable > tbody > tr > td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #999999;
+  cursor: pointer;
+}
+.mlistPaging {
+  margin-top: 45px;
+}

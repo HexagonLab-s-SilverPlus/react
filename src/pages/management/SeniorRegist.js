@@ -465,11 +465,11 @@ const SeniorRegist = () => {
                 <tr>
                   <th>기 관</th>
                   <td>
-                    <input readOnly />
+                    <input value={member.memOrgName} readOnly />
                   </td>
-                  <th>기 관 코 드</th>
+                  <th>기 관 주 소</th>
                   <td>
-                    <input value={member.memGovCode} readOnly />
+                    <input value={member.memAddress} readOnly />
                   </td>
                   <th>담 당 자</th>
                   <td>

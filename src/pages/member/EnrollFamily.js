@@ -222,7 +222,10 @@ function EnrollFamily() {
     }
   };
 
-  const handleGoBack = () => {};
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
 
   const handleVerifyPhone = async (e) => {
     e.preventDefault(); // 기본 동작 방지 (중요)
