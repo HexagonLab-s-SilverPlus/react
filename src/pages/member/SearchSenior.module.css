@@ -77,5 +77,40 @@
 .sSearchPaging {
   /* border: 1px solid; */
   position: relative;
-  top: 0;
+  margin-top: 20px;
+}
+
+.sSearchTable th.select,
+.sSearchTable td.select {
+  width: 5%;
+}
+
+.sSearchTable th.name,
+.sSearchTable td.name {
+  width: 10%;
+}
+
+.sSearchTable th.gender,
+.sSearchTable td.gender {
+  width: 10%;
+}
+
+.sSearchTable th.birthdate,
+.sSearchTable td.birthdate {
+  width: 30%;
+}
+
+.sSearchTable th.famid,
+.sSearchTable td.famid {
+  width: 15%;
+}
+
+.sSearchTable th.approval,
+.sSearchTable td.approval {
+  width: 15%;
+}
+
+.sSearchTable th.relationship,
+.sSearchTable td.relationship {
+  width: 15%;
 }
