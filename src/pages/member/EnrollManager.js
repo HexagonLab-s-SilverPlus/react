@@ -19,7 +19,7 @@ function EnrollManager() {
     memAddress: '', // 주소
     memCellphone: '', // 휴대전화
     memCellphoneCheck: '', // 인증번호
-    // memPhone: '',       // 일반전화
+    memPhone: '', // 일반전화
     memOrgName: '', // 관공서 코드
     memType: 'MANAGER', // 회원타입
     memPwChk: '',
@@ -170,10 +170,10 @@ function EnrollManager() {
     }
 
     // 전송 전에 유효성 검사 확인
-    if (!validate()) {
-      alert('비밀번호 일치 확인을 해주세요.');
-      return;
-    }
+    // if (!validate()) {
+    //   alert('비밀번호 일치 확인을 해주세요.');
+    //   return;
+    // }
 
     if (!validateCellphone()) {
       alert('휴대전화 인증을 해주세요.');
@@ -208,7 +208,10 @@ function EnrollManager() {
     }
   };
 
-  const handleGoBack = () => {};
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
 
   const handleVerifyPhone = async (e) => {
     e.preventDefault(); // 기본 동작 방지 (중요)
@@ -309,7 +312,7 @@ function EnrollManager() {
                   style={{
                     color: messageIdColor,
                     fontSize: '10px',
-                    marginTop: 0,
+                    margin: 0,
                   }}
                 >
                   {idCheckMsg}
@@ -319,7 +322,7 @@ function EnrollManager() {
                   style={{
                     color: messageIdColor,
                     fontSize: '10px',
-                    marginTop: 0,
+                    margin: 0,
                   }}
                 >
                   {idCheckMsg}
@@ -459,6 +462,16 @@ function EnrollManager() {
                 검색
               </button>
             </tr>
+            <tr className={styles.valuebox}>일반전화</tr>
+            <tr>
+              <input
+                className={styles.textbox}
+                type="text"
+                name="memPhone"
+                placeholder=" '-' 없이 입력"
+                onChange={handleChange}
+              />
+            </tr>
             <tr className={styles.valuebox}>휴대전화</tr>
             <tr>
               <input
@@ -500,13 +513,11 @@ function EnrollManager() {
             </tr>
             <tr>
               {!cellphoneCheck ? (
-                <span style={{ color: 'red', fontSize: '10px', marginTop: 0 }}>
+                <span style={{ color: 'red', fontSize: '10px', margin: 0 }}>
                   {cellphoneCheckMsg}
                 </span>
               ) : (
-                <span
-                  style={{ color: 'green', fontSize: '10px', marginTop: 0 }}
-                >
+                <span style={{ color: 'green', fontSize: '10px', margin: 0 }}>
                   {cellphoneCheckMsg}
                 </span>
               )}
@@ -514,7 +525,7 @@ function EnrollManager() {
             <tr>
               <button
                 className={styles.button1}
-                onClick={handleGoBack}
+                onClick={(e) => handleGoBack(e)}
                 style={{ backgroundColor: '#d9d9d9', color: '#333333' }}
               >
                 이전

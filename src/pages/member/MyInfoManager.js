@@ -246,15 +246,15 @@ const MyInfoManager = () => {
           </div>
         ) : (
           <div className={styles.myfoDiv}>
-            <div className={styles.myfoProfilephoto}>
-              <img
-                src={noimage}
-                // style={{ width: '250px', height: '300px' }}
-                className={styles.image}
-              ></img>
-            </div>
-            <div className={styles.myfoTableDiv}>
-              <form encType="multipart/form-data" onSubmit={handleSubmit}>
+            <form encType="multipart/form-data" onSubmit={handleSubmit}>
+              <div className={styles.myfoTableDiv}>
+                <div className={styles.myfoProfilephoto}>
+                  <img
+                    src={noimage}
+                    // style={{ width: '250px', height: '300px' }}
+                    className={styles.image}
+                  ></img>
+                </div>
                 <table className={styles.myfoTable}>
                   <tr>
                     <th>이 름</th>
@@ -431,35 +431,35 @@ const MyInfoManager = () => {
                     </td>
                   </tr>
                 </table>
-                <div className={styles.myfoButtonDiv}>
-                  <div>
-                    <button
-                      className={styles.myfolButton1}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(-1);
-                      }}
-                    >
-                      이 전
-                    </button>
-                  </div>
-                  <div>
-                    <input
-                      type="reset"
-                      value="초 기 화"
-                      className={styles.myfoButton2}
-                      onClick={() => setUpdateMember(initialData)}
-                    />
-                    <input
-                      type="submit"
-                      value="수 정"
-                      className={styles.myfolButton1}
-                      style={{ margin: '0' }}
-                    />
-                  </div>
+              </div>
+              <div className={styles.myfoButtonDiv}>
+                <div>
+                  <button
+                    className={styles.myfolButton1}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(-1);
+                    }}
+                  >
+                    이 전
+                  </button>
                 </div>
-              </form>
-            </div>
+                <div>
+                  <input
+                    type="reset"
+                    value="초 기 화"
+                    className={styles.myfoButton2}
+                    onClick={() => setUpdateMember(initialData)}
+                  />
+                  <input
+                    type="submit"
+                    value="수 정"
+                    className={styles.myfolButton1}
+                    style={{ margin: '0' }}
+                  />
+                </div>
+              </div>
+            </form>
           </div>
         )}
       </div>
