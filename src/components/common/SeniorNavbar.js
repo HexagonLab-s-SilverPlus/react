@@ -73,7 +73,7 @@ const SeniorNavbar = () => {
         />
         {isModalVisible && (
           <div className={Styles.modal}>
-            <p>내정보 보기</p>
+            {/* <p>내정보 보기</p> */}
             <p onClick={handleLogout}>로그아웃</p>
           </div>
         )}

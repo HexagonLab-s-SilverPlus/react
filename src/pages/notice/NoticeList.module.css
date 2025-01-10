@@ -63,10 +63,12 @@ footer {margin-top: auto;}
 .memberInputButton:hover {background: #064420; color: #fff;}
 .tableDiv{width:calc(100%);margin-top: 20px;}
 .memberNoticeTable{table-layout:fixed;width: 100%;text-align: center;margin-top:80px;font-size: 18px;border-collapse: collapse;}
-.memberNoticeTable > thead { width: 100%;}
-.memberNoticeTable > thead > tr > th {padding-top : 8px;padding-bottom: 8px;font-weight: bold;border-bottom: 2px solid #999999;}
+.memberNoticeTable > thead { width: 100%; background-color: #eee;}
+.memberNoticeTable > thead > tr > th {font-weight: bold;border-bottom: 2px solid #999999;}
+.memberNoticeTable tr{height:40px; transition: all 0.3s;}
+.memberNoticeTable tr:hover {background-color: #eee;transition: all 0.3s;}
 .thTitle {width: 70px;}
 .thDate {width: 20%;}
 .thViews {width: 10%;}
-.memberNoticeTable > tbody > tr > td {padding-top : 8px;padding-bottom: 8px;border-bottom:2px solid #999999;cursor:pointer;}
+.memberNoticeTable > tbody > tr > td {border-bottom:2px solid #999999;cursor:pointer;}
 .memberNoticePaging {margin-top: 45px;}
