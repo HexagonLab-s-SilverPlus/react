@@ -64,9 +64,48 @@
 
 
 
-.getPlayerArea{width:30%;background-color: rgba(255, 255, 255, 0.1);height: 100%;box-sizing: border-box; padding : 10px 10px;}
-.getPlayerArea img {width:15%;max-width: 100px; margin:2px}
-
+.getPlayerArea{position: relative; width:30%;background-color: rgba(255, 255, 255, 0.1);height: 100%;box-sizing: border-box; padding : 10px 10px;}
+.getPlayerArea img {width:15%;max-width: 100px; margin:2px;position: absolute;}
+.getPlayerArea img:nth-child(1) {left: 8%; z-index: 1;}
+.getPlayerArea img:nth-child(2) {left: 16%; z-index: 2;}
+.getPlayerArea img:nth-child(3) {left: 24%; z-index: 3;}
+.getPlayerArea img:nth-child(4) {left: 32%; z-index: 4;}
+.getPlayerArea img:nth-child(5) {left: 40%; z-index: 5;}
+.getPlayerArea img:nth-child(6) {left: 48%; z-index: 6;}
+.getPlayerArea img:nth-child(7) {left: 56%; z-index: 7;}
+.getPlayerArea img:nth-child(8) {left: 64%; z-index: 8;}
+.getPlayerArea img:nth-child(9) {left: 72%; z-index: 9;}
+.getPlayerArea img:nth-child(10) {left: 80%; z-index: 10;}
+.getPlayerArea img:nth-child(11) {top:32%;left: 8%; z-index: 11;}
+.getPlayerArea img:nth-child(12) {top:32%;left: 16%; z-index: 12;}
+.getPlayerArea img:nth-child(13) {top:32%;left: 24%; z-index: 13;}
+.getPlayerArea img:nth-child(14) {top:32%;left: 32%; z-index: 14;}
+.getPlayerArea img:nth-child(15) {top:32%;left: 40%; z-index: 15;}
+.getPlayerArea img:nth-child(16) {top:32%;left: 48%; z-index: 16;}
+.getPlayerArea img:nth-child(17) {top:32%;left: 56%; z-index: 17;}
+.getPlayerArea img:nth-child(18) {top:32%;left: 64%; z-index: 18;}
+.getPlayerArea img:nth-child(19) {top:32%;left: 72%; z-index: 19;}
+.getPlayerArea img:nth-child(20) {top:32%;left: 80%; z-index: 20;}
+.getPlayerArea img:nth-child(21) {top:64%;left: 8%; z-index: 21;}
+.getPlayerArea img:nth-child(22) {top:64%;left: 16%; z-index: 22;}
+.getPlayerArea img:nth-child(23) {top:64%;left: 24%; z-index: 23;}
+.getPlayerArea img:nth-child(24) {top:64%;left: 32%; z-index: 24;}
+.getPlayerArea img:nth-child(25) {top:64%;left: 40%; z-index: 25;}
+.getPlayerArea img:nth-child(26) {top:64%;left: 48%; z-index: 26;}
+.getPlayerArea img:nth-child(27) {top:64%;left: 56%; z-index: 27;}
+.getPlayerArea img:nth-child(28) {top:64%;left: 64%; z-index: 28;}
+.getPlayerArea img:nth-child(29) {top:64%;left: 72%; z-index: 29;}
+.getPlayerArea img:nth-child(30) {top:64%;left: 80%; z-index: 30;}
+.getPlayerArea img:nth-child(31) {top:96%;left: 8%; z-index: 31;}
+.getPlayerArea img:nth-child(32) {top:96%;left: 16%; z-index: 32;}
+.getPlayerArea img:nth-child(33) {top:96%;left: 24%; z-index: 33;}
+.getPlayerArea img:nth-child(34) {top:96%;left: 32%; z-index: 34;}
+.getPlayerArea img:nth-child(35) {top:96%;left: 40%; z-index: 35;}
+.getPlayerArea img:nth-child(36) {top:96%;left: 48%; z-index: 36;}
+.getPlayerArea img:nth-child(37) {top:96%;left: 56%; z-index: 37}
+.getPlayerArea img:nth-child(38) {top:96%;left: 64%; z-index: 38;}
+.getPlayerArea img:nth-child(39) {top:96%;left: 72%; z-index: 39;}
+.getPlayerArea img:nth-child(40) {top:96%;left: 80%; z-index: 40;}
 
 .playerArea{width: 100%;display: flex; background-color: rgba(255, 255, 255, 0.1);}
 .playerCardArea{width: 80%;display: flex;align-items: center;gap:10px;}

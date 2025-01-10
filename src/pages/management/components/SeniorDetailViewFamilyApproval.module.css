@@ -20,6 +20,13 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0px 48px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sdvfaHeader {
+  width: 100%;
 }
 
 .sdvfaHeader > p {
@@ -53,13 +60,15 @@
   font-weight: bold;
   border-bottom: 2px solid #064420;
   border-top: 2px solid #064420;
-  background: #FDFAF6;
+  background: #fdfaf6;
   border-left: 1px solid #ddd;
   height: 46px;
   box-sizing: border-box;
 }
 
-.sdvfaTable > thead > tr > th:nth-child(1) {border-left: 0;}
+.sdvfaTable > thead > tr > th:nth-child(1) {
+  border-left: 0;
+}
 
 .sdvfaTable > tbody > tr > td {
   padding-top: 8px;
@@ -68,11 +77,15 @@
   border-left: 1px solid #ddd;
 }
 
-.sdvfaTable > tbody > tr > td:nth-child(1) {border-left: 0;}
+.sdvfaTable > tbody > tr > td:nth-child(1) {
+  border-left: 0;
+}
 
 .sdvfaTable > tbody > tr > td > button {
   margin: 0 10px;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .approvalBtn {
@@ -81,8 +94,8 @@
   background-color: #e4efe7;
   border-radius: 5px;
   border: 0;
-  width: 45px;
-  height: 25px;
+  width: 80px;
+  height: 30px;
 }
 
 .rejectlBtn {
@@ -91,33 +104,33 @@
   background-color: #eee;
   border-radius: 5px;
   border: 0;
-  width: 45px;
-  height: 25px;
+  width: 80px;
+  height: 30px;
 }
 
 .sdvfaTable th.separateCol,
 .sdvfaTable td.separateCol {
-  width: 10%;
+  width: 5%;
 }
 
 .sdvfaTable th.genderCol,
 .sdvfaTable td.genderCol {
-  width: 10%;
+  width: 5%;
 }
 
 .sdvfaTable th.nameCol,
 .sdvfaTable td.nameCol {
-  width: 15%;
+  width: 10%;
 }
 
 .sdvfaTable th.addressCol,
 .sdvfaTable td.addressCol {
-  width: 35%;
+  width: 40%;
 }
 
 .sdvfaTable th.idCol,
 .sdvfaTable td.idCol {
-  width: 10%;
+  width: 15%;
 }
 
 .sdvfaTable th.fileCol,
@@ -127,5 +140,43 @@
 
 .sdvfaTable th.approvalCol,
 .sdvfaTable td.approvalCol {
-  width: 10%;
+  width: 15%;
+}
+
+.sdvfaTable td.fileCol > button {
+  border: 0px;
+  background-color: #fff;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.dropdownContainer {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 400px;
+}
+
+.dropdownMenu {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.dropdownItem {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f0f0;
 }

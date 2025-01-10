@@ -124,10 +124,6 @@ const QnAAnswer = () => {
                         <h1 className={styles.qnaAnswerContent}>질문내용</h1>
                         <textarea type="text" name="qnaWContent" onChange={handleChange} className={styles.qnaAnswerContentTxt} defaultValue={qna.qnaWContent} readOnly></textarea>
                     </div>
-                    <button
-                    onClick={(e)=>handleFileInsertBox(e)}
-                        >첨부파일추가
-                    </button>
                     {newFiles.map((file, index) => (
                         <tr key={index}>
                             <td colSpan="2">

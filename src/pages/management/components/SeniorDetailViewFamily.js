@@ -210,7 +210,7 @@ const SeniorDetailViewFamily = ({ UUID }) => {
                       <input
                         value={
                           seniorFormData.memRnn.split('-')[1][0] === '1' ||
-                            seniorFormData.memRnn.split('-')[1][0] === '3'
+                          seniorFormData.memRnn.split('-')[1][0] === '3'
                             ? '남성'
                             : '여성'
                         }
@@ -246,11 +246,11 @@ const SeniorDetailViewFamily = ({ UUID }) => {
                     <input
                       value={
                         seniorFormData.memCellphone &&
-                          /^\d{11}$/.test(seniorFormData.memCellphone)
+                        /^\d{11}$/.test(seniorFormData.memCellphone)
                           ? seniorFormData.memCellphone.replace(
-                            /(\d{3})(\d{4})(\d{4})/,
-                            '$1-$2-$3'
-                          )
+                              /(\d{3})(\d{4})(\d{4})/,
+                              '$1-$2-$3'
+                            )
                           : seniorFormData.memCellphone || ''
                       }
                       disabled
@@ -286,11 +286,11 @@ const SeniorDetailViewFamily = ({ UUID }) => {
                 <tr>
                   <th>기 관</th>
                   <td>
-                    <input disabled />
+                    <input value={manager.memOrgName} disabled />
                   </td>
-                  <th>기 관 코 드</th>
+                  <th>기 관 주 소</th>
                   <td>
-                    <input value={seniorFormData.memGovCode} disabled />
+                    <input value={manager.memAddress} disabled />
                   </td>
                   <th>담 당 자</th>
                   <div className={styles.sdetailTableAgeDiv}>

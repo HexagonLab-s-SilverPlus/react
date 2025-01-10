@@ -1,13 +1,13 @@
-.qnaContent {height: 911px;width: 1456px; padding-top: 69px;padding-left: 61px;position: relative;left: 368px;}
+.qnaContent {height: calc(100vh - 69px);width: 1456px; padding-top: 69px;padding-left: 61px;position: relative;left: 368px;}
 .qnaWriteTitleDiv {display: flex;margin-top: 60px;margin-bottom: 30px;}
 .memberIdDiv {display: flex;margin-top: 30px; margin-bottom: 30px;}
 .qnaWriteContentDiv {display: flex;margin-top: 20px;}
-.qnaWriteTitle {width: 100px;margin: 0;padding: 0;vertical-align: top;text-align: left;font-family: "Pretendard Variable";font-size: 24px;}
-.memberId {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 24px;}
-.qnaWriteTitleTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 24px;}
-.memberIdTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 16px;}
-.qnaWriteContent {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 24px;}
-.qnaWriteContentTxt {height: 500px; width: 90%; font-family: "Pretendard Variable"; font-size: 16px;}
+.qnaWriteTitle {width: 100px;margin: 0;padding: 0;vertical-align: top;text-align: left;font-family: "Pretendard Variable";font-size: 20px;}
+.memberId {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}
+.qnaWriteTitleTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 20px;}
+.memberIdTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 18px;}
+.qnaWriteContent {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}
+.qnaWriteContentTxt {height: 500px; width: 90%; font-family: "Pretendard Variable"; font-size: 18px;}
 .qnaWriteBTN {position: absolute; margin-top: 10px; left: 50%; transform: translate(-50%, 0);}
 .qnaWriteBTN input, .upLoadFilesBTN, .qnaWriteBTN button {display: inline-block; height: 41px; width: 89px; border: none; font-weight: bold; border-radius: 10px; font-size: 18px; cursor: pointer; font-family: "Pretendard Variable"; margin-left: 25px;}
 .upLoadFilesBTN {margin-left: 0;}

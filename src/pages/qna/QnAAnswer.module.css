@@ -1,10 +1,10 @@
-.qnaContent {height: 911px; width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
+.qnaContent {height: calc(100vh - 69px); width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
 .qnaAnswerTitleDiv, .memberIdDiv, .qnaAnswerContentDiv {display: flex; margin-top: 30px; margin-bottom: 30px;}
-.qnaAnswerTitle, .memberId {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 24px;}
-.qnaAnswerTitleTxt, .memberIdTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 24px;}
-.memberIdTxt {font-size: 16px;}
-.qnaAnswerContent {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 24px;}
-.qnaAnswerContentTxt {height: 500px; width: 90%; font-family: "Pretendard Variable"; font-size: 16px;}
+.qnaAnswerTitle, .memberId {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}
+.qnaAnswerTitleTxt, .memberIdTxt {height: 20px; width: 30%; font-family: "Pretendard Variable"; font-size: 20px;}
+.memberIdTxt {font-size: 18px;}
+.qnaAnswerContent {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}
+.qnaAnswerContentTxt {height: 500px; width: 90%; font-family: "Pretendard Variable"; font-size: 18px; resize: none;}
 .qnaAnswerBTN {position: absolute; margin-top: 10px; left: 50%; transform: translate(-50%, 0);}
 .qnaAnswerBTN input, .qnaAnswerBTN button {display: inline-block; height: 41px; width: 89px; border-top: none; border-left: none; border-right: none; font-weight: bold; border-radius: 10px; font-size: 18px; cursor: pointer; font-family: "Pretendard Variable"; margin-left: 25px;}
 .qnaAnswerBTN input {color: #ffffff; background-color: #064420;}

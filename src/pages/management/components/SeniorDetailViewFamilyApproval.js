@@ -8,27 +8,76 @@ import { parseResidentNumber } from '../../../fuction/function';
 const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
   const [isApproval, setIsApproval] = useState(false);
   const [statusD, setStatusD] = useState('');
-  // 가족 정보 객체 저장 상태변수
-  //   const [family, setFamily] = useState();
+  const [fileList, setFileList] = useState([]); // 파일 목록 상태
+  const [showFileList, setShowFileList] = useState(false); // 파일 목록 표시 상태
 
-  //   // 최초 페이지 렌더링 시 어르신 정보 받아오기
-  //   useEffect(() => {
-  //     const SeniorDetail = async () => {
-  //       try {
-  //         const response = await apiSpringBoot.get(`/member/sdetail/${UUID}`);
-  //         setFamily(response.data.familyInfo);
-  //       } catch (error) {
-  //         console.error('회원 데이터 조회 실패 : ', error);
-  //       }
-  //     };
-
-  //     SeniorDetail();
-  //   }, [UUID]);
-
-  // 렌더링 파트
   useEffect(() => {
     console.log('전달받은 가족 정보', family);
   }, [UUID]);
+
+  // 가족계정 회원가입시 첨부한 파일 목록 출력 핸들러
+  const handleFileList = async () => {
+    if (fileList.length > 0) {
+      setShowFileList((prev) => !prev);
+      return;
+    }
+
+    if (!showFileList) {
+      try {
+        const response = await apiSpringBoot.get(
+          `/member/fflist/${family.memUUID}`
+        );
+        setFileList(response.data.list);
+        setShowFileList(true);
+        console.log('출력한 파일 데이터 확인 : ', response.data.list);
+      } catch (error) {
+        console.error('파일목록 가져오기 실패 ', error);
+        alert('파일목록 가져오기 실패');
+      }
+    } else {
+      setShowFileList(false);
+    }
+  };
+
+  // 파일 다운로드 핸들러
+  const FileDown = async (oFileName, rFileName) => {
+    try {
+      const response = await apiSpringBoot.get(`/member/fdown`, {
+        params: { oFileName, rFileName },
+        responseType: 'blob',
+      });
+
+      console.log('다운로드 응답 데이터:', response);
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', oFileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('다운로드 에러 발생', error);
+      alert('파일 다운로드 실패');
+    }
+  };
+
+  // 가족계정 승인/반려 핸들러
+  const handleApproval = async (e) => {
+    const approvalConfirm = window.confirm('승인하시겠습니까?');
+    if (approvalConfirm) {
+      const status = e.target.value;
+      setStatusD(status);
+      console.log(status);
+      await apiSpringBoot.put(`member/approval/${UUID}`, null, {
+        params: { status: status },
+      });
+      status === '승인' ? setIsApproval(true) : setIsApproval(false);
+      status === '승인' ? alert('승인완료') : alert('반려완료');
+    } else {
+      return;
+    }
+  };
 
   if (!UUID) {
     return (
@@ -38,17 +87,6 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
       </div>
     );
   }
-
-  const handleApproval = async (e) => {
-    const status = e.target.value;
-    setStatusD(status);
-    console.log(status);
-    await apiSpringBoot.put(`member/approval/${UUID}`, null, {
-      params: { status: status },
-    });
-    status === '승인' ? setIsApproval(true) : setIsApproval(false);
-    status === '승인' ? alert('승인완료') : alert('반려완료');
-  };
 
   return (
     <>
@@ -74,14 +112,28 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className={styles.separateCol}>자녀</td>
+                    <td className={styles.separateCol}>
+                      {senior.memSenFamRelationship === 'child'
+                        ? '자녀'
+                        : senior.memSenFamRelationship === 'brosis'
+                          ? '형제'
+                          : senior.memSenFamRelationship === 'partner'
+                            ? '배우자'
+                            : senior.memSenFamRelationship === 'bride'
+                              ? '며느리'
+                              : senior.memSenFamRelationship === 'groom'
+                                ? '사위'
+                                : ''}
+                    </td>
                     <td className={styles.genderCol}>
                       {parseResidentNumber(family.memRnn).gender}
                     </td>
                     <td className={styles.nameCol}>{family.memName}</td>
                     <td className={styles.addressCol}>{family.memAddress}</td>
                     <td className={styles.idCol}>{family.memId}</td>
-                    <td className={styles.fileCol}>다운로드</td>
+                    <td className={styles.fileCol}>
+                      <button onClick={handleFileList}>다운로드</button>
+                    </td>
                     <td className={styles.approvalCol}>
                       {senior.memFamilyApproval === 'PENDING' ? (
                         <>
@@ -92,14 +144,14 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
                                 onClick={(e) => handleApproval(e)}
                                 className={styles.approvalBtn}
                               >
-                                승인
+                                승 인
                               </button>
                               <button
                                 value="반려"
                                 onClick={(e) => handleApproval(e)}
                                 className={styles.rejectlBtn}
                               >
-                                반려
+                                반 려
                               </button>
                             </>
                           ) : statusD === '승인' ? (
@@ -121,6 +173,25 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
               </table>
             </div>
             {/* 가족계정승인 레이어 끝 */}
+            {/* 파일 목록 드롭다운 - 표 밖 */}
+            {showFileList && (
+              <div className={styles.dropdownContainer}>
+                <h3>첨부 파일 목록</h3>
+                <ul className={styles.dropdownMenu}>
+                  {fileList.map((file, index) => (
+                    <li
+                      key={index}
+                      className={styles.dropdownItem}
+                      onClick={() => {
+                        FileDown(file.mfOriginalName, file.mfRename);
+                      }}
+                    >
+                      {file.mfOriginalName}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       )}

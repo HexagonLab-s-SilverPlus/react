@@ -80,14 +80,14 @@ const FAQList = () => {
         setIsInsert(true)
     };
 
-    const handleFAQInsert = async (page = 1) => {
+    const handleFAQInsert = async () => {
         console.info("faqInser : " + JSON.stringify(faq));
         try {
             await apiSpringBoot.post('/faq', faq, {
                 headers: { 'Content-Type': 'application/json' },
             });
         alert('FAQ 등록 성공');
-        handleFAQView();
+        handleFAQView(pagingInfo.pageNumber);
         } catch (error) {
         console.error('FAQ 등록 실패', error);
         alert('FAQ 등록 실패');
@@ -168,7 +168,7 @@ const FAQList = () => {
             alert("FAQ 수정 성공");
             setOpenFAQ(null);
             setUpdateFAQ(null);
-            handleFAQView();
+            handleFAQView(pagingInfo.pageNumber);
         } catch {
             alert("FAQ 수정 실패");
             console.error('FAQ 삭제 실패', error);
@@ -191,7 +191,7 @@ const FAQList = () => {
                 await apiSpringBoot.delete(`/faq/${uuid}`);
                 alert("FAQ 삭제 성공");
                 setOpenFAQ(null);
-                handleFAQView();
+                handleFAQView(pagingInfo.pageNumber);
             } catch {
                 alert("FAQ 삭제 실패");
                 console.error('FAQ 삭제 실패', error);
@@ -200,7 +200,7 @@ const FAQList = () => {
     };
 
     useEffect (() => {
-        handleFAQView();
+        handleFAQView(pagingInfo.pageNumber );
         if(isInsert){
             handleFAQInsert();
         }
