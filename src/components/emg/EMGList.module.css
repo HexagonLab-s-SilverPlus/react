@@ -9,7 +9,7 @@
 /* emgTop end */
 
 .emgTable {width: 100%; border-top: 2px solid #064420; border-bottom: 2px solid #064420; margin-bottom: 24px; border-collapse: collapse; font-size: 20px;}
-.emgTable input {font-size: 20px;}
+.emgTable input {font-size: 18px;}
 .emgTable thead {width: 100%; height: 48px; border-bottom: 2px solid #064420; background: #FDFAF6;}
 .emgTable th {border: 1px solid #ddd;}
 .emgTable tr th:nth-child(1) {width: 25%; border-left: 0;}
