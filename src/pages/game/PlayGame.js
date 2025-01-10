@@ -7,7 +7,8 @@ import SeniorNavbar from '../../components/common/SeniorNavbar';
 // resources
 import hwatuCard from './cardInfo';
 // function
-import { selectCard, chooseCard, moveCard } from './playAction'
+import { selectCard } from './playAction'
+import { autoChoice } from './autoChoice';
 
 
 
@@ -16,13 +17,18 @@ const PlayGame = () => {
   const cards = hwatuCard;
   // 기타카드
   const otherCard = ([
-    // 뒷면
-    {month : 99, type:"back", image:"back.png"},
     // 폭탄
-    {month : 99, type:"bomb", image:"bomb.png"},
+    { id:51, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:52, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:53, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:54, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:55, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:56, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:57, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:58, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:59, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
+    { id:60, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
   ]);
-
-
   // 플레이어 카드 목록
   const [playerCards, setPlayerCards] = useState([]);
   // 상대방 카드 목록
@@ -35,14 +41,13 @@ const PlayGame = () => {
   const [getPlayerCards, setGetPlayerCards] = useState([]);
   // 상대방이 획득한 패
   const [getOpponentCards, setGetOpponentCards] = useState([]);
+  // turn 저장 변수(true : player or false : opponent)
+  const [currentTurn, setCurrentTurn] = useState(true);
+  //-----------------------------------------------------------------------------
   // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
   const [isTwoCards, setIsTwoCards] = useState(false);
-  // 테이블에 같은카드 두장일때 선택할 옵션
-  const [choiceOptions, setChoiceOptions] = useState([]);
 
-  // turn 저장 변수(player or opponent)
-  const [currentTurn, setCurrentTurn] = useState('player');
-
+  //------------------------------------------------------------------------------
   // 초기 카드 세팅(한번실행)
   useEffect(()=>{
     const initialCards = generateInitialCards();// 카드 섞고 분배
@@ -50,8 +55,9 @@ const PlayGame = () => {
     setOpponentCards(initialCards.opponent);  // 상대방 카드 세팅
     setTableCards(initialCards.table);  // 테이블 카드 세팅
     setDeckCards(initialCards.deck);  // 덱 카드 세팅
+    setGetPlayerCards([]);
+    setGetOpponentCards([]);
   },[]);
-
   // 카드 초기화 로직
   const generateInitialCards = () => {
     // 카드 섞기
@@ -63,7 +69,6 @@ const PlayGame = () => {
       deck:allCards.slice(28), // 20장
     };
   };
-
   // 카드 섞기
   const shuffle = (array) => {
     for (let i = array.length - 1; i>0 ; i--){
@@ -72,7 +77,6 @@ const PlayGame = () => {
     }
     return array;
   };
-
   // 테이블 오픈된 카드 월별로 묶기 함수
   const groupByMonth = (cards) => {
     return cards.reduce((groups, card) => {
@@ -83,69 +87,99 @@ const PlayGame = () => {
       return groups;  // 그룹 리턴
     }, {});
   };
-
+  //------------------------------------------------------------------------------------------
   // 카드 id순서대로 정렬
   const sortCard = (cards) => {
     const ascCard = [...cards].sort((a,b) => a.id - b.id);
     return ascCard;
   }
-
-
+  //-------------------------------------------------------------------------------------------
+  // 턴 1회 실시
   const handleSelectCard = (card) => {
-    // 테이블에 있는 같은카드 가져오기
-    let cards = selectCard(card,tableCards);
+    // // 뺏어올 카드 수 카운트
+    // const takeAwayCard = 0;
+    // // 자신의 덱에 같은패가 3장인지 확인
+    // const cardCount =0;
+    // // 같은카드 3개일시 사용될 리스트
+    // const threeCardList = [];
+    // if (currentTurn) {
+    // playerCards.forEach((myCard)=>{
+    //   if (myCard.month===card.month&&myCard.id!==card.id){
+    //     cardCount= cardCount+1;
+    //     threeCardList.push(myCard);
+    //   }
+    // });
+    // if (cardCount===2){
+    //   takeAwayCard=takeAwayCard+1;
+    // }} else {
+    //   opponentCards.forEach((myCard)=>{
+    //     if (myCard.month===card.month&&myCard.id!==card.id){
+    //       cardCount= cardCount+1;
+    //       threeCardList.push(myCard);
+    //     }
+    //   });
+    //   if (cardCount===2){
+    //     takeAwayCard=takeAwayCard+1;
+    // }}
 
-    // 플레이어가 먹은패에 카드 가져오기
-    let myCards = chooseCard(cards);
+    // 덱카드에서 하나 뽑기
+    const [firstCard, ...remainingDeck] = deckCards;
+    setDeckCards(remainingDeck);
+    // 플레이어 카드 빼기
+    const updatedPlayerCards = currentTurn
+      ? playerCards.filter((playerCard) => playerCard.id !== card.id)
+      : opponentCards.filter((opponentCard) => opponentCard.id !== card.id);
 
+    if (currentTurn) {
+      setPlayerCards(updatedPlayerCards);
+    } else {
+      setOpponentCards(updatedPlayerCards);
+    }
     // 카드 처리
-    // 동일카드가 없을시
-    if (myCards === 0) {
-      // 플레이어 패에서 카드빼기
-      const updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 플레이어 패를 테이블에 깔기
-      setTableCards((prev) => [...prev,card]);
-    } else if(myCards ===1) {
-      // 플레이어 패에서 카드빼기
-      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 테이블 패에서 카드빼기
-      updatedPlayerCards = tableCards.filter((tableCard) => tableCard.id !== cards[0].id);
-      setTableCards(updatedPlayerCards);
-      // 플레이어 패와 테이블의 일치하는 패를 내가 먹은 테이블에 넣기
-      setGetPlayerCards((prev)=>[...prev,card,cards[0]]);
-    } else if(myCards === 2){
-      // 둘중 하나 고르기
-      setIsTwoCards(true);
-      setChoiceOptions(cards);
-      // 뒤집을카드 같은거면 두개다 내가 가져가고 
+    const returnValue = selectCard(card, firstCard, tableCards);
+    // 처리한 카드 변수저장
+    const getCardList = returnValue.getCards;
+    const pushCardList = returnValue.pushCards;
+    const outTableCardList = returnValue.outCards;
+    console.log(getCardList);
+    console.log(pushCardList);
+    console.log(outTableCardList);
+    if (outTableCardList.length !==0){
+      const outTableCard = tableCards.filter((tableCard) => !outTableCardList.some((card) => card.id === tableCard.id));
+      setTableCards(outTableCard);
+    };
+    if (pushCardList.length !== 0){
+      setTableCards((prev)=>[...prev,...pushCardList]);
+    };
+    if (getCardList.length!==0){
+      currentTurn
+      ? setGetPlayerCards((prev)=>[...prev,...getCardList])
+      : setGetOpponentCards((prev)=>[...prev,...getCardList]);
+    };
+    // if (cardCount==2){
+    //   if(currentTurn) {
+    //     const updateThreeCard = playerCards.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
+    //     setPlayerCards(updateThreeCard,otherCard[0],otherCard[1]);
+    //     setGetPlayerCards((prev)=>[...prev,...threeCardList]);
+    //   } else{
+    //     const updateThreeCard = opponentCards.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
+    //     setOpponentCards(updateThreeCard,otherCard[0],otherCard[1]);
+    //     setGetOpponentCards((prev)=>[...prev,...threeCardList]);
+    //   }
 
-      // 아니면 하나만 가져가기
-    } else if(myCards === 3){
-      // 플레이어 패에서 카드빼기
-      let updatedPlayerCards = playerCards.filter((playerCard) => playerCard.id !== card.id);
-      setPlayerCards(updatedPlayerCards);
-      // 테이블 패에서 카드빼기
-      const updatedTableCards = tableCards.filter(
-        (tableCard) => !cards.some((matchCard) => matchCard.id === tableCard.id));
-      setTableCards(updatedTableCards);
-      // 내가 가져간 패에 추가
-      setGetPlayerCards((prev) => [...prev, ...cards, card]);
-    }
-    
-  
-    // 덱에서 한장꺼내서 뒤집기
-    if (deckCards!==0){
-      const [newCard, ...remainingDeck] = deckCards;
-      setDeckCards(remainingDeck); // 덱 상태 업데이트
-      setTableCards((prev)=>[...prev,newCard]);  // 테이블 추가
-    }
+    // }
 
-    // 턴오버 처리
-    setCurrentTurn("opponent")
-  }
+    setCurrentTurn((prev)=>(!prev));
+  };
+  //--------------------------------------------------------------------------------------------------
+  // opponent 임의 카드 출력 함수
+  useEffect(()=>{
+    if (!currentTurn){
+    const choiceCard = autoChoice(opponentCards,tableCards);
+    handleSelectCard(choiceCard);
 
+  }},[currentTurn]);
+  //---------------------------------------------------------------------------------------------------------------------
   return (
     <div className={styles.mainPage}>
       {/* 상단 네비바 */}
@@ -159,7 +193,12 @@ const PlayGame = () => {
         <div className={styles.opponentArea}>
           {/* 상대방이 먹은패 */}
           <div className={styles.getOpponentCards}>
-            상대방이 먹은패
+            {sortCard(getOpponentCards).map((card)=>(
+              <img
+                src={`/assets/images/game/card/${card.image}`}
+                alt={`${card.month}월 ${card.type} 카드`}
+              />
+            ))}
           </div>{/* 상대방이 먹은패 */}
           {/* 상대방 가지고 있는패(갯수에 맞게 뒷면으로 표시) */}
           <div className={styles.opponentCards}>
@@ -176,8 +215,9 @@ const PlayGame = () => {
         <div className={styles.tableArea}>
           {/* 덱카드 */}
           <div className={styles.deckCards}>
-            {}
-            <img src={`/assets/images/game/card/back.png`} alt="덱 카드" className={styles.deckCard}/>
+            { deckCards.length!==0 &&
+              <img src={`/assets/images/game/card/back.png`} alt="덱 카드" className={styles.deckCard}/>
+            }
           </div>{/* 덱카드 */}
           {/* 테이블 카드 */}
           <div className={styles.openCards}>
@@ -197,7 +237,7 @@ const PlayGame = () => {
 
           {/* 내가 가져온 패 */}
           <div className={styles.getPlayerArea}>
-            {getPlayerCards.map((card)=>(
+            {sortCard(getPlayerCards).map((card)=>(
               <img
                 src={`/assets/images/game/card/${card.image}`}
                 alt={`${card.month}월 ${card.type} 카드`}
