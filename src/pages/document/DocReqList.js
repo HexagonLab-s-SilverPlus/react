@@ -155,12 +155,13 @@ const DocRequestList = () => {
                                     <td className={dstyles.dTd}>{document.docCompleted}</td>
                                     <td className={dstyles.dTd}>
                                         <button
-                                            onClick={() => navigate(`/document/${document.rownum}`)}
+                                            onClick={() => navigate(`/seniorlist/sdetailview/${document.seniorUUID}?scrollTo=DocManaged`)}
                                             className={dstyles.dViewButton}
                                         >
                                             상세보기
                                         </button>
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>
