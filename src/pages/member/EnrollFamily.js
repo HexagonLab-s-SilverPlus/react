@@ -6,9 +6,11 @@ import styles from './Enroll.module.css';
 import Modal from '../../components/common/Modal';
 import SearchSenior from './SearchSenior';
 
-function EnrollFamily({ onEnrollSuccess, memType }) {
+function EnrollFamily() {
   // Modal 관리 상태변수
   const [showModal, setShowModal] = useState(false);
+  const [selectSeniorData, SetSelectSeniorData] = useState([]);
+
   const [formData, setFormData] = useState({
     memId: '', // 아이디
     memPw: '', // 비밀번호
@@ -19,7 +21,7 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     memCellphoneCheck: '', // 인증번호
     // memPhone: '',       // 일반전화
     // memGovCode: '', // 관공서 코드
-    memType: memType, // 회원타입
+    memType: 'FAMILY', // 회원타입
     memPwChk: '',
   });
 
@@ -168,10 +170,10 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     }
 
     // 전송 전에 유효성 검사 확인
-    if (!validate()) {
-      alert('비밀번호 일치 확인을 해주세요.');
-      return;
-    }
+    // if (!validate()) {
+    //   alert('비밀번호 일치 확인을 해주세요.');
+    //   return;
+    // }
 
     if (!validateCellphone()) {
       alert('휴대전화 인증을 해주세요.');
@@ -189,6 +191,16 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
     data.append('memType', formData.memType);
     data.append('memStatus', 'ACTIVE');
 
+    const seniorRelationshipData = selectSeniorData.map((senior) => ({
+      memUUID: senior.memUUID,
+      relationship: senior.relationship || '',
+    }));
+
+    data.append(
+      'seniorRelationshipData',
+      JSON.stringify(seniorRelationshipData)
+    );
+
     // 선택된 파일 추가
     selectedFiles.forEach((file) => {
       data.append('memFiles', file); // 파일 배열로 전송
@@ -202,7 +214,6 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
       });
       alert('가입 성공');
       console.log('memType', memType);
-      onEnrollSuccess();
     } catch (error) {
       console.error('가입 실패');
       console.log(formData);
@@ -270,6 +281,16 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
 
   // Modal 관련 함수
   const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
+
+  const handleSelect = (selectData) => {
+    SetSelectSeniorData(selectData);
     setShowModal(false);
   };
 
@@ -491,12 +512,31 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
                 {cellphoneCheckMsg}
               </span>
             )}
-            <tr className={styles.valuebox}>어르신</tr>
-            <tr>
-              <input className={styles.textbox} style={{ width: '350px' }} />
-              <button className={styles.button2} style={{ marginLeft: '20px' }}>
+            <tr className={styles.valuebox}>
+              어르신
+              <button
+                className={styles.button2}
+                style={{ marginLeft: '20px' }}
+                onClick={(e) => handleSearch(e)}
+              >
                 검색
               </button>
+            </tr>
+            <tr>
+              {/* <input
+                className={styles.textbox}
+                style={{ width: '350px' }}
+                value={selectSeniorData}
+              /> */}
+              {selectSeniorData.length > 0 && (
+                <ul>
+                  {selectSeniorData.map((senior) => (
+                    <li key={senior.memUUID}>
+                      {senior.memName} - {senior.relationship || '관계 미설정'}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </tr>
 
             <tr>
@@ -573,7 +613,7 @@ function EnrollFamily({ onEnrollSuccess, memType }) {
       {/* 검색 창 Modal */}
       {showModal && (
         <Modal onClose={handleCloseModal}>
-          <SearchSenior></SearchSenior>
+          <SearchSenior onSelectMultiple={handleSelect} />
         </Modal>
       )}
     </>

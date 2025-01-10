@@ -7,6 +7,7 @@ import SeniorSideBar from '../../components/common/SeniorSideBar.js';
 import { marked } from 'marked';
 import SeniorNavbar from '../../components/common/SeniorNavbar.js';
 import { Player } from '@lottiefiles/react-lottie-player';
+import EMG from '../../components/emg/EMG.js';
 
 function ChatPage() {
   const location = useLocation();
@@ -20,6 +21,18 @@ function ChatPage() {
   const { apiSpringBoot, accessToken, apiFlask, member } = useContext(AuthContext);
   const chatEndRef = useRef(null);
   const [inputText, setInputText] = useState(''); // 입력창 텍스트 관리
+
+  const [session, setSession] = useState(''); // 세션 상태
+
+  // EMG 상태 관리
+  const [onCamera, setOnCamera] = useState(false);
+
+
+  // 위험 키워드
+  const dangerKeywords = ['아프다', '쓰러졌다', '도와줘', '긴급'];
+
+
+
 
   // 채팅 이력 조회
   const fetchChatHistory = async () => {
@@ -159,6 +172,7 @@ function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+
   // 세션 종료 핸들러
   const handleEndSession = async () => {
     try {
@@ -178,10 +192,75 @@ function ChatPage() {
     }
   };
 
+  // 워크스페이스로 세션 조회하는 핸들러
+  // 세션 종료 핸들러
+  const getSession = async () => {
+    try {
+      const response = await apiSpringBoot.patch('/api/session/update-status', null, {
+        params: {
+          workspaceId: selectedWorkspaceId,
+          status: 'COMPLETED',
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
+        },
+      });
+      console.log('세션 종료 성공:', response.data);
+    } catch (error) {
+      console.error('세션 종료 중 오류:', error);
+    }
+  };
 
 
 
   const handleInputChange = (e) => setInputText(e.target.value);
+
+
+  // 위험 키워드 감지
+  useEffect(() => {
+    const checkDangerKeywords = () => {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.sender === 'USER') {
+        const isDangerous = dangerKeywords.some((keyword) => lastMessage.text.includes(keyword));
+        if (isDangerous) {
+          handleStartEMG();
+        }
+      }
+    };
+
+    checkDangerKeywords();
+  }, [messages]);
+
+
+  // 워크스페이스ID를 파라미터로 활성화 상태인 세션 조회
+  useEffect(() => {
+    const getSessionByWorkspaceId = async () => {
+      try {
+        const response = await apiSpringBoot.get(`/api/session/${workspaceId}`);
+        console.log('세션:', response.data.data);
+        setSession(response.data.data.sessId); // ChatSession의 sessId를 세션 상태에 setter
+
+      } catch (error) {
+        console.error('세션 조회 중 에러: ', error)
+      }
+    }
+    getSessionByWorkspaceId();
+
+  }, [workspaceId]
+  );
+
+
+
+  // EMG 활성화 핸들러
+  const handleStartEMG = () => {
+    setOnCamera(true);
+  };
+
+  // EMG 비활성화 핸들러
+  const handleStopEMG = () => {
+    setOnCamera(false);
+  };
 
 
   return (
@@ -196,15 +275,39 @@ function ChatPage() {
           />
         </div>
         <button className={styles.sidebarToggle} onClick={toggleSidebar}>
-          {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
+          {isSidebarVisible ? '닫기' : '열기'}
         </button>
 
 
+
+
+        {/* EMG 컴포넌트 */}
+        <div>
+          {onCamera ? (
+            <EMG onCamera={onCamera} sessId={session} />
+          ): (
+            <EMG onCamera={onCamera} sessId={session} />
+          )}
+        </div>
+
+
+
+
         <div className={styles.chatContainer}>
-        <div
-          className={`${styles['chat-container']} ${isSidebarVisible ? styles.sidebarOpen : styles.sidebarClosed}`}
-        >
+          <div
+            className={`${styles['chat-container']} ${isSidebarVisible ? styles.sidebarOpen : styles.sidebarClosed}`}
+          >
             <div className={styles['chat-page']}>
+
+
+
+              <button className={styles.emergencyButton} onClick={handleStartEMG}>
+                비상 상황
+              </button>
+
+
+
+
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -221,9 +324,6 @@ function ChatPage() {
                 </div>
               ))}
               <div ref={chatEndRef}></div>
-              <button onClick={handleEndSession} className={styles.endSessionButton}>
-                세션 종료
-              </button>
             </div>
           </div>
         </div>
@@ -231,7 +331,6 @@ function ChatPage() {
 
 
 
-      
       <div
         className={`${styles['input-container']} ${isSidebarVisible ? styles['sidebar-open'] : styles['sidebar-closed']
           }`}

@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 화면 전체 높이 */
+    text-align: center;
+    background-color: #f9f9f9; /* 배경색 */
+  }
+  
+  .title {
+    font-size: 4.5rem; /* h1의 폰트 크기 */
+    font-weight: bold; /* 굵은 폰트 */
+    color: #333; /* 글자 색상 */
+    margin-bottom: 20px;
+  }
+  
+  .description {
+    font-size: 2rem; /* p의 폰트 크기 */
+    color: #555; /* 글자 색상 */
+    margin-bottom: 40px;
+  }
+  
+  .lottie {
+    max-width: 600px; /* Lottie 애니메이션 최대 크기 */
+    width: 100%;
+  }
+  

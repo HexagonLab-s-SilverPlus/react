@@ -377,3 +377,24 @@
   padding: 72px 48px;
   margin-top: 100px;
 }
+
+.moveSnrDetailBtn {
+  width: 144px; 
+  height: 48px; 
+  border: 0; 
+  background: #eee;
+  text-align: center;
+  font-size: 20px;
+  font-family: "Pretendard Variable";
+  border-radius: 8px;
+  margin: 48px auto 144px;
+  display: block;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 3px;
+}
+
+.moveSnrDetailBtn:hover {
+  background: #064420;
+  color: #fff;
+}

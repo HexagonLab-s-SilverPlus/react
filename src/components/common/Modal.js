@@ -10,9 +10,11 @@ const Modal = ({ children, onClose }) => {
   return ReactDom.createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button onClick={onClose} className={styles.closeButton}>
-          ✖
-        </button>
+        <div className={styles.modalButtonDiv}>
+          <button onClick={onClose} className={styles.closeButton}>
+            ✖
+          </button>
+        </div>
         {children}
       </div>
     </div>,

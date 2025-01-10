@@ -205,10 +205,6 @@ const MyInfoManager = () => {
     }
   };
 
-  const handleTest = () => {
-    navigate(`/test/${member.memUUID}`);
-  };
-
   return (
     <div className={styles.myfoMainContainer}>
       <SideBar />

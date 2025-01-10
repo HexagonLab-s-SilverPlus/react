@@ -222,6 +222,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
 
   useEffect(() => {
     console.log('전달받은 어르신 정보 객체', senior);
+    console.log('전달받은 담당자 정보 객체', manager);
     const [front, end] = senior.memEmail.split('@');
     calculateAge(senior.memRnn.replace('-', ''));
     setDomain(end);
@@ -463,7 +464,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
                     <input
                       value={
                         seniorFormData.memRnn.split('-')[1][0] === '1' ||
-                          seniorFormData.memRnn.split('-')[1][0] === '3'
+                        seniorFormData.memRnn.split('-')[1][0] === '3'
                           ? '남성'
                           : '여성'
                       }
@@ -510,11 +511,11 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
                   <input
                     value={
                       seniorFormData.memCellphone &&
-                        /^\d{11}$/.test(seniorFormData.memCellphone)
+                      /^\d{11}$/.test(seniorFormData.memCellphone)
                         ? seniorFormData.memCellphone.replace(
-                          /(\d{3})(\d{4})(\d{4})/,
-                          '$1-$2-$3'
-                        )
+                            /(\d{3})(\d{4})(\d{4})/,
+                            '$1-$2-$3'
+                          )
                         : seniorFormData.memCellphone || ''
                     }
                     onChange={handleInfoChange}
