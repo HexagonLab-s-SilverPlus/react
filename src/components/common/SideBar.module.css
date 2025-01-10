@@ -1,7 +1,7 @@
 .sideBarHeader {
     position: fixed;
     width: 368px;
-    height: 980px;
+    height: 100vh;
     background-color: #064420;
     z-index: 1;
 }
