@@ -3,27 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider';
 import SideBar from '../../components/common/SideBar';
 import dstyles from './DocReqList.module.css';
-import Paging from '../../components/common/Paging';
-import { PagingCalculate } from '../../components/common/PagingCalculate ';
 import { apiSpringBoot } from '../../utils/axios';
+import Paging from '../../components/common/Paging';
 
 const DocRequestList = () => {
     const [docData, setDocData] = useState([]); // 공문서 요청 데이터를 저장할 상태
-    const [pagingInfo, setPagingInfo] = useState({
-        currentPage: 1,
-        maxPage: 1,
-        startPage: 1,
-        endPage: 1,
-    }); // 페이징 정보를 저장할 상태
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [seniorNames, setSeniorNames] = useState({}); // seniorUUID와 이름 매핑
+    const [pagingInfo, setPagingInfo] = useState({ // 페이징 정보 상태
+        currentPage: 1,
+        totalPages: 1,
+        totalElements: 0,
+        pageSize: 10,
+        startPage: 1,
+        endPage: 1,
+    });
 
     const navigate = useNavigate();
-    const { role } = useContext(AuthContext); // 사용자 권한 정보
+    const { role, member } = useContext(AuthContext); // 사용자 권한 정보
 
     // 권한 확인
     useEffect(() => {
-        if (role !== 'MANAGER') { // 모두 대문자로 비교
+        if (role !== 'MANAGER') {
             alert('접근 권한이 없습니다.');
             navigate('/'); // 홈 페이지로 리다이렉트
         }
@@ -31,109 +33,92 @@ const DocRequestList = () => {
 
     // 날짜시간 보정 함수
     const adjustTimeZone = (timestamp) => {
-        if (!timestamp) {
-            console.error("Timestamp is null or undefined");
-            return "유효하지 않은 날짜";
-        }
-
+        if (!timestamp) return '유효하지 않은 날짜';
         try {
-            console.log("Raw timestamp:", timestamp);
             const utcDate = new Date(timestamp);
-
-            if (isNaN(utcDate.getTime())) {
-                console.error("Invalid date format detected:", timestamp);
-                throw new Error("Invalid date format");
-            }
-
+            if (isNaN(utcDate.getTime())) throw new Error('Invalid date format');
             const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
-
-            return kstDate.toISOString().split("T")[0];
+            return kstDate.toISOString().split('T')[0];
         } catch (error) {
-            console.error("Error in adjustTimeZone function:", timestamp, error);
-            return "유효하지 않은 날짜";
+            console.error('Error in adjustTimeZone:', error);
+            return '유효하지 않은 날짜';
         }
     };
 
-    // 문서 데이터 가져오기
-    const fetchDocData = async (page) => {
+    const fetchDocData = async (page = 1) => {
         try {
             setLoading(true);
-            
-            const response = await apiSpringBoot.get(`/api/document`, {
-                params: { pageNumber: page, pageSize: 10 },
+            const response = await apiSpringBoot.get('/api/document/pending', {
+                params: { page: page - 1, size: pagingInfo.pageSize, mgrUUID: member.memUUID },
             });
 
-            console.log("API Response Data:", response.data);
+            console.log('Response Data:', response.data);
 
             const docTypeMap = {
-                address: "전입신고서",
-                death: "사망신고서",
-                basic: "기초연금 신청서",
-                medical: "의료급여 신청서",
+                address: '전입신고서',
+                death: '사망신고서',
+                basic: '기초연금 신청서',
+                medical: '의료급여 신청서',
             };
 
-            const { list, paging } = response.data;
-             // 페이징 계산
-             console.log("Paging Inputs: ", {
-                page,
-                listCount: paging.listCount,
-                pageSize: paging.pageSize,
-            });
-            console.log("API Response List Data:", list);
+            const { content: list, totalPages, totalElements } = response.data?.data || {};
 
-            console.log("Server Paging Data: ", paging);
-            console.log("Request Params:", { pageNumber: page, pageSize: 10 });
-            
-            const { maxPage, startPage, endPage } = PagingCalculate(
-                page,
-                paging.listCount,
-                paging.pageSize
-            );
-
-
-            
+            if (!list || list.length === 0) {
+                setError('문서를 불러오는 데 실패했습니다.');
+                return;
+            }
 
             const adjustedData = list.map((document, index) => ({
-                rownum: index + 1 + (paging.currentPage - 1) * 10,
-                username: document.memberName,
+                rownum: (page - 1) * pagingInfo.pageSize + index + 1,
+                seniorUUID: document.writtenBy,
                 doctype: docTypeMap[document.docType] || document.docType,
-                docCompleted: adjustTimeZone(document.createAt),
+                docCompleted: adjustTimeZone(document.docCompletedAt),
             }));
-            console.log("Adjusted Data:", adjustedData);
 
-            setDocData(adjustedData); // 문서 데이터 설정
-            setPagingInfo({
-                currentPage: paging.currentPage,
-                maxPage: paging.totalPages,
-                startPage: 1, // 필요시 계산
-                endPage: paging.totalPages, // 필요시 계산
-            }); // 페이징 정보 설정
+            setDocData(adjustedData);
+            setPagingInfo((prev) => ({
+                ...prev,
+                currentPage: page,
+                totalPages,
+                totalElements,
+                startPage: Math.floor((page - 1) / 10) * 10 + 1,
+                endPage: Math.min(Math.floor((page - 1) / 10) * 10 + 10, totalPages),
+            }));
+
+            // seniorUUID에 해당하는 이름 가져오기
+            const seniorUUIDs = adjustedData.map((doc) => doc.seniorUUID);
+            fetchSeniorNames(seniorUUIDs);
         } catch (err) {
-            console.error("Error fetching document data:", err);
+            console.error('Error fetching document data:', err);
             setError('문서를 불러오는 데 실패했습니다.');
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchSeniorNames = async (seniorUUIDs) => {
+        try {
+            const namesMap = { ...seniorNames };
+            for (const uuid of seniorUUIDs) {
+                if (!namesMap[uuid]) { // 이미 가져온 이름은 제외
+                    const response = await apiSpringBoot.get(`/api/document/mgrName/${uuid}`);
+                    namesMap[uuid] = response.data?.data?.memName || '담당자 미정';
+                }
+            }
+            setSeniorNames(namesMap);
+        } catch (error) {
+            console.error('담당자 이름을 가져오는 중 에러 발생:', error);
+        }
+    };
+
+    const handlePageChange = (page) => {
+        fetchDocData(page);
+    };
+
     // 컴포넌트 마운트 시 데이터 로드
     useEffect(() => {
-        fetchDocData(1); // 첫 페이지 로드
+        fetchDocData(pagingInfo.currentPage);
     }, []);
-
-    // 페이지 변경 핸들러
-    const handlePageChange = (page) => {
-        console.log(`Requesting page: ${page}`);
-        fetchDocData(page); // 새 페이지 데이터 가져오기
-    };
-    
-    // const handlePageChange = (page) => {
-    //     setPagingInfo((prev) => ({
-    //         ...prev,
-    //         currentPage: page,
-    //     }));
-    //     fetchDocData(page); // 새 페이지 데이터 가져오기
-    // };
 
     if (loading) {
         return <div className={dstyles.loading}>로딩 중...</div>;
@@ -165,28 +150,31 @@ const DocRequestList = () => {
                             {docData.map((document) => (
                                 <tr key={document.rownum}>
                                     <td className={dstyles.dTd}>{document.rownum}</td>
-                                    <td className={dstyles.dTd}>{document.username}</td>
+                                    <td className={dstyles.dTd}>{seniorNames[document.seniorUUID] || '로딩 중...'}</td>
                                     <td className={dstyles.dTd}>{document.doctype}</td>
                                     <td className={dstyles.dTd}>{document.docCompleted}</td>
                                     <td className={dstyles.dTd}>
                                         <button
-                                            onClick={() => navigate(`/document/${document.rownum}`)}
+                                            onClick={() => navigate(`/seniorlist/sdetailview/${document.seniorUUID}?scrollTo=DocManaged`)}
                                             className={dstyles.dViewButton}
                                         >
                                             상세보기
                                         </button>
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
                 <Paging
-                    currentPage={pagingInfo.currentPage || 1}
-                    maxPage={pagingInfo.maxPage || 1}
-                    startPage={pagingInfo.startPage || 1}
-                    endPage={pagingInfo.endPage || 1}
-                    onPageChange={(page) => handlePageChange(page)}
+                    pageNumber={pagingInfo.currentPage}
+                    listCount={pagingInfo.totalElements}
+                    pageSize={pagingInfo.pageSize}
+                    maxPage={pagingInfo.totalPages}
+                    startPage={pagingInfo.startPage}
+                    endPage={pagingInfo.endPage}
+                    onPageChange={handlePageChange}
                 />
             </div>
         </div>

@@ -5,6 +5,8 @@ import chatIcon from "../assets/images/chatIcon.png";
 import gostop from "../assets/images/game/card/11_1.png";
 import activityIcon from "../assets/images/activityIcon.png";
 import noticeIcon from "../assets/images/noticeIcon.png";
+import faqIcon from "../assets/images/question.png"
+import bookIcon from "../assets/images/book.png"
 import documentIcon from "../assets/images/documentIcon.png";
 import { useNavigate } from "react-router-dom";
 
@@ -28,6 +30,14 @@ const SeniorMenu = () => {
 
   const handleProgramButton = () => {
     navigate('/program');
+  };
+
+  const handleFAQButton = () => {
+    navigate('/faq');
+  };
+
+  const handleBookButton = () => {
+    navigate('/book');
   };
 
   return (
@@ -62,17 +72,33 @@ const SeniorMenu = () => {
           <img src={activityIcon} alt="어르신 맞춤 활동" />
         </div>
 
+        {/* FAQ */}
+        <div className={`${styles.menuButton} ${styles.div4}`} onClick={handleFAQButton}>
+          <p>
+            자주 <br />
+            하는 질문
+          </p>
+          <img src={faqIcon} alt="FAQ" />
+        </div>
+
         {/* 공지사항 */}
-        <div className={`${styles.menuButton} ${styles.div4}`} onClick={handleNoticeButton}>
+        <div className={`${styles.menuButton} ${styles.div5}`} onClick={handleNoticeButton}>
           <p>공지사항</p>
           <img src={noticeIcon} alt="공지사항" />
         </div>
 
         {/* 공문서 작성 */}
-        <div className={`${styles.menuButton} ${styles.div5}`} onClick={handleDocButton}>
+        <div className={`${styles.menuButton} ${styles.div6}`} onClick={handleDocButton}>
           <p>공문서 작성</p>
           <img src={documentIcon} alt="공문서 작성" />
         </div>
+
+        {/* 공문서 작성 */}
+        <div className={`${styles.menuButton} ${styles.div7}`} onClick={handleBookButton}>
+          <p>책 읽기</p>
+          <img src={bookIcon} alt="책 읽기" />
+        </div>
+
 
       </div>
       <SeniorFooter />

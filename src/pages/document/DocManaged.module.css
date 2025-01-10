@@ -1,10 +1,30 @@
-.dmcontainer{width: calc(100% - 368px); border: 1px solid #000; padding: 0 96px;}
+.dmcontainer{width: 100%; padding: 0 48px 96px;}
 .dmcontainer{font-family: "Pretendard Variable"; box-sizing: border-box;;}
 .dmcontainer input{font-family: "Pretendard Variable";}
 .dmcontainer button{font-family: "Pretendard Variable";}
-.dmTop{display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; box-sizing: border-box; padding: 0 12px; font-size: 18px;}
+.dmTop{display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; box-sizing: border-box; padding: 0 12px 0 24px; font-size: 18px;}
 .dmTop> h1 {margin: 0; padding: 0; font-size: 40px;}
 .dmline> span {font-weight: bold;}
 .dmline> label {margin-left: 12px;}
-.dmline button{font-family: "Pretendard Variable";}
-.dmItem{}
+.dmline button {font-family: "Pretendard Variable"; width: 144px; height: 36px; font-size: 16px; border-radius: 8px; border: 0; cursor: pointer; background: #eee; margin-left: 16px;}
+.dmline button:hover {background: #064420; color: #fff;}
+
+.dmTable {border-collapse: collapse; border-spacing: 0; width: 100%; margin-bottom: 24px;}
+.dmTable > thead > tr > th {border-top: 2px solid #064420; border-bottom: 2px solid #064420; height: 46px; box-sizing: border-box; font-size: 18px; font-weight: bold; background: #FDFAF6;}
+.dmTable > thead > tr > th:nth-child(1) ~ th {border-left: 1px solid #ddd;}
+.dmTable > thead > tr > th:nth-child(1) {width: 20%;}
+.dmTable > thead > tr > th:nth-child(2) {width: 30%;}
+.dmTable > thead > tr > th:nth-child(3) {width: 10%;}
+.dmTable > thead > tr > th:nth-child(4) {width: 15%;}
+.dmTable > thead > tr > th:nth-child(5) {width: 25%;}
+
+.dmItem > td {height: 46px; border: 1px solid #ddd; font-size: 18px; text-align: center;}
+.dmItem > td:first-child {border-left: 0;}
+.dmItem > td:last-child {border-right: 0;}
+.dmItem > td:nth-child(3) {color: #ff0000;}
+
+.dmItem > td button {width: 100px; height: 36px; background: #eee; border-radius: 8px; border: 0; cursor: pointer; font-size: 16px;}
+.dmItem > td button:nth-child(2) {margin-left: 16px;}
+.dmItem > td button:nth-child(1):hover {background: #368cfc; color: #fff;}
+.dmItem > td button:nth-child(2):hover {background: #ff0000; color: #fff;}
+.dmItem > td:nth-child(4) button:hover {background: #064420; color: #fff;}

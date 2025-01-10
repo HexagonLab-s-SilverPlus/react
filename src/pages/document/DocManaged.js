@@ -5,10 +5,12 @@ import Paging from '../../components/common/Paging';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
 
 
-const DocManaged = () => {
+const DocManaged = ({ UUID }) => {
     const [dmData, setDmData] = useState([]);
     const { apiSpringBoot, member } = useContext(AuthContext);
-    const memUuid = 'CECE02F57F344658B7482F5F59F7F998';
+    // const memUuid = 'CECE02F57F344658B7482F5F59F7F998';
+    const memUuid = member.memUUID;
+    const snrUuid = UUID;
 
     //페이징 
 
@@ -39,7 +41,7 @@ const DocManaged = () => {
             // console.log('action 이라구 : ', status);
             const action = status === undefined ? '대기중' : status;
 
-            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`, {
+            const response = await apiSpringBoot.get(`/api/document/${snrUuid}/request`, {
                 params: {
                     action: action,
                     pageNumber: pagingInfo.pageNumber,
@@ -90,6 +92,7 @@ const DocManaged = () => {
     };
 
     useEffect(() => {
+        console.log('Member - uuid : ', member.memUUID);
         // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
         fetchDocManaged();
     }, [apiSpringBoot, member.memUUID, pagingInfo.pageNumber]);

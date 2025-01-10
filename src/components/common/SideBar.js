@@ -31,7 +31,6 @@ function SideBar() {
     ));
 
   const adminLinks = [
-    { path: '/', label: '검색', img : <span class="material-symbols-outlined">search</span> },
     { path: '/mlistview', label: '계정관리', img : <span class="material-symbols-outlined">manage_accounts</span>  },
     { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span>  },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span>  },
@@ -40,7 +39,6 @@ function SideBar() {
   ];
 
   const managerLinks = [
-    { path: '/', label: '검색', img : <span class="material-symbols-outlined">search</span> },
     { path: '/dashlist', label: '대시보드', img : <span class="material-symbols-outlined">home</span> },
     { path: '/seniorlist', label: '어르신관리', img : <span class="material-symbols-outlined">manage_accounts</span> },
     { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
@@ -51,7 +49,6 @@ function SideBar() {
   ];
 
   const familyLinks = [
-    { path: '/', label: '검색', img : <span class="material-symbols-outlined">search</span> },
     { path: '/seniorlist', label: '어르신관리', img : <span class="material-symbols-outlined">manage_accounts</span> },
     { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span> },
@@ -68,8 +65,7 @@ function SideBar() {
         {role === 'ADMIN' && renderLinks(adminLinks)}
         {role === 'MANAGER' && renderLinks(managerLinks)}
         {role === 'FAMILY' && renderLinks(familyLinks)}
-      </ul>
-      <ul className={styles.logout}>
+        <div className={styles.logout}>
         {isLoggedIn ? (
           <li>
             <button onClick={handleLogout}><span class="material-symbols-outlined">logout</span> &nbsp; 로그아웃</button>
@@ -79,6 +75,7 @@ function SideBar() {
             <NavLink to="/loginmember">로그인</NavLink>
           </li>
         )}
+        </div>
       </ul>
     </header>
   );

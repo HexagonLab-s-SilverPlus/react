@@ -74,6 +74,7 @@ const BookUpdate = () => {
                     bookImage:response.data.book.bookImage,
                     bookNum:response.data.book.bookNum,
                     bookDetail:response.data.book.bookDetail,
+                    bookTitle:response.data.book.bookTitle,
                 }));
                 console.log(response.data);
             } catch (error) {

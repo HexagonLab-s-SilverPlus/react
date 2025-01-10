@@ -3,7 +3,7 @@
 .menuContainer {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    grid-template-columns: repeat(4, 1fr); /* 3열 */
     grid-template-rows: repeat(2, 1fr); /* 2행 */
     grid-gap: 24px; /* 버튼 간 간격 */
     padding: 24px;
@@ -15,6 +15,17 @@
     justify-content: center; /* 가로 중앙 */
     align-items: center; /* 세로 중앙 */
 }
+
+/* 첫 번째 행에서 첫 번째 열을 제외한 나머지 열에 마진 적용 */
+.menuContainer > :nth-child(-n+4):not(:nth-child(1)) {
+    margin-top: 100px;  /* 나머지 열에 왼쪽 마진 */
+}
+
+/* 두 번째 행에서 첫 번째 열을 제외한 나머지 열에 마진 적용 */
+.menuContainer > :nth-child(n+5):nth-child(-n+8) {
+    margin-bottom: 100px; /* 두 번째 행에서 첫 번째 열을 제외한 나머지 열에 왼쪽 마진 */
+}
+
 
 /* 공통 버튼 스타일 */
 .menuButton {
@@ -38,7 +49,7 @@
     align-items: center;
     text-align: center;
     width: 578px;
-    height: 686px;
+    height: 737px;
 }
 
 .div1 p {
@@ -49,10 +60,12 @@
 .div2,
 .div3,
 .div4,
-.div5 {
+.div5,
+.div6,
+.div7 {
     background-color: #fff;
-    width: 508px;
-    height: 313px;
+    width: 400px;
+    height: 355px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -64,7 +77,9 @@
 .div2 p,
 .div3 p,
 .div4 p,
-.div5 p {
+.div5 p,
+.div6 p,
+.div7 p {
     margin: 0;
     line-height: 1.2; /* 줄 간격 조정 */
 }
@@ -73,7 +88,9 @@
 .div2 img,
 .div3 img,
 .div4 img,
-.div5 img {
+.div5 img,
+.div6 img,
+.div7 img {
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -89,34 +106,17 @@
 }
 
 .div4 {
-    grid-area: 2 / 2 / 3 / 3; /* 공지사항 */
+    grid-area: 1 / 4 / 2 / 5; /* 공지사항 */
 }
 
 .div5 {
+    grid-area: 2 / 2 / 3 / 3; /* 공문서 작성 */
+}
+
+.div6 {
     grid-area: 2 / 3 / 3 / 4; /* 공문서 작성 */
 }
 
-/* 이미지 크기 설정 */
-.icon {
-    margin-bottom: 10px;
-}
-
-.brainGameIcon {
-    width: 180px;
-    height: 72px;
-}
-
-.activityIcon {
-    width: 111.76px;
-    height: 121px;
-}
-
-.noticeIcon {
-    width: 96px;
-    height: 120px;
-}
-
-.documentIcon {
-    width: 117px;
-    height: 120px;
+.div7 {
+    grid-area: 2 / 4 / 3 / 5; /* 공문서 작성 */
 }
