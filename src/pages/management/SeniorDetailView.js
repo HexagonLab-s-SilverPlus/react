@@ -14,8 +14,11 @@ import { convertUTCToKST } from '../../fuction/function';
 import Medical from './components/Medical';
 import SideBar from '../../components/common/SideBar';
 
-//
+//응급
 import EMGList from '../../components/emg/EMGList';
+
+//공문서
+import DocManaged from '../document/DocManaged';
 
 const SeniorDetailView = () => {
   const { UUID } = useParams();
@@ -92,6 +95,7 @@ const SeniorDetailView = () => {
             senior={senior}
           />
           <Medical UUID={UUID} />
+          <DocManaged UUID={UUID} />
           <EMGList emgSnrUUID={UUID} />
           <button className={styles.moveSnrDetailBtn} onClick={() => navigate(-1)}>목록</button>
         </div>
@@ -100,6 +104,7 @@ const SeniorDetailView = () => {
           <SeniorDetailViewFamily UUID={UUID} />
           <Medical UUID={UUID} />
           <EMGList emgSnrUUID={UUID} />
+          <DocManaged UUID={UUID} />
           <button className={styles.moveSnrDetailBtn} onClick={() => navigate(-1)}>목록</button>
         </div>
       )}
