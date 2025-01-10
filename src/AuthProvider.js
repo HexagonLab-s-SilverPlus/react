@@ -24,6 +24,7 @@ const ExceptionURL = [
   '/member/fid',
   '/member/fpwd',
   '/member/pwdupdate',
+  '/member/fsSearch',
   // '/oauth2/authorization/google',
 ];
 

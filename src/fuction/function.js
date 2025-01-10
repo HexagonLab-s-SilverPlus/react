@@ -35,3 +35,57 @@ export const convertUTCToKST = (utcDate) => {
     return null;
   }
 };
+
+export const parseResidentNumber = (residentNumber) => {
+  if (
+    !residentNumber ||
+    residentNumber.length !== 14 ||
+    residentNumber[6] !== '-'
+  ) {
+    console.error('Invalid resident number format:', residentNumber);
+    return null;
+  }
+
+  const birthYearPrefix =
+    residentNumber[7] === '1' || residentNumber[7] === '2' ? '19' : '20';
+  const year = birthYearPrefix + residentNumber.substring(0, 2);
+  const month = residentNumber.substring(2, 4);
+  const day = residentNumber.substring(4, 6);
+
+  const gender =
+    residentNumber[7] === '1' || residentNumber[7] === '3' ? '남성' : '여성';
+
+  return {
+    birthDate: `${year}/${month}/${day}`,
+    gender: gender,
+  };
+};
+
+// 주민등록번호 정보를 이용한 나이 계산함수
+export const calculateAge = (ssn) => {
+  // if (!ssn || ssn.length !== 13) {
+  //   alert('주민등록번호를 정확히 입력해주세요.');
+  //   return;
+  // }
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const yearPrefix = parseInt(ssn[7], 10) < 3 ? 1900 : 2000; // 1, 2는 1900년대, 3, 4는 2000년대
+  const birthYear = yearPrefix + parseInt(ssn.slice(0, 2), 10);
+  const birthMonth = parseInt(ssn.slice(2, 4), 10);
+  const birthDay = parseInt(ssn.slice(4, 6), 10);
+
+  const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+  let calculatedAge = currentYear - birthYear;
+
+  // 생일이 지났는지 확인
+  if (
+    today.getMonth() < birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() < birthDate.getDate())
+  ) {
+    calculatedAge -= 1;
+  }
+
+  return calculatedAge;
+};

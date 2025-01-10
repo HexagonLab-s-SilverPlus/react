@@ -5,17 +5,19 @@ import Paging from '../../components/common/Paging';
 import { PagingCalculate } from '../../components/common/PagingCalculate ';
 
 
-const DocManaged = () => {
+const DocManaged = ({ UUID }) => {
     const [dmData, setDmData] = useState([]);
     const { apiSpringBoot, member } = useContext(AuthContext);
-    const memUuid = 'CECE02F57F344658B7482F5F59F7F998';///
+    // const memUuid = 'CECE02F57F344658B7482F5F59F7F998';
+    const memUuid = member.memUUID;
+    const snrUuid = UUID;
 
     //페이징 
-    
+
     const [pagingInfo, setPagingInfo] = useState({
         memUuid: memUuid,
         pageNumber: 1,
-        action: 'all',
+        action: '대기중',
         listCount: 1,
         maxPage: 1,
         pageSize: 5,
@@ -32,41 +34,44 @@ const DocManaged = () => {
     };
 
     // 문서 목록을 가져오는 함수
-    // 문서 목록을 가져오는 함수
-    const fetchDocManaged = async (status = "대기중") => {
-        console.log("Sending request with pageNumber:", pagingInfo.pageNumber);  // pageNumber 확인
+    const fetchDocManaged = async (status) => {
+        // console.log("Sending request with pageNumber:", pagingInfo.pageNumber);  // pageNumber 확인
         try {
 
-            const action = status === "대기중" ? 'all' : status;
+            // console.log('action 이라구 : ', status);
+            const action = status === undefined ? '대기중' : status;
 
-            const response = await apiSpringBoot.get(`/api/document/${member.memUUID}/request`, {
+            const response = await apiSpringBoot.get(`/api/document/${snrUuid}/request`, {
                 params: {
-                    status,
-                    action,
+                    action: action,
                     pageNumber: pagingInfo.pageNumber,
                     pageSize: pagingInfo.pageSize,
                     listCount: pagingInfo.listCount,  // 기본값 설정
                     keyword: pagingInfo.keyword,
                 },
             });
-    
+
+            // console.log('API Response : ', response.data.data);
+            // console.log('action : ', response.data.data.action);
+
             if (response.data && response.data.data) {
-                setDmData(response.data.data);
+                setDmData(response.data.data.documents || []);
             } else {
                 setDmData([]);
             }
-    
+
             // 페이징 관련 정보 업데이트
-            if (response.data.search) {
+            if (response.data.data) {
                 const { maxPage, startPage, endPage } = PagingCalculate(
-                    response.data.search.pageNumber || 1,
-                    response.data.search.listCount || 0,
-                    response.data.search.pageSize || 5
+                    response.data.data.pageNumber,
+                    response.data.data.listCount,
+                    response.data.data.pageSize
                 );
-    
+
                 setPagingInfo((prev) => ({
                     ...prev,
-                    pageNumber: response.data.search.pageNumber || 1,
+                    action: response.data.data.action,
+                    pageNumber: response.data.data.pageNumber || 1,
                     maxPage,
                     startPage,
                     endPage,
@@ -74,6 +79,7 @@ const DocManaged = () => {
             } else {
                 setPagingInfo((prev) => ({
                     ...prev,
+                    action: response.data.data.action,
                     pageNumber: 1,
                     maxPage: 1,
                     startPage: 1,
@@ -85,23 +91,18 @@ const DocManaged = () => {
         }
     };
 
-useEffect(() => {
-    // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
-    
-    fetchDocManaged(pagingInfo.pageNumber); // 페이지 번호로 데이터를 가져옴
-}, [memUuid, pagingInfo.pageNumber]);  // memUuid와 pageNumber가 변경될 때마다 호출
+    useEffect(() => {
+        console.log('Member - uuid : ', member.memUUID);
+        // 페이지 번호나 UUID가 변경될 때 데이터를 가져오고 상태 초기화
+        fetchDocManaged();
+    }, [apiSpringBoot, member.memUUID, pagingInfo.pageNumber]);
 
-const handlePageChange = (page) => {
-    setPagingInfo((prev) => ({
-        ...prev,
-        pageNumber: page,
-    }));
-};
-
-
-
-
-
+    const handlePageChange = (page) => {
+        setPagingInfo((prev) => ({
+            ...prev,
+            pageNumber: page,
+        }));
+    };
 
     // 문서 상태 업데이트 (승인 또는 반려)
     // const updateDocumentStatus = async (docId, status) => {
@@ -128,16 +129,16 @@ const handlePageChange = (page) => {
             // 승인자 UUID와 승인 시각 설정
             const approvedBy = member.memUUID;  // 현재 로그인한 사용자의 UUID
             const approvedAt = new Date().toISOString();  // 현재 시간
-    
+
             // 상태 변경 API 호출
             const response = await apiSpringBoot.put(`/api/document/${docId}/approve`, null, {
-                params: { 
+                params: {
                     status,
                     approvedBy,  // 승인자 UUID
                     approvedAt   // 승인 시각
                 },
             });
-    
+
             // 백엔드에서 성공적으로 처리된 경우
             if (response.data.success) {
                 console.log("문서 상태 업데이트 성공");
@@ -151,9 +152,9 @@ const handlePageChange = (page) => {
     };
 
     // 컴포넌트 로드 시 대기중 상태 문서 가져오기
-    useEffect(() => {
-        fetchDocManaged(); // 기본적으로 대기중 상태의 문서만 가져옴
-    }, [apiSpringBoot, member.memUUID]);
+    // useEffect(() => {
+    //     fetchDocManaged(); // 기본적으로 대기중 상태의 문서만 가져옴
+    // }, [apiSpringBoot, member.memUUID]);
 
     // 파일 다운로드 함수
     const handleDownload = async (fileName) => {
@@ -192,7 +193,7 @@ const handlePageChange = (page) => {
             <div className={styles.dmTop}>
                 <h1>공문서 확인</h1>
                 <div className={styles.dmline}>
-                    <button onClick={fetchDocManaged}>공문서 승인 요청</button>
+                    <button onClick={() => fetchDocManaged("대기중")}>공문서 승인 요청</button>
                     <button onClick={() => fetchDocManaged("승인")}>공문서 승인 완료</button>
                     <button onClick={() => fetchDocManaged("반려")}>공문서 승인 반려</button>
                 </div>
@@ -249,13 +250,13 @@ const handlePageChange = (page) => {
                 </tbody>
             </table>
             <Paging
-                    pageNumber={pagingInfo.pageNumber}
-                    listCount={pagingInfo.listCount}
-                    maxPage={pagingInfo.maxPage}
-                    startPage={pagingInfo.startPage}
-                    endPage={pagingInfo.endPage}
-                    onPageChange={(page) => handlePageChange(page)}
-                />
+                pageNumber={pagingInfo.pageNumber}
+                listCount={pagingInfo.listCount}
+                maxPage={pagingInfo.maxPage}
+                startPage={pagingInfo.startPage}
+                endPage={pagingInfo.endPage}
+                onPageChange={(page) => handlePageChange(page)}
+            />
         </div>
     );
 };

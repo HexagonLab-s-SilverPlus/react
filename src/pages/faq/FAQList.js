@@ -18,9 +18,12 @@ const FAQList = () => {
         faqTitle: "",
         faqContent: "",
     }); // 동적으로 입력 필드 관리
-    const [isInsertPage, setIsInsertPage] = useState(false)
-    const [isInsert, setIsInsert] = useState(false)
-    const [isUpdate, setIsUpdate] = useState(false)
+    const [isInsertPage, setIsInsertPage] = useState(false);
+    const [isUpdatePage, setIsUpdatePage] = useState(false);
+    const [isInsert, setIsInsert] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+
+    const [readContent, setReadContent] =useState(null);
 
     const listRef = useRef(null);   // 스크롤 이동용
         const [pagingInfo, setPagingInfo] = useState({
@@ -52,13 +55,19 @@ const FAQList = () => {
     
       
       // FAQ 항목 클릭 시 해당 항목 열기/닫기 처리
-    const toggleFAQ = (index) => {
-        setOpenFAQ((prev) => (isInsertPage ? null :(prev === index ? null : index))); // 이미 열려있으면 닫고, 아니면 열기
-        console.log(openFAQ);
+    const toggleFAQ = (index, faqContent) => {
+        setReadContent(() => (openFAQ === index ? null :faqContent));
+        setOpenFAQ((prev) => (isInsertPage || isUpdatePage ? null :(prev === index ? null : index))); // 이미 열려있으면 닫고, 아니면 열기
     };
 
-    const toggleUpdateFAQ = (index) => {
+    const handleUpdateFAQ = (index, title, content) => {
         setUpdateFAQ(index);
+        setIsUpdatePage(true);
+        setFAQ((pre) => ({
+            ...pre,
+            faqTitle: title,
+            faqContent: content
+        }));
         console.log(updateFAQ);
     };
 
@@ -80,8 +89,8 @@ const FAQList = () => {
         alert('FAQ 등록 성공');
         handleFAQView();
         } catch (error) {
-        console.error('게시글 등록 실패', error);
-        alert('새 게시글 등록 실패');
+        console.error('FAQ 등록 실패', error);
+        alert('FAQ 등록 실패');
         } finally{
             setIsInsertPage(false);
             setIsInsert(false)
@@ -118,6 +127,8 @@ const FAQList = () => {
     const handlePageChange = (page) => {          // 페이지 눌렀을때 뷰 바꾸기
         setPagingInfo((pre) => ({...pre, pageNumber: page}));  
         setOpenFAQ(null);
+        setIsInsertPage(false);
+        setOpenFAQ(null)
         handleFAQView(page);
         if (listRef.current) {
             listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -128,12 +139,19 @@ const FAQList = () => {
         setIsInsertPage(true);
         setOpenFAQ(null);
     };
+    useEffect (() => {
+        if (listRef.current && isInsertPage) {
+            listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
+        }
+    },[isInsertPage]);
 
     const handleFAQCancel = () => {
-        setIsInsertPage(false);
+        if(window.confirm('정말 취소하시겠습니까?')){
+            setIsInsertPage(false);
+        }
     };
 
-    const handleUpdateDateSet = (faqId) => {
+    const handleUpdateDataSet = (faqId) => {
         setFAQ((pre) => ({
             ...pre,
             faqId: faqId,
@@ -156,11 +174,15 @@ const FAQList = () => {
             console.error('FAQ 삭제 실패', error);
         }finally{
             setIsUpdate(false);
+            setIsUpdatePage(false);
         }
     };
 
     const handleFAQUpdateCancel = () => {
-        setUpdateFAQ(null);
+        if(window.confirm('정말 취소하시겠습니까?')){
+            setIsUpdatePage(false);
+            setUpdateFAQ(null);
+        }
     };
 
     const handleDelete = async (uuid) => {
@@ -188,7 +210,6 @@ const FAQList = () => {
     },[isInsertPage, faq]);
 
 
-
     if (!member) {
         return <div>Loading...</div>; // 로그인 정보가 없으면 로딩 화면
     };
@@ -208,7 +229,7 @@ const FAQList = () => {
                         {faqList.map((faqOne, index) =>(
                             <>
                                 <div>
-                                    <div className={styles.object} onClick={() => toggleFAQ(index)}>
+                                    <div className={styles.object} onClick={() => toggleFAQ(index, faqOne.faqContent)}>
                                         <div className={styles.title}>
                                             {faqOne.faqTitle}
                                         </div>
@@ -229,6 +250,7 @@ const FAQList = () => {
                                 </div>
                             </>
                             ))}
+                            <div id="read" style={{display: "none"}}>{readContent}</div>
                             <Paging 
                                 pageNumber={pagingInfo.pageNumber }
                                 listCount={pagingInfo.listCount}
@@ -248,13 +270,14 @@ const FAQList = () => {
         );
     } else {
         return (
-            <div>
+            <div className={styles.all} ref={listRef}>
+                <div >
                 <SideBar />
                 <div className={styles.faqContent}>
                     <QNAHeader text="FAQ" />
-                    <button className={styles.faqInputBTN} onClick={handleCreateFAQ}>등 록</button>
+                    {role === "ADMIN" ? <button className={styles.faqInputBTN} onClick={handleCreateFAQ}>등 록</button>: <div className={styles.faqNAInputBTN} />}
                     {faqList.map((faqOne, index) => (
-                    <div key={index}>
+                    <div key={index}  >
                         {!(updateFAQ === index) ?
                         <><div
                             className={styles.faqRequest}
@@ -263,22 +286,24 @@ const FAQList = () => {
                             <p>[질문]</p>
                             <p>{faqOne.faqTitle}</p>
                         </div>
-
+                        
                         <div
                             className={`${styles.faqAnswer} ${openFAQ === index ? styles.open : ''}`}
                             >
                             <p>[답변]</p>
                             <p className={styles.faqAnswerP}>{faqOne.faqContent}</p>
-                            <button className={styles.faqUpdateBTN} onClick={() => toggleUpdateFAQ(index)}>수 정</button>
-                            <button className={styles.faqDeleteBTN} onClick={() => handleDelete(faqOne.faqId)}>삭 제</button>
-                        </div></> 
+                            {role==="ADMIN" && <>
+                            <button className={styles.faqUpdateBTN} onClick={() => handleUpdateFAQ(index, faqOne.faqTitle, faqOne.faqContent)}>수 정</button>
+                            <button className={styles.faqDeleteBTN} onClick={() => handleDelete(faqOne.faqId)}>삭 제</button></>}
+                        </div>
+                        </> 
                         : <div className={styles.faqDiv}>
                             <p>[질문]</p>
                             <textarea name="faqTitle" defaultValue={faqOne.faqTitle} onChange={handleChange} />
                             <p>[답변]</p>
                             <textarea name="faqContent" defaultValue={faqOne.faqContent} onChange={handleChange} />
-                            <button className={styles.faqInsertBTN} onClick={() => handleUpdateDateSet(faqOne.faqId)}>수 정</button>
-                            <button className={styles.faqInsertBTN} onClick={handleFAQUpdateCancel}>취 소 </button>
+                            <button className={styles.faqInsertBTN} onClick={() => handleUpdateDataSet(faqOne.faqId)}>수 정</button>
+                            <button className={styles.faqInsertCancelBTN} onClick={handleFAQUpdateCancel}>취 소 </button>
                         </div>
                         }
                     </div>
@@ -293,12 +318,12 @@ const FAQList = () => {
                         <button className={styles.faqInsertBTN} onClick={handleFAQInsertDateSet}>
                         추 가
                         </button>
-                        <button className={styles.faqInsertBTN} onClick={handleFAQCancel}>
+                        <button className={styles.faqInsertCancelBTN} onClick={handleFAQCancel}>
                         취 소
                         </button>
                     </div>
                     )}
-
+                    <div className={styles.marginBottom}></div> 
                     <Paging 
                         pageNumber={pagingInfo.pageNumber }
                         listCount={pagingInfo.listCount}
@@ -309,7 +334,7 @@ const FAQList = () => {
                     />
                     <div className={styles.marginBottom}></div> 
                 </div>
-                
+                </div>
             </div>
         );
     }
