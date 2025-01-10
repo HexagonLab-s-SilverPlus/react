@@ -135,7 +135,7 @@ const NoticeDetail = () => {
                     </tr>
                     <tr>
                         <td>
-                            <hr/>
+                            <hr className={styles.noticeHr}/>
                         </td>
                     </tr>
                     <tr>
@@ -163,7 +163,7 @@ const NoticeDetail = () => {
                     </tr>
                     <tr>
                         <td>
-                            <hr/>
+                            <hr className={styles.noticeHr}/>
                         </td>
                     </tr>
                     <tr>

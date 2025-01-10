@@ -11,27 +11,11 @@ import hwatuCard from './cardInfo';
 import { selectCard } from './playAction'
 import { autoChoice } from './autoChoice';
 
-
-
 const PlayGame = () => {
   // navigate
   const navigate = useNavigate();
   // 카드정보
   const cards = hwatuCard;
-  // 기타카드
-  const otherCard = ([
-    // 폭탄
-    { id:51, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:52, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:53, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:54, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:55, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:56, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:57, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:58, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:59, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-    { id:60, month : 50, type:"폭탄", detailType:"폭탄", image:"bomb.png"},
-  ]);
   // 플레이어 카드 목록
   const [playerCards, setPlayerCards] = useState([]);
   // 상대방 카드 목록
@@ -46,9 +30,13 @@ const PlayGame = () => {
   const [getOpponentCards, setGetOpponentCards] = useState([]);
   // turn 저장 변수(true : player or false : opponent)
   const [currentTurn, setCurrentTurn] = useState(true);
+  // 플레이어가 쌓은 카드
+  const [amassPlayerList, setAmassPlayerList] = useState([]);
+  // 상대방이 쌓은 카드
+  const [amassOpponentList, setAmassOpponentList] = useState([]);
   //-----------------------------------------------------------------------------
   // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
-  const [isTwoCards, setIsTwoCards] = useState(false);
+  // const [isTwoCards, setIsTwoCards] = useState(false);
 
   //------------------------------------------------------------------------------
   // 초기 카드 세팅(한번실행)
@@ -65,13 +53,30 @@ const PlayGame = () => {
   const generateInitialCards = () => {
     // 카드 섞기
     const allCards = shuffle(cards);
-    return{ // 섞은카드 분배
+    const initialCards = { // 섞은카드 분배
       player: allCards.slice(0,10), // 10장
       opponent: allCards.slice(10,20), // 10장
       table:allCards.slice(20,28), // 8장
       deck:allCards.slice(28), // 20장
     };
+
+    // month 가 같은 카드가 4장인지 검증
+    if(isFourCard(initialCards.player)||isFourCard(initialCards.opponent)||isFourCard(initialCards.table)){
+      console.log("같은카드 4장");
+      return generateInitialCards();
+    };
+    return initialCards;
+
   };
+  // 같은패가 4장인지 확인
+  const isFourCard = (cards) =>{
+    const cardGroup = cards.reduce((month,card)=>{
+      month[card.month] = (month[card.month]||0)+1;
+      return month;
+    },{});
+    return Object.values(cardGroup).some(count=>count===4);
+  };
+
   // 카드 섞기
   const shuffle = (array) => {
     for (let i = array.length - 1; i>0 ; i--){
@@ -99,79 +104,43 @@ const PlayGame = () => {
   //-------------------------------------------------------------------------------------------
   // 턴 1회 실시
   const handleSelectCard = (card) => {
-    // // 뺏어올 카드 수 카운트
+    // 뺏어올 카드 수 카운트
     // const takeAwayCard = 0;
-    // // 자신의 덱에 같은패가 3장인지 확인
-    // const cardCount =0;
-    // // 같은카드 3개일시 사용될 리스트
-    // const threeCardList = [];
-    // if (currentTurn) {
-    // playerCards.forEach((myCard)=>{
-    //   if (myCard.month===card.month&&myCard.id!==card.id){
-    //     cardCount= cardCount+1;
-    //     threeCardList.push(myCard);
-    //   }
-    // });
-    // if (cardCount===2){
-    //   takeAwayCard=takeAwayCard+1;
-    // }} else {
-    //   opponentCards.forEach((myCard)=>{
-    //     if (myCard.month===card.month&&myCard.id!==card.id){
-    //       cardCount= cardCount+1;
-    //       threeCardList.push(myCard);
-    //     }
-    //   });
-    //   if (cardCount===2){
-    //     takeAwayCard=takeAwayCard+1;
-    // }}
-
+    // ------------------------------------------------------------------------------------
+    // 턴 플레이어 카드
+    const turnPlayerCards = currentTurn
+    ? playerCards : opponentCards;
+    // 턴 플레이어 겟 카드
+    const turnPlayerGetCards = currentTurn
+    ? getPlayerCards : getOpponentCards;
+    // 턴 플레이어 amass 카드
+    const turnPlayerAmassList = currentTurn
+    ? amassPlayerList:amassOpponentList;
     // 덱카드에서 하나 뽑기
     const [firstCard, ...remainingDeck] = deckCards;
-    setDeckCards(remainingDeck);
-    // 플레이어 카드 빼기
-    const updatedPlayerCards = currentTurn
-      ? playerCards.filter((playerCard) => playerCard.id !== card.id)
-      : opponentCards.filter((opponentCard) => opponentCard.id !== card.id);
-
-    if (currentTurn) {
-      setPlayerCards(updatedPlayerCards);
-    } else {
-      setOpponentCards(updatedPlayerCards);
-    }
+    setDeckCards(remainingDeck); // 덱카드 셋
     // 카드 처리
-    const returnValue = selectCard(card, firstCard, tableCards);
+    const returnValue = selectCard(card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards,turnPlayerAmassList);
     // 처리한 카드 변수저장
-    const getCardList = returnValue.getCards;
-    const pushCardList = returnValue.pushCards;
-    const outTableCardList = returnValue.outCards;
-    console.log(getCardList);
-    console.log(pushCardList);
-    console.log(outTableCardList);
-    if (outTableCardList.length !==0){
-      const outTableCard = tableCards.filter((tableCard) => !outTableCardList.some((card) => card.id === tableCard.id));
-      setTableCards(outTableCard);
-    };
-    if (pushCardList.length !== 0){
-      setTableCards((prev)=>[...prev,...pushCardList]);
-    };
-    if (getCardList.length!==0){
-      currentTurn
-      ? setGetPlayerCards((prev)=>[...prev,...getCardList])
-      : setGetOpponentCards((prev)=>[...prev,...getCardList]);
-    };
-    // if (cardCount==2){
-    //   if(currentTurn) {
-    //     const updateThreeCard = playerCards.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
-    //     setPlayerCards(updateThreeCard,otherCard[0],otherCard[1]);
-    //     setGetPlayerCards((prev)=>[...prev,...threeCardList]);
-    //   } else{
-    //     const updateThreeCard = opponentCards.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
-    //     setOpponentCards(updateThreeCard,otherCard[0],otherCard[1]);
-    //     setGetOpponentCards((prev)=>[...prev,...threeCardList]);
-    //   }
+    // gpc : getPlayerCard, pc: playerCard, tc : tableCard, cnt: takeAwayCard, amass: amassList
+    console.log("getPlayerCard : ", returnValue.gpc);
+    console.log("playerCard : ", returnValue.pc);
+    console.log("tableCard : ", returnValue.tc);
+    console.log("takeAwayCard : ", returnValue.cnt);
+    console.log("amassList : ", returnValue.amass);
 
-    // }
-
+    // 반환카드 세팅
+    if(currentTurn){
+      setGetPlayerCards(returnValue.gpc);
+      setPlayerCards(returnValue.pc);
+      setAmassPlayerList((prev)=>[...prev,...returnValue.amass]);
+    } else{
+      setGetOpponentCards(returnValue.gpc);
+      setOpponentCards(returnValue.pc);
+      setAmassOpponentList((prev)=>[...prev,...returnValue.amass]);
+    }
+    setTableCards(returnValue.tc);
+    // 턴 교대
     setCurrentTurn((prev)=>(!prev));
   };
   //--------------------------------------------------------------------------------------------------
@@ -270,7 +239,7 @@ const PlayGame = () => {
             <button onClick={()=>(handleMoveHome())}>홈으로 이동</button>
           </div>
         </div>{/* 플레이어 카드 */}
-        {isTwoCards &&
+        {/* {isTwoCards &&
           <div className={styles.isTwoCards}>
             <div className={styles.twoCardsTitle}>카드를 선택하세요</div>
             <div>
@@ -285,7 +254,7 @@ const PlayGame = () => {
               </div>
             </div>
           </div>
-        }
+        } */}
       </div>
     </div>
   );

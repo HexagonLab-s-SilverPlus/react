@@ -27,6 +27,7 @@
     font-weight: 500;
     margin: 0; 
     padding: 0;
+    height:600px;
 }
 
 .sideBar li a {
@@ -49,14 +50,11 @@
     color: #064420;
 }
 
-/* .logout {
+.logout {
+    position: absolute;
     list-style-type: none;
-    margin: 0; 
-    padding: 0;
-    left: 68px;
-    bottom: 50px;
-    width: 268px;
-} */
+    bottom:0;
+}
 
 
 .logout button {
