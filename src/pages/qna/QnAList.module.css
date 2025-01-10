@@ -1,4 +1,4 @@
-.qnaContent {height: 911px; width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
+.qnaContent {height: calc(100vh - 69px); width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
 .qnaSeachdiv {padding-top: 85px; padding-left: 1016px; position: relative; height: 41px;}
 .qnaSeachdiv img {position: absolute; right: 0; bottom: 0px; width: 30px; height: 30px; cursor: pointer;}
 .qnaSearchAllSelect, .qnaSearchTitleSelect, .qnaSearchDateSelect {height: 33px; width: 83px; border-top: none; border-left: none; border-right: none; font-weight: bold; font-size: 20px; position: absolute; font-family: "Pretendard Variable"; font-weight: bold;}
@@ -20,3 +20,8 @@
 .qnaStateN {width: 100px; text-align: center; color: #ff0000; font-weight: bolder;}
 .qnaStateY {width: 100px; text-align: center; font-weight: bolder;}
 .qnaStateYss {background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;}
+.pagingDiv {height: 30px;}
+
+.qnaTr {transition: background-color 0.3s ease;}
+.qnaTr:hover { background-color: #f0f0f0;}
+.qnaTr td {}

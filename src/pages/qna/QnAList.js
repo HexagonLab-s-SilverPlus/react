@@ -201,17 +201,17 @@ const QnAList = () => {
           </tr>
           
           {qnaList.map((qna, index) => (
-          <tr>
+          <tr className={styles.qnaTr}>
             <td><button onClick={() => handleMoveDetailView(qna.qnaId)}>{qna.qnaTitle}</button></td>
             <td className={styles.memberNameTd}>{memberList[index].memName}</td>
             <td className={styles.qnaWCreateAtTd}>{qna.qnaWUpdateAt.split('T')[0]}</td>
-            {member.memType === "ADMIN" && (qna.qnaADCreateBy ? <td className={styles.qnaStateY}>답변</td>
+            {(qna.qnaADCreateBy ? <td className={styles.qnaStateY}>답변</td>
                               : <td className={styles.qnaStateN}>미답변</td>)}
           </tr>
           ))}
    
         </table>
-        <div className={styles.pagingDiv}>
+        <div className={styles.pagingDiv} />
           <Paging 
             pageNumber={pagingInfo.pageNumber }
             maxPage={pagingInfo.maxPage}
@@ -219,7 +219,7 @@ const QnAList = () => {
             endPage={pagingInfo.endPage}
             onPageChange={(page) => handlePageChange(page)}
           />
-        </div>
+        
       </div>
       
     </div>

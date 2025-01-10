@@ -53,6 +53,7 @@ const MemberListView = () => {
   };
 
   useEffect(() => {
+    console.log(pagingInfo);
     const MemberList = async () => {
       try {
         if (role === 'ADMIN') {
@@ -65,6 +66,12 @@ const MemberListView = () => {
           );
 
           setPagingInfo(response.data.search);
+          console.log(
+            '계산한 값들 maxPage, startPage, endPage : ',
+            maxPage,
+            startPage,
+            endPage
+          );
 
           setPagingInfo((pre) => ({
             ...pre,
@@ -79,18 +86,27 @@ const MemberListView = () => {
           setMemberList(updateList);
           console.log(response.data.list);
           console.log(updateList);
+          console.log('업데이트된 pagingInfo:', {
+            ...response.data.search,
+            maxPage,
+            startPage,
+            endPage,
+          });
         }
       } catch (error) {
         console.error('리스트 출력 실패 : ', error);
       }
     };
 
-    MemberList(1, 'all');
+    MemberList();
   }, []);
 
   // 검색으로 인한 페이지 변경 시
   const handleUpdateView = async (page, updatedSearch) => {
     console.log('검색 기능 작동확인');
+    console.log(page);
+    console.log(updatedSearch);
+    console.log(pagingInfo);
     try {
       const response = await apiSpringBoot.get(`/member/adminList`, {
         params: {
@@ -295,7 +311,7 @@ const MemberListView = () => {
           </table>
           <div className={styles.mlistPaging}>
             <Paging
-              currentPage={pagingInfo.currentPage}
+              pageNumber={pagingInfo.pageNumber}
               maxPage={pagingInfo.maxPage}
               startPage={pagingInfo.startPage}
               endPage={pagingInfo.endPage}

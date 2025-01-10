@@ -28,6 +28,7 @@ const QnADetail = () => {
 
     const handleQnADetailView = async () => {   // 페이지 불러오기
         const response = await apiSpringBoot.get(`/qna/detail/${qnaUUID}`);
+        console.log(JSON.stringify(response));
         setQna(response.data.qna);
         setQnaMember(response.data.member);
         SetFiles(response.data.files);
@@ -83,24 +84,31 @@ const QnADetail = () => {
                 </div>
             </div>
             
-            <hr />
+            <hr className={styles.qnaHr}/>
+
+            
+            <div className={styles.filesDiv}>
+                <div style={{position: "relative", width: "100%"}}>
+                    <div className={styles.filesPositionDiv}>
+                        {files && files.map((file, index) =>(
+                            <span 
+                                onClick={()=>handleFileDown(file, index)}
+                            >
+                                qna_file_{index} <br/>
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
             <p className={styles.qnaDetailContent}>
                 {qna.qnaWContent}
             </p>
-            <hr />
-            <div className={styles.filesDiv}>
-                첨부파일
-                <div>
-                    {files && files.map((file, index) =>(
-                        <span 
-                            className={styles.files}
-                            onClick={()=>handleFileDown(file, index)}
-                        >
-                            qna_file_{index} <br/>
-                        </span>
-                    ))}
-                </div>
-            </div>
+            {qna.qnaADContent &&
+            <>
+                <hr className={styles.qnaHr}/>
+                <div className={styles.qnaADContent}>{qna.qnaADContent}</div>
+            </>}
+            <hr className={styles.qnaHr}/>
 
             <div className={styles.qnaDetailBTNDiv}>
                 <button className={styles.qnaListViewBTN} onClick={() => {navigate(-1);}} >목 록</button>
@@ -116,9 +124,9 @@ const QnADetail = () => {
                 : !qna.qnaADCreateBy &&
                     <button className={styles.qnaUpdateViewBTN} onClick={handleMoveUpdateView}>수 정</button>}
                 <button className={styles.qnaDeleteBTN} onClick={handleQnADelete} >삭 제</button>
-               
-                    
+   
             </div>
+            <div className={styles.pagingDiv} />
         </div>
     </div>);
 }

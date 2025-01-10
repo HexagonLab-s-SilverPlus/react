@@ -74,7 +74,7 @@ const memberRouter = [
       element={<ProtectedRoute element={<MemberDetailView />} />}
     />
 
-    <Route path="/test/:UUID" element={<Test />} />
+    <Route path="/test" element={<Test />} />
   </>,
 ];
 

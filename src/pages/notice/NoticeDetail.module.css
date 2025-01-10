@@ -39,7 +39,7 @@
 .seniorContent{font-size: 24px; font-weight: bold;white-space: pre-wrap;}
 .seniorFiles{font-size: 28px; font-weight: bold;padding-top: 10px;cursor: pointer;}
 footer {margin-top: auto;}
-hr {border: none;height: 2px;background-color: #064420;margin: 16px 0;}
+.noticeHr {border: none;height: 2px;background-color: #064420;margin: 16px 0;}
 .seniorBottomBar{display: flex;padding-bottom: 300px;width: calc(100% - 192px);}
 .seniorInnerButton2{text-decoration: none;cursor: pointer;border: none;background-color: #f9f9f9;font-weight: bold; font-size: 32px;font-family: "Pretendard Variable";}
 .seniorInnerButton2 > span {position: relative; top: 5px; margin-right: 8px;}

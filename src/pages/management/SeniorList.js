@@ -139,6 +139,11 @@ const SeniorList = () => {
     setTempKeyword(e.target.value);
   };
 
+  // 어르신 등록 페이지 이동 함수
+  const handleMoveRegist = () => {
+    navigate('/seniorlist/seniorregist');
+  };
+
   // 키워드 검색
   const handleSearch = () => {
     const updatedSearch = {
@@ -230,6 +235,7 @@ const SeniorList = () => {
           ...pagingInfo,
           pageNumber: page,
           ...updatedSearch,
+          memUUID: member.memUUID,
         },
       });
       setPagingInfo(
@@ -270,6 +276,9 @@ const SeniorList = () => {
         <div className={styles.slistviewHeader}>
           {/* 헤더 출력 레이어 */}
           <p onClick={resetToDefaultView}>어르신 관리</p>
+        </div>
+        <div className={styles.slistRegistBtnDiv}>
+          <button onClick={handleMoveRegist}>어르신 등록</button>
         </div>
         <div className={styles.slistrSubLine}>
           <div className={styles.slistSearchbox}>
@@ -442,32 +451,73 @@ const SeniorList = () => {
               </tr>
             </thead>
             <tbody>
-              {seniorList.map((list) => (
-                <tr
-                  key={list.memUUID}
-                  onClick={() => handleDetailView(list.memUUID)}
-                >
-                  <td className={styles.nameColumn}>{list.memName}</td>
-                  {/*생년월일*/}
-                  <td className={styles.birthColumn}>{list.birthDate}</td>
-                  {/*성별*/}
-                  <td className={styles.genderColumn}>{list.gender}</td>
-                  <td className={styles.addressColumn}>{list.memAddress}</td>
-                  <td className={styles.phoneColumn}>
-                    {list.memCellphone && /^\d{11}$/.test(list.memCellphone)
-                      ? list.memCellphone.replace(
-                          /(\d{3})(\d{4})(\d{4})/,
-                          '$1-$2-$3'
-                        )
-                      : list.memCellphone || ''}
-                  </td>
-                </tr>
-              ))}
+              {role === 'FAMILY' ? (
+                <>
+                  {seniorList.map((list) => (
+                    <tr
+                      key={list.memUUID}
+                      onClick={() => {
+                        if (list.memFamilyApproval === 'APPROVED') {
+                          handleDetailView(list.memUUID);
+                        }
+                      }}
+                      style={
+                        list.memFamilyApproval !== 'APPROVED'
+                          ? { pointerEvents: 'none', opacity: 0.6 }
+                          : {}
+                      }
+                    >
+                      <td className={styles.nameColumn}>{list.memName}</td>
+                      {/*생년월일*/}
+                      <td className={styles.birthColumn}>{list.birthDate}</td>
+                      {/*성별*/}
+                      <td className={styles.genderColumn}>{list.gender}</td>
+                      <td className={styles.addressColumn}>
+                        {list.memAddress}
+                      </td>
+                      <td className={styles.phoneColumn}>
+                        {list.memCellphone && /^\d{11}$/.test(list.memCellphone)
+                          ? list.memCellphone.replace(
+                              /(\d{3})(\d{4})(\d{4})/,
+                              '$1-$2-$3'
+                            )
+                          : list.memCellphone || ''}
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {seniorList.map((list) => (
+                    <tr
+                      key={list.memUUID}
+                      onClick={() => handleDetailView(list.memUUID)}
+                    >
+                      <td className={styles.nameColumn}>{list.memName}</td>
+                      {/*생년월일*/}
+                      <td className={styles.birthColumn}>{list.birthDate}</td>
+                      {/*성별*/}
+                      <td className={styles.genderColumn}>{list.gender}</td>
+                      <td className={styles.addressColumn}>
+                        {list.memAddress}
+                      </td>
+                      <td className={styles.phoneColumn}>
+                        {list.memCellphone && /^\d{11}$/.test(list.memCellphone)
+                          ? list.memCellphone.replace(
+                              /(\d{3})(\d{4})(\d{4})/,
+                              '$1-$2-$3'
+                            )
+                          : list.memCellphone || ''}
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
             </tbody>
           </table>
           <div className={styles.slistPaging}>
             <Paging
-              currentPage={pagingInfo.currentPage}
+              pageNumber={pagingInfo.pageNumber}
               maxPage={pagingInfo.maxPage}
               startPage={pagingInfo.startPage}
               endPage={pagingInfo.endPage}
