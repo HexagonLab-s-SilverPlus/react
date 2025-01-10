@@ -1,5 +1,6 @@
 // src/pages/game/PlayGame.js
 import React,{useState,useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 // css
 import styles from './PlayGame.module.css';
 // components
@@ -13,6 +14,8 @@ import { autoChoice } from './autoChoice';
 
 
 const PlayGame = () => {
+  // navigate
+  const navigate = useNavigate();
   // 카드정보
   const cards = hwatuCard;
   // 기타카드
@@ -180,6 +183,11 @@ const PlayGame = () => {
 
   }},[currentTurn]);
   //---------------------------------------------------------------------------------------------------------------------
+  // 홈으로 이동버튼
+  const handleMoveHome=()=>{
+    if(window.confirm('홈으로 이동하시겠습니까?')){navigate('/senior-menu')}
+  };
+  //------------------------------------------------------------------------------------------------
   return (
     <div className={styles.mainPage}>
       {/* 상단 네비바 */}
@@ -248,14 +256,19 @@ const PlayGame = () => {
 
         {/* 플레이어 카드 */}
         <div className={styles.playerArea}>
-                {sortCard(playerCards).map((card)=>(
-                  <img
-                    key={card.id}
-                    src={`/assets/images/game/card/${card.image}`} 
-                    alt="플레이어 카드" 
-                    onClick={()=>handleSelectCard(card)}
-                  />
-                ))}
+          <div className={styles.playerCardArea}>
+            {sortCard(playerCards).map((card)=>(
+              <img
+                key={card.id}
+                src={`/assets/images/game/card/${card.image}`} 
+                alt="플레이어 카드" 
+                onClick={()=>handleSelectCard(card)}
+              />
+            ))}
+          </div>
+          <div className={styles.playerSide}>
+            <button onClick={()=>(handleMoveHome())}>홈으로 이동</button>
+          </div>
         </div>{/* 플레이어 카드 */}
         {isTwoCards &&
           <div className={styles.isTwoCards}>

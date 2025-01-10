@@ -1,7 +1,7 @@
 .sideBarHeader {
     position: fixed;
     width: 368px;
-    height: 980px;
+    height: 100vh;
     background-color: #064420;
     z-index: 1;
 }
@@ -49,15 +49,14 @@
     color: #064420;
 }
 
-.logout {
+/* .logout {
     list-style-type: none;
     margin: 0; 
     padding: 0;
-    position: fixed;
     left: 68px;
     bottom: 50px;
     width: 268px;
-}
+} */
 
 
 .logout button {

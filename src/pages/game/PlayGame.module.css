@@ -68,9 +68,14 @@
 .getPlayerArea img {width:15%;max-width: 100px; margin:2px}
 
 
-.playerArea{display: flex; background-color: rgba(255, 255, 255, 0.1);align-items: center;gap:10px;}
-.playerArea img {width: 10%;max-width: 100px; transition:transform 0.3s;}
-.playerArea img:hover {transform:scale(1.2);}
+.playerArea{width: 100%;display: flex; background-color: rgba(255, 255, 255, 0.1);}
+.playerCardArea{width: 80%;display: flex;align-items: center;gap:10px;}
+.playerCardArea img {width: 10%;max-width: 100px; transition:transform 0.3s;}
+.playerCardArea img:hover {transform:scale(1.2);}
+
+.playerSide{width: 20%;display: flex; align-items: center;}
+.playerSide button{background: #eee; font-size: 16px; width: 192px; height: 72px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer; font-size: 32px;}
+.playerSide button:hover{background: #064420; color: #fff;}
 
 
 /* 카드 두장일때 */
