@@ -17,13 +17,20 @@ function SideBar() {
   };
 
   const renderLinks = (links) =>
-    links.map(({ path, label,img }) => (
+    links.map(({ path, label, img }) => (
       <li key={path}>
         <NavLink
           to={path}
           className={({ isActive }) =>
             isActive ? `${styles.activeLink}` : ''
           } // 활성화된 링크에 클래스 추가
+          onClick={(e) => {
+            // 현재 활성화된 경로라면 리렌더링 강제
+            if (window.location.pathname === path) {
+              e.preventDefault(); // 기본 동작 막기
+              window.location.reload(); // 페이지 리로드
+            }
+          }}
         >
           {img} &nbsp; {label}
         </NavLink>

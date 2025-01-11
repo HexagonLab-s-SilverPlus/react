@@ -165,19 +165,19 @@ const NoticeWrite = () => {
                                         className={styles.noticeButton}
                                         onClick={(e)=>handleFileInsertBox(e)}
                                         >첨부파일추가
-                                    </button>
+                                    </button> &nbsp; &nbsp; &nbsp;
                                 </tr>
                                 <div>
                                 {/* 첨부파일 추가 박스 */}
                                 {newFiles.map((file, index) => (
                                     <tr key={index}>
                                         <td colSpan="2">
-                                            <span>{file.name}</span>
+                                            <span>{file.name}</span> &nbsp;
                                             <input 
                                                 type="button"
                                                 onClick={()=>handleDeleteFile(index)}
                                                 value="x"
-                                                className={styles.noticeButton}
+                                                className={styles.noticeButton2}
                                             />
                                         </td>
                                     </tr>

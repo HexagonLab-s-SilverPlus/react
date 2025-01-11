@@ -276,11 +276,14 @@ function NoticeList() {
                         <span onClick={()=>(window.location.href = "/notice")}>공지사항</span>
                     </div>
                     <div className={styles.memberSubLine}>
-                        {role ==="ADMIN"&&(
                         <div>
+                       <button className={styles.memberInputButton} onClick={()=>(window.location.href = "/notice")}>목록</button> &nbsp;
+                        {role ==="ADMIN"&&(
+                        
                             <button className={styles.memberInputButton} onClick={()=>(navigate("/notice/noticewrite"))}>공지사항 등록</button>
-                        </div>)
+                        )
                         }
+                        </div>
                         {role !=="ADMIN"&&(
                         <div>
                         </div>)
