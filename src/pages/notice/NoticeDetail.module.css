@@ -38,6 +38,7 @@
 .seniorSubBar{font-size: 28px; font-weight: bold;padding-top: 30px;}
 .seniorContent{font-size: 24px; font-weight: bold;white-space: pre-wrap;}
 .seniorFiles{font-size: 28px; font-weight: bold;padding-top: 10px;cursor: pointer;}
+.seniorFiles:hover {color: #368cfc;}
 footer {margin-top: auto;}
 .noticeHr {border: none;height: 2px;background-color: #064420;margin: 16px 0;}
 .seniorBottomBar{display: flex;padding-bottom: 300px;width: calc(100% - 192px);}
@@ -50,4 +51,4 @@ footer {margin-top: auto;}
 .seniorUpButton {display: flex;justify-content: flex-start;}
 .seniorCenterButton {flex: 1;display: flex;justify-content: center;}
 
-.noticeSeniorFiles{display: flex;}
+.noticeSeniorFiles{display: flex; align-items: center;}
