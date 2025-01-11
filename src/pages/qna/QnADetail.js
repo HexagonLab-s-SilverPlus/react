@@ -126,7 +126,7 @@ const QnADetail = () => {
                 <button className={styles.qnaDeleteBTN} onClick={handleQnADelete} >삭 제</button>
    
             </div>
-            <div className={styles.pagingDiv} />
+            <div className={styles.marginBotton} />
         </div>
     </div>);
 }

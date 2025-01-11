@@ -21,12 +21,7 @@ const EMGWarning = ({onCloseModal, emgUUID}) => {
         
     }, []);
 
-    const handleEMGConfirm = () => {
-        onCloseModal();
-    };
-
-    // 확인 버튼 클릭
-    const handleCancel = async () => {
+    const handleEMGConfirm = async () => {
         const response = await fetch('http://localhost:5000/emg/cancel', {
             method: 'POST',
             headers: {
@@ -36,6 +31,11 @@ const EMGWarning = ({onCloseModal, emgUUID}) => {
                 uuid: emgUUID,
             }),
         });
+        onCloseModal();
+    };
+
+    // 확인 버튼 클릭
+    const handleCancel = () => {
         onCloseModal();
     };
 

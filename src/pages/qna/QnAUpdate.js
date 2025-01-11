@@ -156,7 +156,7 @@ const QnAUpdate = () => {
                             >파일추가
                         </button>}
                         <div>
-                        {files && files.map((file, index) => (
+                        {role !== "ADMIN" && files && files.map((file, index) => (
                             <tr key={index}>
                                 <td colSpan="2">
                                     <span>qna_file_{index}</span>
@@ -171,7 +171,7 @@ const QnAUpdate = () => {
                         ))}
                         </div>
                         <div>
-                        {newFiles && newFiles.map((file, index) => (
+                        {role !== "ADMIN" && newFiles && newFiles.map((file, index) => (
                             <tr key={index}>
                                 <td colSpan="2">
                                     <span>qna_file_{index}</span>
