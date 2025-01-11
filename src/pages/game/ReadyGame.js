@@ -21,7 +21,7 @@ const ReadyGame = () => {
       </div>
       <div className={styles.gameWelcome}>
         <p>
-          {member.memName}님 맞고 게임에 오신것을 환영합니다.<br/>
+          {member.memName}님 카드맞추기 게임에 오신것을 환영합니다.<br/>
           게임시작 버튼을 눌러 게임을 시작해 보세요.😊
         </p>
         <button onClick={()=>(nav('/game/play'))}>게임시작</button> &nbsp;

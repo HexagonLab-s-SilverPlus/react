@@ -147,8 +147,11 @@ const QnAAnswer = () => {
                         <input type='submit' value="답 변" />
                         <button onClick={(event) => {navigate(-1); event.preventDefault();}}>취 소</button>
                     </div>
+                    <div className={styles.marginBotton} />
                 </form>    
-            </div>        
+               
+            </div>       
+            
         </div>
     );
 }

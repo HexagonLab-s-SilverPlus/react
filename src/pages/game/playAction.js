@@ -41,13 +41,31 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
         threeCardList.push(myCard);
         }
     });
-    if (cardCount==2){
+    // 테이블내 내가 3개 낸 카드가 있는지
+    let sameTableCard = 0;
+    tableCards.forEach((tableCard)=>{
+        if (tableCard.month===card.month){
+            sameTableCard = sameTableCard+1;
+        }
+    });
+
+    if (cardCount==2 && sameTableCard==1){
         const updateThreeCard = playerCard.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
         playerCard=[...updateThreeCard,otherCard[0],otherCard[1]];
         getCardList=[...threeCardList];
         takeAwayCard = takeAwayCard+1;
         
     }
+    // 3장쌓인 카드가 내가 싼카드인지 확인
+    const checkedMyThreeCard = (checkCard) => {
+        let countCard = 0;
+        turnPlayerAmassList.forEach((card)=>{
+            if (card.month === checkCard.month){
+                countCard=countCard+1;
+            }
+        });
+        if (countCard == 1){return true;}else{return false;}
+    };
     // 자신의 카드와 덱카드 동일카드 저장----------------------------------------------
     // 플레이어가 낸 카드와 일치하는 달인 테이블카드 리스트
     const sameCardToPlayer = [];
@@ -84,7 +102,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
             outTableCardList.push(sameCardToDeck[0]);
         // 테이블에서 덱카드와 같은 카드가 3개일때
         } else if (sameCardToDeck.length === 3){
-            takeAwayCard = takeAwayCard+1;
+            checkedMyThreeCard(firstCard) ? (takeAwayCard = takeAwayCard+2) : (takeAwayCard = takeAwayCard+1);
             getCardList.push(firstCard,...sameCardToDeck);
             pushCardList.push(card);
             outTableCardList.push(...sameCardToDeck);
@@ -111,8 +129,8 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
             outTableCardList.push(...sameCardToPlayer,sameCardToDeck[0]);
         // 테이블에서 덱카드와 같은 카드가 3개일때
         } else if (sameCardToDeck.length === 3){
+            checkedMyThreeCard(firstCard) ? (takeAwayCard = takeAwayCard+2) : (takeAwayCard = takeAwayCard+1);
             getCardList.push(card,firstCard,...sameCardToPlayer,...sameCardToDeck);
-            pushCardList.push(card);
             outTableCardList.push(...sameCardToPlayer,...sameCardToDeck);
         }
         
@@ -120,6 +138,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
     } else if(sameCardToPlayer.length === 2){
         // 플레이어카드 = 덱카드 일때
         if(card.month === firstCard.month){
+            takeAwayCard = takeAwayCard+1;
             getCardList.push(card,firstCard,...sameCardToPlayer);
             outTableCardList.push(...sameCardToPlayer);
         // 테이블에서 덱카드와 같은 카드가 0개일때
@@ -137,12 +156,14 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
             outTableCardList.push(sameCardToPlayer[0],sameCardToDeck[0]);
         // 테이블에서 덱카드와 같은 카드가 3개일때
         } else if (sameCardToDeck.length === 3){
+            checkedMyThreeCard(firstCard) ? (takeAwayCard = takeAwayCard+2) : (takeAwayCard = takeAwayCard+1);
             getCardList.push(card,firstCard,sameCardToPlayer[0],...sameCardToDeck);
             outTableCardList.push(sameCardToPlayer[0],...sameCardToDeck);
         }
         
     // 테이블에서 같은 카드 3개일때
     } else if(sameCardToPlayer.length === 3){
+        checkedMyThreeCard(card) ? (takeAwayCard = takeAwayCard+2) : (takeAwayCard = takeAwayCard+1);
         // 테이블에서 덱카드와 같은 카드가 0개일때
         if (sameCardToDeck.length === 0 ){
             getCardList.push(card,...sameCardToPlayer);
@@ -158,6 +179,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
             outTableCardList.push(...sameCardToPlayer,sameCardToDeck[0]);
         // 테이블에서 덱카드와 같은 카드가 3개일때
         } else if (sameCardToDeck.length === 3){
+            checkedMyThreeCard(firstCard) ? (takeAwayCard = takeAwayCard+2) : (takeAwayCard = takeAwayCard+1);
             getCardList.push(card,firstCard,...sameCardToPlayer,...sameCardToDeck);
             outTableCardList.push(...sameCardToPlayer,...sameCardToDeck);
         }
@@ -179,11 +201,12 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
     if (outTableCardList.length !==0){
         tableCard = tableCard.filter((tableCard) => !outTableCardList.some((card) => card.id === tableCard.id));
     };
+    // 쓸일때
+    if (tableCards.length===0){
+        takeAwayCard = takeAwayCard+1;
+    }
     // 폭탄 제거하기
     tableCard = tableCard.filter((card)=>card.month !== 50);
     return { gpc : getPlayerCard, pc: playerCard, tc : tableCard, cnt: takeAwayCard , amass: amassList};
 };
-
-
-
 
