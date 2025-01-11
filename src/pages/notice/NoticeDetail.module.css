@@ -27,7 +27,7 @@
 .noticeList {display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh;background-color:#f9f9f9;}
 .seniorMainDiv{width: calc(100% - 192px); min-height: calc(100vh - 240px); margin: 48px auto; background: #fff; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); border-radius: 16px; box-sizing: border-box; padding: 96px;}
 .seniorDetailTable { width:100%;}
-.seniorTopButton {display: flex;justify-content: space-between;align-items: flex-end;width:100%;margin-bottom: 40px;}
+.seniorTopButton td {display: flex;justify-content: space-between;align-items: flex-end;width:100%;margin-bottom: 40px;}
 .seniorInnerButton{text-decoration: none;cursor: pointer;border: none;background-color: #ffffff;font-size: 32px;font-weight: bold; font-family: "Pretendard Variable";}
 .seniorInnerButton > span{width:36px;position: relative; top: 3px; left: 0px; transition: all 0.3s;}
 .seniorInnerButton:hover > span{left: -9px;}

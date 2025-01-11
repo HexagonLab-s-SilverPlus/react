@@ -6,9 +6,6 @@ import QnAWrite from '../pages/qna/QnAWrite';
 import QnADetail from '../pages/qna/QnADetail';
 import QnAUpdate from '../pages/qna/QnAUpdate';
 import QnAAnswer from '../pages/qna/QnAAnswer';
-import EMGTest from '../pages/emg/EMGTest';
-import EMGListTest from '../pages/emg/EMGListTest'
-import EMGList from '../components/emg/EMGList';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
 
@@ -20,8 +17,7 @@ const qnaRouter = [
         <Route path="/qna/detail/:qnaUUID" element={<ProtectedRoute element={<QnADetail />} />} />,
         <Route path="/qna/update/:qnaUUID" element={<ProtectedRoute element={<QnAUpdate />} />} />,
         <Route path="/qna/answer/:qnaUUID" element={<ProtectedRoute element={<QnAAnswer />} />} />,
-        <Route path="/emg/test" element={<ProtectedRoute element={<EMGTest />} />} />,
-        <Route path="/emg/listtest" element={<ProtectedRoute element={<EMGListTest />} />} />
+
     </>
 ];
 

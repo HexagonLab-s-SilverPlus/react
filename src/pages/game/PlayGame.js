@@ -119,6 +119,9 @@ const PlayGame = () => {
     // 덱카드에서 하나 뽑기
     const [firstCard, ...remainingDeck] = deckCards;
     setDeckCards(remainingDeck); // 덱카드 셋
+    // 상대방 플레이이어 겟 카드
+    const opponentGetCard = currentTurn
+    ? getOpponentCards : getPlayerCards;
     // 카드 처리
     const returnValue = selectCard(card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards,turnPlayerAmassList);
     // 처리한 카드 변수저장
@@ -129,6 +132,10 @@ const PlayGame = () => {
     console.log("takeAwayCard : ", returnValue.cnt);
     console.log("amassList : ", returnValue.amass);
 
+    // qmassList 갯수만큼 카드 뺏기
+    if (returnValue.amass > 0 ){
+      const amassCardList = amassCards(returnValue.amass, opponentGetCard)
+    }
     // 반환카드 세팅
     if(currentTurn){
       setGetPlayerCards(returnValue.gpc);
@@ -140,6 +147,7 @@ const PlayGame = () => {
       setAmassOpponentList((prev)=>[...prev,...returnValue.amass]);
     }
     setTableCards(returnValue.tc);
+
     // 턴 교대
     setCurrentTurn((prev)=>(!prev));
   };

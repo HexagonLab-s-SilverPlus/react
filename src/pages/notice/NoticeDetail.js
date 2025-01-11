@@ -115,15 +115,17 @@ const NoticeDetail = () => {
             <table className={styles.seniorDetailTable}>
                 <thead>
                     <tr className={styles.seniorTopButton}>
+                        <td>
                         <button 
                             className={styles.seniorInnerButton} 
-                            onClick={()=>(navigate('/notice'))}
+                            onClick={()=>(navigate(-1))}
                         >
                             <span class="material-symbols-outlined">arrow_back</span> 뒤로가기</button>
                         <button
                             className={styles.seniorButton} 
                             onClick={() =>(navigate('/notice'))}
                         >목록</button>
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
