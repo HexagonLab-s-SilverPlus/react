@@ -316,21 +316,24 @@ function ChatPage() {
 
 
 
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']}`}
-                >
-                  {message.loading ? (
-                    <Player autoplay loop src="/lottie/doc-loading-anime.json" style={{ height: '150px', width: '150px' }} />
-                  ) : (
-                    <div
-                      className={styles['markdown']}
-                      dangerouslySetInnerHTML={{ __html: marked(message.text) }}
-                    ></div>
-                  )}
-                </div>
-              ))}
+              <div id="read">
+
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']}`}
+                  >
+                    {message.loading ? (
+                      <Player autoplay loop src="/lottie/doc-loading-anime.json" style={{ height: '150px', width: '150px' }} />
+                    ) : (
+                      <div
+                        className={styles['markdown']}
+                        dangerouslySetInnerHTML={{ __html: marked(message.text) }}
+                      ></div>
+                    )}
+                  </div>
+                ))}
+              </div>
               <div ref={chatEndRef}></div>
             </div>
           </div>
