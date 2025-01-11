@@ -10,7 +10,12 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { FaTrashAlt } from 'react-icons/fa';
 
+//현재 관리중인 어르신 count 뽑아내기
+//가족 계정 승인 요청수 url연결하면 끝
+
 const DashList = () => {
+    const [seniorCount, setSeniorCount] = useState(0);
+    const [approvalCount, setApprovalCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
     const [todolist, setTodolist] = useState([]);
     const [calendarEvents, setCalendarEvents] = useState([]);
@@ -31,17 +36,47 @@ const DashList = () => {
     const { member, memId } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const fetchSeniorCount = async () => {
+        try {
+            if (!member?.memUUID) {
+                console.error("memUUID가 정의되지 않았습니다.");
+                return;
+            }
+            console.log("Fetching senior count for memUUID:", member?.memUUID);
+            const response = await apiSpringBoot.get(`dashboard/Countsnr/${member.memUUID}`);
+            console.log("Senior count response:", response.data);
+            setSeniorCount(response.data.count); // 서버로부터 받은 데이터 사용
+        } catch (error) {
+            console.error("현재 관리중인 어르신 수 가져오기 실패:", error);
+        }
+    };
+    
+    
     const fetchDocumentCount = async () => {
-        try{
-            const response = await apiSpringBoot.get('/dashboard/count');
-            setDocumentCount(response.data.documentCount);
-        } catch (error){
-            console.error('문서 카운트 가져오기 실패:', error);
+        try {
+            if (!member?.memUUID) {
+                console.error("mgrUUID가 정의되지 않았습니다.");
+                return;
+            }
+            const response = await apiSpringBoot.get(`/dashboard/Count/${member?.memUUID}`);
+            console.log("Document count response:", response.data);
+            setDocumentCount(response.data.data); // 서버로부터 받은 데이터 사용
+        } catch (error) {
+            console.error("공문서 카운트 가져오기 실패:", error);
         }
     };
     useEffect(() => {
         fetchDocumentCount(); // 컴포넌트 마운트 시 카운트 가져오기
     }, []);
+
+    const fetchApprovalCount = async () =>{
+        try{
+            const response = await apiSpringBoot.get(`/member/approvalCount/${member?.memUUID}`);
+            setApprovalCount(response.data);
+        }catch(error){
+            console.error('가족 계정 승인 요청수 가져오기 실패:', error);
+        }
+    }
 
 
     // 목록
@@ -237,16 +272,34 @@ const DashList = () => {
         setEditingContent('');
         setEditingStatus('N');
     };
+ 
+    
+
 
     useEffect(() => {
         if (member) {
+            // formData의 memUuid를 설정
             setFormData((prevFormData) => ({
                 ...prevFormData,
-                memUuid: member.memUUID, // memUUID를 AuthContext에서 가져옴
+                memUuid: member.memUUID,
             }));
+    
+            // 공문서 요청 수 가져오기
+            // fetchDocumentCount();
+    
+            // 가족 계정 승인 요청 수 가져오기
+            if (member.memUUID) {
+                fetchSeniorCount();
+                fetchApprovalCount();
+                fetchDocumentCount();
+                
+            }
         }
+    
+        // To-do 목록 가져오기
         fetchAllTodos();
-
+    
+        // 오늘 날짜를 선택된 날짜로 설정
         const today = new Date().toISOString().split("T")[0];
         setSelectedDate(today);
     }, [member]);
@@ -260,17 +313,17 @@ const DashList = () => {
                         <h2>{memId}님 안녕하세요!</h2>
                         <button
                             className={`${styles.button} ${styles.blue}`}
-                            onClick={() => navigate('/manegedsenior')}
+                            onClick={() => navigate('/seniorlist')}
                         >
                             <span>현재 관리중인 어르신 수</span>
-                            <strong>15명</strong>
+                            <strong>{seniorCount}명</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.red}`}
                             onClick={() => navigate('/familyaccount')}
                         >
                             <span>가족 계정 승인 요청수</span>
-                            <strong>9건</strong>
+                            <strong>{approvalCount}건</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.purple}`}
