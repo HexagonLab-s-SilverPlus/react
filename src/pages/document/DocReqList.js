@@ -133,7 +133,7 @@ const DocRequestList = () => {
             <SideBar />
             <div className={dstyles.dRsection}>
                 <div className={dstyles.dDocTop}>
-                    <span className={dstyles.dMenuName}>공문서 요청 수확인</span>
+                    <span className={dstyles.dMenuName}>공문서 요청 확인</span>
                 </div>
                 <div className={dstyles.dTableDiv}>
                     <table className={`${dstyles.dDocRequestTable} ${dstyles.dTable}`}>
