@@ -12,6 +12,7 @@
     padding: 20px;
     font-size: 18px; /* 기본 폰트 크기 확대 */
     padding-bottom: 300px; /* footer랑 겹치지 않도록 여유 공간 추가 */
+    overflow-x: auto; /* 테이블이 화면을 넘으면 가로 스크롤 활성화 */
   }
 
   
@@ -33,6 +34,8 @@
     text-align: center;
     padding: 20px;
     font-size: 23px; /* 테이블 폰트 크기 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    text-overflow: ellipsis; /* 내용이 길면 말줄임표 처리 */
   }
   
   .table th {

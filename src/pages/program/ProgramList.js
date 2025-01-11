@@ -112,6 +112,9 @@ const ProgramList = () => {
 
     // 목록 페이지로 이동
     const handleListClick = () => {
+        setSearchAction('all'); // select 초기화
+        setSearchKeyword(''); // input 초기화
+
         if (role === "SENIOR") {
             if (isNearby) {
                 // 내 주변 프로그램일 때 새로고침
@@ -136,15 +139,14 @@ const ProgramList = () => {
             }
         } else {
             // 시니어가 아닌 경우 초기 페이징 설정으로 목록 출력
-            setSearchAction('all'); // select 초기화
-            setSearchKeyword(''); // input 초기화
+            // setSearchAction('all'); // select 초기화
+            // setSearchKeyword(''); // input 초기화
             setPagingInfo(initPagingInfo); // 초기 페이징 설정으로 리셋
             handleProgramView(initPagingInfo.pageNumber, initPagingInfo.action);
         }
 
         handleScrollToTop(); // 스크롤 맨 위로
     };
-
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrProgramId) => {
@@ -365,7 +367,7 @@ const ProgramList = () => {
                     <div className={styles.snrPgRight}>
                         {isNearby === false ? (
                             <div className={styles.pgSearchWrap}>
-                                <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
+                                <select name="action" value={searchAction} onChange={handleSelectChange} className={styles.searchSelect}>
                                     <option value="all">선택&nbsp;&nbsp;</option>
                                     <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                     <option value="pgContent">내용&nbsp;&nbsp;</option>
@@ -440,7 +442,7 @@ const ProgramList = () => {
 
 
                             <div className={styles.pgSearchWrap}>
-                                <select name="action" onChange={handleSelectChange} className={styles.searchSelect}>
+                                <select name="action" value={searchAction} onChange={handleSelectChange} className={styles.searchSelect}>
                                     <option value="all">선택&nbsp;&nbsp;</option>
                                     <option value="pgTitle">제목&nbsp;&nbsp;</option>
                                     <option value="pgContent">내용&nbsp;&nbsp;</option>
