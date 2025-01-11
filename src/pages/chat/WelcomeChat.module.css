@@ -161,9 +161,9 @@
 }
 
 .sidebarToggle {
-  position: fixed; /* 고정 위치로 변경 */
-  top: 20px;
-  left: 40px; /* 사이드바 넓이와 동일하게 조정 */
+  position: fixed;
+  top: 40px;
+  left: 20px;
   background-color: #007bff;
   color: white;
   border: none;
@@ -172,13 +172,12 @@
   cursor: pointer;
   z-index: 1000;
   transition: background-color 0.3s ease;
-  font-size: 16px; /* 버튼 글씨 크기 */
+  font-size: 16px;
 }
 
 .sidebarToggle:hover {
   background-color: #0056b3;
 }
-
 .sidebar {
   width: 360px; /* 사이드바의 고정 너비 */
   height: 100vh; /* 화면 전체 높이 */

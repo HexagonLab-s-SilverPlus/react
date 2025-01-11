@@ -6,11 +6,9 @@ import InfiniteScroll from "react-infinite-scroll-component"; // InfiniteScroll 
 import styles from "./SeniorSideBar.module.css";
 import PropTypes from "prop-types";
 
-// 공통 모달 컴포넌트
+// 휴지통 모달 컴포넌트
 const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, title, navigate }) => {
-    console.log("hasMoreActive:", hasMore);
     if (!isOpen) return null;
-
 
     return ReactDOM.createPortal(
         <div className={styles.modalOverlay}>
@@ -20,43 +18,42 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
                     닫기
                 </button>
 
-                <div id="scrollable-modal" className={styles.trashList}>
-                    <InfiniteScroll
-                        dataLength={workspaces.length} // 현재까지 로드된 데이터 길이
-                        next={() => {
-                            console.log("InfiniteScroll next 호출");
-                            fetchMore();
-                        }}
-                        hasMore={hasMore} // 데이터가 더 있는지 여부
-                        loader={<div className={styles.spinner}>로딩 중...</div>} // 로딩 상태 표시
-                        height={300} // 스크롤 영역 높이
-                        scrollableTarget="scrollable-modal" // 스크롤할 대상
-                    >
-                        {workspaces.length > 0 ? (
-                            workspaces.map((workspace) => (
-                                <div
-                                    key={workspace.workspaceId}
-                                    className={styles.deletedItem}
-                                    onClick={() => {
-                                        closeModal();
-                                        navigate(`/w/${workspace.workspaceId}`);
-                                    }}
-                                >
-                                    {workspace.workspaceName}
-                                </div>
-                            ))
-                        ) : (
-                            <div className={styles.noWorkspace}>
-                                {title === "즐겨찾기" ? "즐겨찾기가 비었습니다." : "휴지통이 비었습니다."}
+                <div className={styles.trashList}>
+                    {workspaces.length > 0 ? (
+                        workspaces.map((workspace) => (
+                            <div
+                                key={workspace.workspaceId}
+                                className={styles.deletedItem}
+                                onClick={() => {
+                                    closeModal();
+                                    navigate(`/w/${workspace.workspaceId}`);
+                                }}
+                            >
+                                {workspace.workspaceName}
                             </div>
-                        )}
-                    </InfiniteScroll>
+                        ))
+                    ) : (
+                        <div className={styles.noWorkspace}>
+                            휴지통이 비었습니다.
+                        </div>
+                    )}
+                    {hasMore && (
+                        <button
+                            className={styles.loadMoreButton}
+                            onClick={fetchMore}
+                        >
+                            더보기
+                        </button>
+                    )}
                 </div>
             </div>
         </div>,
         document.body
     );
 };
+
+
+
 
 // 삭제 확인 모달 컴포넌트
 const DeleteConfirmationModal = ({ isOpen, closeModal, workspaceToDelete, handleDelete }) => {
@@ -101,21 +98,19 @@ const SeniorSideBar = ({ memUUID }) => {
 
     const [pageSize] = useState(5); // 한 페이지의 크기
 
-    const [isActiveModalOpen, setIsActiveModalOpen] = useState(false); // 활성화 워크스페이스 모달 상태
-    const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
     const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(null);
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
 
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
 
     const [openDropdownId, setOpenDropdownId] = useState(null);
     const dropdownRef = useRef(null); // 드롭다운 영역을 참조하기 위한 ref
-
-    const [loading, setLoading] = useState(true);
-    const [errorMessage, setErrorMessage] = useState("");
 
 
 
@@ -123,6 +118,10 @@ const SeniorSideBar = ({ memUUID }) => {
     const { apiSpringBoot, memName } = useContext(AuthContext);
     const navigate = useNavigate();
 
+
+    useEffect(() => {
+        console.log("Updated hasMoreDeleted:", hasMoreDeleted);
+    }, [hasMoreDeleted]);
 
     // 드롭다운 외부 클릭 감지
     useEffect(() => {
@@ -201,23 +200,40 @@ const SeniorSideBar = ({ memUUID }) => {
     }, [memUUID]);
 
 
-    // 휴지통 버튼 클릭 핸들러
-    const fetchDeletedWorkspaces = async () => {
-        try {
+    // 휴지통 버튼 클릭 시 삭제된 워크스페이스 로드
+    const fetchDeletedWorkspaces = async (reset = false) => {
+        if (loading) return; // 중복 호출 방지
+        setLoading(true);
 
-            const page = Math.ceil(deletedWorkspaces.length / 5) + 1; // 다음 페이지 계산
+        try {
+            const offset = reset ? 0 : deletedWorkspaces.length; // 초기화 시 0부터 시작
             const response = await apiSpringBoot.get(
-                `/api/workspace/${memUUID}/status?workspaceStatus=DELETED&page=${page}&size=5`
+                `/api/workspace/${memUUID}/status`,
+                { params: { workspaceStatus: "DELETED", offset, size: pageSize } }
             );
 
-            // 기존 데이터에 새 데이터 추가 (append)
-            setDeletedWorkspaces((prev) => [...prev, ...response.data.data]); // 누적
+            const newWorkspaces = response.data.data || [];
+            if (reset) {
+                setDeletedWorkspaces(newWorkspaces); // 초기화 시 데이터 대체
+                setDeletedPage(1); // 첫 페이지로 초기화
+            } else {
+                setDeletedWorkspaces((prev) => [...prev, ...newWorkspaces]); // 기존 데이터에 추가
+                setDeletedPage((prev) => prev + 1);
+            }
 
-            // 더 이상 데이터가 없으면 hasMoreDeleted를 false로 설정
-            setHasMoreDeleted(response.data.data.length === 5); // 한 번에 가져올 데이터가 5개면 추가 데이터가 있다고 간주
+            setHasMoreDeleted(newWorkspaces.length === pageSize); // 더 로드할 데이터가 있는지 확인
         } catch (error) {
             console.error("삭제된 워크스페이스 로드 실패:", error);
+        } finally {
+            setLoading(false);
         }
+    };
+
+
+    // 휴지통 버튼 클릭 핸들러
+    const handleTrashButtonClick = () => {
+        fetchDeletedWorkspaces(true); // 초기화 후 첫 페이지 데이터 로드
+        setIsTrashModalOpen(true); // 모달 열기
     };
 
 
@@ -313,25 +329,35 @@ const SeniorSideBar = ({ memUUID }) => {
                 const hasMore = newWorkspaces.length === pageSize;
                 console.log("hasMoreArchived 업데이트:", hasMore);
                 setHasMoreArchived(hasMore);
+
+
+
+
             } else if (type === "deleted") {
                 const offset = deletedWorkspaces.length; // 현재 데이터 길이를 기반으로 오프셋 계산
+                console.log("Deleted page:", deletedPage);
+                const nextPage = deletedPage + 1; // 다음 페이지 계산
+                console.log(`Fetching page: ${nextPage}`); // 확인용 로그
+
                 const response = await apiSpringBoot.get(
                     `/api/workspace/${memUUID}/status`,
-                    { params: { workspaceStatus: type.toUpperCase(), offset, size: pageSize } } // 쿼리 파라미터 전달
+                    { params: { workspaceStatus: type.toUpperCase(), offset, size: pageSize } }
                 );
 
-
-                console.log("API 응답 데이터:", response.data);
                 const newWorkspaces = response.data.data || [];
-                console.log("새로운 워크스페이스:", newWorkspaces);
+                console.log("Fetched workspaces:", newWorkspaces);
 
-                setDeletedWorkspaces((prev) => [...prev, ...newWorkspaces]);
+                if (newWorkspaces.length < pageSize) {
+                    console.warn("Expected 5 items but received:", newWorkspaces.length);
+                }
 
-                setDeletedPage((prev) => prev + 1);
 
+                setDeletedWorkspaces((prev) => [...prev, ...newWorkspaces]); // 기존 데이터에 새 데이터 추가
+                setDeletedPage(nextPage); // 페이지 번호 업데이트
 
+                // 더 이상 데이터가 없으면 hasMoreDeleted를 false로 설정
                 const hasMore = newWorkspaces.length === pageSize;
-                console.log("hasMoreDeleted 업데이트:", hasMore);
+                console.log("Updated hasMoreDeleted:", hasMore);
                 setHasMoreDeleted(hasMore);
             }
         } catch (error) {
@@ -340,7 +366,9 @@ const SeniorSideBar = ({ memUUID }) => {
     };
 
 
-
+    const fetchMoreWorkspaces_ = (type) => {
+        if (type === "deleted") fetchDeletedWorkspaces(false);
+    };
 
     // 즐겨찾기 누르면 해당 워크스페이스 ARCHIVED로 변경
     const setWorkspaceAsFavorite = async (workspaceId) => {
@@ -416,7 +444,7 @@ const SeniorSideBar = ({ memUUID }) => {
                                     <div
                                         key={workspace.workspaceId}
                                         className={`${styles.item} ${selectedWorkspaceId === workspace.workspaceId ? styles.selectedItem : ""
-                                        }`}
+                                            }`}
                                         onClick={() => {
                                             setSelectedWorkspaceId(workspace.workspaceId);
                                             navigate(`/w/${workspace.workspaceId}`)
@@ -536,10 +564,7 @@ const SeniorSideBar = ({ memUUID }) => {
 
             <button
                 className={styles.trashButton}
-                onClick={() => {
-                    fetchDeletedWorkspaces(); // 삭제된 데이터 새로고침
-                    setIsTrashModalOpen(true); // 모달 열기
-                }}
+                onClick={handleTrashButtonClick} // 수정된 핸들러
             >
                 휴지통
             </button>
@@ -569,11 +594,13 @@ const SeniorSideBar = ({ memUUID }) => {
                 isOpen={isTrashModalOpen}
                 closeModal={() => setIsTrashModalOpen(false)}
                 workspaces={deletedWorkspaces}
-                fetchMore={() => fetchMoreWorkspaces("deleted")}
+                fetchMore={() => fetchDeletedWorkspaces(false)} // 더보기 버튼 클릭 시 호출
                 hasMore={hasMoreDeleted}
                 title="휴지통"
                 navigate={navigate}
             />
+
+
             <DeleteConfirmationModal
                 isOpen={isDeleteConfirmationOpen}
                 closeModal={() => setIsDeleteConfirmationOpen(false)}
