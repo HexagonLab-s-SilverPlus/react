@@ -103,7 +103,7 @@ const SeniorMenu = () => {
 
         </div>{/* menuWrap end */}
       </div>{/* menuContainer end */}
-      <SeniorFooter />
+      <SeniorFooter className={styles.snrft} />
     </div >
   );
 };
