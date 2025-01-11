@@ -43,7 +43,7 @@ const DashList = () => {
                 return;
             }
             console.log("Fetching senior count for memUUID:", member?.memUUID);
-            const response = await apiSpringBoot.get(`dashboard/Countsnr/${member?.memUUID}`);
+            const response = await apiSpringBoot.get(`dashboard/Countsnr/${member.memUUID}`);
             console.log("Senior count response:", response.data);
             setSeniorCount(response.data.count); // 서버로부터 받은 데이터 사용
         } catch (error) {
