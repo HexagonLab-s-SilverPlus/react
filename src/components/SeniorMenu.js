@@ -33,7 +33,7 @@ const SeniorMenu = () => {
   };
 
   const handleFAQButton = () => {
-    navigate('/faq');
+    navigate('/qna/faq');
   };
 
   const handleBookButton = () => {
