@@ -1,7 +1,6 @@
-/* FullCalendar 전체 스타일 */
+/* FullCalendar 컨테이너 크기 */
 .calendar-container {
-    width: 100%; /* 전체 너비 */
-    max-width: 750px; /* 최대 가로 크기 */
+    width: 100%; /* 가로 크기 설정 */
     margin: 0 auto; /* 중앙 정렬 */
     background-color: #ffffff; /* 배경색 */
     border: 1px solid #ddd; /* 테두리 */
@@ -10,28 +9,34 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
+
 .fc {
     font-family: 'Arial', sans-serif;
-    background-color: #ffffff !important; /* 배경색 */
-    color: #000000 !important; /* 텍스트 색상 */
+    background-color: #ffffff !important; /* 연한 베이지 배경 */
+    color: #000000 !important; /* 텍스트 보라색 */
 }
 
 /* Today 버튼 스타일 */
 .fc-button.fc-today-button {
-    background-color: #618264 !important; /* 기본 버튼 색상 */
+    background-color: #618264 !important; /* 갈색 */
     color: white !important;
     border-radius: 5px !important;
     border: none !important;
 }
 
 .fc-button.fc-today-button:hover {
-    background-color: #A0522D !important; /* hover 색상 */
+    background-color: #064420 !important; /* 더 진한 갈색 */
+    cursor: pointer;
+}
+
+.fc .fc-button:disabled {
+    opacity: 1;
 }
 
 /* 이전(<), 다음(>) 네비게이션 버튼 스타일 */
 .fc-button.fc-prev-button,
 .fc-button.fc-next-button {
-    background-color: #E4EFE7 !important; /* 기본 색상 */
+    background-color: #E4EFE7 !important; /* 베이지 */
     color: #064420 !important;
     border-radius: 5px !important;
     border: none !important;
@@ -39,13 +44,14 @@
 
 .fc-button.fc-prev-button:hover,
 .fc-button.fc-next-button:hover {
-    background-color: #8B4513 !important; /* hover 색상 */
+    background-color: #064420 !important; /* 진한 갈색 */
     color: white !important;
 }
 
 /* 이벤트 스타일 */
 .fc-event {
-    background-color: #70ace6 !important; /* 기본 이벤트 색상 */
+    background-color: #70ace6 !important; /* 갈색 */
+   
     border-radius: 5px !important;
     padding: 5px !important;
     font-size: 14px !important;
@@ -53,103 +59,38 @@
 
 /* 캘린더 셀 배경 */
 .fc-daygrid-day {
-    background-color: #ffffff !important; /* 기본 셀 배경 */
+    background-color: #ffffff !important; /* 연한 크림색 */
 }
 
 /* 캘린더 헤더 */
 .fc-toolbar-title {
-    color: #585757 !important; /* 헤더 텍스트 색상 */
+    color: #585757 !important; /* 보라색 */
     font-weight: bold !important;
 }
 
 /* 요일 헤더 스타일 */
 .fc-col-header-cell {
+    /* background-color: #eee4d7 !important; */
     color: #585757 !important;
     font-weight: bold !important;
 }
 
 /* Hover 시 이벤트 스타일 */
 .fc-event:hover {
-    background-color: #003079 !important; /* hover 색상 */
+    background-color: #003079 !important; /* 진한 갈색 */
+
     color: white !important;
     transform: scale(1.05); /* 약간 확대 */
     transition: transform 0.2s ease-in-out;
 }
 
-/* 캘린더 컨테이너 */
-.calendarbox {
-    width: 100%; /* 전체 너비 */
-    max-width: 1500px; /* 최대 가로 크기 */
-    margin: 0 auto; /* 중앙 정렬 */
-}
 
 .calendar-container .fc {
-    width: 100% !important; /* 반응형 너비 */
+    width: 500px !important;
     max-width: 100% !important;
     margin: 0 auto !important;
 }
 
-/* 반응형 스타일 */
-@media screen and (max-width: 1200px) {
-    .calendarbox {
-        max-width: 1200px;
-    }
-
-    .calendar-container {
-        max-width: 600px;
-        padding: 5px;
-    }
-
-    .fc-event {
-        font-size: 12px !important; /* 작은 화면에서 폰트 크기 조정 */
-    }
-
-    .fc-button {
-        font-size: 12px !important; /* 버튼 폰트 크기 조정 */
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .calendarbox {
-        max-width: 100%;
-        padding: 10px;
-    }
-
-    .calendar-container {
-        max-width: 100%;
-        padding: 5px;
-    }
-
-    .fc-toolbar-title {
-        font-size: 16px !important; /* 작은 화면에서 헤더 크기 조정 */
-    }
-
-    .fc-event {
-        font-size: 10px !important; /* 이벤트 폰트 크기 축소 */
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .calendarbox {
-        width: 100%;
-    }
-
-    .calendar-container {
-        max-width: 100%;
-        padding: 5px;
-    }
-
-    .fc-toolbar-title {
-        font-size: 14px !important; /* 더 작은 화면에서 헤더 크기 조정 */
-    }
-
-    .fc-button {
-        font-size: 10px !important; /* 버튼 폰트 크기 축소 */
-        padding: 5px !important; /* 버튼 내부 여백 축소 */
-    }
-
-    .fc-event {
-        font-size: 8px !important; /* 이벤트 폰트 크기 축소 */
-        padding: 3px !important;
-    }
+.fc .fc-view-harness-active > .fc-view {
+    height: 593px;
 }
