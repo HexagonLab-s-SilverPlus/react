@@ -1,8 +1,10 @@
 .backgroundContainer {
   position: relative;
-  height: 100vh; /* 충분한 스크롤 공간 */
+  height: 100vh;
+  /* 충분한 스크롤 공간 */
   background-color: #f4f4f4;
-  overflow: hidden; /* 흰색 배경 방지 */
+  overflow: hidden;
+  /* 흰색 배경 방지 */
 }
 
 .backgroundContainer::before {
@@ -12,9 +14,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 그레이톤 오버레이 */
-  z-index: 1; /* 텍스트보다 뒤에 배치 */
-  pointer-events: none; /* 클릭 비활성화 */
+  background: rgba(0, 0, 0, 0.4);
+  /* 그레이톤 오버레이 */
+  z-index: 1;
+  /* 텍스트보다 뒤에 배치 */
+  pointer-events: none;
+  /* 클릭 비활성화 */
 }
 
 .backgroundImage {
@@ -23,36 +28,50 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지 비율 유지하며 화면을 채움 */
-  object-position: top center; /* 이미지 상단 중심을 기준으로 배치 */
+  object-fit: cover;
+  /* 이미지 비율 유지하며 화면을 채움 */
+  object-position: top center;
+  /* 이미지 상단 중심을 기준으로 배치 */
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .initialText {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
   font-size: 4rem;
+  /* 폰트 크기 */
   line-height: 1.5;
+  /* 줄 간격 */
   text-align: center;
+  /* 텍스트 정렬 */
   color: white;
+  /* 텍스트 색상 */
   font-weight: bold;
-  transition: opacity 0.5s ease;
-  position: fixed;
-  z-index: 2; /* 오버레이 위로 배치 */
+  /* 글씨 굵기 */
+  z-index: 2;
+  /* 배경 이미지 위에 배치 */
+  white-space: pre-line;
+  /* 텍스트 줄 바꿈 처리 */
 }
 
+
 .secondSection {
+  height: 200hv;
   padding: 50px 20px;
   text-align: center;
   background-color: #f9f9f9;
 }
+
+
 .sectionTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 3rem;
+  /* 텍스트 크기 */
+  margin-bottom: 150px;
+  /* 아래 여백 */
 }
+
 
 .sectionDescription {
   font-size: 1.2rem;
@@ -63,16 +82,20 @@
 
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2열 고정 */
+  grid-template-columns: repeat(2, 1fr);
+  /* 2열 고정 */
   gap: 20px;
-  justify-content: center; /* 중앙 정렬 */
-  width: 50%; /* 그리드 중앙 배치 */
+  justify-content: center;
+  /* 중앙 정렬 */
+  width: 50%;
+  /* 그리드 중앙 배치 */
   margin: 0 auto;
 }
 
 .imageCard {
   position: relative;
-  aspect-ratio: 16 / 9; /* 이미지의 가로 세로 비율 */
+  aspect-ratio: 16 / 9;
+  /* 이미지의 가로 세로 비율 */
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -91,8 +114,10 @@
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지를 컨테이너에 꽉 채움 */
-  object-position: top; /* 이미지의 상단을 우선으로 보여줌 */
+  object-fit: cover;
+  /* 이미지를 컨테이너에 꽉 채움 */
+  object-position: top;
+  /* 이미지의 상단을 우선으로 보여줌 */
   transition: filter 0.3s ease;
 }
 
@@ -106,10 +131,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.3); /* 항상 살짝 어두운 배경 */
-  opacity: 1; /* 기본적으로 표시 */
+  background: rgba(0, 0, 0, 0.3);
+  /* 항상 살짝 어두운 배경 */
+  opacity: 1;
+  /* 기본적으로 표시 */
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .roleTitle {
   font-size: 2.5rem;
   color: white;
@@ -121,11 +149,13 @@
   font-size: 1.2rem;
   color: white;
   text-align: center;
-  display: none; /* 기본적으로 숨김 */
+  display: none;
+  /* 기본적으로 숨김 */
 }
 
 .imageCard:hover .roleDescription {
-  display: block; /* 호버 시 설명 표시 */
+  display: block;
+  /* 호버 시 설명 표시 */
 }
 
 
@@ -146,9 +176,12 @@
 }
 
 .loginSection {
-  text-align: center; /* 설명과 버튼을 중앙 정렬 */
-  margin-top: 130px; /* 이미지 그리드와 버튼 간의 여백 */
+  text-align: center;
+  /* 설명과 버튼을 중앙 정렬 */
+  margin-top: 130px;
+  /* 이미지 그리드와 버튼 간의 여백 */
 }
+
 /* 로그인 버튼 */
 .loginButton {
   background-color: #003300;
@@ -163,14 +196,16 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin: 50px auto; /* 수평 중앙 정렬 및 여백 */
+  margin: 50px auto;
+  /* 수평 중앙 정렬 및 여백 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .loginButton:hover {
   background-color: #005500;
-  transform: scale(1.05); /* 호버 시 살짝 확대 */
+  transform: scale(1.05);
+  /* 호버 시 살짝 확대 */
 }
 
 
@@ -190,22 +225,309 @@
 
 .scrollArrow {
   position: absolute;
-  bottom: 20px; /* 컨테이너 하단에서 20px 위 */
-  left: 50%; /* 수평 중앙 정렬 */
-  transform: translateX(-50%); /* 중앙 기준 정렬 */
-  font-size: 1.5rem; /* 적당한 크기 */
+  bottom: 20px;
+  /* 컨테이너 하단에서 20px 위 */
+  left: 50%;
+  /* 수평 중앙 정렬 */
+  transform: translateX(-50%);
+  /* 중앙 기준 정렬 */
+  font-size: 1.5rem;
+  /* 적당한 크기 */
   color: white;
   text-align: center;
-  animation: blink 1.5s infinite; /* 깜빡임 애니메이션 */
+  animation: blink 1.5s infinite;
+  /* 깜빡임 애니메이션 */
   z-index: 3;
   cursor: pointer;
 }
 
 @keyframes blink {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
+}
+
+
+
+
+/* 육각형 */
+.hexagon {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  background-color: #e0e0e0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.teamImage {
+  z-index: 200;
+}
+
+
+.hexagon:hover {
+  background-color: #d4d4d4; /* 육각형 호버 시 배경 색상 변경 */
+  transition: background-color 0.3s ease;
+}
+
+.hexCorner:hover .teamOverlay {
+  opacity: 1;
+  /* 호버 시 텍스트 표시 */
+}
+
+.hexagonContent {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.hexCorner {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+  z-index: 2;
+}
+
+.hexCorner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hexCorner:hover img {
+  transform: scale(1.2);
+  /* 호버 시 이미지 확대 */
+}
+
+
+.hexCorner:hover {
+  width: 150px;
+  height: 150px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.hexCorner.active img {
+  transform: scale(1.3);
+  /* 클릭 시 더 확대 */
+  z-index: 2;
+  /* 다른 요소 위에 표시 */
+}
+
+
+.corner1 {
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.corner2 {
+  top: 50px;
+  right: -50px;
+}
+
+.corner3 {
+  bottom: 50px;
+  right: -50px;
+}
+
+.corner4 {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.corner5 {
+  bottom: 50px;
+  left: -50px;
+}
+
+.corner6 {
+  top: 50px;
+  left: -50px;
+}
+
+.teamOverlay {
+  position: absolute;
+  top: 120%;
+  /* 이미지 아래에 텍스트 배치 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 0.9rem;
+  z-index: 3;
+  /* 이미지 위로 표시 */
+  opacity: 0;
+  /* 기본적으로 숨김 */
+  transition: opacity 0.3s ease;
+}
+
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+
+
+
+.scrollArrow {
+  position: absolute;
+  bottom: 20px;
+  /* 두 번째 섹션의 하단에서 20px 위 */
+  left: 50%;
+  /* 수평 중앙 정렬 */
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: white;
+  text-align: center;
+  animation: blink 1.5s infinite;
+  z-index: 3;
+  cursor: pointer;
+}
+
+
+.second_scrollArrow {
+  position: absolute;
+  left: 50%;
+  /* 수평 중앙 정렬 */
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  animation: blink 1.5s infinite;
+  z-index: 3;
+  cursor: pointer;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.backgroundContainer {
+  position: relative;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.backgroundImage {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.developerSection {
+  padding: 80px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.secondSection {
+  position: relative;
+  /* 위치 지정 기준 설정 */
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+
+
+
+.sectionDescription {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+}
+
+.imageCard {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loginSection {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.loginButton {
+  background-color: #003300;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.hexagonContainer {
+  position: relative;
+  width: 500px;
+  /* 육각형 크기 */
+  height: 500px;
+  margin: 50px auto;
+}
+
+
+.underline {
+  position: relative;
+  display: inline-block; /* 텍스트 크기에 맞춰 영역 설정 */
+  text-align: center;
+  line-height: 0.1; /* 줄 간격 */
+}
+
+.underline::before {
+  content: '';
+  position: absolute;
+  bottom: 1.0; /* 텍스트 바로 아래에 위치 */
+  left: 0;
+  width: 100%;
+  height: 20px; /* 밑줄 두께 */
+  background-color: rgba(255, 255, 0, 0.5); /* 투명한 노란색 */
+  z-index: -1; /* 텍스트 아래로 위치 */
+  transform: scaleY(0.5); /* 밑줄 크기를 텍스트와 겹치게 조정 */
 }

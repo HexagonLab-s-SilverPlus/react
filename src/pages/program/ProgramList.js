@@ -1,6 +1,6 @@
 // src/pages/program/ProgramList.js
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { apiSpringBoot } from "../../utils/axios";
 import { AuthContext } from "../../AuthProvider";
 import styles from './ProgramList.module.css';
@@ -13,14 +13,20 @@ import SeniorNavbar from "../../components/common/SeniorNavbar";
 import SeniorFooter from "../../components/common/SeniorFooter";
 
 const ProgramList = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [programs, setPrograms] = useState([]);
     const snrPgListRef = useRef(null); // snrPgList 요소를 참조하기 위한 useRef
+
+    //토큰정보 가져오기(AuthProvider)
+    const { role, member } = useContext(AuthContext);
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];        // 현재 날짜 가져오기
 
-    //페이징
-    const [pagingInfo, setPagingInfo] = useState({
+    // 초기 상태 정의
+    const initPagingInfo = {
         pageNumber: 1,
         listCount: 1,
         pageSize: 8,
@@ -31,14 +37,25 @@ const ProgramList = () => {
         keyword: '',
         startDate: formattedDate,
         endDate: formattedDate,
+    };
+
+    // 상태 복원 또는 초기화 (SENIOR 전용)
+    const [pagingInfo, setPagingInfo] = useState(() => {
+        if (role === "SENIOR") {
+            return location.state?.pagingInfo || initPagingInfo;
+        }
+        return initPagingInfo;
     });
 
-    const navigate = useNavigate();
+    const [isNearby, setIsNearby] = useState(() => {
+        if (role === "SENIOR") {
+            return location.state?.isNearby ?? true;
+        }
+        return false; // SENIOR가 아닌 경우 기본값
+    });
 
-    //토큰정보 가져오기(AuthProvider)
-    const { role, member } = useContext(AuthContext);
-    const [isNearby, setIsNearby] = useState(true);
-
+    const [searchAction, setSearchAction] = useState('all'); // select의 value
+    const [searchKeyword, setSearchKeyword] = useState(''); // input의 value
 
     //--------------------------------------------------
     const handleScrollToTop = () => {
@@ -72,30 +89,66 @@ const ProgramList = () => {
         navigate('/program/write');
     };
 
-    //목록 페이지로 이동
-    const handleListClick = () => {
-        // window.location.reload();   //페이지 새로고침
-        if (isNearby) {
-            // 내 주변 프로그램일 때 새로고침
-            window.location.reload();
-        } else {
-            // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
-            setPagingInfo((prev) => ({
-                ...prev,
-                pageNumber: 1,
-                action: 'all', // 전체 검색으로 초기화
-                keyword: '',   // 검색어 초기화
-                startDate: formattedDate,
-                endDate: formattedDate,
-            }));
-            handleProgramView(1, 'all'); // 전체 목록 로드
-            handleScrollToTop(); // 스크롤 맨 위로
-        }
+    // 검색 select 변경 핸들러
+    const handleSelectChange = (e) => {
+        const { value } = e.target;
+        setSearchAction(value);
+        setPagingInfo((prev) => ({
+            ...prev,
+            action: value,
+            pageNumber: 1, // 검색 조건 변경 시 항상 1페이지로 초기화
+        }));
     };
+
+    // 검색 input 변경 핸들러
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setSearchKeyword(value);
+        setPagingInfo((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    // 목록 페이지로 이동
+    const handleListClick = () => {
+        if (role === "SENIOR") {
+            if (isNearby) {
+                // 내 주변 프로그램일 때 새로고침
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    pageNumber: 1, // 페이지 번호 초기화
+                }));
+                handleProgramView(1, 'nearby'); // 내 주변 목록 로드
+            } else {
+                // 전국 어르신 프로그램일 때 검색 조건 초기화 및 전체 목록 로드
+                setSearchAction('all'); // select 초기화
+                setSearchKeyword(''); // input 초기화
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    pageNumber: 1,
+                    action: 'all', // 전체 검색으로 초기화
+                    keyword: '',   // 검색어 초기화
+                    startDate: formattedDate,
+                    endDate: formattedDate,
+                }));
+                handleProgramView(1, 'all'); // 전국 목록 로드
+            }
+        } else {
+            // 시니어가 아닌 경우 초기 페이징 설정으로 목록 출력
+            setSearchAction('all'); // select 초기화
+            setSearchKeyword(''); // input 초기화
+            setPagingInfo(initPagingInfo); // 초기 페이징 설정으로 리셋
+            handleProgramView(initPagingInfo.pageNumber, initPagingInfo.action);
+        }
+
+        handleScrollToTop(); // 스크롤 맨 위로
+    };
+
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrProgramId) => {
-        navigate(`/program/detail/${snrProgramId}`);
+        navigate(`/program/detail/${snrProgramId}`, { state: { pagingInfo, isNearby } });
     };
 
     useEffect(() => {
@@ -150,21 +203,12 @@ const ProgramList = () => {
             }
         };
 
-        if (pagingInfo.pageNumber !== 1 || pagingInfo.action === 'all') {
-            // 페이지 번호가 변경되었거나 전체 조회 시만 데이터를 불러옴
-            loadPrograms();
-        }
+        // if (pagingInfo.pageNumber !== 1 || pagingInfo.action === 'all') {
+        // 페이지 번호가 변경되었거나 전체 조회 시만 데이터를 불러옴
+        loadPrograms();
+        // }
 
     }, [pagingInfo.pageNumber, isNearby]);
-
-    const handleSelectChange = (e) => {
-        const { value } = e.target;
-        setPagingInfo((prev) => ({
-            ...prev,
-            action: value,
-            pageNumber: 1, // 검색 조건 변경 시 항상 1페이지로 초기화
-        }));
-    };
 
     const handlePageChange = async (page) => {
         const currentPage = page || 1; // page 값이 없을 경우 기본값으로 1 설정
@@ -250,15 +294,6 @@ const ProgramList = () => {
         }
     };
 
-    //input 에 입력 시 paging훅에 저장
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setPagingInfo((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
     //검색 버튼 클릭
     const handleSearchClick = () => {
         handleProgramView(1, pagingInfo.action);
@@ -273,7 +308,7 @@ const ProgramList = () => {
             }
         };
 
-        switch (pagingInfo.action) {
+        switch (searchAction) {
             case "pgDate":
                 return (
                     <div className={styles.pgDateWrap}>
@@ -298,6 +333,7 @@ const ProgramList = () => {
                     <input
                         type="search"
                         name="keyword"
+                        value={searchKeyword} // input 상태 바인딩
                         placeholder="검색어를 입력하세요."
                         onChange={handleInputChange}
                         onKeyDown={handleKeyPress}

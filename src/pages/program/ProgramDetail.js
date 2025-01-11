@@ -1,6 +1,6 @@
 // src/pages/program/ProgamDetail.js
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { apiSpringBoot } from "../../utils/axios";
 import { AuthContext } from "../../AuthProvider";
 import styles from './ProgramDetail.module.css';
@@ -17,6 +17,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 const ProgramDetail = () => {
+    //이동
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    //토큰정보 가져오기(AuthProvider)
+    const { role, member } = useContext(AuthContext);
+
     const [program, setProgram] = useState({
         snrStartedAt: '',
         snrEndedAt: '',
@@ -24,20 +31,46 @@ const ProgramDetail = () => {
     const [files, setFiles] = useState([]);
     const { snrProgramId } = useParams();   //URL 파라미터에서 ID 가져오기
 
-    //토큰정보 가져오기(AuthProvider)
-    const { role, member } = useContext(AuthContext);
-
-    //이동
-    const navigate = useNavigate();
-
     //목록 페이지로 이동
     const handleMoveProgram = () => {
-        navigate(`/program`);
+        const { isNearby } = location.state || {}; // location.state에서 isNearby 가져오기
+
+        const initialPagingInfo = {
+            pageNumber: 1,
+            listCount: 1,
+            pageSize: 8,
+            maxPage: 1,
+            startPage: 1,
+            endPage: 1,
+            action: 'all', // 기본 검색 조건
+            keyword: '',
+            startDate: new Date().toISOString().split('T')[0], // 오늘 날짜
+            endDate: new Date().toISOString().split('T')[0],
+        };
+
+        if (role === "SENIOR") {
+            // isNearby 상태를 고려하여 이동
+            navigate(`/program`, {
+                state: {
+                    pagingInfo: initialPagingInfo,
+                    isNearby: isNearby || false, // 기본값으로 false 설정
+                },
+            });
+        } else {
+            // SENIOR가 아닌 경우 초기 상태로 이동
+            navigate(`/program`);
+        }
     };
+
 
     //이전 페이지로 이동
     const handleMovePrevPage = () => {
-        navigate(-1);
+        if (role === "SENIOR") {
+            const { pagingInfo, isNearby } = location.state || {};
+            navigate(`/program`, { state: { pagingInfo, isNearby } });
+        } else {
+            navigate(`/program`); // SENIOR가 아닌 경우 상태 전달 없이 이동
+        }
     };
 
     //수정 페이지로 이동
@@ -158,7 +191,7 @@ const ProgramDetail = () => {
                     <div className={styles.pgSubTop}>
                         <div className={styles.pgSubTopBtns}>
                             <button onClick={handleMovePrevPage}>
-                                <span class="material-symbols-outlined">arrow_left_alt</span>
+                                <span className="material-symbols-outlined">arrow_left_alt</span>
                                 뒤로 가기
                             </button>
                             <button onClick={handleMoveProgram}>목록</button>
@@ -211,7 +244,7 @@ const ProgramDetail = () => {
                             { top: 0, behavior: 'smooth', }
                         )
                     )}>
-                        <span class="material-symbols-outlined">arrow_upward</span>
+                        <span className="material-symbols-outlined">arrow_upward</span>
                         위로 이동
                     </button>
                     <button onClick={handleMoveProgram}>목록</button>
