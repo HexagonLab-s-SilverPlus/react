@@ -1,6 +1,4 @@
 .footer{
-    position: absolute; /* 일반 문서 흐름에 따라 배치 */
-    bottom: 0;
     color:#999999;
     height:48px;
     text-align: center;

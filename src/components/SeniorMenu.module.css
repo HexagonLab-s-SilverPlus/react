@@ -1,7 +1,7 @@
-.menuContainer {width: 100%;box-sizing: border-box; display: flex; padding: 48px 96px; justify-content: space-between; overflow-y: auto;}
-.div1 {width: calc(25% - 24px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.2; background-color: #FDFAF6;}
+.menuContainer {width: 100%;box-sizing: border-box; display: flex; padding: 48px 96px; justify-content: space-between;}
+.div1 {width: calc(25% - 24px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.2; background-color: #FDFAF6; height: calc(910px - 96px - 48px - 96px);}
 .div1 > p {margin-bottom: 0;}
-.menuWrap {width: 75%; display: flex; justify-content: space-between; flex-wrap: wrap; align-content: space-between;}
+.menuWrap {width: 75%; display: flex; justify-content: space-between; flex-wrap: wrap; align-content: space-between; height: 100%; height: calc(910px - 96px - 48px - 96px);}
 .menuWrap > div {width: calc((100% / 3) - 14px);}
 /* 공통 버튼 스타일 */
 .menuButton {
@@ -26,6 +26,7 @@
 .div7 {
     background-color: #fff;
     width: 400px;
+    height: calc((100% / 2) - 12px);
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
