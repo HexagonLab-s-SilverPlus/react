@@ -117,10 +117,10 @@ const SeniorDetailView = () => {
         <div className={styles.snrDetailViewRight}>
           <SeniorDetailViewFamily UUID={UUID} />
           <Medical UUID={UUID} />
-          <EMGList emgSnrUUID={UUID} />
           <div ref={docManagedRef}>
             <DocManaged UUID={UUID} />
           </div>
+          <EMGList emgSnrUUID={UUID} />
           <button
             className={styles.moveSnrDetailBtn}
             onClick={() => navigate(-1)}

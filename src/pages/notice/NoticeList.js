@@ -1,10 +1,10 @@
 // src/pages/notice/NoticeList.js
-import React,{useState,useEffect, useContext, useRef} from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 // AuthContext
-import {AuthContext} from "../../AuthProvider"
+import { AuthContext } from "../../AuthProvider"
 // axios
-import {apiSpringBoot} from '../../utils/axios';
+import { apiSpringBoot } from '../../utils/axios';
 // components
 import SeniorNavbar from '../../components/common/SeniorNavbar';
 import SeniorFooter from '../../components/common/SeniorFooter';
@@ -23,24 +23,24 @@ function NoticeList() {
     const [notices, setNotices] = useState([]);
     // 페이징 정보
     const [pagingInfo, setPagingInfo] = useState({
-        pageNumber:1,
-        pageSize:10,
-        maxPage:1,
-        startPage:1,
-        endPage:1,
-        listCount:1,
+        pageNumber: 1,
+        pageSize: 10,
+        maxPage: 1,
+        startPage: 1,
+        endPage: 1,
+        listCount: 1,
     });
     // 검색 정보
     const [search, setSearch] = useState({
-        action:"제목",
-        keyword:"",
+        action: "제목",
+        keyword: "",
     });
 
     // navigate 객체생성
     const navigate = useNavigate();
 
     // 토큰정보 가져오기(AuthProvider)
-    const {role} = useContext(AuthContext);  // 롤정보    
+    const { role } = useContext(AuthContext);  // 롤정보    
 
     // 검색관련
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태
@@ -54,7 +54,7 @@ function NoticeList() {
         const correctedDate = new Date(originalDate.getTime() + 9 * 60 * 60 * 1000); // UTC+9 보정
         return correctedDate.toISOString(); // ISO 8601 형식 반환
     };
-    
+
     // 스크롤 이동용
     const listRef = useRef(null);
 
@@ -66,9 +66,9 @@ function NoticeList() {
     // 검색 action 저장
     const handleSelectOption = (option) => {
         //setSelectOption(option);
-        setSearch((prev)=>({
+        setSearch((prev) => ({
             ...prev,
-            action:option,
+            action: option,
         })); // 선택된 옵션 업데이트
         setIsDropdownOpen(false); // 드롭다운 닫기
     };
@@ -78,116 +78,116 @@ function NoticeList() {
     };
 
     // 키워드검색
-    const handleSearch = ()=>{
+    const handleSearch = () => {
         const updatedSearch = {
             ...search,
-            keyword:tempKeyword,
+            keyword: tempKeyword,
         }
         setSearch(updatedSearch); // 상태 업데이트
-        setPagingInfo((prev)=>({
+        setPagingInfo((prev) => ({
             ...prev,
-            pageNumber:1,
+            pageNumber: 1,
         }));
-        handleUpdateView(1,updatedSearch);
+        handleUpdateView(1, updatedSearch);
     };
 
     // 페이징 변경시
-    const handleUpdateView = async (page,updatedSearch = search) => {
+    const handleUpdateView = async (page, updatedSearch = search) => {
         if (listRef.current) {
             listRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
         console.log(pagingInfo);
         console.log(search);
-        try{
+        try {
             const response = await apiSpringBoot.get(`/notice`, {
                 params: {
                     ...pagingInfo,
-                    pageNumber:page,
+                    pageNumber: page,
                     ...updatedSearch,
                 },
             });
-            setPagingInfo(PagingCalculate(page,response.data.search.listCount,response.data.search.pageSize));
-            setPagingInfo((prev) =>({
+            setPagingInfo(PagingCalculate(page, response.data.search.listCount, response.data.search.pageSize));
+            setPagingInfo((prev) => ({
                 ...prev,
-                pageNumber:page,
-                listCount:response.data.search.listCount,
-                pageSize:response.data.search.pageSize,
-            }));   
+                pageNumber: page,
+                listCount: response.data.search.listCount,
+                pageSize: response.data.search.pageSize,
+            }));
             setNotices(response.data.list);
 
-            console.log("notices : "+response.data.list);         
-        } catch (e){
+            console.log("notices : " + response.data.list);
+        } catch (e) {
             console.log("error : {}", e); // 에러 메시지 설정
-        }    
+        }
     };
 
 
     // 최초 공지사항 전체리스트 가져오기
-    useEffect(()=>{
+    useEffect(() => {
         const fetchNotices = async () => {
-        try{
-            //console.log(response.data.search.pageNumber);
-            const response = await apiSpringBoot.get('/notice');
-            console.log(response.data.list);
-            console.log(response.data.search);
-            // 리스트저장
-            setNotices(response.data.list);
-            // 페이징 처리할 값 생성
-            setPagingInfo(PagingCalculate(response.data.search.pageNumber,response.data.search.listCount, response.data.search.pageSize));
-            setPagingInfo((prev) =>({
-                ...prev,
-                pageNumber:response.data.search.pageNumber,
-                listCount:response.data.search.listCount,
-                pageSize:response.data.search.pageSize,
-            }));
-            console.log(response.data.search.pageNumber);
-        } catch (error) {
-            console.log(error);
-            alert("공지사항 불러오기에 실패하였습니다.");
-        }
-    };
-    fetchNotices();
-    },[]);
+            try {
+                //console.log(response.data.search.pageNumber);
+                const response = await apiSpringBoot.get('/notice');
+                console.log(response.data.list);
+                console.log(response.data.search);
+                // 리스트저장
+                setNotices(response.data.list);
+                // 페이징 처리할 값 생성
+                setPagingInfo(PagingCalculate(response.data.search.pageNumber, response.data.search.listCount, response.data.search.pageSize));
+                setPagingInfo((prev) => ({
+                    ...prev,
+                    pageNumber: response.data.search.pageNumber,
+                    listCount: response.data.search.listCount,
+                    pageSize: response.data.search.pageSize,
+                }));
+                console.log(response.data.search.pageNumber);
+            } catch (error) {
+                console.log(error);
+                alert("공지사항 불러오기에 실패하였습니다.");
+            }
+        };
+        fetchNotices();
+    }, []);
 
 
     // 랜더링 뷰
-    if (role === "SENIOR"){
+    if (role === "SENIOR") {
         return (
             <div className={styles.noticeList}>
                 {/* 헤더 */}
-                <SeniorNavbar/>
+                <SeniorNavbar />
                 <section className={styles.noticeListBody}>
                     <div className={styles.noticeLeftMenu}>
-                        <div className={styles.menuName} onClick={()=>(window.location.href = "/notice")}>공지사항</div>
+                        <div className={styles.menuName} onClick={() => (window.location.href = "/notice")}>공지사항</div>
                     </div>
                     <div className={styles.noticeRightMenu}>
                         <div className={styles.top}>
-                            
+
                             {/* 검색창 */}
                             <div className={styles.searchbox}>
                                 {/* 검색옵션 */}
-                                <div 
+                                <div
                                     className={styles.searchOptions}
                                     onClick={handleToggleDropdown}
                                 >
                                     &nbsp; {search.action} &nbsp;
                                     <img
                                         className={styles.arrow}
-                                        src={isDropdownOpen ? up:down}
-                                        alt={isDropdownOpen ? "올리기":"내리기"}
+                                        src={isDropdownOpen ? up : down}
+                                        alt={isDropdownOpen ? "올리기" : "내리기"}
                                     />&nbsp;
                                 </div>
                                 {isDropdownOpen && (
                                     <div className={styles.dropdown}>
                                         <div
                                             className={styles.dropdownOption}
-                                            onClick={()=>handleSelectOption("제목")}
+                                            onClick={() => handleSelectOption("제목")}
                                         >
                                             &nbsp; 제목 &nbsp;
                                         </div>
                                         <div
                                             className={styles.dropdownOption}
-                                            onClick={()=>handleSelectOption("내용")}
+                                            onClick={() => handleSelectOption("내용")}
                                         >
                                             &nbsp; 내용 &nbsp;
                                         </div>
@@ -203,77 +203,78 @@ function NoticeList() {
                                         onChange={handleChangeKeyword}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
-                                            handleSearch(); // Enter 키로 검색 실행
-                                            setIsDropdownOpen(false);
+                                                handleSearch(); // Enter 키로 검색 실행
+                                                setIsDropdownOpen(false);
                                             }
                                         }}
                                     />
-                                    &nbsp;
-                                    <button 
-                                        className={styles.noticeSeniorButton}
-                                        onClick={() => {
-                                            handleSearch();
-                                            setIsDropdownOpen(false);}}
-                                    >검색</button>
+                                    {/* &nbsp; */}
                                 </div>
+                                <button
+                                    className={styles.noticeSeniorButton}
+                                    onClick={() => {
+                                        handleSearch();
+                                        setIsDropdownOpen(false);
+                                    }}
+                                >검색</button>
                             </div>
                         </div>
 
                         {/* 리스트 출력 */}
                         <div className={styles.list} ref={listRef}>
-                        {notices.map((noticeList) =>(
-                            <div
-                                key={noticeList.notId}
-                                onClick={()=>(navigate(`/notice/noticedetail/${noticeList.notId}`))}
-                                className={styles.object}
-                            >
-                                <div className={styles.title}>
-                                    {noticeList.notTitle}
-                                </div>
-                                <div className={styles.message}>
-                                    <div className={styles.messagement}>
-                                        내용이 궁금하면 클릭해보세요!
+                            {notices.map((noticeList) => (
+                                <div
+                                    key={noticeList.notId}
+                                    onClick={() => (navigate(`/notice/noticedetail/${noticeList.notId}`))}
+                                    className={styles.object}
+                                >
+                                    <div className={styles.title}>
+                                        {noticeList.notTitle}
                                     </div>
                                     <div className={styles.message}>
-                                        <div className={styles.date}>
-                                            등록일 &nbsp;
-                                            {adjustTimeZone(noticeList.notCreateAt).split('T')[0]}
-                                        </div> &nbsp;&nbsp;&nbsp;
-                                        <div className={styles.date}>
-                                            조회수 &nbsp;
-                                            {noticeList.notReadCount}
+                                        <div className={styles.messagement}>
+                                            내용이 궁금하면 클릭해보세요!
+                                        </div>
+                                        <div className={styles.message}>
+                                            <div className={styles.date}>
+                                                등록일 &nbsp;
+                                                {adjustTimeZone(noticeList.notCreateAt).split('T')[0]}
+                                            </div> &nbsp;&nbsp;&nbsp;
+                                            <div className={styles.date}>
+                                                조회수 &nbsp;
+                                                {noticeList.notReadCount}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             ))}
-                        <div className={styles.noticePaging}>
-                                <Paging 
+                            <div className={styles.noticePaging}>
+                                <Paging
                                     pageNumber={pagingInfo.pageNumber || 1}
                                     maxPage={pagingInfo.maxPage || 1}
                                     startPage={pagingInfo.startPage || 1}
                                     endPage={pagingInfo.endPage || 1}
                                     onPageChange={(page) => handleUpdateView(page)}
                                 />
-                        </div>
+                            </div>
                         </div>
 
                     </div>
-                </section>    
+                </section>
                 {/*Footer*/}
                 <SeniorFooter />
             </div>
         );
     } else {
-        console.log('렌더링 직전 데이터 notices : '+notices);
-        console.log('렌더링 직전 데이터 pagingInfo : '+pagingInfo);
-        console.log('렌더링 직전 데이터 search : '+search.action+ ' ' + search.keyword);
+        console.log('렌더링 직전 데이터 notices : ' + notices);
+        console.log('렌더링 직전 데이터 pagingInfo : ' + pagingInfo);
+        console.log('렌더링 직전 데이터 search : ' + search.action + ' ' + search.keyword);
         return (
             <div className={styles.memberContainer}>
                 <SideBar />
                 <div className={styles.memberSubContainer}>
                     <div className={styles.MemberNoticeTop}>
-                        <span onClick={()=>(window.location.href = "/notice")}>공지사항</span>
+                        <span onClick={() => (window.location.href = "/notice")}>공지사항</span>
                     </div>
                     <div className={styles.memberSubLine}>
                         <div>
@@ -289,32 +290,32 @@ function NoticeList() {
                         </div>)
                         }
                         <div className={styles.memberSearchbox}>
-                            <div 
+                            <div
                                 className={styles.memberSearchOptions}
                                 onClick={handleToggleDropdown}
                             >
                                 &nbsp; {search.action} &nbsp;
                                 <img
                                     className={styles.memberArrow}
-                                    src={isDropdownOpen ? up:down}
-                                    alt={isDropdownOpen ? "올리기":"내리기"}
+                                    src={isDropdownOpen ? up : down}
+                                    alt={isDropdownOpen ? "올리기" : "내리기"}
                                 />&nbsp;
-                            {isDropdownOpen && (
-                                <div className={styles.memberDropdown}>
-                                    <div
-                                        className={styles.memberDropdownOption}
-                                        onClick={()=>handleSelectOption("제목")}
+                                {isDropdownOpen && (
+                                    <div className={styles.memberDropdown}>
+                                        <div
+                                            className={styles.memberDropdownOption}
+                                            onClick={() => handleSelectOption("제목")}
                                         >
-                                        &nbsp; 제목 &nbsp;
-                                    </div>
-                                    <div
-                                        className={styles.memberDropdownOption}
-                                        onClick={()=>handleSelectOption("내용")}
+                                            &nbsp; 제목 &nbsp;
+                                        </div>
+                                        <div
+                                            className={styles.memberDropdownOption}
+                                            onClick={() => handleSelectOption("내용")}
                                         >
-                                        &nbsp; 내용 &nbsp;
+                                            &nbsp; 내용 &nbsp;
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
                             </div>
                             {/* 검색키워드입력창 */}
                             <div className={styles.memberSearchKeyword}>
@@ -325,11 +326,11 @@ function NoticeList() {
                                     onChange={handleChangeKeyword}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                          handleSearch(); // Enter 키로 검색 실행
-                                          setIsDropdownOpen(false);
+                                            handleSearch(); // Enter 키로 검색 실행
+                                            setIsDropdownOpen(false);
                                         }
-                                      }}
-                                    value={tempKeyword}  
+                                    }}
+                                    value={tempKeyword}
                                 />
                                 &nbsp;
                                 <img
@@ -355,10 +356,10 @@ function NoticeList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {notices.map((noticeList) =>(
-                                    <tr 
+                                {notices.map((noticeList) => (
+                                    <tr
                                         key={noticeList.notId}
-                                        onClick={()=>(navigate(`/notice/noticedetail/${noticeList.notId}`))}
+                                        onClick={() => (navigate(`/notice/noticedetail/${noticeList.notId}`))}
                                     >
                                         <td>{noticeList.notTitle}</td>
                                         <td>{adjustTimeZone(noticeList.notCreateAt).split('T')[0]}</td>
@@ -369,7 +370,7 @@ function NoticeList() {
                         </table>
                     </div>
                     <div className={styles.memberNoticePaging}>
-                        <Paging 
+                        <Paging
                             pageNumber={pagingInfo.pageNumber || 1}
                             maxPage={pagingInfo.maxPage || 1}
                             startPage={pagingInfo.startPage || 1}

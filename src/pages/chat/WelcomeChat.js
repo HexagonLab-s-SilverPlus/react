@@ -36,21 +36,42 @@ function WelcomeChat() {
         },
       );
 
-      const { workspaceId } = response.data; // 생성된 워크스페이스 ID
+      const { workspaceId, audioBase64  } = response.data; // 생성된 워크스페이스 ID
+
       if (!workspaceId) {
         alert('워크스페이스 생성에 실패했습니다. 다시 시도해주세요.');
         return;
+      }
+
+
+      // Base64 오디오 재생
+      if (audioBase64 ) {
+        const audio = new Audio(`data:audio/mpeg;base64,${audioBase64}`);
+        audio.play();
       }
 
       // 생성된 워크스페이스 ID를 ChatPage로 전달하며 이동
       navigate(`/w/${workspaceId}`, {
         state: { userFirstMsg }, // 사용자 첫 메시지를 상태로 전달
       });
+
+
     } catch (error) {
       console.error('Flask 서버 호출 중 오류:', error);
       alert('메시지 전송 중 문제가 발생했습니다. 다시 시도해주세요.');
     }
   };
+
+
+
+
+  // 사용자 입력 처리 및 엔터키 감지
+const handleInputKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    handleSend(); // 엔터키를 누르면 메시지 전송
+  }
+};
+
 
   // 사이드바 토글
   const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
@@ -68,12 +89,15 @@ function WelcomeChat() {
         </button>
         <Container>
           <div className={styles['welcome-container']}>
-            <h1 className={styles['welcome-title']}>
-              점심은 드셨나요?<br />오늘 드신 점심메뉴를 이야기해주세요!
-            </h1>
-            <p className={styles['welcome-description']}>
-              말씀해 주시면 목소리가 자동으로 입력됩니다. 편하게 대화해 보세요.
-            </p>
+            <div id="read">
+              <h1 className={styles['welcome-title']}>
+                점심은 드셨나요?<br />오늘 드신 점심메뉴를 이야기해주세요!
+              </h1>
+              <p className={styles['welcome-description']}>
+                AI가 어르신의 마음을 돌봅니다.
+              </p>
+
+            </div>
             <div className={styles['input-container']}>
               <input
                 type="text"
@@ -81,6 +105,7 @@ function WelcomeChat() {
                 className={styles['text-input']}
                 value={userFirstMsg}
                 onChange={handleInputChange}
+                onKeyDown={handleInputKeyDown} // 엔터키 감지 이벤트 추가
               />
               <button
                 className={`${styles['send-button']} ${styles['button']}`}

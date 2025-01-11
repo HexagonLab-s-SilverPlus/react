@@ -1,32 +1,8 @@
-
-/* 전체 메뉴 컨테이너 */
-.menuContainer {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 3열 */
-    grid-template-rows: repeat(2, 1fr); /* 2행 */
-    grid-gap: 24px; /* 버튼 간 간격 */
-    padding: 24px;
-    box-sizing: border-box;
-    padding:24px 96px;
-    height:calc(100vh - 96px - 48px);
-
-    /* 중앙 배치 설정 */
-    justify-content: center; /* 가로 중앙 */
-    align-items: center; /* 세로 중앙 */
-}
-
-/* 첫 번째 행에서 첫 번째 열을 제외한 나머지 열에 마진 적용 */
-.menuContainer > :nth-child(-n+4):not(:nth-child(1)) {
-    margin-top: 100px;  /* 나머지 열에 왼쪽 마진 */
-}
-
-/* 두 번째 행에서 첫 번째 열을 제외한 나머지 열에 마진 적용 */
-.menuContainer > :nth-child(n+5):nth-child(-n+8) {
-    margin-bottom: 100px; /* 두 번째 행에서 첫 번째 열을 제외한 나머지 열에 왼쪽 마진 */
-}
-
-
+.menuContainer {width: 100%;box-sizing: border-box; display: flex; padding: 48px 96px; justify-content: space-between; overflow-y: auto;}
+.div1 {width: calc(25% - 24px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.2; background-color: #FDFAF6;}
+.div1 > p {margin-bottom: 0;}
+.menuWrap {width: 75%; display: flex; justify-content: space-between; flex-wrap: wrap; align-content: space-between;}
+.menuWrap > div {width: calc((100% / 3) - 14px);}
 /* 공통 버튼 스타일 */
 .menuButton {
     border-radius: 30px;
@@ -38,23 +14,8 @@
     color: #064420;
     cursor: pointer;
 }
-
-/* 말동무 대화하기 버튼 스타일 */
-.div1 {
-    grid-area: 1 / 1 / 3 / 2; /* 2행 높이 차지 */
-    background-color: #FDFAF6;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 578px;
-    height: 737px;
-}
-
-.div1 p {
-    line-height: 1.2; /* 줄 간격 조정 */
-}
+.menuButton:hover {background: #FDFAF6;}
+.div1:hover {background: #fff;}
 
 /* 나머지 버튼 스타일 */
 .div2,
@@ -65,11 +26,10 @@
 .div7 {
     background-color: #fff;
     width: 400px;
-    height: 355px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 20px;
+    padding: 30px;
     text-align: left;
     position: relative;
 }
@@ -95,28 +55,6 @@
     bottom: 20px;
     right: 20px;
 }
+.div6 img {transform: scale(1.5) translateX(-10px);}
 
-/* 각 버튼의 그리드 영역 */
-.div2 {
-    grid-area: 1 / 2 / 2 / 3; /* 두뇌 활성화 게임 */
-}
-
-.div3 {
-    grid-area: 1 / 3 / 2 / 4; /* 어르신 맞춤 활동 */
-}
-
-.div4 {
-    grid-area: 1 / 4 / 2 / 5; /* 공지사항 */
-}
-
-.div5 {
-    grid-area: 2 / 2 / 3 / 3; /* 공문서 작성 */
-}
-
-.div6 {
-    grid-area: 2 / 3 / 3 / 4; /* 공문서 작성 */
-}
-
-.div7 {
-    grid-area: 2 / 4 / 3 / 5; /* 공문서 작성 */
-}
+.snrft {position: absolute; bottom: 0;}

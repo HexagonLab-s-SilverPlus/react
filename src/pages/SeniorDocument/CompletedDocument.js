@@ -167,12 +167,8 @@ const CompletedDocument = () => {
                                 <td>
                                     {doc.document.submittedAt
                                         ? new Date(doc.document.submittedAt).toLocaleString('ko-KR', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            hour12: true,
+                                            year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit'
                                         }).replace(/(?<=\d)(?=\.)/g, '') // 숫자 뒤의 점 앞에만 작동
                                         : '제출전'}
                                 </td>

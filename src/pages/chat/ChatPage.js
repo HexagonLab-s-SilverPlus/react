@@ -140,7 +140,7 @@ function ChatPage() {
         }
       );
 
-      const { reply } = response.data;
+      const { reply, audioBase64 } = response.data;
 
       // 로딩 상태 해제 및 AI 응답 추가
       setMessages((prev) => {
@@ -150,6 +150,12 @@ function ChatPage() {
           text: reply,
           loading: false,
         };
+
+        // Base64 오디오 재생
+        if (audioBase64) {
+          const audio = new Audio(`data:audio/mpeg;base64,${audioBase64}`);
+          audio.play();
+        }
         return updatedMessages;
       });
     } catch (error) {
@@ -265,6 +271,7 @@ function ChatPage() {
 
   return (
     <div>
+      {/* SeniorNavbar 고정 */}
       <SeniorNavbar />
       <div className={styles.container}>
         <div className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden}`}>
@@ -274,6 +281,7 @@ function ChatPage() {
             setSelectedWorkspaceId={setSelectedWorkspaceId}
           />
         </div>
+
         <button className={styles.sidebarToggle} onClick={toggleSidebar}>
           {isSidebarVisible ? '닫기' : '열기'}
         </button>
@@ -285,7 +293,7 @@ function ChatPage() {
         <div>
           {onCamera ? (
             <EMG onCamera={onCamera} sessId={session} />
-          ): (
+          ) : (
             <EMG onCamera={onCamera} sessId={session} />
           )}
         </div>
