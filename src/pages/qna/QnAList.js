@@ -11,7 +11,7 @@ import searchImag from '../../assets/images/search.png'
 
 
 const QnAList = () => {
-  const { member} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
+  const { member, role} = useContext(AuthContext);   // AuthProvider 에서 데이터 가져오기
   const [qnaList, setQnaList] = useState([]);                     // qnaList 담을 상태훅
   const [memberList, setMemberList] = useState([]);               // member 담을 상태훅(누가 작성한지 담을때 사용)
   const [actionInfo, setActionInfo] = useState([]);               // 검색 데이터 담을 상태훅
@@ -40,6 +40,10 @@ const QnAList = () => {
 
   const handleWriteClick = () => {        // 등록 뷰로 이동
     navigate('/qna/write'); 
+  };
+
+  const handleMoveQnA = () => {        // 등록 뷰로 이동
+    navigate('/qna'); 
   };
 
   const handlePageChange = async (page) => {          // 페이지 눌렀을때 뷰 바꾸기
@@ -157,9 +161,13 @@ const QnAList = () => {
         return ; 
       case 'title':
         return <div>
-                  <input name='keyword' onChange={handleChange} className={styles.qnaTitleInput}/> 
-                  <img src={searchImag} onClick={handleSearch} />
-                </div>;
+                <input name='keyword' onChange={handleChange}
+                  className={styles.qnaTitleInput} 
+                  onKeyDown={(e) => {if (e.key === "Enter") {
+                  handleSearch(); // Enter 키로 검색 실행
+                  }}}/> 
+                <img src={searchImag} onClick={handleSearch} />
+              </div>;
       case 'date':
 
         return <div>
@@ -190,14 +198,15 @@ const QnAList = () => {
             <option value="date">날짜</option>
           </select>
           {searchView()}
-          <button className={styles.qnaInputBTN} onClick={handleWriteClick}>등 록</button>
+          {role !== "ADMIN" && <button className={styles.qnaInputBTN} onClick={handleWriteClick}>등 록</button>}
+          <button className={styles.qnaBTN} onClick={handleMoveQnA}>목 록</button>
         </div>
         <table className={styles.qnaListTable}>
           <tr>
             <th>제목</th>
             <th className={styles.memberName}>이름</th>
             <th className={styles.qnaWCreateAt}>마지막 수정 날짜</th>
-            {member.memType === "ADMIN" && <th className={styles.qnaStateH}>상태</th>}
+            <th className={styles.qnaStateH}>상태</th>
           </tr>
           
           {qnaList.map((qna, index) => (
@@ -219,7 +228,6 @@ const QnAList = () => {
             endPage={pagingInfo.endPage}
             onPageChange={(page) => handlePageChange(page)}
           />
-        
       </div>
       
     </div>

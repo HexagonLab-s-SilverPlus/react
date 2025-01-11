@@ -9,7 +9,7 @@
     padding: 24px;
     box-sizing: border-box;
     padding:24px 96px;
-    height:calc(100vh - 96px - 48px);
+    height:calc(100% - 96px - 48px);
 
     /* 중앙 배치 설정 */
     justify-content: center; /* 가로 중앙 */

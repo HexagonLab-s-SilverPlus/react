@@ -53,8 +53,8 @@
 .object:hover {background-color: #FDFAF6; cursor:pointer;}
 .object .messagement {opacity:0;}
 .object:hover .messagement {opacity:1;}
-.objectAnswer {height: 0px; font-size: 0; overflow: hidden; transition: max-height 0.2s linear, padding 0.2s linear;}
-.objectAnswer.open {font-size: 36px; font-weight: bold; color: #333333; display: block; align-content: center; margin: 20px 0px; width: 92%; max-width: 1400px; margin-left: auto; padding: 20px 50px; background-color: rgb(219, 219, 219); box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 10px; min-height: 150px; resize: none; font-family: "Pretendard Variable"; white-space: pre-wrap; height: auto; max-height: 1000px;}
+.objectAnswer {height: 0px; font-size: 0; overflow: hidden; transition: max-height 0.2s linear, padding 0.2s linear; word-break: keep-all;}
+.objectAnswer.open {font-size: 36px; font-weight: bold; color: #333333; display: block; align-content: center; margin: 20px 0px; width: 92%; max-width: 1400px; margin-left: auto; padding: 20px 50px; background-color: #eee; box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15); border-radius: 10px; min-height: 150px; resize: none; font-family: "Pretendard Variable"; white-space: pre-wrap; height: auto; max-height: 1000px;word-break: keep-all;}
 .title {font-size:36px; font-weight:bold; color:#333333; padding-bottom: 30px;}
 .message {display:flex; justify-content:space-between; align-items:end; margin-top:10px; font-size:24px; color:#999999;}
 .date {color:#333333; font-weight:bold; font-size:24px;}
