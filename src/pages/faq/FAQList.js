@@ -239,7 +239,7 @@ const FAQList = () => {
                                             </div>
                                             <div className={styles.message}>
                                                 <div className={styles.date}>
-                                                    등록일 &nbsp; {formatDate(faqOne.faqUpdatedAt)}
+                                                     &nbsp; {formatDate(faqOne.faqUpdatedAt)}
                                                 </div> &nbsp;&nbsp;&nbsp;
                                             </div>
                                         </div>

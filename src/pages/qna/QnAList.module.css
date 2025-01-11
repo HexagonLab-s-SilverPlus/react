@@ -8,9 +8,11 @@
 .qnaTitleInput {height: 33px; width: 217px; border-top: none; border-left: none; border-right: none; position: absolute; right: 40px; bottom: 0;}
 .qnaDateInput {position: absolute; right: 40px; bottom: 0px;}
 .qnaDate {height: 30px; width: 110px; font-family: "Pretendard Variable"; font-weight: bold;}
-.qnaInputBTN {display: inline-block; height: 41px; width: 89px; border-top: none; border-left: none; border-right: none; background-color: #064420; font-weight: bold; color: #ffffff; border-radius: 10px; font-size: 18px; position: absolute; left: 0; bottom: 0; cursor: pointer; font-family: "Pretendard Variable";}
-.qnaListTable {margin-top: 100px; width: 1456px; padding-top: 80px; font-size: 18px; border-collapse: collapse;}
+.qnaInputBTN {display: inline-block; height: 41px; width: 89px; border:0; background-color: #eeeeee; font-weight: bold; color: #000000; border-radius: 10px; font-size: 18px; position: absolute; left: 0; bottom: 0; cursor: pointer; font-family: "Pretendard Variable";}
+.qnaInputBTN:hover {display: inline-block; height: 41px; width: 89px; border: 0; background-color: #064420; font-weight: bold; color: #ffffff; border-radius: 10px; font-size: 18px; position: absolute; left: 0; bottom: 0; cursor: pointer; font-family: "Pretendard Variable";}
+.qnaListTable {margin-top: 100px; width: 1456px; padding-top: 80px; font-size: 18px; border-collapse: collapse; border-top: solid 1px #000000;}
 .qnaListTable tr {height: 44px;}
+.qnaListTable tr th {background-color: #f9f9f9; }
 .qnaListTable tr th, .qnaListTable tr td {border-bottom: 2px solid #0000004b;}
 .qnaListTable tr td button {font-size: 18px; background: none; border: none; color: rgb(0, 0, 0); text-decoration: underline; cursor: pointer; text-decoration-line: none;}
 .qnaTitle {width: 956px; text-align: left;}
