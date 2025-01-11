@@ -11,7 +11,10 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
     if (!isOpen) return null;
 
     return ReactDOM.createPortal(
-        <div className={styles.modalOverlay}>
+        <div
+            className={styles.modalOverlay}
+            onClick={closeModal} // 외부 클릭 시 모달 닫기
+        >
             <div className={styles.trashModal}>
                 <h3>{title}</h3>
                 <button className={styles.closeButton} onClick={closeModal}>

@@ -7,7 +7,7 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const faqRouter = [
     <>
-        <Route path="/faq" element={<ProtectedRoute element={<FAQList />} />} />,
+        <Route path="/qna/faq" element={<ProtectedRoute element={<FAQList />} />} />,
     </>
 ];
 
