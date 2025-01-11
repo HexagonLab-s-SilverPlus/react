@@ -435,7 +435,7 @@ const ProgramList = () => {
                             <p className={styles.pgTitle}>어르신 프로그램 목록 <span>{pagingInfo.listCount}</span></p>
                             <div className={styles.pgTopBtns}>
                                 <button type="button" onClick={handleListClick}>목록</button>
-                                {(role === "MANAGER" || role === "ADMIN") && (
+                                {(role === "MANAGER") && (
                                     <button type="button" onClick={handleWriteClick}>등록하기</button>
                                 )}
                             </div>
