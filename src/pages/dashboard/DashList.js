@@ -310,7 +310,7 @@ const DashList = () => {
             <div className={styles.container}>
                 <div className={styles.rsection}>
                     <div className={styles.buttonContainer}>
-                        <h2>{memId}님 안녕하세요!</h2>
+                        <h2 className={styles.membertitle}>{memId}님 안녕하세요!</h2>
                         <button
                             className={`${styles.button} ${styles.blue}`}
                             onClick={() => navigate('/seniorlist')}
@@ -334,15 +334,13 @@ const DashList = () => {
                         </button>
                     </div>
 
-                    <div className={styles.calendarbox} style={{ width: "1300px", margin: "0 auto" }}>
+                    <div className={styles.calendarbox} /* style={{ width: "920px", height: "750px", margin: "0 auto" }} */>
                         <FullCalendar
                         // className="custom-calendar"
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
                           
                             events={calendarEvents}
-                            height="750px"
-                            
                             // dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
                             dateClick={handleDateClick}
                         />
@@ -353,8 +351,8 @@ const DashList = () => {
                         <form onSubmit={handleInsertTodo}>
                             <h3> 할 일 작성</h3>
                       
-                            <div>
-                                <label>내용:</label>
+                            <div className={styles.addContentForm}>
+                                <label>내용 &nbsp;:</label>
                                 <input
                                     type="text"
                                     name="taskContent"
@@ -363,8 +361,8 @@ const DashList = () => {
                                     required
                                 />
                             </div>
-                            <div>
-                                <label>날짜:</label>
+                            <div className={styles.addContentForm}>
+                                <label>날짜 &nbsp;:</label>
                                 <input
                                     type="date"
                                     name="taskDate"
@@ -373,33 +371,31 @@ const DashList = () => {
                                     required
                                 />
                             </div>
-                            <button type="submit">저장하기</button>
+                            <button className={styles.todosave} type="submit">SAVE</button>
                         </form>
                     </div>
                     )}
                     
                     <div className={styles.todobigform}>
-                    <h3 className={styles.todoTitle}>
-                        {selectedDate} 할 일
-                        <button
-                            className={styles.addButton}
-                            onClick={() => setShowForm(!showForm)}
-                        >
-                            +
-                        </button>
-                    </h3>
-                                        <ul className={styles.todoList}>
-                        {filteredTodos.map((todo) => (
-     <li className={styles.todoItem} key={todo.taskId}>
-     {editingTaskId === todo.taskId ? (
-         // 수정 모드
-         <div>
-             <input
-                 type="text"
-                 value={editingContent}
-                 onChange={(e) => setEditingContent(e.target.value)}
-                 placeholder="할 일 내용을 수정하세요"
-             />
+                        <div className={styles.todoTitle}>
+                            <p>{selectedDate}</p>
+                            <div>
+                                To Do List
+                                <button
+                                    className={styles.addButton}
+                                    onClick={() => setShowForm(!showForm)}
+                                >
+                                    <span>+</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <ul className={styles.todoList}>
+                            {filteredTodos.map((todo) => (
+                                <li className={styles.todoItem} key={todo.taskId}>
+                                {editingTaskId === todo.taskId ? (
+                                // 수정 모드
+                                    <div className={styles.editForm}>
              <label>
                  <input
                      type="checkbox"
@@ -408,8 +404,14 @@ const DashList = () => {
                          setEditingStatus(e.target.checked ? 'Y' : 'N')
                      }
                  />
-                 완료 여부
+                 {/* 완료 여부 */}
              </label>
+             <input
+                 type="text"
+                 value={editingContent}
+                 onChange={(e) => setEditingContent(e.target.value)}
+                 placeholder="할 일 내용을 수정하세요"
+             />
              <button onClick={handleSaveEdit} className={styles.saveButton}>
                  저장
              </button>
