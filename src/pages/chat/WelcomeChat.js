@@ -64,7 +64,7 @@ function WelcomeChat() {
           <SeniorSideBar memUUID={member?.memUUID} />
         </div>
         <button className={styles.sidebarToggle} onClick={toggleSidebar}>
-          {isSidebarVisible ? '닫기' : '워크스페이스 열기'}
+          {isSidebarVisible ? '닫기' : '열기'}
         </button>
         <Container>
           <div className={styles['welcome-container']}>
