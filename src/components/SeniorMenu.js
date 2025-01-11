@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./SeniorMenu.module.css";
 import chatIcon from "../assets/images/chatIcon.png";
 //import brainGameIcon from "../assets/images/brainGameIcon.png";
-import gostop from "../assets/images/game/card/11_1.png";
+import game from "../assets/images/game.png";
 import activityIcon from "../assets/images/activityIcon.png";
 import noticeIcon from "../assets/images/noticeIcon.png";
 import faqIcon from "../assets/images/question.png"
@@ -54,13 +54,10 @@ const SeniorMenu = () => {
           </p>
         </div>
 
-        {/* 두뇌 활성화 게임 */}
-        <div className={`${styles.menuButton} ${styles.div2}`} onClick={() => (navigate('/game'))}>
-          <p>
-            두뇌 활성화 <br />
-            게임 : 맞고
-          </p>
-          <img src={gostop} alt="맞고" style={{ width: "100px" }} />
+        {/* 공문서 작성 */}
+        <div className={`${styles.menuButton} ${styles.div2}`} onClick={handleDocButton}>
+          <p>공문서 작성</p>
+          <img src={documentIcon} alt="공문서 작성" />
         </div>
 
         {/* 어르신 맞춤 활동 */}
@@ -87,10 +84,13 @@ const SeniorMenu = () => {
           <img src={noticeIcon} alt="공지사항" />
         </div>
 
-        {/* 공문서 작성 */}
-        <div className={`${styles.menuButton} ${styles.div6}`} onClick={handleDocButton}>
-          <p>공문서 작성</p>
-          <img src={documentIcon} alt="공문서 작성" />
+        {/* 두뇌 활성화 게임 */}
+        <div className={`${styles.menuButton} ${styles.div6}`} onClick={() => (navigate('/game'))}>
+          <p>
+            게임 : <br/>
+            카드 맞추기
+          </p>
+          <img src={game} alt="맞고" style={{ width: "100px" }} />
         </div>
 
         {/* 공문서 작성 */}
