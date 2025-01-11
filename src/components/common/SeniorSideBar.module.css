@@ -378,15 +378,16 @@
   /* 화면 하단에서 20px 위로 */
   left: 20px;
   /* 사이드바 왼쪽 여백 */
-  width: calc(100% - 40px);
+  width: 100%;
+
   /* 좌우 여백을 제외한 전체 너비 */
   padding: 10px;
   background-color: #ff6b6b;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 25px;
+  font-size: 23px;
   font-weight: bold;
 }
 

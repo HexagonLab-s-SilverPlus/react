@@ -1,408 +1,416 @@
 /* 부모 컨테이너 */
 .chat-container {
+  width: 50%;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  /* 수직 배치 */
+  height: 100vh;
+  /* 화면 전체 높이 */
+  transition: margin-left 0.3s ease;
+  /* 부드러운 이동 효과 */
   
-    display: flex;
-    flex-direction: column;
-    /* 수직 배치 */
-    height: 100vh;
-    /* 화면 전체 높이 */
-    transition: margin-left 0.3s ease; /* 부드러운 이동 효과 */
-  }
+}
 
-  .pageWrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* 화면 전체 높이 */
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* 화면 전체 높이 */
 }
 
 
-  
-  /* 사이드바가 열렸을 때의 상태 */
-  .chat-container.sidebar-open {
-    margin-left: 360px; /* 사이드바 너비만큼 오른쪽으로 이동 */
-  }
-  
-  /* 메시지 영역 (스크롤 가능) */
-  .chat-page {
-    flex: 1;
-    /* 남은 공간을 모두 차지 */
-    overflow-y: auto;
-    /* 세로 스크롤 가능 */
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  /* 메시지 세트를 한 화면에 꽉 차게 표시 */
-  .message-set {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: calc(100vh - 100px);
-    /* 입력창 제외 영역 */
-    box-sizing: border-box;
-    padding: 20px;
-  }
-  
-  /* 채팅 말풍선 스타일 */
-  .chat-bubble {
-    padding: 20px;
-    border-radius: 30px;
-    margin: 35px 0;
-    font-size: 28px;
-    line-height: 1.5;
-    max-width: 70%; /* 최대 너비 */
-    min-width: 50px; /* 최소 너비 */
-    word-wrap: break-word;
-    width: fit-content; /* 메시지 내용에 따라 너비 동적으로 조정*/
-    /* 글씨  굵게 */
-    font-weight: bold;
-    /* 그림자 효과 (Figma Drop Shadow 설정 반영) */
-    box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.15);
-  }
-  
-  .user-message {
-    /* 사용자 메시지는 오른쪽 정렬 */
-    align-self: flex-end;
-    background-color: #F1F3F5;
-    margin-left: auto;
-    margin-right: 10px;
-  }
-  
-  .ai-response {
-    align-self: flex-start;
-    /* AI 응답은 왼쪽 정렬 */
-    background-color: #FDFAF6;
-     margin-left: 10px;
-    margin-right: auto;
-  }
-  
-  /* 입력창 고정 */
-  .input-container {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    /* background-color: #f8f9fa; */
-    /* border-top: 1px solid #ddd; */
-    height: 100px;
-    /* 고정된 높이 */
-    box-sizing: border-box;
-  }
-  
-  .text-input {
-    flex: 1;
-    /* 입력창의 가변 너비 */
-    height: 80px;
-    padding: 0 15px;
-    font-size: 25px;
-    border: 1px solid #cbd5e0;
-    border-radius: 25px;
-    outline: none;
-  }
-  
-  .send-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    border: none;
-    border-radius: 50%;
-    background-color: #14532d;
-    color: #ffffff;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .send-button:disabled {
-    background-color: #a0aec0;
-    cursor: not-allowed;
-  }
-  
-  .send-button:hover {
-    background-color: #276749;
-  }
-  
-  .container {
-    display: flex;
-    height: 100vh;
-    position: relative;
-  }
-  
-  .sidebarToggle {
-    position: fixed;
-    /* 고정 위치로 변경 */
-    top: 20px;
-    left: 40px;
-    /* 사이드바 넓이와 동일하게 조정 */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    z-index: 1000;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    /* 버튼 글씨 크기 */
-  }
-  
-  .sidebarToggle:hover {
-    background-color: #0056b3;
-  }
-  
-  .sidebar {
-    position: relative;
-    width: 360px;
-    height: 100vh;
-    background-color: #f0f8ff;
-    border-right: 2px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-  
-  .sidebarVisible {
-    transform: translateX(0);
-  }
-  
-  .header {
-    font-size: 30px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    margin-top: 80px;
-  }
-  
-  .list {
-    flex: 1;
-    overflow-y: auto;
-  }
-  
-  .item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    margin-bottom: 10px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 25px;
-    text-align: left;
-  }
-  
-  .item:hover {
-    background-color: #d8d8d8 !important;
-    border-color: #e6f7ff !important;
-  }
-  
-  .selectedItem {
-    background-color: #1890ff !important;
-    color: white !important;
-    font-weight: bold;
-    border-color: #063158;
-  }
-  
-  .noWorkspace {
-    font-size: 30px;
-    text-align: center;
-    color: #888;
-  }
-  
-  .button {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 280px;
-    padding: 15px;
-    font-size: 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align: center;
-  }
-  
-  .button:hover {
-    background-color: #45a049;
-  }
-  
-  .error {
-    color: red;
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  .menuIcon {
-    color: gray;
-    font-size: 20px;
-    cursor: pointer;
-    visibility: hidden;
-  }
-  
-  .item:hover .menuIcon {
-    visibility: visible;
-  }
-  
-  .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 400px;
-    text-align: center;
-    position: relative;
-  }
-  
-  .modal h3 {
-    margin-bottom: 10px;
-    font-size: 35px;
-    font-weight: bold;
-  }
-  
-  .modal p {
-    margin-bottom: 20px;
-    color: #555;
-    font-size: 23px;
-  }
-  
-  .modalActions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .cancelButton {
-    background: #ccc;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 25px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .cancelButton:hover {
-    background-color: #b0b0b0;
-  }
-  
-  .deleteButton {
-    background: #e53935;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 25px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .deleteButton:hover {
-    background-color: #d32f2f;
-  }
-  
-  .dropdownMenu {
-    position: absolute;
-    top: 110%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-  
-  .dropdownMenu button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-  }
-  
-  .dropdownMenu button:hover {
-    background-color: #f0f0f0;
-  }
-  
-  /* 마크다운 스타일링 */
-  .markdown {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-  }
-  
-  /* 제목 스타일 */
-  .markdown h1,
-  .markdown h2,
-  .markdown h3 {
-    margin: 1em 0 0.5em;
-    font-weight: bold;
-  }
-  
-  /* 리스트 스타일 */
-  .markdown ul {
-    margin: 1em 0;
-    padding-left: 1.5em;
-  }
-  
-  .markdown ol {
-    margin: 1em 0;
-    padding-left: 1.5em;
-  }
-  
-  .markdown li {
-    margin-bottom: 0.5em;
-  }
-  
-  /* 코드블록 스타일 */
-  .markdown pre {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 5px;
-    overflow-x: auto;
-  }
-  
-  .markdown code {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #f0f0f0;
-    padding: 2px 4px;
-    border-radius: 4px;
-  }
-  
-  /* 링크 스타일 */
-  .markdown a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .markdown a:hover {
-    text-decoration: underline;
-  }
+
+/* 사이드바가 열렸을 때의 상태 */
+.chat-container.sidebar-open {
+  margin-left: 360px;
+  /* 사이드바 너비만큼 오른쪽으로 이동 */
+}
+
+/* 메시지 영역 (스크롤 가능) */
+.chat-page {
+  flex: 1;
+  /* 남은 공간을 모두 차지 */
+  /* 세로 스크롤 가능 */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 메시지 세트를 한 화면에 꽉 차게 표시 */
+.message-set {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 100px);
+  /* 입력창 제외 영역 */
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* 채팅 말풍선 스타일 */
+.chat-bubble {
+  padding: 20px;
+  border-radius: 30px;
+  margin: 35px 0;
+  font-size: 28px;
+  line-height: 1.5;
+  max-width: 70%;
+  /* 최대 너비 */
+  min-width: 50px;
+  /* 최소 너비 */
+  word-wrap: break-word;
+  width: fit-content;
+  /* 메시지 내용에 따라 너비 동적으로 조정*/
+  /* 글씨  굵게 */
+  font-weight: bold;
+  /* 그림자 효과 (Figma Drop Shadow 설정 반영) */
+  box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.15);
+}
+
+.user-message {
+  /* 사용자 메시지는 오른쪽 정렬 */
+  align-self: flex-end;
+  background-color: #F1F3F5;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.ai-response {
+  align-self: flex-start;
+  /* AI 응답은 왼쪽 정렬 */
+  background-color: #FDFAF6;
+  margin-left: 10px;
+  margin-right: auto;
+}
+
+/* 입력창 고정 */
+.input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  /* background-color: #f8f9fa; */
+  /* border-top: 1px solid #ddd; */
+  height: 100px;
+  /* 고정된 높이 */
+  box-sizing: border-box;
+}
+
+.text-input {
+  flex: 1;
+  /* 입력창의 가변 너비 */
+  height: 80px;
+  padding: 0 15px;
+  font-size: 25px;
+  border: 1px solid #cbd5e0;
+  border-radius: 25px;
+  outline: none;
+}
+
+.send-button {
+  margin-left: 1ch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: 50%;
+  background-color: #14532d;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.send-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.send-button:hover {
+  background-color: #276749;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
+
+.sidebarToggle {
+  position: fixed;
+  /* 고정 위치로 변경 */
+  top: 20px;
+  left: 40px;
+  /* 사이드바 넓이와 동일하게 조정 */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  /* 버튼 글씨 크기 */
+}
+
+.sidebarToggle:hover {
+  background-color: #0056b3;
+}
+
+.sidebar {
+  position: relative;
+  width: 360px;
+  height: 100vh;
+  background-color: #f0f8ff;
+  border-right: 2px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebarVisible {
+  transform: translateX(0);
+}
+
+.header {
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 25px;
+  text-align: left;
+}
+
+.item:hover {
+  background-color: #d8d8d8 !important;
+  border-color: #e6f7ff !important;
+}
+
+.selectedItem {
+  background-color: #1890ff !important;
+  color: white !important;
+  font-weight: bold;
+  border-color: #063158;
+}
+
+.noWorkspace {
+  font-size: 30px;
+  text-align: center;
+  color: #888;
+}
+
+.button {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  padding: 15px;
+  font-size: 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+}
+
+.menuIcon {
+  color: gray;
+  font-size: 20px;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.item:hover .menuIcon {
+  visibility: visible;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.modal p {
+  margin-bottom: 20px;
+  color: #555;
+  font-size: 23px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.cancelButton {
+  background: #ccc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #b0b0b0;
+}
+
+.deleteButton {
+  background: #e53935;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #d32f2f;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.dropdownMenu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdownMenu button:hover {
+  background-color: #f0f0f0;
+}
+
+/* 마크다운 스타일링 */
+.markdown {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 제목 스타일 */
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+}
+
+/* 리스트 스타일 */
+.markdown ul {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+.markdown ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+.markdown li {
+  margin-bottom: 0.5em;
+}
+
+/* 코드블록 스타일 */
+.markdown pre {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.markdown code {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* 링크 스타일 */
+.markdown a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.markdown a:hover {
+  text-decoration: underline;
+}
 
 
 
@@ -412,36 +420,42 @@
 
 
 
-  .attachment-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #28a745; /* 녹색 계열로 CSV 파일 느낌 */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.attachment-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #28a745;
+  /* 녹색 계열로 CSV 파일 느낌 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .attachment-button:hover {
-    background-color: #218838; /* 호버 시 약간 어두운 녹색 */
-    transform: scale(1.05); /* 살짝 확대 */
+  background-color: #218838;
+  /* 호버 시 약간 어두운 녹색 */
+  transform: scale(1.05);
+  /* 살짝 확대 */
 }
 
 .attachment-button:active {
-    background-color: #1e7e34; /* 클릭 시 더 어두운 녹색 */
-    transform: scale(0.98); /* 살짝 축소 */
+  background-color: #1e7e34;
+  /* 클릭 시 더 어두운 녹색 */
+  transform: scale(0.98);
+  /* 살짝 축소 */
 }
 
 .attachment-button::before {
-    content: '📄'; /* 파일 아이콘 */
-    margin-right: 8px;
-    font-size: 16px;
+  content: '📄';
+  /* 파일 아이콘 */
+  margin-right: 8px;
+  font-size: 16px;
 }
 
 
@@ -456,6 +470,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

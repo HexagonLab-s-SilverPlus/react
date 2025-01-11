@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './DocumentChatPage.module.css';
 import { AuthContext } from '../../AuthProvider.js';
 import { marked } from 'marked';
@@ -11,7 +11,7 @@ import { Player } from '@lottiefiles/react-lottie-player'; // Lottie import
 
 function DocumentChatPage() {
   const { documentType } = useParams(); // URL에서 문서 유형 가져오기
-  const { apiFlask, accessToken, refreshToken } = useContext(AuthContext); // Context에서 apiFlask 가져오기
+  const { apiFlask, accessToken, refreshToken, member } = useContext(AuthContext); // Context에서 apiFlask 가져오기
   const documentService = DocumentService(apiFlask, accessToken, refreshToken); // DocumentService를 apiFlask로 생성
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
@@ -21,6 +21,10 @@ function DocumentChatPage() {
   const [answers, setAnswers] = useState({});
   const [fileName, setFileName] = useState(""); // 동적 파일 이름 저장
   const [questions, setQuestions] = useState([]); // 질문과 키를 함께 저장
+
+
+  const navigate= useNavigate();
+
 
   // 문서 유형 매핑 테이블
   const documentTypeMap = {
@@ -213,7 +217,6 @@ function DocumentChatPage() {
   return (
     <div className={styles.pageWrapper}>
       <SeniorNavbar />
-      <Container>
         <div className={styles['chat-container']}>
           <div className={styles['chat-page']}>
             {messages.map((message, index) => (
@@ -246,11 +249,7 @@ function DocumentChatPage() {
                         key={idx}
                         className={styles['attachment-button']}
                         onClick={() => {
-                          if (attachment.url) {
-                            downloadFile(attachment.url); // 파일 다운로드 실행
-                          } else {
-                            console.error('첨부 파일 경로가 비어 있습니다:', attachment);
-                          }
+                          navigate(`/d/${member.memUUID}`);
                         }}
                       >
                         {attachment.label}
@@ -282,7 +281,6 @@ function DocumentChatPage() {
             </button>
           </div>
         </div>
-      </Container>
     </div>
   );
 
