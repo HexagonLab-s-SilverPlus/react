@@ -123,3 +123,44 @@
 .twoCards{width: 100%; display: flex; justify-content: center; gap: 50px;}
 .isTwoCards img{width:20%; max-width: 100px;cursor: pointer;transition:transform 0.3s;}
 .isTwoCards img:hover{transform:scale(1.2);}
+
+/* 게임완료 처리 모달 */
+.finishModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;}
+
+.finishModalMain {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+}
+.finishModalTitle{
+    color : #333;
+    font-size: 60px;
+    padding: 24px 0;
+}
+.finishModalContent{
+    color : #333;
+    font-size: 48px;
+    text-align: center;
+}
+.finishModalContent div{
+    padding: 24px 0;
+    text-align: center;
+    color: black;
+}
+
+.finishModalButton{width: 100%;display: flex; justify-content: center; gap:100px;}
+.finishModalButton button{background: #ddd; font-size: 16px; width: 192px; height: 72px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer; font-size: 32px;}
+.finishModalButton button:hover{background: #064420; color: #fff;}
