@@ -1,0 +1,21 @@
+  /* 버튼 스타일 */
+  .modalButton {
+    background-color: #f44336; /* 빨간색 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: "Pretendard Variable";
+    cursor: pointer;
+    border-radius: 8px;
+    width: 180px;
+  }
+  
+  .modalButton:hover {
+    background-color: #d32f2f; /* 버튼 호버 시 색상 */
+  }
+  
+  .message {
+    font-size: 16px;
+    font-family: "Pretendard Variable";
+  }

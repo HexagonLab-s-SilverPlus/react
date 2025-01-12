@@ -22,7 +22,7 @@ const EMGWarning = ({onCloseModal, emgUUID}) => {
     }, []);
 
     const handleEMGConfirm = async () => {
-        const response = await fetch('http://localhost:5000/emg/cancel', {
+        await fetch('http://localhost:5000/emg/cancel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,12 +41,12 @@ const EMGWarning = ({onCloseModal, emgUUID}) => {
 
     return (
         <div>
-            <div className="modal" style={styles.modal}>
-                <div className="modal-content" style={styles.modalContent}>
-                    <h2>위급 상황이 아니면 확인을 선택해 주세요</h2>
+            <div>
+                <div>
+                    <h2 className={styles.message}>위급 상황이 아니면 확인을 선택해 주세요</h2>
                     <p>{timeLeft}초 남음</p>
-                    <div className="buttons" style={styles.buttonContainer}>
-                        <button onClick={handleCancel} style={styles.button}>확인</button>
+                    <div  >
+                        <button onClick={handleCancel} className={styles.modalButton}>확인</button>
                     </div>
                 </div>
             </div>
