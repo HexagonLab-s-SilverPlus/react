@@ -235,6 +235,10 @@ const ProgramList = () => {
             return updated; // 새로운 상태 반환
         });
 
+        // select와 input 상태 초기화
+        setSearchAction("all"); // "선택"으로 초기화
+        setSearchKeyword("");   // 빈 문자열로 초기화
+
         // 페이지 번호를 초기화
         setPagingInfo((prev) => ({
             pageNumber: 1,
