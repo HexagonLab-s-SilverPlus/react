@@ -198,7 +198,7 @@ const ProgramList = () => {
                     endDate: formatDate(response.data.search.endDate),
                     listCount: response.data.search.listCount,
                 }));
-
+                navigate(location.pathname, { replace: true });
             } catch (error) {
                 // console.error('handleProgramView Error:', error);
                 alert('어르신 프로그램 목록을 불러오는데 실패하였습니다.');
