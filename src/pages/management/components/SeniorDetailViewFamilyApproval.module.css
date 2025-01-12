@@ -19,7 +19,7 @@
 .sdvfaSubContainer {
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 48px 72px;
+  padding: 0px 48px 96px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;

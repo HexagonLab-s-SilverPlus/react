@@ -111,7 +111,7 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
         <div className={styles.sdvfaMainContainer}>
           <div className={styles.sdvfaSubContainer}>
             <div className={styles.sdvfaHeader}>
-              <p>가족계정승인</p>
+              <p>가족 계정 승인</p>
             </div>
             {/* 가족계정승인 레이어 시작 */}
             <div className={styles.sdvfaTableDiv}>

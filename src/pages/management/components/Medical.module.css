@@ -1,5 +1,5 @@
 /* src/components/medical/Medical.module.css */
-.medicalWrap {width: 100%;  box-sizing: border-box; padding: 96px 48px;}
+.medicalWrap {width: 100%;  box-sizing: border-box; padding: 0px 48px 96px;}
 .medicalWrap {font-family: "Pretendard Variable"; box-sizing: border-box;}
 .medicalWrap input {font-family: "Pretendard Variable";}
 .medicalWrap input[type="date"]:disabled {padding-left: 36px;}

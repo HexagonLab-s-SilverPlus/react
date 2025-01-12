@@ -153,9 +153,9 @@ const SeniorDetailViewFamily = ({ UUID }) => {
   return (
     <div className={styles.sdetailMainContainer}>
       <div className={styles.sdetailSubContainer}>
-        <div className={styles.sdetailHeader}>
+        {/* <div className={styles.sdetailHeader}>
           <p>어르신 관리</p>
-        </div>
+        </div> */}
         <div className={styles.sdetailSubHeader}>
           <p>인적 사항</p>
         </div>

@@ -2,12 +2,28 @@
 .snrDetailViewWrap {
   display: flex;
 }
+
+/* .sdetailHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+} */
+
 .snrDetailViewRight {
   width: calc(100% - 368px);
   position: absolute;
-  top: 0;
+  top: 107px;
   right: 0;
 }
+
+.snrDetailViewWrap .sdetailHeader {width: calc(100% - 368px); box-sizing: border-box; padding: 48px 48px 0; display: flex; justify-content: space-between; align-items: flex-end; background: #fff; position: fixed; top: 0; z-index: 9999;}
+.snrDetailViewWrap .sdetailHeader > p {margin: 0; font-size: 40px; font-weight: bold; border-bottom: 3px solid #064420; width: 20%; padding-left: 24px; padding-bottom: 8px; box-sizing: border-box;}
+.snrDetailViewWrap .sdetailHeader > ul {padding: 0 24px 8px 0; margin: 0; display: flex; width: 80%; border-bottom: 3px solid #064420; justify-content: flex-end;}
+.snrDetailViewWrap .sdetailHeader > ul > li {list-style: none; padding: 0; font-size: 24px; font-weight: bold; margin-left: 24px; cursor: pointer;}
+.snrDetailViewWrap .sdetailHeader > ul > li:hover {color: #368cfc;}
 
 .sdetailMainContainer {
   display: flex;
@@ -20,16 +36,6 @@
   right: 0;
   box-sizing: border-box;
   padding: 72px 48px;
-}
-
-.sdetailHeader > p {
-  font-size: 40px;
-  font-weight: bold;
-  margin: 0;
-  border-bottom: 3px solid #064420;
-  padding-bottom: 8px;
-  padding-left: 24px;
-  cursor: pointer;
 }
 
 .sdetailSubHeader > p {
