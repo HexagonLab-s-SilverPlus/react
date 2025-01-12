@@ -163,12 +163,6 @@ function EnrollManager() {
     }
   };
 
-  const handleCheckPassword = () => {
-    if (formData.memPw) {
-      validatePassword();
-    }
-  };
-
   // 가입 버튼 클릭시 작동하는 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault(); // 이벤트 발생 제거(submit 이벤트 취소) - 기본 폼 제출 방지

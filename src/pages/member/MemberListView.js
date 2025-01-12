@@ -102,10 +102,10 @@ const MemberListView = () => {
   }, []);
 
   // 검색으로 인한 페이지 변경 시
-  const handleUpdateView = async (page, updatedSearch) => {
+  const handleUpdateView = async (page, updatedSearch = search) => {
     console.log('검색 기능 작동확인');
     console.log(page);
-    console.log(updatedSearch);
+    console.log(search);
     console.log(pagingInfo);
     try {
       const response = await apiSpringBoot.get(`/member/adminList`, {

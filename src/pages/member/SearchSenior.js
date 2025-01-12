@@ -62,40 +62,8 @@ const SearchSenior = ({ onSelectMultiple }) => {
     }));
   };
 
-  // // 페이지 랜더링 시 출력할 리스트
-  // useEffect(() => {
-  //   const Search = async () => {
-  //     try {
-  //       const response = await apiSpringBoot.get(`/member/fsSearch`);
-  //       const { maxPage, startPage, endPage } = PagingCalculate(
-  //         response.data.search.pageNumber,
-  //         response.data.search.listCount,
-  //         response.data.search.pageSize
-  //       );
-  //       setPagingInfo(response.data.search);
-  //       setPagingInfo((pre) => ({
-  //         ...pre,
-  //         maxPage: maxPage,
-  //         startPage: startPage,
-  //         endPage: endPage,
-  //       }));
-  //       const updateList = response.data.senior.map((senior) => ({
-  //         ...senior,
-  //         memEnrollDate: convertUTCToKST(senior.memEnrollDate),
-  //       }));
-  //       setSeniorData(updateList);
-  //       setFamilyData(response.data.family);
-  //       console.log('서버에서 가져온 어르신 데이터 : ', response.data.senior);
-  //       console.log('서버에서 가져온 가족 데이터 : ', response.data.family);
-  //     } catch (error) {
-  //       console.error('리스트 출력 실패 : ', error);
-  //     }
-  //   };
-  //   Search(1, '전체');
-  // }, []);
-
   // 검색 시 출력할 리스트
-  const handleUpdateList = async (page, updatedSearch) => {
+  const handleUpdateList = async (page, updatedSearch = search) => {
     try {
       const response = await apiSpringBoot.get(`/member/fsSearch`, {
         params: {

@@ -15,13 +15,6 @@ const MemberDetailView = () => {
   const [formData, setFormData] = useState();
   const [initialData, setInitialData] = useState(null); // 초기 데이터를 저장할 상태
 
-  const { setInitialLoad } = useMemberStore();
-
-  const handleMove = () => {
-    setInitialLoad(false);
-    navigate('/mlistview');
-  };
-
   useEffect(() => {
     const MemberDetail = async () => {
       try {
@@ -165,11 +158,11 @@ const MemberDetailView = () => {
                     <tr>
                       <th>이 름</th>
                       <td>
-                        <input value={formData.memName} readOnly />
+                        <input value={formData.memName} disabled />
                       </td>
                       <th>아 이 디</th>
                       <td>
-                        <input value={formData.memId} readOnly />
+                        <input value={formData.memId} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -182,7 +175,7 @@ const MemberDetailView = () => {
                               ? '남성'
                               : '여성'
                           }
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>이 메 일</th>
@@ -199,7 +192,7 @@ const MemberDetailView = () => {
                       <td>
                         <input
                           value={formData.memEnrollDate.split(' ')[0]}
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>계 정 상 태</th>
@@ -215,7 +208,7 @@ const MemberDetailView = () => {
                                     ? '정지'
                                     : formData.memStatus
                             }
-                            readOnly
+                            disabled
                             style={{ width: '150px' }}
                             onChange={handleInfoChange}
                             name="memStatus"
@@ -266,11 +259,7 @@ const MemberDetailView = () => {
                     <tr>
                       <th>기 관</th>
                       <td>
-                        <input readOnly />
-                      </td>
-                      <th>기 관 코 드</th>
-                      <td>
-                        <input value={formData.memGovCode} name="memGovCode" />
+                        <input value={formData.memOrgName} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -280,8 +269,8 @@ const MemberDetailView = () => {
                           name="memAddress"
                           value={formData.memAddress}
                           onChange={handleInfoChange}
-                          style={{ width: '550px' }}
-                          readOnly
+                          style={{ width: '803px' }}
+                          disabled
                         />
                       </td>
                     </tr>
@@ -291,7 +280,10 @@ const MemberDetailView = () => {
                   <div>
                     <button
                       className={styles.mdetailButton1}
-                      onClick={handleMove}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(-1);
+                      }}
                     >
                       목 록
                     </button>
@@ -326,11 +318,11 @@ const MemberDetailView = () => {
                     <tr>
                       <th>이 름</th>
                       <td>
-                        <input value={formData.memName} readOnly />
+                        <input value={formData.memName} disabled />
                       </td>
                       <th>아 이 디</th>
                       <td>
-                        <input value={formData.memId} readOnly />
+                        <input value={formData.memId} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -343,7 +335,7 @@ const MemberDetailView = () => {
                               ? '남성'
                               : '여성'
                           }
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>이 메 일</th>
@@ -360,7 +352,7 @@ const MemberDetailView = () => {
                       <td>
                         <input
                           value={formData.memEnrollDate.split(' ')[0]}
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>계 정 상 태</th>
@@ -376,7 +368,7 @@ const MemberDetailView = () => {
                                     ? '정지'
                                     : formData.memStatus
                             }
-                            readOnly
+                            disabled
                             style={{ width: '150px' }}
                             onChange={handleInfoChange}
                             name="memStatus"
@@ -427,7 +419,7 @@ const MemberDetailView = () => {
                           name="memAddress"
                           value={formData.memAddress}
                           onChange={handleInfoChange}
-                          style={{ width: '550px' }}
+                          style={{ width: '803px' }}
                         />
                       </td>
                     </tr>
