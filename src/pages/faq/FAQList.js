@@ -270,7 +270,7 @@ const FAQList = () => {
         );
     } else {
         return (
-            <div className={styles.all} ref={listRef}>
+            <div className={styles.bodyDiv} ref={listRef}>
                 <div >
                 <SideBar />
                 <div className={styles.faqContent}>

@@ -175,6 +175,7 @@ const MyInfoAdmin = () => {
         },
       });
       alert('내 정보 수정 성공');
+      window.location.reload();
     } catch (error) {
       alert('내 정보 수정 실패');
       console.error('내 정보 수정중 오류 발생 : ', error);
@@ -198,6 +199,11 @@ const MyInfoAdmin = () => {
               type="password"
               name="pwdChk"
               onChange={handlePwdChkChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  MyInfo();
+                }
+              }}
             />
             <button onClick={MyInfo}>확 인</button>
           </div>
@@ -228,11 +234,11 @@ const MyInfoAdmin = () => {
                   <tr>
                     <th>이 름</th>
                     <td>
-                      <input value={updateMember.memName} readOnly />
+                      <input value={updateMember.memName} disabled />
                     </td>
                     <th>아 이 디</th>
                     <td>
-                      <input value={updateMember.memId} readOnly />
+                      <input value={updateMember.memId} disabled />
                     </td>
                   </tr>
                   <tr>
@@ -245,7 +251,7 @@ const MyInfoAdmin = () => {
                             ? '남성'
                             : '여성'
                         }
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>이 메 일</th>
@@ -332,7 +338,7 @@ const MyInfoAdmin = () => {
                     <td>
                       <input
                         value={updateMember.memEnrollDate.split(' ')[0]}
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>계 정 상 태</th>
@@ -347,7 +353,7 @@ const MyInfoAdmin = () => {
                                 ? '정지'
                                 : updateMember.memStatus
                         }
-                        readOnly
+                        disabled
                         onChange={handleInfoChange}
                         name="memStatus"
                       />

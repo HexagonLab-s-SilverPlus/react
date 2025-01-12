@@ -1,5 +1,5 @@
 // src/pages/member/EnrollManager.js
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './Enroll.module.css';
@@ -24,6 +24,8 @@ function EnrollManager() {
     memType: 'MANAGER', // 회원타입
     memPwChk: '',
   });
+
+  const rnnEndRef = useRef(null);
 
   const navigate = useNavigate();
   // 아이디 사용가능여부 상태변수
@@ -56,9 +58,16 @@ function EnrollManager() {
   const handleChange = (e) => {
     const { name, value } = e.target; // 이벤트에서 name과 value를 추출
     setFormData((prevFormData) => {
+      let filteredValue = value;
+
+      // 아이디 입력일 경우 영문자만 허용
+      // if (name === 'memId') {
+      //   filteredValue = value.replace(/[^a-zA-Z0-9]/g, ''); // 영문자와 숫자 이외의 문자는 제거
+      // }
+
       const updateFormData = {
         ...prevFormData,
-        [name]: value, // name에 해당하는 값을 업데이트
+        [name]: filteredValue, // name에 해당하는 값을 업데이트
       };
       // 비밀번호 확인 칸이 입력 중일 때만 유효성 검사 실행
       if (name === 'memPwChk') {
@@ -81,10 +90,17 @@ function EnrollManager() {
 
   const handleRnnChange = (e) => {
     const { name, value } = e.target;
+
+    // 입력값에서 숫자만 필터링
+    const filteredValue = value.replace(/[^0-9]/g, '');
+
     setRnn((prevRnn) => ({
       ...prevRnn, // 이전 상태를 복사
-      [name]: value, // 변경할 키와 값만 업데이트
+      [name]: filteredValue, // 변경할 키와 값만 업데이트
     }));
+    if (name === 'memRnnFront' && value.length === 6) {
+      rnnEndRef.current.focus();
+    }
   };
 
   // 아이디 중복검사 버튼 클릭시 작동하는 핸들러
@@ -194,17 +210,24 @@ function EnrollManager() {
     data.append('orgData', JSON.stringify(selectOrgData));
 
     try {
-      await apiSpringBoot.post('/member/enroll', data, {
+      const response = await apiSpringBoot.post('/member/enroll', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('가입 성공');
+
+      if (response.status === 200) {
+        // 성공 응답 상태 확인
+        alert('가입 성공');
+        console.log('회원가입 성공 데이터:', response.data);
+        navigate('/loginmember');
+      } else {
+        alert('가입 실패');
+        console.error('가입 실패 상태:', response);
+      }
     } catch (error) {
-      console.error('가입 실패');
-      console.log(formData);
-      console.log(data);
-      alert('가입실패');
+      console.error('가입 처리 중 오류 발생:', error);
+      alert('가입 실패');
     }
   };
 
@@ -269,6 +292,29 @@ function EnrollManager() {
     setShowModal(false);
   };
 
+  // const handleFirstInputChange = (e) => {
+  //   const value = e.target.value;
+
+  //   // 숫자만 입력 허용 및 최대 6자리 제한
+  //   if (!isNaN(value) && value.length <= 6) {
+  //     setFirstValue(value);
+
+  //     // 6자리 입력 시 두 번째 input으로 포커스 이동
+  //     if (value.length === 6) {
+  //       secondInputRef.current.focus();
+  //     }
+  //   }
+  // };
+
+  // const handleSecondInputChange = (e) => {
+  //   const value = e.target.value;
+
+  //   // 숫자만 입력 허용
+  //   if (!isNaN(value)) {
+  //     setSecondValue(value);
+  //   }
+  // };
+
   return (
     <>
       <div className={styles.enrollMainContainer}>
@@ -284,6 +330,7 @@ function EnrollManager() {
                 name="memName"
                 onChange={handleChange}
                 className={styles.textbox}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>아이디</tr>
@@ -301,6 +348,16 @@ function EnrollManager() {
                   marginRight: '20px',
                   marginBottom: 0,
                 }}
+                value={formData.memId}
+                pattern="[a-zA-Z0-9]*" // 영문자와 숫자만 허용
+                title="아이디는 영문자와 숫자만 입력 가능합니다." // 경고 메시지
+                onInvalid={(e) =>
+                  e.target.setCustomValidity(
+                    '아이디는 영문자와 숫자만 입력 가능합니다.'
+                  )
+                }
+                onInput={(e) => e.target.setCustomValidity('')} // 입력 시 커스텀 메시지 초기화
+                required
               />
               <button className={styles.button2} onClick={handleIdCheck}>
                 중복확인
@@ -340,6 +397,7 @@ function EnrollManager() {
                 }}
                 className={styles.textbox}
                 style={{ marginBottom: '0' }}
+                required
               />
             </tr>
             {!passwordValidate && (
@@ -374,6 +432,7 @@ function EnrollManager() {
                 className={styles.textbox}
                 onChange={handleChange}
                 style={{ marginBottom: '0' }}
+                required
               />
             </tr>
             {formData.memPwChk === '' ? (
@@ -399,6 +458,7 @@ function EnrollManager() {
                 name="emailId"
                 style={{ width: '160px' }}
                 onChange={handleEmailIdChange}
+                required
               />
               <span className={styles.findIdEmailSpan}>@</span>
               <input
@@ -406,6 +466,7 @@ function EnrollManager() {
                 style={{ width: '160px' }}
                 value={domain}
                 onChange={handleEmailDomainChange}
+                required
               />
               <select name="domainOption" onChange={handleEmailDomainChange}>
                 <option value="">직접입력</option>
@@ -414,15 +475,6 @@ function EnrollManager() {
                 <option value="hanmail.net">한메일</option>
                 <option value="nate.com">네이트</option>
               </select>
-            </tr>
-            <tr className={styles.valuebox}>주소</tr>
-            <tr>
-              <input
-                type="text"
-                name="memAddress"
-                value={selectOrgData ? selectOrgData.add : ''}
-                className={styles.textbox}
-              />
             </tr>
             <tr className={styles.valuebox}>주민등록번호</tr>
             <tr>
@@ -433,14 +485,19 @@ function EnrollManager() {
                 className={styles.textbox}
                 style={{ width: '219px' }}
                 maxLength={6}
+                value={rnn.memRnnFront}
+                required
               />
               <span>-</span>
               <input
-                type="text"
+                type="password"
                 name="memRnnEnd"
                 onChange={handleRnnChange}
                 style={{ width: '219px' }}
                 maxLength={7}
+                value={rnn.memRnnEnd}
+                ref={rnnEndRef}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>기관</tr>
@@ -451,6 +508,8 @@ function EnrollManager() {
                 value={selectOrgData ? selectOrgData.org : ''}
                 className={styles.textbox}
                 style={{ width: '350px' }}
+                onClick={(e) => handleSearch(e)}
+                required
               />
               <button
                 className={styles.button2}
@@ -462,7 +521,17 @@ function EnrollManager() {
                 검색
               </button>
             </tr>
-            <tr className={styles.valuebox}>일반전화</tr>
+            <tr className={styles.valuebox}>기관주소</tr>
+            <tr>
+              <input
+                type="text"
+                name="memAddress"
+                value={selectOrgData ? selectOrgData.add : ''}
+                className={styles.textbox}
+                required
+              />
+            </tr>
+            <tr className={styles.valuebox}>기관전화</tr>
             <tr>
               <input
                 className={styles.textbox}
@@ -470,6 +539,7 @@ function EnrollManager() {
                 name="memPhone"
                 placeholder=" '-' 없이 입력"
                 onChange={handleChange}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>휴대전화</tr>
@@ -481,6 +551,7 @@ function EnrollManager() {
                 className={styles.textbox}
                 placeholder=" '-' 없이 입력"
                 style={{ width: '350px' }}
+                required
               />
               <button
                 className={styles.button2}

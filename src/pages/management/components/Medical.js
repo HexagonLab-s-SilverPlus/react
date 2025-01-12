@@ -338,6 +338,7 @@ const Medical = ({ UUID }) => {
 
                     <tbody>
                         {medicals.map((item, index) => (
+                            item.mediDiagDate &&
                             <tr key={index} className={styles.mediItem}>
                                 <td><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
                                 <td><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}
@@ -442,6 +443,7 @@ const Medical = ({ UUID }) => {
 
                         <tbody>
                             {medicals.map((item, index) => (
+                                item.mediDiagDate &&
                                 <tr key={index} className={styles.mediItem}>
                                     <td className={styles.hiddenColumn}><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
                                     <td style={{ borderLeft: '1px solid #fff' }}><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}

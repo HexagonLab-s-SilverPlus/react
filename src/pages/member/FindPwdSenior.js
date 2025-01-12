@@ -191,6 +191,11 @@ const FindPwdSenior = () => {
   //   }
   // };
 
+  const handleMoveReturn = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
+
   const moveFindPwdResult = () => {
     navigate('/fpsResult', { state: verifyData });
   };
@@ -371,6 +376,7 @@ const FindPwdSenior = () => {
                 color: '#333333',
                 border: 0,
               }}
+              onClick={handleMoveReturn}
             >
               이 전
             </button>

@@ -1,18 +1,20 @@
-.qnaContent {height: calc(100vh - 69px); width: 1456px; padding-top: 69px; padding-left: 61px; position: relative; left: 368px;}
-.qnaDetailHeader {display: flex; align-items: flex-end; margin-top: 55px; padding: 0;}
+.bodyDiv {position: relative; }
+.qnaContent {position: absolute; right: 0px; width:calc(100% - 368px) ;padding: 69px 61px 72px 61px; box-sizing: border-box;}
+.qnaDetailHeader {display: flex; align-items: flex-end; margin-top: 55px; padding: 0; position: relative;}
 .qnaDetailHeader h1, h4 {margin: 0; padding: 0;}
 .qnaDetailContent {padding: 40px 40px; font-family: "Pretendard Variable"; font-size: 18px; letter-spacing: 2px; white-space: pre-wrap; width: 85%;}
 .qnaDetailBTNDiv {width: 100%; position: relative;}
-.qnaListViewBTN, .qnaAnswerViewBTN, .qnaDeleteBTN, .qnaUpdateViewBTN {display: inline-block; height: 41px; border: 0; background-color: #eeeeee; color: #000000; border-radius: 10px; font-size: 18px; cursor: pointer; font-family: "Pretendard Variable"; width: 75px;}
+.qnaListViewBTN, .qnaAnswerViewBTN, .qnaDeleteBTN, .qnaUpdateViewBTN {display: inline-block; border: 0; background-color: #eeeeee; color: #000000; border-radius: 10px; cursor: pointer; font-family: "Pretendard Variable"; font-size: 16px; width: 100px; height: 36px; border-radius: 8px;; margin-left: 16px; border: 0; cursor: pointer;}
 .qnaAnswerViewBTN {width: 130px; position: absolute; left: 50%; transform: translate(-50%, 0);}
-.qnaListViewBTN:hover, .qnaAnswerViewBTN:hover, .qnaDeleteBTN:hover, .qnaUpdateViewBTN:hover  {display: inline-block; height: 41px; border-top: none; border-left: none; border-right: none; background-color: #064420; color: #ffffff; border-radius: 10px; font-size: 18px; cursor: pointer; font-family: "Pretendard Variable";}
+.qnaListViewBTN:hover, .qnaAnswerViewBTN:hover, .qnaDeleteBTN:hover, .qnaUpdateViewBTN:hover  {background-color: #064420; color: #ffffff;}
+.qnaListViewBTN{margin: 0;}
 .qnaDeleteBTN {position: absolute; right: 0;}
-.qnaUpdateViewBTN {position: absolute; right: 100px;}
+.qnaUpdateViewBTN {position: absolute; right: 116px;}
 .qnaDetailDateImg, .qnaDetailIdImg, .qnaDetailTypeImg {position: relative;}
 .qnaDetailDateImg {top: 4px;}
 .qnaDetailIdImg {top: 3px;}
 .qnaDetailTypeImg {top: 5px;}
-.memberData {position: absolute; right: 0;}
+.memberData {position: absolute; right: 60px;}
 .memberData span {font-family: "Pretendard Variable"; font-weight: bold; margin-left: 10px;}
 .memberData img {margin-left: 30px;}
 .filesDiv {display: flex; margin-bottom: 20px;}
@@ -21,4 +23,4 @@
 .qnaHr {border: 0;height: 2px;background-color: #DFDFDF;margin: 16px 0; }
 .qnaADContent {padding: 80px 40px; font-family: "Pretendard Variable"; font-size: 18px; letter-spacing: 2px; white-space: pre-wrap;}
 .filesPositionDiv {position: absolute; right: 0; margin-right: 20px;}
-.marginBotton {height: 30px;}
+.marginBotton {height: 72px;}

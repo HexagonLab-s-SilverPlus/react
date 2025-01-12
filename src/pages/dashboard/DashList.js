@@ -9,6 +9,9 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { FaTrashAlt } from 'react-icons/fa';
+import older from '../../assets/images/older.png';
+import family from '../../assets/images/family.png';
+import document from '../../assets/images/document.png';
 
 //현재 관리중인 어르신 count 뽑아내기
 //가족 계정 승인 요청수 url연결하면 끝
@@ -273,6 +276,32 @@ const DashList = () => {
         setEditingStatus('N');
     };
 
+    const handleCheckboxChange = async (todo) => {
+        const updatedStatus = todo.taskStatus === 'Y' ? 'N' : 'Y';
+    
+        try {
+            // 서버에 업데이트 요청
+            await apiSpringBoot.put(`/dashboard/${todo.taskId}`, {
+                ...todo,
+                taskStatus: updatedStatus,
+            });
+    
+            // React 상태 업데이트
+            setTodolist((prev) =>
+                prev.map((t) =>
+                    t.taskId === todo.taskId
+                        ? { ...t, taskStatus: updatedStatus }
+                        : t
+                )
+            );
+            window.location.reload();
+        } catch (error) {
+            console.error('Checkbox 상태 변경 실패:', error);
+            alert('상태 변경 실패!');
+        }
+    };
+    
+
     
  
     
@@ -317,21 +346,21 @@ const DashList = () => {
                             className={`${styles.button} ${styles.blue}`}
                             onClick={() => navigate('/seniorlist')}
                         >
-                            <span>현재 관리중인 어르신 수</span>
+                            <img src={older} className={styles.dasholer} /><span>현재 관리중인 어르신 수</span>
                             <strong>{seniorCount}명</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.red}`}
                             onClick={() => navigate('/familyaccount')}
                         >
-                            <span>가족 계정 승인 요청수</span>
+                            <img src={family} className={styles.accountfamilyicon} /><span>가족 계정 승인 요청수</span>
                             <strong>{approvalCount}건</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.purple}`}
                             onClick={() => navigate('/docrequest')}
                         >
-                            <span>공문서 요청수</span>
+                            <img src={document} className={styles.documenticon} /><span>공문서 요청수</span>
                             <strong>{documentCount}건</strong>
                         </button>
                     </div>
@@ -351,7 +380,7 @@ const DashList = () => {
 
 <div className={styles["form-container"]}>
                         <form onSubmit={handleInsertTodo}>
-                            <h3> 할 일 작성</h3>
+                            <h3> Add New Todo</h3>
                       
                             <div className={styles.addContentForm}>
                                 <label>내용 &nbsp;:</label>
@@ -428,7 +457,8 @@ const DashList = () => {
                  type="checkbox"
                  className={styles.checkbox}
                  checked={todo.taskStatus === 'Y'}
-                 readOnly
+                 onChange={()=> handleCheckboxChange(todo)}
+                //  readOnly
              />
              <span
                  className={`${styles.todoText} ${

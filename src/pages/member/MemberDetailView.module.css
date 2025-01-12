@@ -79,11 +79,12 @@
   padding: 0;
   padding-left: 15px;
   font-size: 18px;
-  border: 0;
+  border: 1px solid;
 }
 
 .mdetailTable > tr > td > input[readonly] {
   background-color: #dddddd;
+  border: 1px solid #ddd;
 }
 
 .mdetailTable > tr > th {
@@ -107,12 +108,12 @@
 .mdetailButtonDiv {
   display: flex;
   justify-content: space-between;
-  max-width: calc(100% - 100px);
+  max-width: calc(100% - 130px);
   margin-top: 50px;
 }
 
 .mdetailButton1 {
-  border-radius: 3px;
+  border-radius: 5px;
   border: 0;
   background-color: #064420;
   color: #ffffff;
@@ -124,8 +125,14 @@
   cursor: pointer;
 }
 
+.mdetailButton1:hover {
+  background-color: #ffffff;
+  color: #064420;
+  border: 1px solid #064420;
+}
+
 .mdetailButton2 {
-  border-radius: 3px;
+  border-radius: 5px;
   background-color: #eeeeee;
   border: 0;
   color: #000000;
@@ -135,6 +142,12 @@
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
+}
+
+.mdetailButton2:hover {
+  background-color: #963434;
+  color: #eee;
+  border: 1px solid #000000;
 }
 
 .loading {

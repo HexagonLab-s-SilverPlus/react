@@ -23,7 +23,25 @@
   justify-content: end;
   margin-top: 80px;
   margin-bottom: 20px;
+  justify-content: space-between;
 }
+
+.mlistReturnListBtnDiv > button {
+  cursor: pointer;
+  width: 70px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #064420;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.mlistReturnListBtnDiv > button:hover {
+  background-color: transparent;
+  color: #064420;
+}
+
 .mlistSearchbox {
   display: flex;
   justify-content: flex-end;
