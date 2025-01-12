@@ -149,6 +149,7 @@
 .todo-checkbox {
     margin-right: 10px; /* 체크박스와 텍스트 간 간격 */
     cursor: pointer; /* 마우스 포인터 표시 */
+    /* color: #70ace6; */
 }
 
 /* 할 일 텍스트 */
@@ -271,13 +272,13 @@
 }
 
 .saveButton {
-    background-color: #2e9659;
+    background-color: #70ace6;
     color: white;
     right: 68px;
 }
 
 .cancelButton {
-    background-color: #f44336;
+    background-color: #F37D89;
     color: white;
     right: 8px;
 }
@@ -347,5 +348,23 @@
 .addButton {border: 0; width: 24px; height: 24px; background: #70ace6; font-family: "Pretendard Variable"; border-radius: 4px; color: #fff; font-size: 24px; display: flex; justify-content: center; align-items: center; margin-left: 8px;}
 .addButton > span {position: relative; top: -2px;}
 .addButton:hover {background: #003079;}
-/* todoTitle end */
+
+.dasholer {
+    width: 30px; /* 너비를 200px로 설정 */
+    height: 30px; /* 높이를 100px로 설정 */
+}
+
+.accountfamilyicon{
+    width: 30px; /* 너비를 200px로 설정 */
+    height: 30px; /* 높이를 100px로 설정 */
+
+}
+.documenticon{
+    width: 30px; /* 너비를 200px로 설정 */
+    height: 30px; /* 높이를 100px로 설정 */
+
+}
+
+
+
 
