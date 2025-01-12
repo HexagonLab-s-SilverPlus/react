@@ -28,11 +28,9 @@
     width: 400px;
     height: calc((100% / 2) - 12px);
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
     padding: 30px;
-    text-align: left;
-    position: relative;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .div2 p,
@@ -52,10 +50,12 @@
 .div5 img,
 .div6 img,
 .div7 img {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+    width: 112px;
+    align-self: flex-end;
 }
+.div4 img {transform: scale(1.1);}
+.div5 img {transform: scale(0.85);}
 .div6 img {transform: scale(1.5) translateX(-10px);}
+.div7 img {transform: scale(1.1);}
 
 .snrft {position: absolute; bottom: 0;}
