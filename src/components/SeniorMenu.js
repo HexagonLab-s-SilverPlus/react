@@ -33,7 +33,7 @@ const SeniorMenu = () => {
   };
 
   const handleFAQButton = () => {
-    navigate('/faq');
+    navigate('/qna/faq');
   };
 
   const handleBookButton = () => {
@@ -54,54 +54,56 @@ const SeniorMenu = () => {
           </p>
         </div>
 
-        {/* 공문서 작성 */}
-        <div className={`${styles.menuButton} ${styles.div2}`} onClick={handleDocButton}>
-          <p>공문서 작성</p>
-          <img src={documentIcon} alt="공문서 작성" />
-        </div>
+        <div className={styles.menuWrap}>
+          {/* 공문서 작성 */}
+          <div className={`${styles.menuButton} ${styles.div2}`} onClick={handleDocButton}>
+            <p>공문서 작성</p>
+            <img src={documentIcon} alt="공문서 작성" />
+          </div>
 
-        {/* 어르신 맞춤 활동 */}
-        <div className={`${styles.menuButton} ${styles.div3}`} onClick={handleProgramButton}>
-          <p>
-            어르신 <br />
-            맞춤 활동
-          </p>
-          <img src={activityIcon} alt="어르신 맞춤 활동" />
-        </div>
+          {/* 어르신 맞춤 활동 */}
+          <div className={`${styles.menuButton} ${styles.div3}`} onClick={handleProgramButton}>
+            <p>
+              어르신 <br />
+              맞춤 활동
+            </p>
+            <img src={activityIcon} alt="어르신 맞춤 활동" />
+          </div>
 
-        {/* FAQ */}
-        <div className={`${styles.menuButton} ${styles.div4}`} onClick={handleFAQButton}>
-          <p>
-            자주 <br />
-            하는 질문
-          </p>
-          <img src={faqIcon} alt="FAQ" />
-        </div>
+          {/* FAQ */}
+          <div className={`${styles.menuButton} ${styles.div4}`} onClick={handleFAQButton}>
+            <p>
+              자주 <br />
+              하는 질문
+            </p>
+            <img src={faqIcon} alt="FAQ" />
+          </div>
 
-        {/* 공지사항 */}
-        <div className={`${styles.menuButton} ${styles.div5}`} onClick={handleNoticeButton}>
-          <p>공지사항</p>
-          <img src={noticeIcon} alt="공지사항" />
-        </div>
+          {/* 공지사항 */}
+          <div className={`${styles.menuButton} ${styles.div5}`} onClick={handleNoticeButton}>
+            <p>공지사항</p>
+            <img src={noticeIcon} alt="공지사항" />
+          </div>
 
-        {/* 두뇌 활성화 게임 */}
-        <div className={`${styles.menuButton} ${styles.div6}`} onClick={() => (navigate('/game'))}>
-          <p>
-            게임 : <br/>
-            카드 맞추기
-          </p>
-          <img src={game} alt="맞고" style={{ width: "100px" }} />
-        </div>
+          {/* 두뇌 활성화 게임 */}
+          <div className={`${styles.menuButton} ${styles.div6}`} onClick={() => (navigate('/game'))}>
+            <p>
+              게임 : <br />
+              카드 맞추기
+            </p>
+            <img src={game} alt="맞고" style={{ width: "100px" }} />
+          </div>
 
-        {/* 공문서 작성 */}
-        <div className={`${styles.menuButton} ${styles.div7}`} onClick={handleBookButton}>
-          <p>책 읽기</p>
-          <img src={bookIcon} alt="책 읽기" />
-        </div>
+          {/* 공문서 작성 */}
+          <div className={`${styles.menuButton} ${styles.div7}`} onClick={handleBookButton}>
+            <p>책 읽기</p>
+            <img src={bookIcon} alt="책 읽기" />
+          </div>
 
 
-      </div>
-      <SeniorFooter />
+        </div>{/* menuWrap end */}
+      </div>{/* menuContainer end */}
+      <SeniorFooter className={styles.snrft} />
     </div >
   );
 };

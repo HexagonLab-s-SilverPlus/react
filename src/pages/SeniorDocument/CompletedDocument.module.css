@@ -1,3 +1,66 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed; /* 열 너비를 비율에 따라 고정 */
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  text-align: center;
+  height: 70px; /* 높이를 고정 */
+  line-height: 70px; /* 세로 정렬 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  overflow: hidden; /* 넘치는 내용 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 내용 말줄임표 */
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: calc((100% / 13) * 2); /* 2 비율 */
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: calc(100% / 13); /* 1 비율 */
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: calc(100% / 13); /* 1 비율 */
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: calc(100% / 13); /* 1 비율 */
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  width: calc((100% / 13) * 2); /* 2 비율 */
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  width: calc((100% / 13) * 2); /* 2 비율 */
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) {
+  width: calc((100% / 13) * 2); /* 2 비율 */
+}
+
+.table th:nth-child(8),
+.table td:nth-child(8) {
+  width: calc(100% / 13); /* 1 비율 */
+}
+
+.table th:nth-child(9),
+.table td:nth-child(9) {
+  width: calc(100% / 13); /* 1 비율 */
+}
+
 .pageWrapper {
     display: flex;
     flex-direction: column;
@@ -11,7 +74,7 @@
     margin: 0 auto;
     padding: 20px;
     font-size: 18px; /* 기본 폰트 크기 확대 */
-    padding-bottom: 300px; /* footer랑 겹치지 않도록 여유 공간 추가 */
+    overflow-x: auto; /* 테이블이 화면을 넘으면 가로 스크롤 활성화 */
   }
 
   
@@ -22,18 +85,6 @@
     margin-bottom: 20px;
   }
   
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .table th, .table td {
-    border: 1px solid #ddd;
-    text-align: center;
-    padding: 20px;
-    font-size: 23px; /* 테이블 폰트 크기 */
-  }
   
   .table th {
     background-color: #f4f4f4;

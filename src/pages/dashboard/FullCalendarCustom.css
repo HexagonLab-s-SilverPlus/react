@@ -94,3 +94,8 @@
 .fc .fc-view-harness-active > .fc-view {
     height: 593px;
 }
+
+/* 스크롤바 숨기기 */
+.fc .fc-scrollgrid-liquid {
+    overflow: hidden !important;
+}

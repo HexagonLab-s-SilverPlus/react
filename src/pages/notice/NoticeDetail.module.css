@@ -10,18 +10,20 @@
 .notTitleLine {display:flex;justify-content:space-between;padding:5px 5px;}
 .notTitle{display: flex;font-weight:bold;font-size: 24px;}
 .writeData{display: flex;align-items: center;justify-items: end; gap: 30px;}
+.writeData span{display: flex;gap: 5px;}
 .img {width:20px;}
-.notContent{width:100%;font-weight:normal;font-size: 16px;padding:30px 20px;white-space: pre-wrap;}
+.notContent{width:100%;font-weight:normal;font-size: 16px;padding:30px 20px;white-space: pre-wrap;border: none !important;}
 .noticebutton {background: #eee; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; font-family: "Pretendard Variable"; margin-left: 16px; border: 0; cursor: pointer;}
 .noticebutton:hover {background: #064420; color: #fff;}
-.filesDiv{display: flex; padding:15px 5px}
+.filesDiv{display: flex; align-items: center; padding:15px 5px}
 .file {padding: 0; margin: 0;list-style: none; margin-bottom: 8px; margin-right: 24px;color: #333; text-decoration: none;}
 .file:hover {color: #368cfc;cursor: pointer;}
 .buttonDiv{position:relative;padding-top:50px;display: flex;justify-content: space-between;align-items: center;margin-bottom: 200px;}
 .centerButton{position:absolute;left:50%;transform: translateX(-50%);}
 .rightButtons{display:flex;position:absolute;right:0;gap:10px ;}
-.fileview{width:90%}
-.noticeFakeButton {font-family: "Pretendard Variable";font-size: 16px; width: 200px; height: 36px; background: #064420; border-radius: 36px; text-align: center; line-height: 36px; color: #fff; margin-right: 24px;}
+.fileview{width:90%;}
+.noticeFakeButton{font-family: "Pretendard Variable";font-size: 16px; width: 200px; height: 36px; background: #064420; border-radius: 36px; text-align: center; line-height: 36px; color: #fff; margin-right: 24px;border:none;}
+
 
 /*senior*/
 .noticeList {display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh;background-color:#f9f9f9;}
@@ -38,6 +40,7 @@
 .seniorSubBar{font-size: 28px; font-weight: bold;padding-top: 30px;}
 .seniorContent{font-size: 24px; font-weight: bold;white-space: pre-wrap;}
 .seniorFiles{font-size: 28px; font-weight: bold;padding-top: 10px;cursor: pointer;}
+.seniorFiles:hover {color: #368cfc;}
 footer {margin-top: auto;}
 .noticeHr {border: none;height: 2px;background-color: #064420;margin: 16px 0;}
 .seniorBottomBar{display: flex;padding-bottom: 300px;width: calc(100% - 192px);}
@@ -50,4 +53,4 @@ footer {margin-top: auto;}
 .seniorUpButton {display: flex;justify-content: flex-start;}
 .seniorCenterButton {flex: 1;display: flex;justify-content: center;}
 
-.noticeSeniorFiles{display: flex;}
+.noticeSeniorFiles{display: flex; align-items: center;}
