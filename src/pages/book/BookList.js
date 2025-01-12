@@ -277,7 +277,6 @@ const BookList = () => {
                 placeholder="검색어를 입력하세요."
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
-                className={styles.searchInput}
             />
         );
         
@@ -343,6 +342,7 @@ const BookList = () => {
                                     handlePageChange(page);
                                 }}
                             />
+                            <div className={styles.marginBotton} />
                         </div>{/* snrBkList end */}
 
                     </div>{/* snrBkRight end */}

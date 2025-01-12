@@ -1,5 +1,5 @@
-.qnaContent {height: calc(100vh - 69px);width: 1456px; padding-top: 69px;padding-left: 61px;position: relative;left: 368px;}
-.qnaWriteTitleDiv {display: flex;margin-top: 60px;margin-bottom: 30px;}
+.bodyDiv {position: relative; }
+.qnaContent {position: absolute; right: 0px; width:calc(100% - 368px) ;padding: 69px 61px 72px 61px; box-sizing: border-box;}.qnaWriteTitleDiv {display: flex;margin-top: 60px;margin-bottom: 30px;}
 .memberIdDiv {display: flex;margin-top: 30px; margin-bottom: 30px;}
 .qnaWriteContentDiv {display: flex;margin-top: 20px;}
 .qnaWriteTitle {width: 100px;margin: 0;padding: 0;vertical-align: top;text-align: left;font-family: "Pretendard Variable";font-size: 20px;}

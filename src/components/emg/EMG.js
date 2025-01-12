@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext  } from 'react';
-import Modal from '../../components/common/Modal';
+import ModalEMG from '../../components/common/ModalEMG';
 import { AuthContext } from '../../AuthProvider'
 import EMGWarning from './EMGWarning';
 
@@ -176,9 +176,9 @@ function EMG({onCamera, sessId}){
                         hidden
                     />}
                 {showModal && (
-                    <Modal onClose={handleCloseModal}>
+                    <ModalEMG >
                         <EMGWarning onCloseModal = {handleCloseModal} emgUUID={emg}/>
-                    </Modal>
+                    </ModalEMG>
                 )}
             </div>
     );
