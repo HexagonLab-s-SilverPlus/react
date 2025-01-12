@@ -190,6 +190,10 @@ const FindPwdMember = () => {
   //     return;
   //   }
   // };
+  const handleMoveReturn = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
 
   const moveFindPwdResult = () => {
     navigate('/fpmResult', { state: verifyData });
@@ -371,6 +375,7 @@ const FindPwdMember = () => {
                 color: '#333333',
                 border: 0,
               }}
+              onClick={handleMoveReturn}
             >
               이 전
             </button>

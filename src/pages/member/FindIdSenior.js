@@ -191,6 +191,11 @@ const FindIdSenior = () => {
   //   }
   // };
 
+  const handleMoveReturn = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
+
   const moveFindIdResult = () => {
     navigate('/fisResult', { state: verifyData });
   };
@@ -371,6 +376,7 @@ const FindIdSenior = () => {
                 color: '#333333',
                 border: 0,
               }}
+              onClick={handleMoveReturn}
             >
               이 전
             </button>

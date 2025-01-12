@@ -40,9 +40,9 @@ const FindPwdMemberResult = () => {
         });
         console.log('response 데이터 확인 : ', response.data);
         setResult(response.headers['response']);
-        if (result === 'success') {
+        if (response.headers['response'] === 'success') {
           setMemUUID(response.data);
-        } else if (result === 'failed') {
+        } else if (response.headers['response'] === 'failed') {
           console.log('조회된 아이디가 없음');
         } else {
           console.log('비밀번호 찾기 실패');
@@ -123,7 +123,8 @@ const FindPwdMemberResult = () => {
     }
 
     try {
-      const response = await apiSpringBoot.put(`/member/pwdupdate/${memUUID}`, {
+      const response = await apiSpringBoot.post(`/member/pwdupdate`, {
+        memUUID: memUUID,
         memPw: memPwd.memPw,
       });
       const result = response.headers['response'];
@@ -230,7 +231,7 @@ const FindPwdMemberResult = () => {
                       }}
                       name="pwdCheck"
                     >
-                      {messagePwdColor === 'green' && <span>&#x2714;</span>}
+                      {messagePwdColor === 'green'}
                       {passwordCheckMsg}
                     </tr>
                   )}
