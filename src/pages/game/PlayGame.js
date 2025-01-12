@@ -8,8 +8,9 @@ import SeniorNavbar from '../../components/common/SeniorNavbar';
 // resources
 import hwatuCard from './cardInfo';
 // function
-import { selectCard } from './playAction'
+import { selectCard } from './playAction';
 import { autoChoice } from './autoChoice';
+import AmassCardsModal from './AmassCardsModal';
 
 const PlayGame = () => {
   // navigate
@@ -34,6 +35,14 @@ const PlayGame = () => {
   const [amassPlayerList, setAmassPlayerList] = useState([]);
   // 상대방이 쌓은 카드
   const [amassOpponentList, setAmassOpponentList] = useState([]);
+  // 상대방에게 피뺏기 모달창 
+  const [showModal, setShowModal] = useState(false);
+  // 상대방이 얻은 패 저장변수
+  const [opponentGetCard, setOpponentGetCard] = useState([]);
+  // 가져올 카드수 임시 저장 변수
+  const [takeAwayCardCount,setTakeAwayCardCount] = useState(0);
+  // 패 뺏기 중 상태 대기변수
+  const [isProcessing, setIsProcessing] = useState(false);
   //-----------------------------------------------------------------------------
   // 테이블에 같은카드 두장일때 선택시 사용할 상태변수
   // const [isTwoCards, setIsTwoCards] = useState(false);
@@ -104,8 +113,10 @@ const PlayGame = () => {
   //-------------------------------------------------------------------------------------------
   // 턴 1회 실시
   const handleSelectCard = (card) => {
-    // 뺏어올 카드 수 카운트
-    // const takeAwayCard = 0;
+    if (isProcessing) {
+      console.log("모달 작업 중, 대기 중입니다.");
+      return; // 대기 상태일 경우 진행 중지
+    }
     // ------------------------------------------------------------------------------------
     // 턴 플레이어 카드
     const turnPlayerCards = currentTurn
@@ -120,10 +131,15 @@ const PlayGame = () => {
     const [firstCard, ...remainingDeck] = deckCards;
     setDeckCards(remainingDeck); // 덱카드 셋
     // 상대방 플레이이어 겟 카드
-    const opponentGetCard = currentTurn
-    ? getOpponentCards : getPlayerCards;
+    const opponentCardsToShow = currentTurn
+        ? checkCardType(getOpponentCards)
+        : checkCardType(getPlayerCards);
+    setOpponentGetCard(opponentCardsToShow);
+
+    console.log("opponentGetCard: ", opponentCardsToShow);
+
     // 카드 처리
-    const returnValue = selectCard(card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards,turnPlayerAmassList);
+    const returnValue = selectCard(card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards,turnPlayerAmassList,deckCards);
     // 처리한 카드 변수저장
     // gpc : getPlayerCard, pc: playerCard, tc : tableCard, cnt: takeAwayCard, amass: amassList
     console.log("getPlayerCard : ", returnValue.gpc);
@@ -132,15 +148,27 @@ const PlayGame = () => {
     console.log("takeAwayCard : ", returnValue.cnt);
     console.log("amassList : ", returnValue.amass);
 
+    setTakeAwayCardCount(returnValue.cnt);
+
+    console.log("returnValue.cnt:", returnValue.cnt);
+    console.log("opponentGetCard.length:", opponentGetCard.length);
     // qmassList 갯수만큼 카드 뺏기
-    if (returnValue.amass > 0 ){
-      const amassCardList = amassCards(returnValue.amass, opponentGetCard)
+    if (returnValue.cnt > 0 && opponentGetCard.length > 0) {
+      console.log("모달 활성화 조건 만족");
+      setShowModal(true); // 모달 열기
+      setIsProcessing(true); // 대기 시작
     }
+
+
+    setTakeAwayCardCount(0); // 카운트수 0만들기
+    setOpponentGetCard([]); // 선택된 카드 초기화
+
     // 반환카드 세팅
     if(currentTurn){
       setGetPlayerCards(returnValue.gpc);
       setPlayerCards(returnValue.pc);
       setAmassPlayerList((prev)=>[...prev,...returnValue.amass]);
+
     } else{
       setGetOpponentCards(returnValue.gpc);
       setOpponentCards(returnValue.pc);
@@ -159,10 +187,49 @@ const PlayGame = () => {
     handleSelectCard(choiceCard);
 
   }},[currentTurn]);
+  
   //---------------------------------------------------------------------------------------------------------------------
   // 홈으로 이동버튼
   const handleMoveHome=()=>{
     if(window.confirm('홈으로 이동하시겠습니까?')){navigate('/senior-menu')}
+  };
+  // 다시하기 버튼
+  const handleMoveRegame = () => {
+    if(window.confirm('다시 하시겠습니까?')){window.location.href ="/game/play"}
+  };
+  // ------------------------------------------
+  const handleWinner = (getPlayerCardCount,getOpponentCardCount) =>{
+    if (getPlayerCardCount>getOpponentCardCount){
+      return(<div>어르신 승리 😆</div>);
+    } else if (getPlayerCardCount<getOpponentCardCount){
+      return(<div>컴퓨터 승리 😢</div>);
+    } else{
+      return(<div>무승부입니다 🙂</div>);
+    }
+
+  }; 
+  //-----------------------------------------------------------------------------------------------------------
+  // 패목록중에서 피만 뽑기
+  const checkCardType = (cards) =>{
+    const cardType = cards.filter((card)=>card.type === "피")
+    return cardType;
+  };
+  //------------------------------------------------------------------------------------------------
+  // 뺏을카드 내가 얻은 목록에 추가 메소드
+  const handleConfirmAmassCards = (cards) => {
+    if (currentTurn) {
+        setGetPlayerCards((prev) => [...prev, ...cards]); // 플레이어 카드에 추가
+        setGetOpponentCards((prev) =>
+            prev.filter((card) => !cards.some((selected) => selected.id === card.id))
+        ); // 상대방 카드에서 제거
+    } else {
+        setGetOpponentCards((prev) => [...prev, ...cards]); // 상대방 카드에 추가
+        setGetPlayerCards((prev) =>
+            prev.filter((card) => !cards.some((selected) => selected.id === card.id))
+        ); // 플레이어 카드에서 제거
+    }
+    setShowModal(false); // 모달 닫기
+    setIsProcessing(false); // 대기 해제
   };
   //------------------------------------------------------------------------------------------------
   return (
@@ -247,6 +314,8 @@ const PlayGame = () => {
             <button onClick={()=>(handleMoveHome())}>홈으로 이동</button>
           </div>
         </div>{/* 플레이어 카드 */}
+
+
         {/* {isTwoCards &&
           <div className={styles.isTwoCards}>
             <div className={styles.twoCardsTitle}>카드를 선택하세요</div>
@@ -263,6 +332,36 @@ const PlayGame = () => {
             </div>
           </div>
         } */}
+
+
+        {showModal && opponentGetCard.length > 0 && (
+          <AmassCardsModal
+            opponentCards={opponentGetCard}
+            amassCount={takeAwayCardCount}
+            onConfirm={handleConfirmAmassCards}
+          />
+        )}
+
+
+        {deckCards.length === 0 &&
+          (
+            <div className={styles.finishModal}>
+              <div className={styles.finishModalMain}>
+                <div className={styles.finishModalTitle}>
+                  게임이 종료되었습니다.
+                </div>
+                <div className={styles.finishModalContent}>
+                  상대방이 얻은 카드 갯수 : {getOpponentCards.length}<br/>
+                  내가 얻은 카드 갯수 : {getPlayerCards.length}<br/>
+                  {handleWinner(getPlayerCards.length,getOpponentCards.length)}
+                </div>
+                <div className={styles.finishModalButton}>
+                  <button onClick={()=>(handleMoveRegame())}>다 시 하 기</button>
+                  <button onClick={()=>(handleMoveHome())}>홈으로 이동</button>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

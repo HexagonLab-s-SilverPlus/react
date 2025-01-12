@@ -1,5 +1,5 @@
 // src/pages/game/playAction.js
-export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards, turnPlayerAmassList)=>{
+export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPlayerGetCards, turnPlayerAmassList,deckCards)=>{
     console.log("내가 낸 패 : ",card);
     console.log("덱에서 뒤집힌 패 : ",firstCard);
     // 변수----------------------------------------------------------------
@@ -53,6 +53,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
         const updateThreeCard = playerCard.filter((playerCard)=>!threeCardList.some((card) => card.id === playerCard.id));
         playerCard=[...updateThreeCard,otherCard[0],otherCard[1]];
         getCardList=[...threeCardList];
+        console.log("폭탄");
         takeAwayCard = takeAwayCard+1;
         
     }
@@ -62,6 +63,9 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
         turnPlayerAmassList.forEach((card)=>{
             if (card.month === checkCard.month){
                 countCard=countCard+1;
+                console.log("자뻑");
+            } else{
+                console.log("뻑");
             }
         });
         if (countCard == 1){return true;}else{return false;}
@@ -85,6 +89,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
     if (sameCardToPlayer.length === 0){
         // 플레이어카드 = 덱카드 일때
         if(card.month === firstCard.month){
+            console.log("쪽");
             takeAwayCard = takeAwayCard+1;
             getCardList.push(card,firstCard);
         // 테이블에서 덱카드와 같은 카드가 0개일때
@@ -138,6 +143,7 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
     } else if(sameCardToPlayer.length === 2){
         // 플레이어카드 = 덱카드 일때
         if(card.month === firstCard.month){
+            console.log("따닥");
             takeAwayCard = takeAwayCard+1;
             getCardList.push(card,firstCard,...sameCardToPlayer);
             outTableCardList.push(...sameCardToPlayer);
@@ -201,8 +207,11 @@ export const selectCard = (card, firstCard, tableCards, turnPlayerCards, turnPla
     if (outTableCardList.length !==0){
         tableCard = tableCard.filter((tableCard) => !outTableCardList.some((card) => card.id === tableCard.id));
     };
+    console.log("덱 카드 수 : ",deckCards.length-1);
+
     // 쓸일때
-    if (tableCards.length===0){
+    if (tableCard.filter((tableCard) => !outTableCardList.some((card) => card.id === tableCard.id)).length===0 && deckCards.length-1 > 0){
+        console.log("쓸");
         takeAwayCard = takeAwayCard+1;
     }
     // 폭탄 제거하기
