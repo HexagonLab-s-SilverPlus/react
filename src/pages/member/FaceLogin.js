@@ -84,6 +84,7 @@ const FaceLogin = () => {
       setResult(serverResponse.data);
       const accessToken = serverResponse.headers['authorization'];
       const refreshToken = serverResponse.headers['response'];
+      alert('로그인 성공');
       login({ accessToken, refreshToken });
       navigate('/');
     } catch (error) {

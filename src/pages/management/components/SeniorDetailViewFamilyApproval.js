@@ -64,18 +64,35 @@ const SeniorDetailViewFamilyApproval = ({ UUID, family, senior }) => {
 
   // 가족계정 승인/반려 핸들러
   const handleApproval = async (e) => {
-    const approvalConfirm = window.confirm('승인하시겠습니까?');
-    if (approvalConfirm) {
-      const status = e.target.value;
-      setStatusD(status);
-      console.log(status);
-      await apiSpringBoot.put(`member/approval/${UUID}`, null, {
-        params: { status: status },
-      });
-      status === '승인' ? setIsApproval(true) : setIsApproval(false);
-      status === '승인' ? alert('승인완료') : alert('반려완료');
+    const status = e.target.value;
+    if (status === '승인') {
+      const approvalConfirm = window.confirm('승인하시겠습니까?');
+      if (approvalConfirm) {
+        setStatusD(status);
+        console.log(status);
+        await apiSpringBoot.put(`member/approval/${UUID}`, null, {
+          params: { status: status },
+        });
+        status === '승인' ? setIsApproval(true) : setIsApproval(false);
+        status === '승인' ? alert('승인완료') : alert('반려완료');
+        window.location.reload();
+      } else {
+        return;
+      }
     } else {
-      return;
+      const approvalConfirm = window.confirm('반려하시겠습니까?');
+      if (approvalConfirm) {
+        setStatusD(status);
+        console.log(status);
+        await apiSpringBoot.put(`member/approval/${UUID}`, null, {
+          params: { status: status },
+        });
+        status === '승인' ? setIsApproval(true) : setIsApproval(false);
+        status === '승인' ? alert('승인완료') : alert('반려완료');
+        window.location.reload();
+      } else {
+        return;
+      }
     }
   };
 

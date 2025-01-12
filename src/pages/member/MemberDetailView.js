@@ -19,7 +19,7 @@ const MemberDetailView = () => {
 
   const handleMove = () => {
     setInitialLoad(false);
-    navigate('/test');
+    navigate('/mlistview');
   };
 
   useEffect(() => {
@@ -99,6 +99,7 @@ const MemberDetailView = () => {
     const updatedFormData = {
       ...formData, // 기존 상태 값
       memChangeStatus: currentTimestamp, // 새로운 값 추가
+      memCellphone: formData.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     // FormData 객체에 값 추가
@@ -286,28 +287,31 @@ const MemberDetailView = () => {
                     </tr>
                   </table>
                 </div>
+                <div className={styles.mdetailButtonDiv}>
+                  <div>
+                    <button
+                      className={styles.mdetailButton1}
+                      onClick={handleMove}
+                    >
+                      목 록
+                    </button>
+                  </div>
+                  <div>
+                    <input
+                      type="reset"
+                      value="초 기 화"
+                      className={styles.mdetailButton2}
+                      onClick={() => setFormData(initialData)}
+                    />
+                    <input
+                      type="submit"
+                      value="수 정"
+                      className={styles.mdetailButton1}
+                      style={{ margin: '0' }}
+                    />
+                  </div>
+                </div>
               </form>
-            </div>
-            <div className={styles.mdetailButtonDiv}>
-              <div>
-                <button className={styles.mdetailButton1} onClick={handleMove}>
-                  목 록
-                </button>
-              </div>
-              <div>
-                <input
-                  type="reset"
-                  value="초 기 화"
-                  className={styles.mdetailButton2}
-                  onClick={() => setFormData(initialData)}
-                />
-                <input
-                  type="submit"
-                  value="수 정"
-                  className={styles.mdetailButton1}
-                  style={{ margin: '0' }}
-                />
-              </div>
             </div>
           </>
         ) : (
