@@ -146,15 +146,13 @@ function EnrollManager() {
     }
   };
 
-  const validatePassword = () => {
+  const validatePassword = (password) => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    if (passwordRegex.test(formData.memPw)) {
-      setPasswordValidate(true);
-    } else {
-      setPasswordValidate(false);
-    }
-    return passwordRegex.test(formData.memPw);
+
+    const isValid = passwordRegex.test(password); // 유효성 검사
+    setPasswordValidate(isValid); // 상태를 즉시 업데이트
+    return isValid;
   };
 
   const validateCellphone = () => {
@@ -180,16 +178,16 @@ function EnrollManager() {
       return;
     }
 
-    if (!validatePassword()) {
+    if (!validatePassword) {
       alert('비밀번호 조건에 맞지 않습니다.');
       return;
     }
 
     // 전송 전에 유효성 검사 확인
-    // if (!validate()) {
-    //   alert('비밀번호 일치 확인을 해주세요.');
-    //   return;
-    // }
+    if (!validate) {
+      alert('비밀번호 일치 확인을 해주세요.');
+      return;
+    }
 
     if (!validateCellphone()) {
       alert('휴대전화 인증을 해주세요.');
@@ -292,29 +290,6 @@ function EnrollManager() {
     setShowModal(false);
   };
 
-  // const handleFirstInputChange = (e) => {
-  //   const value = e.target.value;
-
-  //   // 숫자만 입력 허용 및 최대 6자리 제한
-  //   if (!isNaN(value) && value.length <= 6) {
-  //     setFirstValue(value);
-
-  //     // 6자리 입력 시 두 번째 input으로 포커스 이동
-  //     if (value.length === 6) {
-  //       secondInputRef.current.focus();
-  //     }
-  //   }
-  // };
-
-  // const handleSecondInputChange = (e) => {
-  //   const value = e.target.value;
-
-  //   // 숫자만 입력 허용
-  //   if (!isNaN(value)) {
-  //     setSecondValue(value);
-  //   }
-  // };
-
   return (
     <>
       <div className={styles.enrollMainContainer}>
@@ -392,8 +367,9 @@ function EnrollManager() {
                 type="password"
                 name="memPw"
                 onChange={(e) => {
-                  handleChange(e);
-                  handleCheckPassword();
+                  const password = e.target.value;
+                  handleChange(e); // 기존 입력 상태 업데이트
+                  validatePassword(password); // 즉시 유효성 검사 실행
                 }}
                 className={styles.textbox}
                 style={{ marginBottom: '0' }}

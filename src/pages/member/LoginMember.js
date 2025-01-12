@@ -7,7 +7,6 @@ import styles from './LoginMember.module.css';
 import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 
-import SideBar from '../../components/common/SideBar';
 import SeniorFooter from '../../components/common/SeniorFooter';
 
 import kakao from '../../assets/images/icon/Kakao Icon.png';
@@ -17,7 +16,7 @@ import google from '../../assets/images/icon/Google Icon.png';
 const LoginMember = () => {
   const [memId, setMemId] = useState('');
   const [memPw, setMemPw] = useState('');
-  const { login, isLoggedIn, member } = useContext(AuthContext);
+  const { login, isLoggedIn, member, role } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -72,7 +71,6 @@ const LoginMember = () => {
 
         login({ accessToken, refreshToken });
         alert('로그인 성공');
-
       }
       // if (response.data.errorCode === '')
     } catch (error) {
@@ -90,7 +88,6 @@ const LoginMember = () => {
     e.preventDefault();
     navigate('/loginsenior');
   };
-
 
   // 멤버 타입에 따른 리다이렉트 처리
   useEffect(() => {
