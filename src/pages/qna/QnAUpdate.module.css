@@ -1,4 +1,5 @@
-.qnaContent {width: 100%; padding: 69px 61px 72px calc(368px + 61px); box-sizing: border-box;}
+.bodyDiv {position: relative; }
+.qnaContent {position: absolute; right: 0px; width:calc(100% - 368px) ;padding: 69px 61px 72px 61px; box-sizing: border-box;}
 .qnaUpdateTitleDiv, .memberIdDiv, .qnaUpdateContentDiv {display: flex; margin-top: 30px; margin-bottom: 30px;}
 .qnaUpdateTitle {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}
 .memberId {width: 100px; margin: 0; padding: 0; vertical-align: top; text-align: left; font-family: "Pretendard Variable"; font-size: 20px;}

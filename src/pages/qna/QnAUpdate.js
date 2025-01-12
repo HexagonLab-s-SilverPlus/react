@@ -127,7 +127,7 @@ const QnAUpdate = () => {
     };
 
     return (
-        <div>
+        <div className={styles.bodyDiv}>
             <SideBar />
             <div className={styles.qnaContent}>
                 <QNAHeader text="Q&A 수정"/>

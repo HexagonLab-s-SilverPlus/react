@@ -1,4 +1,5 @@
-.qnaContent {width: 100%; padding: 69px 61px 72px calc(368px + 61px); box-sizing: border-box;}
+.bodyDiv {position: relative; }
+.qnaContent {position: absolute; right: 0px; width:calc(100% - 368px) ;padding: 69px 61px 72px 61px; box-sizing: border-box;}
 .qnaDetailHeader {display: flex; align-items: flex-end; margin-top: 55px; padding: 0; position: relative;}
 .qnaDetailHeader h1, h4 {margin: 0; padding: 0;}
 .qnaDetailContent {padding: 40px 40px; font-family: "Pretendard Variable"; font-size: 18px; letter-spacing: 2px; white-space: pre-wrap; width: 85%;}
