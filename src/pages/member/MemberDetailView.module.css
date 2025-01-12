@@ -82,7 +82,7 @@
   border: 1px solid;
 }
 
-.mdetailTable > tr > td > input[readonly] {
+.mdetailTable > tr > td > input[disabled] {
   background-color: #dddddd;
   border: 1px solid #ddd;
 }
@@ -185,7 +185,7 @@
   border: 0;
 }
 
-.mdetailTable > tr > td > div > input[readonly] {
+.mdetailTable > tr > td > div > input[disabled] {
   background-color: #dddddd;
 }
 

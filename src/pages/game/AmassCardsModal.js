@@ -3,15 +3,18 @@ import React,{useState} from 'react';
 // 스타일 파일
 import styles from './AmassCardsModal.module.css';
 
-const AmassCardsModal = ({opponentCArs, amassCount}) => {
+const AmassCardsModal = ({opponentCards, amassCount,onConfirm}) => {
+    console.log("opponentCards: ", opponentCards);
+    console.log("amassCount: ", amassCount);
+
     // 선택카드 리스트
     const [selectedCards, setSelectedCards] = useState([]);
-    // 카드선택 핸들러
+    // 카드 선택 핸들러
     const handleCardClick = (card) => {
-        if (selectedCards.includes(card)){
-            setSelectedCards(selectedCards.filter((selected)=>selected.id!==card.id));
-        } else if (selectedCards.length < amassCount){
-            setSelectedCards([...selectedCards,card]);
+        if (selectedCards.some((selected) => selected.id === card.id)) {
+            setSelectedCards(selectedCards.filter((selected) => selected.id !== card.id));
+        } else if (selectedCards.length < amassCount) {
+            setSelectedCards([...selectedCards, card]);
         }
     };
 
@@ -29,12 +32,16 @@ const AmassCardsModal = ({opponentCArs, amassCount}) => {
             <div className={styles.modalContent}>
                 <div className={styles.modalAmassTitle}>카드를 {amassCount}장 선택해주세요.</div>
                 <div className={styles.modalAmassCardList}> 
-                    {opponentCArs.map((card)=>(
+                    {opponentCards.map((card)=>(
                         <img
                             key={card.id}
                             src={`/assets/images/game/card/${card.image}`}
                             alt={`${card.month}월 ${card.type} 카드`}
-                            className={selectedCards.includes(card)? styles.modalAmassSelected : styles.modalAmasscard}
+                            className={
+                                selectedCards.some((selected) => selected.id === card.id)
+                                    ? styles.modalAmassSelected
+                                    : styles.modalAmassCard
+                            }
                             onClick={()=>handleCardClick(card)}
                         />
                     ))}

@@ -135,15 +135,13 @@ function EnrollFamily() {
     }
   };
 
-  const validatePassword = () => {
+  const validatePassword = (password) => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    if (passwordRegex.test(formData.memPw)) {
-      setPasswordValidate(true);
-    } else {
-      setPasswordValidate(false);
-    }
-    return passwordRegex.test(formData.memPw);
+
+    const isValid = passwordRegex.test(password); // 유효성 검사
+    setPasswordValidate(isValid); // 상태를 즉시 업데이트
+    return isValid;
   };
 
   const validateCellphone = () => {
@@ -169,23 +167,23 @@ function EnrollFamily() {
       return;
     }
 
-    if (!validatePassword()) {
+    if (!validatePassword) {
       alert('비밀번호 조건에 맞지 않습니다.');
       return;
     }
 
     // 전송 전에 유효성 검사 확인
-    // if (!validate()) {
-    //   alert('비밀번호 일치 확인을 해주세요.');
-    //   return;
-    // }
+    if (!validate) {
+      alert('비밀번호 일치 확인을 해주세요.');
+      return;
+    }
 
-    if (!validateCellphone()) {
+    if (!validateCellphone) {
       alert('휴대전화 인증을 해주세요.');
       return;
     }
 
-    if (!seniorRelationshipData) {
+    if (!selectSeniorData) {
       alert('가족관계에 있는 어르신을 검색하여 선택해주세요.');
       return;
     }
@@ -205,6 +203,11 @@ function EnrollFamily() {
       memUUID: senior.memUUID,
       relationship: senior.relationship || '',
     }));
+
+    if (!seniorRelationshipData.relationship) {
+      alert('선택한 어르신과의 관계를 설정해주세요.');
+      return;
+    }
 
     data.append(
       'seniorRelationshipData',
@@ -328,15 +331,6 @@ function EnrollFamily() {
                 onChange={handleChange}
                 className={styles.textbox}
                 required
-                value={formData.memId}
-                pattern="[a-zA-Z0-9]*" // 영문자와 숫자만 허용
-                title="아이디는 영문자와 숫자만 입력 가능합니다." // 경고 메시지
-                onInvalid={(e) =>
-                  e.target.setCustomValidity(
-                    '아이디는 영문자와 숫자만 입력 가능합니다.'
-                  )
-                }
-                onInput={(e) => e.target.setCustomValidity('')} // 입력 시 커스텀 메시지 초기화
               />
             </tr>
             <tr className={styles.valuebox}>아이디</tr>
@@ -354,6 +348,15 @@ function EnrollFamily() {
                   marginRight: '20px',
                   marginBottom: 0,
                 }}
+                value={formData.memId}
+                pattern="[a-zA-Z0-9]*" // 영문자와 숫자만 허용
+                title="아이디는 영문자와 숫자만 입력 가능합니다." // 경고 메시지
+                onInvalid={(e) =>
+                  e.target.setCustomValidity(
+                    '아이디는 영문자와 숫자만 입력 가능합니다.'
+                  )
+                }
+                onInput={(e) => e.target.setCustomValidity('')} // 입력 시 커스텀 메시지 초기화
                 required
               />
               <button className={styles.button2} onClick={handleIdCheck}>
@@ -389,8 +392,9 @@ function EnrollFamily() {
                 type="password"
                 name="memPw"
                 onChange={(e) => {
-                  handleChange(e);
-                  handleCheckPassword();
+                  const password = e.target.value;
+                  handleChange(e); // 기존 입력 상태 업데이트
+                  validatePassword(password); // 즉시 유효성 검사 실행
                 }}
                 className={styles.textbox}
                 style={{ marginBottom: '0' }}
@@ -494,7 +498,7 @@ function EnrollFamily() {
               />
               <span>-</span>
               <input
-                type="text"
+                type="password"
                 name="memRnnEnd"
                 onChange={handleRnnChange}
                 style={{ width: '219px' }}

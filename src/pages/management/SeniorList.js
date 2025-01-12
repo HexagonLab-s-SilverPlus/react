@@ -227,7 +227,7 @@ const SeniorList = () => {
   };
 
   // 검색으로 인한 페이지 변경 시
-  const handleUpdateView = async (page, updatedSearch) => {
+  const handleUpdateView = async (page, updatedSearch = search) => {
     console.log('검색 기능 작동확인');
     try {
       const response = await apiSpringBoot.get(`/member/seniorList`, {
