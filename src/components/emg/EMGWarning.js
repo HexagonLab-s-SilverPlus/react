@@ -44,8 +44,8 @@ const EMGWarning = ({onCloseModal, emgUUID}) => {
             <div>
                 <div>
                     <h2 className={styles.message}>위급 상황이 아니면 확인을 선택해 주세요</h2>
-                    <p>{timeLeft}초 남음</p>
-                    <div  >
+                    <p className={styles.sec}>{timeLeft}초 남음</p>
+                    <div  className={styles.btn}>
                         <button onClick={handleCancel} className={styles.modalButton}>확인</button>
                     </div>
                 </div>
