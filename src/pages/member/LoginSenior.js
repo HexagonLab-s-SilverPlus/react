@@ -174,12 +174,6 @@ const LoginSenior = () => {
                   비밀번호 찾기
                 </Link>
               </span>
-              <span className={styles.seperator}>❘</span>
-              <span>
-                <Link to="/enrollselect" className={styles.findlink}>
-                  회원가입
-                </Link>
-              </span>
             </div>
             <div>
               <button type="submit" className={styles.loginbutton}>
