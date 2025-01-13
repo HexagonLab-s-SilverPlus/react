@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import styles from './WelcomePage.module.css';
 import backgroundImage from '../../assets/images/background.png';
 import granfa from '../../assets/images/granfa.png';
 import manager from '../../assets/images/mgr.png';
 import admin from '../../assets/images/developer.png'
 import family from '../../assets/images/familiy.png';
+import { AuthContext } from '../../AuthProvider';
 
 import sangmu from '../../assets/images/sangmu.jpg'; // 상무
 import eunyoung from '../../assets/images/eunyoung.jpg'; // 은영
@@ -22,6 +23,8 @@ const WelcomePage = () => {
     const developerSectionRef = useRef(null);
     const [hoveredIndex, setHoveredIndex] = useState(null); // 호버 상태 관리
     const [hexagonHovered, setHexagonHovered] = useState(false); // 육각형 호버 상태 관리
+
+    const { member } = useContext(AuthContext);
 
     // 팀원 이미지, 이름, 소개
     // text에 어떻게 적을지 방향성 정해보기(자기소개)
@@ -127,7 +130,12 @@ const WelcomePage = () => {
     };
 
     const handleLoginClick = () => {
-        navigate('/senior-menu'); // SeniorMenu 페이지로 이동
+        if (!member || !member.memType) return;
+
+        if (member.memType === 'SENIOR') navigate('/senior-menu');
+        else if (member.memType === 'MANAGER') navigate('/dashlist');
+        else if (member.memType === 'FAMILY') navigate('/seniorlist');
+        else if (member.memType === 'ADMIN') navigate('/mlistview');
     }
 
     return (
@@ -158,7 +166,7 @@ const WelcomePage = () => {
                     }}
                 >
                     어르신, 혹시 말동무가 필요하신가요?<br />
-                    실버플러스의 AI 말동무 서비스로 대화를 시작해 보세요!
+                    실버플러스의 AI 말동무 서비스로<br />대화를 시작해 보세요!
                 </div>
 
                 <div className={styles.scrollArrow} onClick={() => handleScrollToSection(secondSectionRef)}>
@@ -265,7 +273,7 @@ const WelcomePage = () => {
                                 <p className={styles.underline}>
                                     다각적 접근으로 문제를 해결합니다.<br />
                                 </p>
-                                <br/>
+                                <br />
                                 <a
                                     href="https://github.com/HexagonLab-s-SilverPlus" // GitHub Organization 링크 추가
                                     target="_blank"
