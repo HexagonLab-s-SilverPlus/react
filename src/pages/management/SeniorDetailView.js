@@ -104,10 +104,11 @@ const SeniorDetailView = () => {
 
         // 병력 공개 데이터 처리
         setMediPrivacy(mediResponse.data);
-        console.log('mediPrivacy : ', mediResponse.data);
+        // console.log('mediPrivacy : ', mediResponse.data);
 
       } catch (error) {
-        console.error('데이터 조회 실패: ', error);
+        // console.error('데이터 조회 실패: ', error);
+        alert('어르신의 정보를 가져오는데 실패했습니다.')
       }
     };
 
@@ -119,7 +120,7 @@ const SeniorDetailView = () => {
     if (senior) {
       const scrollToSection = searchParams.get('scrollTo');
       if (scrollToSection === 'DocManaged' && docManagedRef.current) {
-        console.log('Scrolling to DocManaged');
+        // console.log('Scrolling to DocManaged');
         setTimeout(() => {
           docManagedRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 200); // 약간의 지연 추가

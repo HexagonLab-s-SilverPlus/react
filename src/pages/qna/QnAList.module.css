@@ -9,7 +9,7 @@
 .qnaTitleInput {height: 33px; width: 217px; border-top: none; border-left: none; border-right: none; position: absolute; right: 40px; bottom: 0;}
 .qnaDateInput {position: absolute; right: 40px; bottom: 0px;}
 .qnaDate {height: 30px; width: 110px; font-family: "Pretendard Variable"; font-weight: bold;}
-.qnaInputBTN {display: inline-block; border: 0; background-color: #eeeeee; color: #000000; cursor: pointer; font-family: "Pretendard Variable"; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; border: 0; cursor: pointer; position: absolute; left: 0; bottom: 0;}
+.qnaInputBTN {display: inline-block; border: 0; background-color: #eeeeee; color: #000000; cursor: pointer; font-family: "Pretendard Variable"; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; border: 0; cursor: pointer; position: absolute; left: 120px; bottom: 0;}
 .qnaInputBTN:hover {background-color: #064420; color: #ffffff;}
 .qnaBTN {display: inline-block; border: 0; background-color: #eeeeee; color: #000000; border-radius: 10px; cursor: pointer; font-family: "Pretendard Variable"; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; border: 0; cursor: pointer; position: absolute; left: 0; bottom: 0;}
 .qnaBTN:hover {background-color: #064420; color: #ffffff;}

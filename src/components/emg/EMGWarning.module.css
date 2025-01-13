@@ -1,21 +1,32 @@
-  /* 버튼 스타일 */
-  .modalButton {
-    background-color: #f44336; /* 빨간색 */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: "Pretendard Variable";
-    cursor: pointer;
-    border-radius: 8px;
-    width: 180px;
-  }
+/* 버튼 스타일 */
+.modalButton {
+  background-color: #f44336; /* 빨간색 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 36px;
+  font-family: "Pretendard Variable";
+  cursor: pointer;
+  border-radius: 8px;
+  width: 180px;
+  position: absolute;
+  left: calc(50% - 90px);
+  bottom: 30px;
+}
+
+.modalButton:hover {
+  font-size: 36px;
+  background-color: #d32f2f; /* 버튼 호버 시 색상 */
+}
+
+.message, .sec {
+  font-size: 36px;
+  font-family: "Pretendard Variable";
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
-  .modalButton:hover {
-    background-color: #d32f2f; /* 버튼 호버 시 색상 */
-  }
-  
-  .message {
-    font-size: 16px;
-    font-family: "Pretendard Variable";
-  }
+}
