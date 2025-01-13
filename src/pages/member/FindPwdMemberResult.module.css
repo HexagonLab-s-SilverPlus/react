@@ -1,4 +1,8 @@
 /* src/pages/member/FindPwdMemberResult.module.css*/
+.fpmResultMainContainer button,
+.fpmResultMainContainer input {
+  font-family: 'Pretendard Variable';
+}
 
 .fpmResultMainContainer {
   position: absolute;

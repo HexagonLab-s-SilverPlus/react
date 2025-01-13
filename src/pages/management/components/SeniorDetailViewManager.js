@@ -277,6 +277,11 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
     }
   };
 
+  const handleReset = (e) => {
+    e.preventDefault();
+    window.location.reload();
+  };
+
   // 어르신 수정
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -299,7 +304,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
     const updatedSeniorFormData = {
       ...seniorFormData, // 기존 상태 값
       memChangeStatus: currentTimestamp, // 새로운 값 추가
-      mem,
+      memEnrollDate: convertUTCToKST(seniorFormData.memEnrollDate),
     };
 
     // FormData 객체 생성
@@ -669,7 +674,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
                 type="reset"
                 value="초 기 화"
                 className={styles.sdetailButton2}
-                onClick={() => seniorFormData(initialData)}
+                onClick={handleReset}
               />
               <input
                 type="submit"

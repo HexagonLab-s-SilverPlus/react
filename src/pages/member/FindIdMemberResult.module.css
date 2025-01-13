@@ -1,4 +1,9 @@
 /* src/pages/member/FindIdMemberResult.module.css*/
+.fimResultMainContainer button,
+.fimResultMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .fimResultMainContainer {
   position: absolute;
   /* display: flex; */

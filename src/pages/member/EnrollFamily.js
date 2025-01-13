@@ -209,11 +209,15 @@ function EnrollFamily() {
       relationship: senior.relationship || '',
     }));
 
-    if (!seniorRelationshipData.relationship) {
+    // 관계 값이 설정되지 않은 항목이 있는지 확인
+    const isAnyRelationshipMissing = seniorRelationshipData.some(
+      (data) => data.relationship === ''
+    );
+
+    if (isAnyRelationshipMissing) {
       alert('선택한 어르신과의 관계를 설정해주세요.');
       return;
     }
-
     data.append(
       'seniorRelationshipData',
       JSON.stringify(seniorRelationshipData)

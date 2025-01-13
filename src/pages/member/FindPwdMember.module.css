@@ -1,4 +1,9 @@
 /* src/pages/member/FindPwdMember.module.css*/
+.findPwdMainContainer button,
+.findPwdMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .findPwdMainContainer {
   position: absolute;
   width: 1200px;

@@ -1,4 +1,9 @@
 /* src/pages/member/Enroll.module.css*/
+.enrollMainContainer button,
+.enrollMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .enrollMainContainer {
   position: absolute;
   width: 1300px;

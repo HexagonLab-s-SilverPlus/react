@@ -1,4 +1,8 @@
 /* src/pages/member/LoginSenior.module.css */
+.form button,
+.form input {
+  font-family: 'Pretendard Variable';
+}
 
 .form {
   position: absolute;

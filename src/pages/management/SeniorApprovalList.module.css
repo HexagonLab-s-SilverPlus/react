@@ -1,4 +1,12 @@
 /* src/pages/management/SeniorApporvalList.module.css */
+.alistContainer input {
+  font-family: 'Pretendard Variable';
+}
+
+.alistContainer button {
+  font-family: 'Pretendard Variable';
+}
+
 .alistContainer {
   display: flex;
 }
@@ -27,22 +35,6 @@
   justify-content: space-between;
 }
 
-.alistReturnListBtnDiv > button {
-  cursor: pointer;
-  width: 70px;
-  height: 30px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #064420;
-  color: #ffffff;
-  border-radius: 4px;
-}
-
-.alistReturnListBtnDiv > button:hover {
-  background-color: transparent;
-  color: #064420;
-}
-
 .alisttableDiv {
   width: calc(100%);
   margin-top: 130px;
@@ -57,18 +49,15 @@
 }
 .alistTable > thead {
   width: 100%;
-}
-
-.alistTable > thead > tr {
-  border-top: 3px solid #618264;
-  border-bottom: 3px solid #618264;
+  background-color: #fdfaf6;
 }
 
 .alistTable > thead > tr > th {
   padding-top: 8px;
   padding-bottom: 8px;
   font-weight: bold;
-  border-bottom: 2px solid #999999;
+  border-top: 2px solid #618264;
+  border-bottom: 2px solid #618264;
 }
 
 .alistTable > tbody > tr:hover {
@@ -78,9 +67,15 @@
 .alistTable > tbody > tr > td {
   padding-top: 8px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #999999;
+  border-bottom: 1px solid #618264;
   cursor: pointer;
 }
 .alistPaging {
   margin-top: 45px;
+}
+
+.alistTable th:not(:first-child):not(:last-child),
+.alistTable td:not(:first-child):not(:last-child) {
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
 }

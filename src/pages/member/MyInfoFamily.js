@@ -235,7 +235,7 @@ const MyInfoFamily = () => {
     const newUpdateMember = {
       ...updateMember,
       memChangeStatus: currentTimestamp,
-      memCellphone: formData.memCellphone.replace(/-/g, ''), // 하이픈 제거
+      memCellphone: updateMember.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     Object.entries(newUpdateMember).forEach(([key, value]) => {

@@ -1,4 +1,9 @@
 /* src/pages/member/FaceLogin.module.css */
+.floginMainContainer button,
+.floginMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .floginMainContainer {
   position: absolute;
   width: 1300px;

@@ -1,4 +1,12 @@
 /* src/pages/managemnet/SeniorList.module.css */
+.slistContainer input {
+  font-family: 'Pretendard Variable';
+}
+
+.slistContainer button {
+  font-family: 'Pretendard Variable';
+}
+
 .slistContainer {
   display: flex;
 }
@@ -19,20 +27,19 @@
 }
 
 .slistRegistBtnDiv > button {
-  width: 100px;
-  height: 30px;
-  font-size: 15px;
+  width: 120px;
+  height: 40px;
+  font-size: 18px;
   font-weight: bold;
   border: 0;
-  background-color: #064420;
-  color: #fff;
+  background-color: #eee;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .slistRegistBtnDiv > button:hover {
-  background-color: transparent;
-  color: #064420;
+  background-color: #064420;
+  color: #fff;
   border: 1px solid #064420;
 }
 
@@ -123,12 +130,14 @@
 }
 .slistTable > thead {
   width: 100%;
+  background-color: #fdfaf6;
 }
 .slistTable > thead > tr > th {
   padding-top: 8px;
   padding-bottom: 8px;
   font-weight: bold;
-  border-bottom: 2px solid #999999;
+  border-top: 2px solid #618264;
+  border-bottom: 2px solid #618264;
 }
 .thTitle {
   width: 70px;
@@ -142,12 +151,18 @@
 .slistTable > tbody > tr > td {
   padding-top: 8px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #999999;
+  border-bottom: 1px solid #618264;
   cursor: pointer;
 }
 
 .slistTable > tbody > tr:hover {
   background-color: #d9d9d9d9;
+}
+
+.slistTable th:not(:first-child):not(:last-child),
+.slistTable td:not(:first-child):not(:last-child) {
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
 }
 
 .slistPaging {

@@ -1,4 +1,9 @@
 /* src/pages/member/FIndIdSenior.module.css*/
+.findIdMainContainer button,
+.findIdMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .findIdMainContainer {
   position: absolute;
   width: 1200px;
