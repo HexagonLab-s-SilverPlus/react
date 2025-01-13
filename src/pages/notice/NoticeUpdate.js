@@ -252,11 +252,11 @@ const NoticeDetail = () => {
                                 <tr>
                                     <td className={styles.buttonDiv}>
                                         <button
-                                            className={styles.noticeButton}
+                                            className={styles.noticeButton2}
                                             type='submit'
                                         >수정</button> &nbsp;
                                         <button 
-                                            className={styles.noticeButton}
+                                            className={styles.noticeButton2}
                                             onClick={handleInsertCancel}
                                         >취소</button>
                                     </td>
