@@ -75,3 +75,8 @@
 .modal p:hover {
   background-color: #f0f0f0; /* 호버 시 배경색 */
 }
+
+.modalMemName {
+  font-size: 24px;
+  padding: 10px 10px;
+}

@@ -86,7 +86,7 @@ const FaceLogin = () => {
       const refreshToken = serverResponse.headers['response'];
       alert('로그인 성공');
       login({ accessToken, refreshToken });
-      navigate('/');
+      navigate('/senior-menu');
     } catch (error) {
       console.error('Error sending image to server:', error);
     }
