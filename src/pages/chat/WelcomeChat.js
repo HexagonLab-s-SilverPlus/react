@@ -36,7 +36,7 @@ function WelcomeChat() {
         },
       );
 
-      const { workspaceId, audioBase64  } = response.data; // 생성된 워크스페이스 ID
+      const { workspaceId, audioBase64, reply  } = response.data; // 생성된 워크스페이스 ID
 
       if (!workspaceId) {
         alert('워크스페이스 생성에 실패했습니다. 다시 시도해주세요.');
@@ -52,7 +52,7 @@ function WelcomeChat() {
 
       // 생성된 워크스페이스 ID를 ChatPage로 전달하며 이동
       navigate(`/w/${workspaceId}`, {
-        state: { userFirstMsg }, // 사용자 첫 메시지를 상태로 전달
+        state: { workspaceId, aiReply: reply },
       });
 
 

@@ -12,7 +12,7 @@ import EMG from '../../components/emg/EMG.js';
 function ChatPage() {
   const location = useLocation();
   const { workspaceId: paramWorkspaceId } = useParams();
-  const { workspaceId: stateWorkspaceId, userFirstMsg } = location.state || {}; // WelcomeChat에서 전달받은 메시지
+  const { workspaceId: stateWorkspaceId, aiReply } = location.state || {};
   const workspaceId = stateWorkspaceId || paramWorkspaceId;
 
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(workspaceId);
@@ -33,8 +33,6 @@ function ChatPage() {
 
 
 
-
-  // 채팅 이력 조회
   const fetchChatHistory = async () => {
     if (!workspaceId) return;
 
@@ -43,6 +41,7 @@ function ChatPage() {
       const { data } = response?.data || {};
 
       if (Array.isArray(data)) {
+        console.log('메시지 이력:', data);
         setMessages(data.map(msg => ({
           sender: msg.msgSenderRole,
           text: msg.msgContent,
@@ -57,61 +56,25 @@ function ChatPage() {
     }
   };
 
-  // AI 응답 요청 및 메시지 추가
-  useEffect(() => {
-    const fetchAIReply = async () => {
-      try {
-        setMessages((prev) => [
-          ...prev,
-          { sender: 'USER', text: userFirstMsg }, // 사용자 메시지 추가
-          { sender: 'AI', loading: true }, // 로딩 상태 추가
-        ]);
 
-        const response = await apiFlask.post(
-          '/chat',
-          {
-            message: userFirstMsg,
-            createWorkspace: false,
-            workspaceId,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`,
-            },
-          }
-        );
-
-        const { reply } = response.data;
-
-        setMessages((prev) => {
-          const updatedMessages = [...prev];
-          updatedMessages[updatedMessages.length - 1] = { sender: 'AI', text: reply, loading: false };
-          return updatedMessages;
-        });
-      } catch (error) {
-        console.error('AI 응답 요청 실패:', error);
-        setMessages((prev) => [
-          ...prev,
-          { sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false },
-        ]);
-      }
-    };
-
-    if (userFirstMsg) fetchAIReply();
-  }, [workspaceId, userFirstMsg]);
-
-  // 워크스페이스 변경 시 채팅 이력 불러오기
   useEffect(() => {
     if (workspaceId) {
       setSelectedWorkspaceId(workspaceId);
       fetchChatHistory();
     }
-  }, [workspaceId]);
+    if (aiReply) {
+      setMessages((prev) => [...prev, { sender: 'AI', text: aiReply }]);
+    }
+  }, [workspaceId, aiReply]);
+
+
 
   // 사이드바 토글
   const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
 
+
+
+  
   // 메시지 전송 핸들러
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;

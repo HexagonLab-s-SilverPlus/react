@@ -11,7 +11,7 @@
 .searchKeyword{width: calc(100% - 400px); display:flex;align-items:center;border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px; height: 72px;}
 .search{width:32px;height:24px;cursor:pointer;}
 .searchKeywordBox{width:100%;font-size:32px;border:0px;color:#333333; outline: 0;}
-.dropdown{position:absolute;z-index:1000;margin-top: 85px;padding: 20px 30px ;border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px; background-color: #fff;}
+.dropdown{box-sizing: border-box; position:absolute;z-index:1000;width: 172px; margin-top: 85px;padding: 20px 30px ;border:2px rgba(0, 0, 0, 0.15) solid;border-radius: 10px; background-color: #fff;}
 .dropdownOption{padding:5px 0px;cursor:pointer;font-weight:normal;}
 .dropdownOption:hover{font-weight:bold;}
 .noticeSeniorButton{background: #eee; font-size: 16px; width: 192px; height: 72px; border-radius: 8px; font-family: "Pretendard Variable"; border: 0; cursor: pointer; font-size: 32px;}

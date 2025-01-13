@@ -1,10 +1,10 @@
 // src/pages/notice/noticeDetailView.js
-import React,{useState,useEffect,useContext} from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 // AuthContext
-import {AuthContext} from "../../AuthProvider"
+import { AuthContext } from "../../AuthProvider"
 // axios
-import {apiSpringBoot} from '../../utils/axios';
+import { apiSpringBoot } from '../../utils/axios';
 // css
 import styles from './NoticeUpdate.module.css';
 // components
@@ -14,72 +14,72 @@ const NoticeDetail = () => {
 
     // notice
     const [formData, setFormData] = useState({
-        notId:'',
-        notTitle:'',
-        notContent:'',
-        notCreateAt:'',
-        notCreateBy:'',
-        notUpdateBy:'',
-        notReadCount:0,
+        notId: '',
+        notTitle: '',
+        notContent: '',
+        notCreateAt: '',
+        notCreateBy: '',
+        notUpdateBy: '',
+        notReadCount: 0,
     });
 
     // params
-    const {notId} = useParams();
+    const { notId } = useParams();
 
     // navigate
     const navigate = useNavigate();
 
     // origin notice
-    const [noticeFiles,setNoticeFiles] = useState([]);
-    const [deleteFiles,setDeleteFiles] = useState([]);
+    const [noticeFiles, setNoticeFiles] = useState([]);
+    const [deleteFiles, setDeleteFiles] = useState([]);
 
     // new files
     const [newFiles, setNewFiles] = useState([]);
     // 토큰정보 가져오기(AuthProvider)
-    const {member} = useContext(AuthContext);
+    const { member } = useContext(AuthContext);
 
     // notice data set
-    useEffect(()=>{
+    useEffect(() => {
         const fetchNoticeDetail = async () => {
-            try{
+            try {
                 const response = await apiSpringBoot.get(`/notice/detail/${notId}`);
                 console.log(response.data.notice);
                 console.log(response.data.noticeFiles);
-                setFormData((prev)=>({
+                setFormData((prev) => ({
                     ...prev,
-                    notId:response.data.notice.notId,
-                    notTitle:response.data.notice.notTitle,
-                    notContent:response.data.notice.notContent,
-                    notCreateAt:response.data.notice.notCreateAt,
-                    notCreateBy:response.data.notice.notCreateBy,
-                    notUpdateBy:member.memUUID,
-                    notReadCount:response.data.notice.notReadCount,
+                    notId: response.data.notice.notId,
+                    notTitle: response.data.notice.notTitle,
+                    notContent: response.data.notice.notContent,
+                    notCreateAt: response.data.notice.notCreateAt,
+                    notCreateBy: response.data.notice.notCreateBy,
+                    notUpdateBy: member.memUUID,
+                    notReadCount: response.data.notice.notReadCount,
                 }));
                 setNoticeFiles(response.data.noticeFiles);
 
-            } catch(error){
+            } catch (error) {
                 setError('공지사항 수정페이지 이동에 실패하였습니다.');
                 console.error(error);
             }
         };
         // 함수실행
         fetchNoticeDetail();
-    },[notId]);
+    }, [notId]);
 
-    
+
     // formData 수정
-    const handleChange = (e) =>{
-        const {name,value} = e.target;
-        setFormData((prevFormData)=>({
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
             ...prevFormData,
-            [name]:value,
+            [name]: value,
         }));
     }
 
     // 수정
     const handleUpdateNotice = async (e) => {
         e.preventDefault(); // submit취소
-        if(window.confirm("공지사항을 수정하시겠습니까?")){
+        if (window.confirm("공지사항을 수정하시겠습니까?")) {
             // 보낼 폼데이터 객체 생성
             const data = new FormData();
 
@@ -107,30 +107,30 @@ const NoticeDetail = () => {
             }
             console.log("deleteFiles : ", data.getAll("deleteFiles"));
 
-            for (let [key,value] of data.entries()){
-                console.log(`${key}:${value.name||value}`);
-            }            
-            
+            for (let [key, value] of data.entries()) {
+                console.log(`${key}:${value.name || value}`);
+            }
 
-            try{
-                await apiSpringBoot.post('/notice/update',data,{
-                    headers:{
-                        'Content-Type':'multipart/form-data',
+
+            try {
+                await apiSpringBoot.post('/notice/update', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
                     }
                 });
                 alert('공지사항 수정에 성공하였습니다.');
                 navigate(`/notice`)
-            } catch(error) {
-                console.error('공지글 수정 실패',error);
+            } catch (error) {
+                console.error('공지글 수정 실패', error);
                 alert('공지사항 수정에 오류가 발생하였습니다.');
             }
         }
     }
-    
+
     // 수정취소
     const handleInsertCancel = (e) => {
         e.preventDefault(); // submit 취소
-        if(window.confirm("정말로 취소하시겠습니까?")){
+        if (window.confirm("정말로 취소하시겠습니까?")) {
             navigate(-1);
         }
     }
@@ -147,7 +147,7 @@ const NoticeDetail = () => {
         input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                setNewFiles((prevFiles) => [...prevFiles,file]);
+                setNewFiles((prevFiles) => [...prevFiles, file]);
             }
         };
 
@@ -158,13 +158,13 @@ const NoticeDetail = () => {
 
     // 파일 삭제 처리
     const handleDeleteFile = (index) => {
-        setNewFiles((prevfiles)=>prevfiles.filter((_,i) => i !== index));
+        setNewFiles((prevfiles) => prevfiles.filter((_, i) => i !== index));
     };
 
     // 기존파일 삭제 처리(리스트에 저장)
-    const handleDeleteOriginFile = (file,index) => {
-        setNoticeFiles((prev)=>prev.filter((_,i) => i !== index));
-        setDeleteFiles((prev)=>[...prev,file]);
+    const handleDeleteOriginFile = (file, index) => {
+        setNoticeFiles((prev) => prev.filter((_, i) => i !== index));
+        setDeleteFiles((prev) => [...prev, file]);
     };
 
 
@@ -175,7 +175,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                        <span onClick={()=>(navigate("/notice"))}>공지사항</span>
+                    <span onClick={() => (navigate("/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <form
@@ -187,7 +187,7 @@ const NoticeDetail = () => {
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input 
+                                        <input
                                             className={styles.notTitleInput}
                                             type='text'
                                             name='notTitle'
@@ -211,52 +211,52 @@ const NoticeDetail = () => {
                                     </td>
                                 </tr>
                                 <div className={styles.fileDiv}>
-                                <tr >
-                                    <button
-                                        className={styles.noticeButton}
-                                        onClick={(e)=>handleFileInsertBox(e)}
+                                    <tr >
+                                        <button
+                                            className={styles.noticeButton}
+                                            onClick={(e) => handleFileInsertBox(e)}
                                         >첨부파일추가
-                                    </button>
-                                </tr>
-                                <div>
-                                {/* 기존 첨부파일 */}
-                                {noticeFiles && noticeFiles.map((file, index) => (
-                                    <tr key={index}>
-                                        <td colSpan="2">
-                                            <span>{file.nfOreginalName}</span>
-                                            <input 
-                                                type="button"
-                                                onClick={()=>handleDeleteOriginFile(file,index)}
-                                                value="x"
-                                                className={styles.noticeButton}
-                                            />
-                                        </td>
+                                        </button>
                                     </tr>
-                                ))}
-                                {/* 신규 첨부파일 */}
-                                {newFiles && newFiles.map((file, index) => (
-                                    <tr key={index}>
-                                        <td colSpan="2">
-                                            <span>{file.name}</span>
-                                            <input 
-                                                type="button"
-                                                onClick={()=>handleDeleteFile(index)}
-                                                value="x"
-                                                className={styles.noticeButton}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                                </div>
+                                    <div>
+                                        {/* 기존 첨부파일 */}
+                                        {noticeFiles && noticeFiles.map((file, index) => (
+                                            <tr key={index}>
+                                                <td colSpan="2">
+                                                    <span>{file.nfOreginalName}</span>
+                                                    <input
+                                                        type="button"
+                                                        onClick={() => handleDeleteOriginFile(file, index)}
+                                                        value="x"
+                                                        className={styles.noticeButton2}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {/* 신규 첨부파일 */}
+                                        {newFiles && newFiles.map((file, index) => (
+                                            <tr key={index}>
+                                                <td colSpan="2">
+                                                    <span>{file.name}</span>
+                                                    <input
+                                                        type="button"
+                                                        onClick={() => handleDeleteFile(index)}
+                                                        value="x"
+                                                        className={styles.noticeButton2}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </div>
                                 </div>
                                 <tr>
                                     <td className={styles.buttonDiv}>
                                         <button
-                                            className={styles.noticeButton2}
+                                            className={styles.noticeButton}
                                             type='submit'
                                         >수정</button> &nbsp;
-                                        <button 
-                                            className={styles.noticeButton2}
+                                        <button
+                                            className={styles.noticeButton}
                                             onClick={handleInsertCancel}
                                         >취소</button>
                                     </td>
