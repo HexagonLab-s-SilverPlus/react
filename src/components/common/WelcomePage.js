@@ -130,7 +130,7 @@ const WelcomePage = () => {
     };
     const handleLoginClick = () => {
         if (!member || !member.memType) {
-            navigate('/loginsenior');
+            navigate('/facelogin');
             return;
         }
         if (member.memType === 'SENIOR') navigate('/senior-menu');
