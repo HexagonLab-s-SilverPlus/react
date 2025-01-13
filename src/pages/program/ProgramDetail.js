@@ -331,7 +331,7 @@ const ProgramDetail = () => {
 
                         <div className={styles.pgDetailBottom}>
                             <button onClick={handleMoveProgram}>목록</button>
-                            {(member?.memType === 'ADMIN' || program?.snrCREATEDBy === member?.memUUID) && (
+                            {(program.snrCreatedBy === member.memUUID) && (
                                 <>
                                     <button onClick={handleUpdateProgram}>수정</button>
                                     <button onClick={handleDeleteProgram}>삭제</button>
