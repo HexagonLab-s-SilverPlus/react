@@ -3,7 +3,7 @@ import React from 'react';
 
 // 날짜시간 데이터 UTC -> KST 변환 함수
 export const convertUTCToKST = (utcDate) => {
-  if (!utcDate) {
+  if (!utcDate || typeof utcDate !== 'string') {
     console.error('Invalid date input:', utcDate);
     return null;
   }
@@ -12,8 +12,11 @@ export const convertUTCToKST = (utcDate) => {
     let date;
 
     // ISO 8601 형식인지 확인
-    if (utcDate.includes('T') && utcDate.endsWith('Z')) {
-      date = new Date(utcDate); // 이미 ISO 형식인 경우
+    if (
+      utcDate.includes('T') &&
+      (utcDate.endsWith('Z') || utcDate.includes('+'))
+    ) {
+      date = new Date(utcDate); // ISO 형식인 경우 처리
     } else {
       // 서버 형식(`yyyy-MM-dd HH:mm:ss.SSS`)을 ISO 형식으로 변환
       const isoDateString = utcDate.replace(' ', 'T') + 'Z';

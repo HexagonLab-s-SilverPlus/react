@@ -1,5 +1,5 @@
 // src/pages/member/EnrollFamily.js
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiSpringBoot } from '../../utils/axios';
 import styles from './Enroll.module.css';
@@ -24,6 +24,8 @@ function EnrollFamily() {
     memType: 'FAMILY', // 회원타입
     memPwChk: '',
   });
+
+  const rnnEndRef = useRef(null);
 
   const navigate = useNavigate();
   // 아이디 사용가능여부 상태변수
@@ -85,6 +87,9 @@ function EnrollFamily() {
       ...prevRnn, // 이전 상태를 복사
       [name]: value, // 변경할 키와 값만 업데이트
     }));
+    if (name === 'memRnnFront' && value.length === 6) {
+      rnnEndRef.current.focus();
+    }
   };
 
   // 아이디 중복검사 버튼 클릭시 작동하는 핸들러
@@ -130,15 +135,13 @@ function EnrollFamily() {
     }
   };
 
-  const validatePassword = () => {
+  const validatePassword = (password) => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/;
-    if (passwordRegex.test(formData.memPw)) {
-      setPasswordValidate(true);
-    } else {
-      setPasswordValidate(false);
-    }
-    return passwordRegex.test(formData.memPw);
+
+    const isValid = passwordRegex.test(password); // 유효성 검사
+    setPasswordValidate(isValid); // 상태를 즉시 업데이트
+    return isValid;
   };
 
   const validateCellphone = () => {
@@ -164,19 +167,24 @@ function EnrollFamily() {
       return;
     }
 
-    if (!validatePassword()) {
+    if (!validatePassword) {
       alert('비밀번호 조건에 맞지 않습니다.');
       return;
     }
 
     // 전송 전에 유효성 검사 확인
-    // if (!validate()) {
-    //   alert('비밀번호 일치 확인을 해주세요.');
-    //   return;
-    // }
+    if (!validate) {
+      alert('비밀번호 일치 확인을 해주세요.');
+      return;
+    }
 
-    if (!validateCellphone()) {
+    if (!validateCellphone) {
       alert('휴대전화 인증을 해주세요.');
+      return;
+    }
+
+    if (!selectSeniorData) {
+      alert('가족관계에 있는 어르신을 검색하여 선택해주세요.');
       return;
     }
 
@@ -196,6 +204,11 @@ function EnrollFamily() {
       relationship: senior.relationship || '',
     }));
 
+    if (!seniorRelationshipData.relationship) {
+      alert('선택한 어르신과의 관계를 설정해주세요.');
+      return;
+    }
+
     data.append(
       'seniorRelationshipData',
       JSON.stringify(seniorRelationshipData)
@@ -207,18 +220,23 @@ function EnrollFamily() {
     });
 
     try {
-      await apiSpringBoot.post('/member/enroll', data, {
+      const response = await apiSpringBoot.post('/member/enroll', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('가입 성공');
-      console.log('memType', memType);
+      if (response.status === 200) {
+        // 성공 응답 상태 확인
+        alert('가입 성공');
+        console.log('회원가입 성공 데이터:', response.data);
+        navigate('/loginmember');
+      } else {
+        alert('가입 실패');
+        console.error('가입 실패 상태:', response);
+      }
     } catch (error) {
-      console.error('가입 실패');
-      console.log(formData);
-      console.log(data);
-      alert('가입실패');
+      console.error('가입 처리 중 오류 발생:', error);
+      alert('가입 실패');
     }
   };
 
@@ -312,6 +330,7 @@ function EnrollFamily() {
                 name="memName"
                 onChange={handleChange}
                 className={styles.textbox}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>아이디</tr>
@@ -329,6 +348,16 @@ function EnrollFamily() {
                   marginRight: '20px',
                   marginBottom: 0,
                 }}
+                value={formData.memId}
+                pattern="[a-zA-Z0-9]*" // 영문자와 숫자만 허용
+                title="아이디는 영문자와 숫자만 입력 가능합니다." // 경고 메시지
+                onInvalid={(e) =>
+                  e.target.setCustomValidity(
+                    '아이디는 영문자와 숫자만 입력 가능합니다.'
+                  )
+                }
+                onInput={(e) => e.target.setCustomValidity('')} // 입력 시 커스텀 메시지 초기화
+                required
               />
               <button className={styles.button2} onClick={handleIdCheck}>
                 중복확인
@@ -363,11 +392,13 @@ function EnrollFamily() {
                 type="password"
                 name="memPw"
                 onChange={(e) => {
-                  handleChange(e);
-                  handleCheckPassword();
+                  const password = e.target.value;
+                  handleChange(e); // 기존 입력 상태 업데이트
+                  validatePassword(password); // 즉시 유효성 검사 실행
                 }}
                 className={styles.textbox}
                 style={{ marginBottom: '0' }}
+                required
               />
             </tr>
             {!passwordValidate ? (
@@ -401,6 +432,7 @@ function EnrollFamily() {
                 className={styles.textbox}
                 onChange={handleChange}
                 style={{ marginBottom: '0' }}
+                required
               />
             </tr>
             {formData.memPwChk === '' ? (
@@ -425,6 +457,7 @@ function EnrollFamily() {
                 name="emailId"
                 style={{ width: '160px' }}
                 onChange={handleEmailIdChange}
+                required
               />
               <span className={styles.findIdEmailSpan}>@</span>
               <input
@@ -432,6 +465,7 @@ function EnrollFamily() {
                 style={{ width: '160px' }}
                 value={domain}
                 onChange={handleEmailDomainChange}
+                required
               />
               <select name="domainOption" onChange={handleEmailDomainChange}>
                 <option value="">직접입력</option>
@@ -448,6 +482,7 @@ function EnrollFamily() {
                 name="memAddress"
                 onChange={handleChange}
                 className={styles.textbox}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>주민등록번호</tr>
@@ -459,14 +494,17 @@ function EnrollFamily() {
                 className={styles.textbox}
                 style={{ width: '219px' }}
                 maxLength={6}
+                required
               />
               <span>-</span>
               <input
-                type="text"
+                type="password"
                 name="memRnnEnd"
                 onChange={handleRnnChange}
                 style={{ width: '219px' }}
                 maxLength={7}
+                ref={rnnEndRef}
+                required
               />
             </tr>
             <tr className={styles.valuebox}>휴대전화</tr>
@@ -478,6 +516,7 @@ function EnrollFamily() {
                 className={styles.textbox}
                 placeholder="'-' 없이 입력"
                 style={{ width: '350px' }}
+                required
               />
               <button
                 className={styles.button2}

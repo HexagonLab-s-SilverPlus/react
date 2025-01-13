@@ -28,7 +28,6 @@ const FindPwdSeniorResult = () => {
 
   const location = useLocation();
   const verifyData = location.state;
-  console.log('넘어온 인증데이터 확인 : ', verifyData);
 
   useEffect(() => {
     const FindPwdResult = async () => {
@@ -40,9 +39,9 @@ const FindPwdSeniorResult = () => {
         });
         console.log('response 데이터 확인 : ', response.data);
         setResult(response.headers['response']);
-        if (result === 'success') {
+        if (response.headers['response'] === 'success') {
           setMemUUID(response.data);
-        } else if (result === 'failed') {
+        } else if (response.headers['response'] === 'failed') {
           console.log('조회된 아이디가 없음');
         } else {
           console.log('비밀번호 찾기 실패');
@@ -121,7 +120,8 @@ const FindPwdSeniorResult = () => {
     }
 
     try {
-      const response = await apiSpringBoot.put(`/member/pwdupdate/${memUUID}`, {
+      const response = await apiSpringBoot.post(`/member/pwdupdate`, {
+        memUUID: memUUID,
         memPw: memPwd.memPw,
       });
       const result = response.headers['response'];
@@ -222,13 +222,13 @@ const FindPwdSeniorResult = () => {
                     <tr
                       style={{
                         textAlign: 'left',
-                        fontSize: '10px',
+                        fontSize: '20px',
                         color: messagePwdColor,
                         height: '20px',
                       }}
                       name="pwdCheck"
                     >
-                      {messagePwdColor === 'green' && <span>&#x2714;</span>}
+                      {messagePwdColor === 'green'}
                       {passwordCheckMsg}
                     </tr>
                   )}

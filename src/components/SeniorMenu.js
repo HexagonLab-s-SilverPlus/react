@@ -65,9 +65,9 @@ const SeniorMenu = () => {
           <div className={`${styles.menuButton} ${styles.div3}`} onClick={handleProgramButton}>
             <p>
               어르신 <br />
-              맞춤 활동
+              프로그램
             </p>
-            <img src={activityIcon} alt="어르신 맞춤 활동" />
+            <img src={activityIcon} alt="어르신 프로그램" />
           </div>
 
           {/* FAQ */}

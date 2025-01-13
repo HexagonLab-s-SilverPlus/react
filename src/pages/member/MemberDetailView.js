@@ -15,13 +15,6 @@ const MemberDetailView = () => {
   const [formData, setFormData] = useState();
   const [initialData, setInitialData] = useState(null); // 초기 데이터를 저장할 상태
 
-  const { setInitialLoad } = useMemberStore();
-
-  const handleMove = () => {
-    setInitialLoad(false);
-    navigate('/test');
-  };
-
   useEffect(() => {
     const MemberDetail = async () => {
       try {
@@ -99,6 +92,7 @@ const MemberDetailView = () => {
     const updatedFormData = {
       ...formData, // 기존 상태 값
       memChangeStatus: currentTimestamp, // 새로운 값 추가
+      memCellphone: formData.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     // FormData 객체에 값 추가
@@ -164,11 +158,11 @@ const MemberDetailView = () => {
                     <tr>
                       <th>이 름</th>
                       <td>
-                        <input value={formData.memName} readOnly />
+                        <input value={formData.memName} disabled />
                       </td>
                       <th>아 이 디</th>
                       <td>
-                        <input value={formData.memId} readOnly />
+                        <input value={formData.memId} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -181,7 +175,7 @@ const MemberDetailView = () => {
                               ? '남성'
                               : '여성'
                           }
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>이 메 일</th>
@@ -198,7 +192,7 @@ const MemberDetailView = () => {
                       <td>
                         <input
                           value={formData.memEnrollDate.split(' ')[0]}
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>계 정 상 태</th>
@@ -214,7 +208,7 @@ const MemberDetailView = () => {
                                     ? '정지'
                                     : formData.memStatus
                             }
-                            readOnly
+                            disabled
                             style={{ width: '150px' }}
                             onChange={handleInfoChange}
                             name="memStatus"
@@ -265,11 +259,7 @@ const MemberDetailView = () => {
                     <tr>
                       <th>기 관</th>
                       <td>
-                        <input readOnly />
-                      </td>
-                      <th>기 관 코 드</th>
-                      <td>
-                        <input value={formData.memGovCode} name="memGovCode" />
+                        <input value={formData.memOrgName} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -279,35 +269,41 @@ const MemberDetailView = () => {
                           name="memAddress"
                           value={formData.memAddress}
                           onChange={handleInfoChange}
-                          style={{ width: '550px' }}
-                          readOnly
+                          style={{ width: '803px' }}
+                          disabled
                         />
                       </td>
                     </tr>
                   </table>
                 </div>
+                <div className={styles.mdetailButtonDiv}>
+                  <div>
+                    <button
+                      className={styles.mdetailButton1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(-1);
+                      }}
+                    >
+                      목 록
+                    </button>
+                  </div>
+                  <div>
+                    <input
+                      type="reset"
+                      value="초 기 화"
+                      className={styles.mdetailButton2}
+                      onClick={() => setFormData(initialData)}
+                    />
+                    <input
+                      type="submit"
+                      value="수 정"
+                      className={styles.mdetailButton1}
+                      style={{ margin: '0' }}
+                    />
+                  </div>
+                </div>
               </form>
-            </div>
-            <div className={styles.mdetailButtonDiv}>
-              <div>
-                <button className={styles.mdetailButton1} onClick={handleMove}>
-                  목 록
-                </button>
-              </div>
-              <div>
-                <input
-                  type="reset"
-                  value="초 기 화"
-                  className={styles.mdetailButton2}
-                  onClick={() => setFormData(initialData)}
-                />
-                <input
-                  type="submit"
-                  value="수 정"
-                  className={styles.mdetailButton1}
-                  style={{ margin: '0' }}
-                />
-              </div>
             </div>
           </>
         ) : (
@@ -322,11 +318,11 @@ const MemberDetailView = () => {
                     <tr>
                       <th>이 름</th>
                       <td>
-                        <input value={formData.memName} readOnly />
+                        <input value={formData.memName} disabled />
                       </td>
                       <th>아 이 디</th>
                       <td>
-                        <input value={formData.memId} readOnly />
+                        <input value={formData.memId} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -339,7 +335,7 @@ const MemberDetailView = () => {
                               ? '남성'
                               : '여성'
                           }
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>이 메 일</th>
@@ -356,7 +352,7 @@ const MemberDetailView = () => {
                       <td>
                         <input
                           value={formData.memEnrollDate.split(' ')[0]}
-                          readOnly
+                          disabled
                         />
                       </td>
                       <th>계 정 상 태</th>
@@ -372,7 +368,7 @@ const MemberDetailView = () => {
                                     ? '정지'
                                     : formData.memStatus
                             }
-                            readOnly
+                            disabled
                             style={{ width: '150px' }}
                             onChange={handleInfoChange}
                             name="memStatus"
@@ -423,7 +419,7 @@ const MemberDetailView = () => {
                           name="memAddress"
                           value={formData.memAddress}
                           onChange={handleInfoChange}
-                          style={{ width: '550px' }}
+                          style={{ width: '803px' }}
                         />
                       </td>
                     </tr>

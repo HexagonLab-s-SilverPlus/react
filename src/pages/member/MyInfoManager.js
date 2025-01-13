@@ -199,6 +199,7 @@ const MyInfoManager = () => {
         },
       });
       alert('내 정보 수정 성공');
+      window.location.reload();
     } catch (error) {
       alert('내 정보 수정 실패');
       console.error('내 정보 수정중 오류 발생 : ', error);
@@ -229,6 +230,11 @@ const MyInfoManager = () => {
               type="password"
               name="pwdChk"
               onChange={handlePwdChkChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  MyInfo();
+                }
+              }}
             />
             <button onClick={MyInfo}>확 인</button>
           </div>
@@ -259,11 +265,11 @@ const MyInfoManager = () => {
                   <tr>
                     <th>이 름</th>
                     <td>
-                      <input value={updateMember.memName} readOnly />
+                      <input value={updateMember.memName} disabled />
                     </td>
                     <th>아 이 디</th>
                     <td>
-                      <input value={updateMember.memId} readOnly />
+                      <input value={updateMember.memId} disabled />
                     </td>
                   </tr>
                   <tr>
@@ -276,7 +282,7 @@ const MyInfoManager = () => {
                             ? '남성'
                             : '여성'
                         }
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>이 메 일</th>
@@ -363,7 +369,7 @@ const MyInfoManager = () => {
                     <td>
                       <input
                         value={updateMember.memEnrollDate.split(' ')[0]}
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>계 정 상 태</th>
@@ -378,8 +384,7 @@ const MyInfoManager = () => {
                                 ? '정지'
                                 : updateMember.memStatus
                         }
-                        readOnly
-                        onChange={handleInfoChange}
+                        disabled
                         name="memStatus"
                       />
                     </td>
@@ -409,9 +414,9 @@ const MyInfoManager = () => {
                   <tr>
                     <th>기 관</th>
                     <td>
-                      <input readOnly />
+                      <input disabled />
                     </td>
-                    <th>기 관 코 드</th>
+                    <th>기 관 명</th>
                     <td>
                       <input
                         value={updateMember.memGovCode}
@@ -420,13 +425,13 @@ const MyInfoManager = () => {
                     </td>
                   </tr>
                   <tr>
-                    <th>주 소</th>
+                    <th>기 관 주 소</th>
                     <td>
                       <input
                         name="memAddress"
                         value={updateMember.memAddress}
                         onChange={handleInfoChange}
-                        style={{ width: '550px' }}
+                        style={{ width: '803px' }}
                       />
                     </td>
                   </tr>

@@ -235,6 +235,7 @@ const MyInfoFamily = () => {
     const newUpdateMember = {
       ...updateMember,
       memChangeStatus: currentTimestamp,
+      memCellphone: formData.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     Object.entries(newUpdateMember).forEach(([key, value]) => {
@@ -248,6 +249,7 @@ const MyInfoFamily = () => {
         },
       });
       alert('내 정보 수정 성공');
+      window.location.reload();
     } catch (error) {
       alert('내 정보 수정 실패');
       console.error('내 정보 수정중 오류 발생 : ', error);
@@ -271,6 +273,11 @@ const MyInfoFamily = () => {
               type="password"
               name="pwdChk"
               onChange={handlePwdChkChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  MyInfo();
+                }
+              }}
             />
             <button onClick={MyInfo}>확 인</button>
           </div>
@@ -301,11 +308,11 @@ const MyInfoFamily = () => {
                   <tr>
                     <th>이 름</th>
                     <td>
-                      <input value={updateMember.memName} readOnly />
+                      <input value={updateMember.memName} disabled />
                     </td>
                     <th>아 이 디</th>
                     <td>
-                      <input value={updateMember.memId} readOnly />
+                      <input value={updateMember.memId} disabled />
                     </td>
                   </tr>
                   <tr>
@@ -318,7 +325,7 @@ const MyInfoFamily = () => {
                             ? '남성'
                             : '여성'
                         }
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>이 메 일</th>
@@ -405,7 +412,7 @@ const MyInfoFamily = () => {
                     <td>
                       <input
                         value={updateMember.memEnrollDate.split(' ')[0]}
-                        readOnly
+                        disabled
                       />
                     </td>
                     <th>계 정 상 태</th>
@@ -420,7 +427,7 @@ const MyInfoFamily = () => {
                                 ? '정지'
                                 : updateMember.memStatus
                         }
-                        readOnly
+                        disabled
                         onChange={handleInfoChange}
                         name="memStatus"
                       />
@@ -441,6 +448,7 @@ const MyInfoFamily = () => {
                         }
                         onChange={handleInfoChange}
                         name="memCellphone"
+                        maxLength={11}
                       />
                     </td>
                   </tr>

@@ -19,7 +19,7 @@ const SeniorList = () => {
   // 키워드 저장
   const [tempKeyword, setTempKeyword] = useState('');
   const [search, setSearch] = useState({
-    action: '전체',
+    action: '선택',
     keyword: '',
   });
   // 성별 선택 저장 상태변수
@@ -217,7 +217,7 @@ const SeniorList = () => {
       keyword: '',
     }); // 페이징 정보 초기화
     setSearch({
-      action: '전체',
+      action: '선택',
       keyword: '',
     }); // 검색 상태 초기화
     setTempKeyword(''); // 검색 키워드 초기화
@@ -227,7 +227,7 @@ const SeniorList = () => {
   };
 
   // 검색으로 인한 페이지 변경 시
-  const handleUpdateView = async (page, updatedSearch) => {
+  const handleUpdateView = async (page, updatedSearch = search) => {
     console.log('검색 기능 작동확인');
     try {
       const response = await apiSpringBoot.get(`/member/seniorList`, {
@@ -277,9 +277,11 @@ const SeniorList = () => {
           {/* 헤더 출력 레이어 */}
           <p onClick={resetToDefaultView}>어르신 관리</p>
         </div>
-        <div className={styles.slistRegistBtnDiv}>
-          <button onClick={handleMoveRegist}>어르신 등록</button>
-        </div>
+        {role === 'MANAGER' && (
+          <div className={styles.slistRegistBtnDiv}>
+            <button onClick={handleMoveRegist}>어르신 등록</button>
+          </div>
+        )}
         <div className={styles.slistrSubLine}>
           <div className={styles.slistSearchbox}>
             {/* 검색옵션 선택 버튼 레이어 */}
@@ -289,7 +291,7 @@ const SeniorList = () => {
             >
               &nbsp; {search.action} &nbsp;
               <img
-                src={isDropdown ? up : down}
+                src={isDropdown ? down : up}
                 className={styles.slistArrow}
               />{' '}
               {!isDropdown && (
@@ -297,11 +299,11 @@ const SeniorList = () => {
                   <div
                     className={styles.slistDropdownOption}
                     onClick={() => {
-                      handleSelectOption('전체');
+                      handleSelectOption('선택');
                       resetToDefaultView();
                     }}
                   >
-                    &nbsp; 전체 &nbsp;
+                    &nbsp; 선택 &nbsp;
                   </div>
                   <div
                     className={styles.slistDropdownOption}
@@ -345,12 +347,17 @@ const SeniorList = () => {
             {/* 검색키워드 입력 레이어 */}
             {search.action === '이름' ||
             search.action === '주소' ||
-            search.action === '전체' ? (
+            search.action === '선택' ? (
               <div slistSearchKeyword>
                 <input
                   className={styles.slistSearchKeywordBox}
                   placeholder="검색어를 입력하세요."
                   onChange={handleChangeKeyword}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
                   value={tempKeyword}
                 />
               </div>

@@ -277,7 +277,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
     }
   };
 
-  // 어르신 등록
+  // 어르신 수정
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -299,6 +299,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
     const updatedSeniorFormData = {
       ...seniorFormData, // 기존 상태 값
       memChangeStatus: currentTimestamp, // 새로운 값 추가
+      mem,
     };
 
     // FormData 객체 생성
@@ -363,9 +364,9 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
   return (
     // <div className={styles.sdetailMainContainer}>
     <div className={styles.sdetailSubContainer}>
-      <div className={styles.sdetailHeader}>
+      {/* <div className={styles.sdetailHeader}>
         <p>어르신 관리</p>
-      </div>
+      </div> */}
       <div className={styles.sdetailSubHeader}>
         <p>인적 사항</p>
       </div>

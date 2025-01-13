@@ -102,10 +102,10 @@ const MemberListView = () => {
   }, []);
 
   // 검색으로 인한 페이지 변경 시
-  const handleUpdateView = async (page, updatedSearch) => {
+  const handleUpdateView = async (page, updatedSearch = search) => {
     console.log('검색 기능 작동확인');
     console.log(page);
-    console.log(updatedSearch);
+    console.log(search);
     console.log(pagingInfo);
     try {
       const response = await apiSpringBoot.get(`/member/adminList`, {
@@ -197,6 +197,12 @@ const MemberListView = () => {
     handleUpdateView(1, { action: '', keyword: '' });
   };
 
+  const handleReturnList = (e) => {
+    e.preventDefault();
+    console.log('목록버튼 작동 확인');
+    window.location.reload();
+  };
+
   return (
     <div className={styles.mlistContainer}>
       <SideBar />
@@ -206,6 +212,9 @@ const MemberListView = () => {
           <p onClick={resetToDefaultView}>계정 관리</p>
         </div>
         <div className={styles.mlistrSubLine}>
+          <div className={styles.mlistReturnListBtnDiv}>
+            <button onClick={handleReturnList}>목 록</button>
+          </div>
           <div className={styles.mlistSearchbox}>
             {/* 검색옵션 선택 버튼 레이어 */}
             <div
@@ -214,7 +223,7 @@ const MemberListView = () => {
             >
               &nbsp; {search.action} &nbsp;
               <img
-                src={isDropdown ? up : down}
+                src={isDropdown ? down : up}
                 className={styles.mlistArrow}
               />{' '}
               {!isDropdown && (
@@ -252,6 +261,11 @@ const MemberListView = () => {
                 className={styles.mlistSearchKeywordBox}
                 placeholder="검색어를 입력하세요."
                 onChange={handleChangeKeyword}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch();
+                  }
+                }}
                 value={tempKeyword}
               />
             </div>

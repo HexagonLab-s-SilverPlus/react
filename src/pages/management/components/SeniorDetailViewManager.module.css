@@ -4,24 +4,23 @@
 .sdetailSubContainer {
   width: 100%;
   box-sizing: border-box;
-  padding: 72px 48px;
+  padding: 24px 48px 72px;
 }
 
-.sdetailHeader > p {
+/* .sdetailHeader > p {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
   border-bottom: 3px solid #064420;
   padding-bottom: 8px;
   padding-left: 24px;
-  /* cursor: pointer; */
-}
+} */
 
 .sdetailSubHeader > p {
   font-size: 40px;
   margin: 0;
   font-weight: bold;
-  padding-top: 40px;
+  /* padding-top: 40px; */
   padding-left: 24px;
 }
 

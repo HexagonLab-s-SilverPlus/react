@@ -1,0 +1,86 @@
+/* src/pages/management/SeniorApporvalList.module.css */
+.alistContainer {
+  display: flex;
+}
+.alistSubContainer {
+  width: calc(100% - 368px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 72px 48px;
+}
+.alistviewHeader > p {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: 3px solid #064420;
+  padding-bottom: 8px;
+  padding-left: 24px;
+  cursor: pointer;
+}
+.alistrSubLine {
+  display: flex;
+  justify-content: end;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.alistReturnListBtnDiv > button {
+  cursor: pointer;
+  width: 70px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #064420;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.alistReturnListBtnDiv > button:hover {
+  background-color: transparent;
+  color: #064420;
+}
+
+.alisttableDiv {
+  width: calc(100%);
+  margin-top: 130px;
+}
+.alistTable {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+  margin-top: 80px;
+  font-size: 18px;
+  border-collapse: collapse;
+}
+.alistTable > thead {
+  width: 100%;
+}
+
+.alistTable > thead > tr {
+  border-top: 3px solid #618264;
+  border-bottom: 3px solid #618264;
+}
+
+.alistTable > thead > tr > th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: bold;
+  border-bottom: 2px solid #999999;
+}
+
+.alistTable > tbody > tr:hover {
+  background-color: #d9d9d9;
+}
+
+.alistTable > tbody > tr > td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #999999;
+  cursor: pointer;
+}
+.alistPaging {
+  margin-top: 45px;
+}

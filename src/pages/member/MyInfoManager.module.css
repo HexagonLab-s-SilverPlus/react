@@ -102,10 +102,12 @@
   padding-left: 15px;
   font-size: 18px;
   border: 0;
+  border: 1px solid;
 }
 
-.myfoTable > tr > td > input[readonly] {
+.myfoTable > tr > td > input[disabled] {
   background-color: #dddddd;
+  border: 1px solid #ddd;
 }
 
 .myfoTable > tr > th {
@@ -146,6 +148,12 @@
   cursor: pointer;
 }
 
+.myfolButton1:hover {
+  background-color: #fff;
+  color: #064420;
+  border: 1px solid #064420;
+}
+
 .myfoButton2 {
   border-radius: 3px;
   background-color: #eeeeee;
@@ -157,6 +165,12 @@
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
+}
+
+.myfoButton2:hover {
+  background-color: #963434;
+  color: #eee;
+  border: 1px solid #000000;
 }
 
 .loading {
@@ -178,11 +192,12 @@
   padding: 0;
   padding-left: 15px;
   font-size: 18px;
-  border: 0;
+  border: 1px solid;
 }
 
 .myfoTable > tr > td > div > input[readonly] {
   background-color: #dddddd;
+  border: 1px solid #ddd;
 }
 
 .image {

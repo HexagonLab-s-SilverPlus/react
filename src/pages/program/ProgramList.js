@@ -198,7 +198,7 @@ const ProgramList = () => {
                     endDate: formatDate(response.data.search.endDate),
                     listCount: response.data.search.listCount,
                 }));
-
+                navigate(location.pathname, { replace: true });
             } catch (error) {
                 // console.error('handleProgramView Error:', error);
                 alert('어르신 프로그램 목록을 불러오는데 실패하였습니다.');
@@ -234,6 +234,10 @@ const ProgramList = () => {
             // console.log('after isNearby status : ', updated); // 상태 변경 후 값 확인
             return updated; // 새로운 상태 반환
         });
+
+        // select와 input 상태 초기화
+        setSearchAction("all"); // "선택"으로 초기화
+        setSearchKeyword("");   // 빈 문자열로 초기화
 
         // 페이지 번호를 초기화
         setPagingInfo((prev) => ({
