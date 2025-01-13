@@ -15,6 +15,7 @@ position: relative; margin-right: 30px;}
 .upLoadFilesBTN {margin-left: 0;}
 .qnaWriteBTN input, .upLoadFilesBTN {color: #000000; background-color: #eee;}
 .qnaWriteBTN input:hover, .qnaWriteBTN button:hover {background-color: #064420; color: #ffffff;}
+.upLoadFilesBTN:hover {background-color: #064420; color: #ffffff;}
 .qnaWriteBTN button input {color: #000000; background-color: #EEE;}
 .filesDiv {display: flex; margin-bottom: 20px;}
 .filesDiv div {margin-left: 100px;}
