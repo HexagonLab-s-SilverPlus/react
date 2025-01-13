@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import styles from './WelcomePage.module.css';
 import backgroundImage from '../../assets/images/background.png';
 import granfa from '../../assets/images/granfa.png';
 import manager from '../../assets/images/mgr.png';
 import admin from '../../assets/images/developer.png'
 import family from '../../assets/images/familiy.png';
+import { AuthContext } from '../../AuthProvider';
 
 import sangmu from '../../assets/images/sangmu.jpg'; // 상무
 import eunyoung from '../../assets/images/eunyoung.jpg'; // 은영
@@ -23,16 +24,79 @@ const WelcomePage = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null); // 호버 상태 관리
     const [hexagonHovered, setHexagonHovered] = useState(false); // 육각형 호버 상태 관리
 
+    const { member } = useContext(AuthContext);
+
     // 팀원 이미지, 이름, 소개
     // text에 어떻게 적을지 방향성 정해보기(자기소개)
     const teamData = [
-        { src: sangmu, name: "이상무", text: "~의 이상무입니다." },
-        { src: hongsae, name: "김홍세", text: "~의 김홍세입니다." },
-        { src: seoi, name: "임서이", text: "~의 임서이입니다." },
-        { src: sujin, name: "노수진", text: "~의 노수진입니다." },
-        { src: taejang, name: "김태장", text: "~의 김태장입니다." },
-        { src: eunyoung, name: "최은영", text: "~의 최은영입니다." },
+        {
+            src: sangmu,
+            name: "이상무",
+            text: (
+                <>
+                    디지털 시대의 문턱에서 소외되지 않도록,<br />
+                    모든 어르신께 공평한 기회를 제공하는<br />
+                    서비스로 성장하길 기대합니다.
+                </>
+            )
+        },
+        {
+            src: hongsae,
+            name: "김홍세(부팀장)",
+            text: (
+                <>
+                    우리 서비스가 어르신들의 일상에<br />
+                    작은 기쁨과 큰 편리함을 더할 수 있기를<br />
+                    진심으로 바랍니다.
+                </>
+            )
+        },
+        {
+            src: seoi,
+            name: "임서이",
+            text: (
+                <>
+                    SilverPlus가 어르신들에게 따뜻한 친구가 되고,<br />
+                    공공서비스를 쉽게 누릴 수 있는<br />
+                    도구가 되기를 바랍니다.
+                </>
+            )
+        },
+        {
+            src: sujin,
+            name: "노수진",
+            text: (
+                <>
+                    기술이 단순한 도구를 넘어,<br />
+                    사람과 사람을 연결하고 소통을 돕는<br />
+                    따뜻한 가치를 전할 수 있기를 바랍니다.
+                </>
+            )
+        },
+        {
+            src: taejang,
+            name: "김태장",
+            text: (
+                <>
+                    SilverPlus가 고령화 사회의 문제를<br />
+                    함께 해결하며, 노인의 삶에 긍정적인<br />
+                    변화를 이끌어내는 플랫폼이 되기를 꿈꿉니다.
+                </>
+            )
+        },
+        {
+            src: eunyoung,
+            name: "최은영(팀장)",
+            text: (
+                <>
+                    사회적 고립을 해소하고<br />
+                    정서적 안정감을 주는 든든한 동반자로<br />
+                    SilverPlus가 자리 잡기를 소망합니다.
+                </>
+            )
+        },
     ];
+
 
 
 
@@ -66,7 +130,12 @@ const WelcomePage = () => {
     };
 
     const handleLoginClick = () => {
-        navigate('/senior-menu'); // SeniorMenu 페이지로 이동
+        if (!member || !member.memType) return;
+
+        if (member.memType === 'SENIOR') navigate('/senior-menu');
+        else if (member.memType === 'MANAGER') navigate('/dashlist');
+        else if (member.memType === 'FAMILY') navigate('/seniorlist');
+        else if (member.memType === 'ADMIN') navigate('/mlistview');
     }
 
     return (
@@ -97,7 +166,7 @@ const WelcomePage = () => {
                     }}
                 >
                     어르신, 혹시 말동무가 필요하신가요?<br />
-                    실버플러스의 AI 말동무 서비스로 대화를 시작해 보세요!
+                    실버플러스의 AI 말동무 서비스로<br />대화를 시작해 보세요!
                 </div>
 
                 <div className={styles.scrollArrow} onClick={() => handleScrollToSection(secondSectionRef)}>
@@ -197,13 +266,22 @@ const WelcomePage = () => {
                                 <p className={styles.underline}>
                                     6명의 인재가 <br />
                                 </p>
-                                <br/>
+                                <br />
                                 <p className={styles.underline}>
                                     균형과 안정, 협력과 융합을 통해 <br />
                                 </p>
                                 <p className={styles.underline}>
-                                    다각적 접근으로 문제를 해결합니다.<br/>
+                                    다각적 접근으로 문제를 해결합니다.<br />
                                 </p>
+                                <br />
+                                <a
+                                    href="https://github.com/HexagonLab-s-SilverPlus" // GitHub Organization 링크 추가
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.githubLink} // 스타일 적용
+                                >
+                                    GitHub Organization 바로가기 ↗
+                                </a>
                             </div>
                         ) : hoveredIndex !== null ? (
                             <div className={styles.hexagonContent}>
