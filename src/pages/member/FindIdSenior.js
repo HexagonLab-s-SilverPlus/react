@@ -184,7 +184,7 @@ const FindIdSenior = () => {
   // 아이디 찾기 결과페이지 이동 함수
   const moveFindIdResult = () => {
     if (verifyData.isVerify === true) {
-      navigate('/fimResult', { state: verifyData });
+      navigate('/fisResult', { state: verifyData });
     } else {
       alert('휴대전화 또는 이메일 인증을 진행해주세요.');
       return;

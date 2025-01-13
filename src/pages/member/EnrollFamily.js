@@ -209,10 +209,10 @@ function EnrollFamily() {
       relationship: senior.relationship || '',
     }));
 
-    if (!seniorRelationshipData.relationship) {
-      alert('선택한 어르신과의 관계를 설정해주세요.');
-      return;
-    }
+    // if (!seniorRelationshipData.relationship) {
+    //   alert('선택한 어르신과의 관계를 설정해주세요.');
+    //   return;
+    // }
 
     data.append(
       'seniorRelationshipData',
