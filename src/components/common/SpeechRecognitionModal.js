@@ -1,5 +1,5 @@
 // react : useState, useContext, useNavigate
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 // css
 import styles from "./SpeechRecognitionModal.module.css";
 // authContext
@@ -16,10 +16,12 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
     // 음성 인식 처리 시간
     const RECORDING_DURATION = 7000;
     // 잠시 보여주기용 텍스트
-    const [wait,setWait] = useState("");
+    const [wait, setWait] = useState("");
+    // 현재 재생 중인 Audio 객체를 관리
+    const audioRef = useRef(null);
 
     // message 변경때마다 읽어주기
-    useEffect(()=>{
+    useEffect(() => {
         const fetchTTS = async () => {
             if (!message) return; // message가 없을 때 실행하지 않음
             try {
@@ -30,10 +32,14 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 if (response.status === 200) {
+                    // 기존 재생 중인 오디오를 멈춤
+                    stopAudio();
                     const audioUrl = URL.createObjectURL(response.data); // Blob을 URL로 변환
                     const audio = new Audio(audioUrl); // Audio 객체 생성
+                    // 새로운 오디오 객체를 참조에 저장
+                    audioRef.current = audio;
                     audio.play(); // 재생
                 } else {
                     console.error("TTS 서버 오류: ", response.statusText);
@@ -43,9 +49,9 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
             }
         };
         fetchTTS(); // 비동기 함수 호출
-    },[message]);
+    }, [message]);
 
-        
+
     // 음성 인식 처리
     const handleSpeechRecognition = async () => {
         // 메세지 출력
@@ -57,7 +63,7 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
             const mediaRecorder = new MediaRecorder(audioStream);
             // 녹음된 오디오 데이터를 저장할 배열 변수
             const audioChunks = [];
-    
+
             // 녹음중 데이터가 생성 될 때마다 실행되는 이벤트 헨들러
             mediaRecorder.ondataavailable = (event) => {
                 audioChunks.push(event.data);
@@ -75,12 +81,12 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
                 const formData = new FormData();
                 // blob 데이터를 audio 필드에 추가가
                 formData.append("audio", wavBlob);
-    
+
                 try {
                     // flask 서버로 post 요청 보내기
                     const response = await apiFlask.post('/stt/pagerider', formData, {
-                        headers:{
-                            Accept:"application/json", // json 응답 처리
+                        headers: {
+                            Accept: "application/json", // json 응답 처리
                         },
                     });
                     // 서버 응답 데이터
@@ -116,25 +122,25 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
             setMessage("마이크에 접근할 수 없습니다.");
         }
     };
-    
+
     // 텍스트에 따라 페이지 이동 처리
     const handleNavigation = (text) => {
-        if (text.includes("프로그램")) {
-            window.location.href ="/program";
-        } else if (text.includes("공지")) {
-            window.location.href ="/notice";
-        } else if (text.includes("대시보드")) {
-            window.location.href ="/dashlist";
-        } else if (text.includes("공문서")) {
-            window.location.href ="/docmain";
+        if (text.includes("프로그램") || text.includes("어르신")) {
+            window.location.href = "/program";
+        } else if (text.includes("공지") || text.includes("사항")) {
+            window.location.href = "/notice";
+        } else if (text.includes("공문서") || text.includes("작성")) {
+            window.location.href = "/docmain";
         } else if (text.includes("말동무") || text.includes("채팅") || text.includes("대화")) {
-            window.location.href ="/welcome-chat";
-        } else if (text.toLowerCase().includes("qna") ||text.toLowerCase().includes("q&a") || text.includes("큐앤에이")) {
-            window.location.href ="/qna";
-        } else if (text.toLowerCase().includes("faq")) {
-            window.location.href ="/faq";
-        } else if (text.includes("메뉴")) {
-            window.location.href ="/senior-menu";
+            window.location.href = "/welcome-chat";
+        } else if (text.toLowerCase().includes("faq") || text.includes("질문") || text.includes("자주") || text.includes("문의")) {
+            window.location.href = "/faq";
+        } else if (text.includes("메뉴") || text.includes("전체")) {
+            window.location.href = "/senior-menu";
+        } else if (text.includes("게임") || text.includes("맞고") || text.includes("화투") || text.includes("오락") || text.toLowerCase().includes("game")) {
+            window.location.href = "/game";
+        } else if (text.includes("책") || text.includes("읽기") || text.includes("도서관") || text.includes("북") || text.toLowerCase().includes("book")) {
+            window.location.href = "/book";
         } else {
             setMessage("음성을 제대로 인식하지 못하거나 서비스하지 않는 기능입니다.");
         }
@@ -189,21 +195,21 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
     const handlePageReader = async () => {
         // 1. 특정 id의 특스트 가져오기
         const targetElement = document.getElementById("read"); // 특정 id로 요소 가져오기
-        if (!targetElement){
+        if (!targetElement) {
             setMessage("읽을 내용이 없습니다.");
             return;
         }
         const pageText = targetElement.innerText.trim(); //텍스트가져오기
-        if(!pageText) {
+        if (!pageText) {
             setMessage("읽을 내용이 없습니다.");
             return;
         }
         console.log(pageText);
         setMessage("");
         setWait("잠시만 기다려주세요.");
-        
 
-        try{
+
+        try {
             // 2. TTS API 호출
             const response = await apiFlask.post('/tts/pagereader', { text: pageText }, {
                 responseType: 'blob',
@@ -211,33 +217,42 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
                     'Content-Type': 'application/json',
                 },
             });
-            
-            if (response.status===200){
+
+            if (response.status === 200) {
                 // 3. 음성 재생
                 const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
                 const newAudio = new Audio(audioUrl);
+                // 새로운 오디오 객체를 참조에 저장
+                audioRef.current = audio;
                 newAudio.play();
                 onStartTTS(newAudio); // TTS 시작 콜백 호출
             } else {
                 console.log("음성변환에 실패하였습니다. 다시 시도해주세요.");
                 setMessage("음성변환에 실패하였습니다. 다시 시도해주세요.");
             }
-        } catch(error){
+        } catch (error) {
             console.error("TTS 요청중 오류 : ", error);
             setMessage("음성변환에 실패하였습니다. 다시 시도해주세요.")
         }
     };
-    
+
+    const stopAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0; // 재생 위치를 처음으로 초기화
+        }
+    };
+
     // 랜더링 뷰
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modal}>
-                <h1>            
+                <h1>
                     {message.split("\n").map((line, index) => (
                         <span key={index}>
-                        {line}
-                        <br />
-                    </span>
+                            {line}
+                            <br />
+                        </span>
                     ))}
                     {wait}
                 </h1>
