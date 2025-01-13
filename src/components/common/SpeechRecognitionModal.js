@@ -223,7 +223,6 @@ const SpeechRecognitionModal = ({ onClose, onStartTTS }) => {
                 const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
                 const newAudio = new Audio(audioUrl);
                 // 새로운 오디오 객체를 참조에 저장
-                audioRef.current = audio;
                 newAudio.play();
                 onStartTTS(newAudio); // TTS 시작 콜백 호출
             } else {
