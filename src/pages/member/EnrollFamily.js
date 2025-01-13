@@ -188,6 +188,11 @@ function EnrollFamily() {
       return;
     }
 
+    if (!selectedFiles) {
+      alert('가족관계증명서를 첨부해주세요.');
+      return;
+    }
+
     const data = new FormData(); // 커맨드객체 작동을 위한 명칭 일치
     data.append('memId', formData.memId);
     data.append('memPw', formData.memPw);
