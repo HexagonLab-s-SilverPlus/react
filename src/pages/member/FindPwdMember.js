@@ -184,7 +184,7 @@ const FindPwdMember = () => {
   // 비밀번호 찾기 결과페이지 이동 함수
   const moveFindPwdResult = () => {
     if (verifyData.isVerify === true) {
-      navigate('/fimResult', { state: verifyData });
+      navigate('/fpmResult', { state: verifyData });
     } else {
       alert('휴대전화 또는 이메일 인증을 진행해주세요.');
       return;

@@ -128,10 +128,11 @@ const WelcomePage = () => {
             ref.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
-
     const handleLoginClick = () => {
-        if (!member || !member.memType) return;
-
+        if (!member || !member.memType) {
+            navigate('/facelogin');
+            return;
+        }
         if (member.memType === 'SENIOR') navigate('/senior-menu');
         else if (member.memType === 'MANAGER') navigate('/dashlist');
         else if (member.memType === 'FAMILY') navigate('/seniorlist');

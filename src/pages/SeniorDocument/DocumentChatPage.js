@@ -4,7 +4,6 @@ import styles from './DocumentChatPage.module.css';
 import { AuthContext } from '../../AuthProvider.js';
 import { marked } from 'marked';
 import DocumentService from './DocumentService.js';
-import Container from '../chat/Container.js';
 import SeniorNavbar from '../../components/common/SeniorNavbar.js';
 import { Player } from '@lottiefiles/react-lottie-player'; // Lottie import
 

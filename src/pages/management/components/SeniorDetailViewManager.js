@@ -304,7 +304,7 @@ const SeniorDetailViewManager = ({ UUID, senior, manager, profileData }) => {
     const updatedSeniorFormData = {
       ...seniorFormData, // 기존 상태 값
       memChangeStatus: currentTimestamp, // 새로운 값 추가
-      mem,
+      memEnrollDate: convertUTCToKST(seniorFormData.memEnrollDate),
     };
 
     // FormData 객체 생성
