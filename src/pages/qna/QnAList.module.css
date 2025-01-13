@@ -13,10 +13,17 @@
 .qnaInputBTN:hover {background-color: #064420; color: #ffffff;}
 .qnaBTN {display: inline-block; border: 0; background-color: #eeeeee; color: #000000; border-radius: 10px; cursor: pointer; font-family: "Pretendard Variable"; font-size: 16px; width: 100px; height: 36px; border-radius: 8px; border: 0; cursor: pointer; position: absolute; left: 0; bottom: 0;}
 .qnaBTN:hover {background-color: #064420; color: #ffffff;}
-.qnaListTable {margin-top: 100px; width: 100%; padding-top: 80px; font-size: 18px; border-collapse: collapse; border-top: solid 1px #000000;}
+.qnaListTable {margin-top: 100px; width: 100%; padding-top: 80px; font-size: 18px; border-collapse: collapse;}
 .qnaListTable tr {height: 44px;}
-.qnaListTable tr th {background-color: #f9f9f9; }
-.qnaListTable tr th, .qnaListTable tr td {border-bottom: 2px solid #0000004b;}
+.qnaListTable tr th {background-color: #fdfaf6; }
+.qnaListTable tr:nth-child(1) {border-top: 2px solid #618264;border-bottom: 2px solid #618264;}
+.qnaListTable tr td {border-bottom: 1px solid #618264;}
+.qnaListTable tr th:not(:first-child):not(:last-child),
+.qnaListTable tr td:not(:first-child):not(:last-child) {
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
 .qnaListTable tr td button {font-size: 18px; background: none; border: none; color: rgb(0, 0, 0); text-decoration: underline; cursor: pointer; text-decoration-line: none;}
 .qnaTitle {width: 956px; text-align: left;}
 .memberName {width: 200px;}
@@ -30,3 +37,4 @@
 .qnaTr {transition: background-color 0.3s ease;}
 .qnaTr:hover { background-color: #f0f0f0;}
 .qnaTr td {}
+
