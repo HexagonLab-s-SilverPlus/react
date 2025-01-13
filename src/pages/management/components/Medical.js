@@ -19,6 +19,7 @@ const Medical = ({ UUID }) => {
     const [isEditing, setIsEditing] = useState([]);  //작성 상태관리(수정 중인 항목의 index를 관리)
     const [isPublic, setIsPublic] = useState('F');    //공개 상태관리
     const [isAllChecked, setIsAllChecked] = useState(false);
+    const [isCheckboxHidden, setIsCheckboxHidden] = useState(false);
 
     //토큰정보 가져오기(AuthProvider)
     const { role, member } = useContext(AuthContext);
@@ -244,6 +245,7 @@ const Medical = ({ UUID }) => {
     const handleUpdateClick = (index) => {
         setBackupMedical(medicals[index]);  //수정 전 데이터 백업
         setIsEditing((prev) => [...prev, index]);   //수정 상태 추가
+        setIsCheckboxHidden(true); // 체크박스 숨김
     };
 
     //수정 중일때 취소 클릭하면 작성 취소됌
@@ -253,6 +255,7 @@ const Medical = ({ UUID }) => {
         );
         setBackupMedical(null); // 백업 데이터 초기화
         setIsEditing((prev) => prev.filter((i) => i !== index)); // 수정 상태 제거
+        setIsCheckboxHidden(false); // 체크박스 다시 표시
     };
 
     //수정 클릭시 수정처리
@@ -272,6 +275,7 @@ const Medical = ({ UUID }) => {
 
                 // 수정 상태 제거
                 setIsEditing((prev) => prev.filter((i) => i !== index));
+                setIsCheckboxHidden(false); // 체크박스 다시 표시
             } catch (error) {
                 // console.error("handleUpdate Error:", error);
                 alert("수정 중 오류가 발생했습니다.");
@@ -329,7 +333,7 @@ const Medical = ({ UUID }) => {
                 <table className={styles.mediTable}>
                     <thead>
                         <tr>
-                            <th><input type="checkbox" checked={isAllChecked} onChange={handleSelectAll} /></th>
+                            <th><input type="checkbox" style={{ display: isCheckboxHidden ? 'none' : 'block' }} checked={isAllChecked} onChange={handleSelectAll} /></th>
                             <th>진단일</th>
                             <th>병명</th>
                             <th>최근 진료일</th>
@@ -341,7 +345,7 @@ const Medical = ({ UUID }) => {
                         {medicals.map((item, index) => (
                             item.mediDiagDate &&
                             <tr key={index} className={styles.mediItem}>
-                                <td><input type="checkbox" checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
+                                <td><input type="checkbox" style={{ display: isCheckboxHidden ? 'none' : 'block' }} checked={item.isChecked || false} onChange={() => handleRowCheckboxChange(index)} /></td>
                                 <td><input type="date" name="mediDiagDate" value={item.mediDiagDate.split('T')[0]}
                                     disabled={!isEditing.includes(index)}
                                     onChange={(e) =>
