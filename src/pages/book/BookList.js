@@ -1,5 +1,5 @@
 // src/pages/book/BookList.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiSpringBoot } from "../../utils/axios";
 import { AuthContext } from "../../AuthProvider";
@@ -15,6 +15,7 @@ const BookList = () => {
     const [books, setBooks] = useState([]);
     const [playbutton, setPlaybutton] = useState(true);
     const [playAudio, setPlayAudio] = useState(null);
+    const audioRef = useRef(null); // Audio 객체를 전역적으로 관리
 
     //페이징
     const [pagingInfo, setPagingInfo] = useState({
@@ -167,7 +168,6 @@ const BookList = () => {
 
         try{
             // 2. TTS API 호출
-
             const response = await apiFlask.post('/tts/pagereader', { text }, {
                 responseType: 'blob',
                 headers: {
@@ -179,6 +179,14 @@ const BookList = () => {
                 // 3. 음성 재생
                 const audioUrl = URL.createObjectURL(response.data);//Blob -> URL변환
                 const newAudio = new Audio(audioUrl);
+
+                // 기존 재생 중인 오디오 중지
+                if (audioRef.current) {
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                }
+                // 새로운 오디오 재생 및 상태 업데이트
+                audioRef.current = newAudio;
                 newAudio.play();
 
                 // 특정 책의 isPlaying 상태를 true로 설정
@@ -195,7 +203,7 @@ const BookList = () => {
                             index === bookIndex ? { ...book, isPlaying: false } : book
                         )
                     );
-                    setPlayAudio(null);
+                    audioRef.current = null;
                 };
                 setPlayAudio(newAudio);
 
@@ -225,17 +233,16 @@ const BookList = () => {
                 )
             );
 
-            setPlayAudio(null);
+            audioRef.current = null;
         }
     };
 
     // 페이지 이동 시 TTS 중지
     useEffect(() => {
         const handleBeforeUnload = () => {
-            // if (audio) {
-            //     audio.pause();
-            //     audio.currentTime = 0; // 오디오 재생 초기화
-            // }
+            if (audioRef.current) {
+                audioRef.current.pause();
+            }
         };
 
         // 이벤트 리스너 등록
