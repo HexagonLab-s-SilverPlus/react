@@ -351,7 +351,7 @@ const DashList = () => {
                         </button>
                         <button
                             className={`${styles.button} ${styles.red}`}
-                            onClick={() => navigate('/familyaccount')}
+                            onClick={() => navigate('/seniorlist/approvalList')}
                         >
                             <img src={family} className={styles.accountfamilyicon} /><span>가족 계정 승인 요청수</span>
                             <strong>{approvalCount}건</strong>
