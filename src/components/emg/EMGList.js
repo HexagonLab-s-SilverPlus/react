@@ -13,7 +13,7 @@ function EmgList({ emgSnrUUID }) {
         uuid: "",
         pageNumber: 1,
         action: "all",
-        listCount: 1,
+        listCount: 0,
         maxPage: 1,
         pageSize: 5,
         startPage: 1,
@@ -52,6 +52,7 @@ function EmgList({ emgSnrUUID }) {
             setPagingInfo((pre) => ({
                 ...pre,
                 pageNumber: response.data.search.pageNumber,
+                listCount: response.data.search.listCount,
                 maxPage: maxPage,
                 startPage: startPage,
                 endPage: endPage,
@@ -107,14 +108,14 @@ function EmgList({ emgSnrUUID }) {
 
                 </tbody>
             </table>
-            <Paging
+            {pagingInfo.listCount !== 0 && <Paging
                 pageNumber={pagingInfo.pageNumber}
                 listCount={pagingInfo.listCount}
                 maxPage={pagingInfo.maxPage}
                 startPage={pagingInfo.startPage}
                 endPage={pagingInfo.endPage}
                 onPageChange={(page) => handlePageChange(page)}
-            />
+            />}
         </div>//emg_wrap end
     );
 };
