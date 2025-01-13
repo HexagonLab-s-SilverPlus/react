@@ -130,7 +130,6 @@
                         </tr>
                         ))}
                         </div>
-                        <hr/>
                     </div>
                     <div className={styles.qnaWriteBTN}>
                         <input type='submit' value="등 록"/>
