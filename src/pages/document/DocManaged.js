@@ -18,7 +18,7 @@ const DocManaged = ({ UUID }) => {
         memUuid: memUuid,
         pageNumber: 1,
         action: '대기중',
-        listCount: 1,
+        listCount: 0,
         maxPage: 1,
         pageSize: 5,
         startPage: 1,
@@ -51,6 +51,8 @@ const DocManaged = ({ UUID }) => {
                 },
             });
 
+            console.log('listcount',response.data.data);
+
             // console.log('API Response : ', response.data.data);
             // console.log('action : ', response.data.data.action);
 
@@ -71,6 +73,7 @@ const DocManaged = ({ UUID }) => {
                 setPagingInfo((prev) => ({
                     ...prev,
                     action: response.data.data.action,
+                    listCount:response.data.data.listCount,
                     pageNumber: response.data.data.pageNumber || 1,
                     maxPage,
                     startPage,
@@ -80,6 +83,7 @@ const DocManaged = ({ UUID }) => {
                 setPagingInfo((prev) => ({
                     ...prev,
                     action: response.data.data.action,
+                    listCount:response.data.data.listCount,
                     pageNumber: 1,
                     maxPage: 1,
                     startPage: 1,
@@ -249,7 +253,8 @@ const DocManaged = ({ UUID }) => {
                     ))}
                 </tbody>
             </table>
-            <Paging
+            
+            {pagingInfo && pagingInfo.listCount != 0 && (<Paging
                 pageNumber={pagingInfo.pageNumber}
                 listCount={pagingInfo.listCount}
                 maxPage={pagingInfo.maxPage}
@@ -257,6 +262,7 @@ const DocManaged = ({ UUID }) => {
                 endPage={pagingInfo.endPage}
                 onPageChange={(page) => handlePageChange(page)}
             />
+            )}
         </div>
     );
 };
