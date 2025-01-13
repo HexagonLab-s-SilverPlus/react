@@ -1,34 +1,23 @@
 .sidebar {
-  position: relative;
-  /* 버튼 고정을 위한 상대 위치 설정 */
-  width: 320px;
-  /* 사이드바 너비비*/
-  height: 100vh;
-  /* 화면 높이 전체 */
-  background-color: #f0f8ff;
-  /* 배경색 */
-  padding: 20px;
-  /* 내부 여백*/
-  border-right: 2px solid #ddd;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 */
-  transition: transform 0.3s ease; /* 부드러운 열림/닫힘 애니메이션 */
+  justify-content: space-between; /* 위와 아래 요소 간 간격 확보 */
+  width: 320px;
+  height: 100vh; /* 화면 전체 높이 */
+  background-color: #f0f8ff;
+  padding: 20px;
+  border-right: 2px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
-
-
 .workspaceContainer {
-  margin-bottom: 20px;
-  /* 아래 여백 추가 */
+  height: 60%;
+  margin-bottom: auto; /* 버튼과의 간격 자동 조정 */
   padding: 10px;
-  /* 내부 여백 */
   border: 1px solid #ddd;
-  /* 테두리 추가 */
   border-radius: 10px;
-  /* 모서리 둥글게 */
   background-color: #ffffff;
-  /* 배경색 설정 */
 }
+
 .sidebarVisible {
   transform: translateX(0);
 }
@@ -39,7 +28,7 @@
 
 .archivedList,
 .activeList {
-  max-height: 250px;
+  max-height: 200px;
   /* 각 목록의 최대 높이 */
   overflow-y: auto;
   /* 스크롤 가능하도록 설정 */
@@ -399,14 +388,10 @@
 
 
 .trashButton {
-  margin: top 50px;
-  bottom: 50px;
-  /* 화면 하단에서 20px 위로 */
-  left: 20px;
-  /* 사이드바 왼쪽 여백 */
-  width: 100%;
-
-  /* 좌우 여백을 제외한 전체 너비 */
+  position: absolute; /* 사이드바 내부에서 절대 위치 지정 */
+  bottom: 20px; /* 사이드바 하단에서 20px 위 */
+  left: 20px; /* 사이드바 왼쪽 여백 */
+  width: calc(100% - 40px); /* 좌우 여백을 제외한 전체 너비 */
   padding: 10px;
   background-color: #ff6b6b;
   color: white;
@@ -420,6 +405,7 @@
 .trashButton:hover {
   background-color: #ff4d4d;
 }
+
 
 .spinner {
   text-align: center;

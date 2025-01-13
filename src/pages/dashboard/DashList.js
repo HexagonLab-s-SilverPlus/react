@@ -53,8 +53,8 @@ const DashList = () => {
             console.error("현재 관리중인 어르신 수 가져오기 실패:", error);
         }
     };
-    
-    
+
+
     const fetchDocumentCount = async () => {
         try {
             if (!member?.memUUID) {
@@ -72,11 +72,11 @@ const DashList = () => {
         fetchDocumentCount(); // 컴포넌트 마운트 시 카운트 가져오기
     }, []);
 
-    const fetchApprovalCount = async () =>{
-        try{
+    const fetchApprovalCount = async () => {
+        try {
             const response = await apiSpringBoot.get(`/member/approvalCount/${member?.memUUID}`);
             setApprovalCount(response.data);
-        }catch(error){
+        } catch (error) {
             console.error('가족 계정 승인 요청수 가져오기 실패:', error);
         }
     }
@@ -91,12 +91,12 @@ const DashList = () => {
             setCalendarEvents(
                 todos.map((todo) => ({
                     title: todo.taskContent,
-                   date: new Date(todo.taskDate).toLocaleDateString('en-CA'),
+                    date: new Date(todo.taskDate).toLocaleDateString('en-CA'),
                 }))
             );
             const today = new Date().toISOString().split("T")[0];
             const filtered = todos.filter(
-              (todo) => new Date(todo.taskDate).toLocaleDateString("en-CA") === today
+                (todo) => new Date(todo.taskDate).toLocaleDateString("en-CA") === today
             );
             setFilteredTodos(filtered);
 
@@ -104,8 +104,8 @@ const DashList = () => {
         } catch (error) {
             console.error('데이터 가져오기 실패:', error);
             setTodolist([]);
-      setCalendarEvents([]);
-      setFilteredTodos([]);
+            setCalendarEvents([]);
+            setFilteredTodos([]);
         }
     };
 
@@ -124,12 +124,12 @@ const DashList = () => {
             return new Date(todo.taskDate).toLocaleDateString('en-CA') === clickedDate;
 
         });
-        
-        console.log("Filtered Todos:", filtered); 
+
+        console.log("Filtered Todos:", filtered);
         setFilteredTodos(filtered); //필터링된 데이터 저장
     };
 
-   
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -143,7 +143,7 @@ const DashList = () => {
     //등록
     const handleInsertTodo = async (e) => {
         e.preventDefault();
-        const data =new FormData();
+        const data = new FormData();
 
         const convertToTimestamp = (dateString) => {
             return `${dateString} 00:00:00`; // ISO 8601 형식 (yyyy-MM-ddTHH:mm:ss.sssZ)
@@ -152,20 +152,20 @@ const DashList = () => {
 
         // FormData에 입력값 추가
         Object.entries(formData).forEach(([key, value]) => {
-            if (key === 'taskDate' ) {
+            if (key === 'taskDate') {
                 data.append(key, convertToTimestamp(value)); // 'yyyy-MM-dd HH:mm:ss' 형식으로 변환
             } else {
                 data.append(key, value);
             }
-        }); 
-            
+        });
+
         for (let [key, value] of data.entries()) {
             console.log(`${key}: ${value}`);
         }
         try {
-            await apiSpringBoot.post('/dashboard', data,{
+            await apiSpringBoot.post('/dashboard', data, {
                 headers: {
-                    'Content-Type' : 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
             });
 
@@ -173,19 +173,19 @@ const DashList = () => {
             window.location.reload();// 페이지 새로고침
             setShowForm(false);
             // fetchTodos();
-             // 새로 추가된 데이터를 todolist와 calendarEvents에 업데이트
-      const newTodo = response.data;
-      setTodolist((prev) => [...prev, newTodo]);
-      setCalendarEvents((prev) => [
-        ...prev,
-        {
-          id: newTodo.taskId,
-          title: newTodo.taskContent,
-          date: newTodo.taskDate.split("T")[0],
-        },
-    ]);
+            // 새로 추가된 데이터를 todolist와 calendarEvents에 업데이트
+            const newTodo = response.data;
+            setTodolist((prev) => [...prev, newTodo]);
+            setCalendarEvents((prev) => [
+                ...prev,
+                {
+                    id: newTodo.taskId,
+                    title: newTodo.taskContent,
+                    date: newTodo.taskDate.split("T")[0],
+                },
+            ]);
 
-            
+
             // 게시글 등록이 성공되면 공지 목록 페이지로 이동
             // navigate('/dashlist');
         } catch (error) {
@@ -210,8 +210,8 @@ const DashList = () => {
         }
     };
 
-     // 수정 시작
-     const handleEditClick = (task) => {
+    // 수정 시작
+    const handleEditClick = (task) => {
         setEditingTaskId(task.taskId);
         setEditingContent(task.taskContent); // 현재 내용을 수정 상태로 가져옴
         setEditingStatus(task.taskStatus); // 현재 상태 수정 가능하도록
@@ -223,43 +223,43 @@ const DashList = () => {
     };
 
     const handleSaveEdit = async () => {
-    if (!editingTaskId) {
-        alert('수정할 Task ID가 없습니다.');
-        return;
-    }
+        if (!editingTaskId) {
+            alert('수정할 Task ID가 없습니다.');
+            return;
+        }
 
-    const updatedTask = {
-        taskId: editingTaskId,
-        taskContent: editingContent,
-        taskStatus: editingStatus,
-        taskDate: formData.taskDate, // 원래 시간 유지
-        memUuid: formData.memUuid,
-    };
+        const updatedTask = {
+            taskId: editingTaskId,
+            taskContent: editingContent,
+            taskStatus: editingStatus,
+            taskDate: formData.taskDate, // 원래 시간 유지
+            memUuid: formData.memUuid,
+        };
 
-    console.log('전송 데이터:', updatedTask);
+        console.log('전송 데이터:', updatedTask);
 
-    try {
-        await apiSpringBoot.put(`/dashboard/${editingTaskId}`, updatedTask, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        alert("수정이 완료되었습니다.");
-        // 상태 업데이트
-        setTodolist((prev) =>
-            prev.map((todo) =>
-                todo.taskId === editingTaskId
-                    ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
-                    : todo
-            )
-        );
-        setFilteredTodos((prev) =>
-            prev.map((todo) =>
-                todo.taskId === editingTaskId
-                    ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
-                    : todo
-            )
-        );
+        try {
+            await apiSpringBoot.put(`/dashboard/${editingTaskId}`, updatedTask, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            alert("수정이 완료되었습니다.");
+            // 상태 업데이트
+            setTodolist((prev) =>
+                prev.map((todo) =>
+                    todo.taskId === editingTaskId
+                        ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
+                        : todo
+                )
+            );
+            setFilteredTodos((prev) =>
+                prev.map((todo) =>
+                    todo.taskId === editingTaskId
+                        ? { ...todo, taskContent: editingContent, taskStatus: editingStatus }
+                        : todo
+                )
+            );
 
             setEditingTaskId(null); // 수정 모드 종료
             setEditingContent('');
@@ -278,14 +278,14 @@ const DashList = () => {
 
     const handleCheckboxChange = async (todo) => {
         const updatedStatus = todo.taskStatus === 'Y' ? 'N' : 'Y';
-    
+
         try {
             // 서버에 업데이트 요청
             await apiSpringBoot.put(`/dashboard/${todo.taskId}`, {
                 ...todo,
                 taskStatus: updatedStatus,
             });
-    
+
             // React 상태 업데이트
             setTodolist((prev) =>
                 prev.map((t) =>
@@ -300,11 +300,11 @@ const DashList = () => {
             alert('상태 변경 실패!');
         }
     };
-    
 
-    
- 
-    
+
+
+
+
 
 
     useEffect(() => {
@@ -314,22 +314,22 @@ const DashList = () => {
                 ...prevFormData,
                 memUuid: member.memUUID,
             }));
-    
+
             // 공문서 요청 수 가져오기
             // fetchDocumentCount();
-    
+
             // 가족 계정 승인 요청 수 가져오기
             if (member.memUUID) {
                 fetchSeniorCount();
                 fetchApprovalCount();
                 fetchDocumentCount();
-                
+
             }
         }
-    
+
         // To-do 목록 가져오기
         fetchAllTodos();
-    
+
         // 오늘 날짜를 선택된 날짜로 설정
         const today = new Date().toISOString().split("T")[0];
         setSelectedDate(today);
@@ -344,21 +344,43 @@ const DashList = () => {
                         <h2 className={styles.membertitle}>{memId}님 안녕하세요!</h2>
                         <button
                             className={`${styles.button} ${styles.blue}`}
-                            onClick={() => navigate('/seniorlist')}
+                            onClick={() => {
+                                if (seniorCount === 0) {
+                                    alert('불러올 어르신 데이터가 없습니다.'); // 경고 메시지 출력
+                                } else {
+                                    navigate('/seniorlist'); // 'docrequest'로 이동
+                                }
+                            }}
+
                         >
                             <img src={older} className={styles.dasholer} /><span>현재 관리중인 어르신 수</span>
                             <strong>{seniorCount}명</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.red}`}
-                            onClick={() => navigate('/familyaccount')}
+                            onClick={() => {
+                                if (approvalCount === 0) {
+                                    alert('불러올 가족 계정 데이터가 없습니다.'); // 경고 메시지 출력
+                                } else {
+                                    navigate('/seniorlist/approvalList')
+                                }
+                            }
+                            }
+
                         >
                             <img src={family} className={styles.accountfamilyicon} /><span>가족 계정 승인 요청수</span>
                             <strong>{approvalCount}건</strong>
                         </button>
                         <button
                             className={`${styles.button} ${styles.purple}`}
-                            onClick={() => navigate('/docrequest')}
+                            onClick={() => {
+                                if (documentCount === 0) {
+                                    alert('불러올 공문서 데이터가 없습니다.'); // 경고 메시지 출력
+                                } else {
+                                    navigate('/docrequest'); // 'docrequest'로 이동
+                                }
+                            }}
+
                         >
                             <img src={document} className={styles.documenticon} /><span>공문서 요청수</span>
                             <strong>{documentCount}건</strong>
@@ -367,46 +389,46 @@ const DashList = () => {
 
                     <div className={styles.calendarbox} /* style={{ width: "920px", height: "750px", margin: "0 auto" }} */>
                         <FullCalendar
-                        // className="custom-calendar"
+                            // className="custom-calendar"
                             plugins={[dayGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
-                          
+
                             events={calendarEvents}
                             // dateClick={(info) => console.log(`Clicked on: ${info.dateStr}`)}
                             dateClick={handleDateClick}
                         />
                     </div>
-                    {showForm &&(
+                    {showForm && (
 
-<div className={styles["form-container"]}>
-                        <form onSubmit={handleInsertTodo}>
-                            <h3> Add New Todo</h3>
-                      
-                            <div className={styles.addContentForm}>
-                                <label>내용 &nbsp;:</label>
-                                <input
-                                    type="text"
-                                    name="taskContent"
-                                    value={formData.taskContent}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className={styles.addContentForm}>
-                                <label>날짜 &nbsp;:</label>
-                                <input
-                                    type="date"
-                                    name="taskDate"
-                                    value={formData.taskDate}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <button className={styles.todosave} type="submit">SAVE</button>
-                        </form>
-                    </div>
+                        <div className={styles["form-container"]}>
+                            <form onSubmit={handleInsertTodo}>
+                                <h3> Add New Todo</h3>
+
+                                <div className={styles.addContentForm}>
+                                    <label>내용 &nbsp;:</label>
+                                    <input
+                                        type="text"
+                                        name="taskContent"
+                                        value={formData.taskContent}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className={styles.addContentForm}>
+                                    <label>날짜 &nbsp;:</label>
+                                    <input
+                                        type="date"
+                                        name="taskDate"
+                                        value={formData.taskDate}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <button className={styles.todosave} type="submit">SAVE</button>
+                            </form>
+                        </div>
                     )}
-                    
+
                     <div className={styles.todobigform}>
                         <div className={styles.todoTitle}>
                             <p>{selectedDate}</p>
@@ -420,72 +442,71 @@ const DashList = () => {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <ul className={styles.todoList}>
                             {filteredTodos.map((todo) => (
                                 <li className={styles.todoItem} key={todo.taskId}>
-                                {editingTaskId === todo.taskId ? (
-                                // 수정 모드
-                                    <div className={styles.editForm}>
-             <label>
-                 <input
-                     type="checkbox"
-                     checked={editingStatus === 'Y'}
-                     onChange={(e) =>
-                         setEditingStatus(e.target.checked ? 'Y' : 'N')
-                     }
-                 />
-                 {/* 완료 여부 */}
-             </label>
-             <input
-                 type="text"
-                 value={editingContent}
-                 onChange={(e) => setEditingContent(e.target.value)}
-                 placeholder="할 일 내용을 수정하세요"
-             />
-             <button onClick={handleSaveEdit} className={styles.saveButton}>
-                 저장
-             </button>
-             <button onClick={handleCancelEdit} className={styles.cancelButton}>
-                 취소
-             </button>
-         </div>
-     ) : (
-         // 기본 모드
-         <div style={{ display: 'flex', alignItems: 'center' }}>
-             <input
-                 type="checkbox"
-                 className={styles.checkbox}
-                 checked={todo.taskStatus === 'Y'}
-                 onChange={()=> handleCheckboxChange(todo)}
-                //  readOnly
-             />
-             <span
-                 className={`${styles.todoText} ${
-                     todo.taskStatus === 'Y' ? styles.completed : ''
-                 }`}
-             >
-                 {todo.taskContent}
-                 
-             </span>
-             <button
-                 onClick={() => handleEditClick(todo)}
-                 className={styles.editButton}
-             >
-                 수정
-             </button>
-             <button
-                 className={styles.deleteButton}
-                 onClick={() => handleDelete(todo.taskId)}
-             >
-                 <FaTrashAlt />
-             </button>
-         </div>
-     )}
- </li>
-))}
+                                    {editingTaskId === todo.taskId ? (
+                                        // 수정 모드
+                                        <div className={styles.editForm}>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={editingStatus === 'Y'}
+                                                    onChange={(e) =>
+                                                        setEditingStatus(e.target.checked ? 'Y' : 'N')
+                                                    }
+                                                />
+                                                {/* 완료 여부 */}
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={editingContent}
+                                                onChange={(e) => setEditingContent(e.target.value)}
+                                                placeholder="할 일 내용을 수정하세요"
+                                            />
+                                            <button onClick={handleSaveEdit} className={styles.saveButton}>
+                                                저장
+                                            </button>
+                                            <button onClick={handleCancelEdit} className={styles.cancelButton}>
+                                                취소
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        // 기본 모드
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <input
+                                                type="checkbox"
+                                                className={styles.checkbox}
+                                                checked={todo.taskStatus === 'Y'}
+                                                onChange={() => handleCheckboxChange(todo)}
+                                            //  readOnly
+                                            />
+                                            <span
+                                                className={`${styles.todoText} ${todo.taskStatus === 'Y' ? styles.completed : ''
+                                                    }`}
+                                            >
+                                                {todo.taskContent}
 
-</ul>
+                                            </span>
+                                            <button
+                                                onClick={() => handleEditClick(todo)}
+                                                className={styles.editButton}
+                                            >
+                                                수정
+                                            </button>
+                                            <button
+                                                className={styles.deleteButton}
+                                                onClick={() => handleDelete(todo.taskId)}
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -32,7 +32,7 @@ const SeniorList = () => {
   const [pagingInfo, setPagingInfo] = useState({
     // 스프링 부터 search를 보낼때 담을 상태훅
     pageNumber: 1,
-    action: '',
+    action: '선택',
     listCount: 1,
     maxPage: 1,
     pageSize: 10,
@@ -75,6 +75,7 @@ const SeniorList = () => {
         if (role === 'MANAGER' || role === 'FAMILY') {
           const response = await apiSpringBoot.get(`/member/seniorList`, {
             params: {
+              ...pagingInfo,
               memUUID: member.memUUID,
             },
           });
@@ -208,7 +209,7 @@ const SeniorList = () => {
     setSeniorList([]); // 멤버 리스트 초기화
     setPagingInfo({
       pageNumber: 1,
-      action: '',
+      action: '선택',
       listCount: 1,
       maxPage: 1,
       pageSize: 10,
@@ -223,7 +224,7 @@ const SeniorList = () => {
     setTempKeyword(''); // 검색 키워드 초기화
 
     // 초기 데이터 다시 로드
-    handleUpdateView(1, { action: '', keyword: '' });
+    handleUpdateView(1, { action: '선택', keyword: '' });
   };
 
   // 검색으로 인한 페이지 변경 시

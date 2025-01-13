@@ -12,8 +12,9 @@ import { convertUTCToKST } from '../../fuction/function';
 const SeniorApporvalList = () => {
   const { role, member } = useContext(AuthContext);
 
-  const [seniorData, setSeniorData] = useState();
-  const [familyData, setFamilyData] = useState();
+  const [seniorData, setSeniorData] = useState([]);
+  const [familyData, setFamilyData] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const [pagingInfo, setPagingInfo] = useState({
@@ -55,6 +56,13 @@ const SeniorApporvalList = () => {
           console.log(response.data.senior[0]?.memEnrollDate); // 첫 번째 요소의 memEnrollDate
           console.log(response.data.family[0]?.memEnrollDate); // 첫 번째 요소의 memEnrollDate
 
+          const seniorList = Array.isArray(response.data.senior)
+            ? response.data.senior
+            : [];
+          const familyList = Array.isArray(response.data.family)
+            ? response.data.family
+            : [];
+
           const updateSeniorList = response.data.senior.map((senior) => ({
             ...senior,
             memEnrollDate: senior.memEnrollDate
@@ -80,6 +88,38 @@ const SeniorApporvalList = () => {
 
     ApprovalList();
   }, []);
+
+  // useEffect(() => {
+  //   const ApprovalList = async () => {
+  //     try {
+  //       if (role === 'MANAGER') {
+  //         const response = await apiSpringBoot.get(`/member/approvalList`, {
+  //           params: {
+  //             memUUID: member.memUUID,
+  //           },
+  //         });
+
+  //         console.log('API 응답:', response.data);
+
+  //         const seniorList = Array.isArray(response.data.senior)
+  //           ? response.data.senior
+  //           : [];
+  //         const familyList = Array.isArray(response.data.family)
+  //           ? response.data.family
+  //           : [];
+
+  //         setSeniorData(seniorList);
+  //         setFamilyData(familyList);
+  //       }
+  //     } catch (error) {
+  //       console.error('리스트 출력 실패:', error);
+  //     } finally {
+  //       setIsLoading(false); // 로딩 완료 상태로 변경
+  //     }
+  //   };
+
+  //   ApprovalList();
+  // }, [role, member.memUUID]);
 
   // 페이지이동으로 인한 페이지 변경 시
   const handleUpdateView = async (page) => {
@@ -107,15 +147,26 @@ const SeniorApporvalList = () => {
         listCount: response.data.search.listCount,
         pageSize: response.data.search.pageSize,
       }));
-      console.log(response.data.senior.memEnrollDate);
-      console.log(response.data.family.memEnrollDate);
-      const updateSeniorList = response.data.senior.map((senior) => ({
+
+      const seniorList = Array.isArray(response.data.senior)
+        ? response.data.senior
+        : [];
+      const familyList = Array.isArray(response.data.family)
+        ? response.data.family
+        : [];
+
+      const updateSeniorList = seniorList.map((senior) => ({
         ...senior,
-        memEnrollDate: convertUTCToKST(senior.memEnrollDate),
+        memEnrollDate: senior.memEnrollDate
+          ? convertUTCToKST(senior.memEnrollDate)
+          : 'Invalid Date',
       }));
-      const updateFamilyList = response.data.family.map((family) => ({
+
+      const updateFamilyList = familyList.map((family) => ({
         ...family,
-        memEnrollDate: convertUTCToKST(family.memEnrollDate),
+        memEnrollDate: family.memEnrollDate
+          ? convertUTCToKST(family.memEnrollDate)
+          : 'Invalid Date',
       }));
       setSeniorData(updateSeniorList);
       setFamilyData(updateFamilyList);
@@ -148,8 +199,17 @@ const SeniorApporvalList = () => {
   };
 
   if (!seniorData || !familyData) {
-    return <div>roading...</div>;
+    return <div>데이터를 불러오는 중입니다...</div>;
   }
+
+  // if (isLoading) {
+  //   return <div>데이터를 불러오는 중입니다...</div>;
+  // }
+
+  // if (!seniorData.length && !familyData.length) {
+  //   console.warn('seniorData 또는 familyData가 비어 있습니다.');
+  //   return <div>표시할 데이터가 없습니다.</div>;
+  // }
 
   return (
     <div className={styles.alistContainer}>
@@ -178,6 +238,13 @@ const SeniorApporvalList = () => {
                       (fam) => fam?.memUUID === senior?.memUUIDFam
                     )
                   : null;
+                // const family = familyData?.find(
+                //   (fam) => fam?.memUUID === senior?.memUUIDFam
+                // );
+
+                console.log('현재 senior:', senior);
+                console.log('매칭되는 family:', family);
+
                 return (
                   <tr
                     key={senior.memUUID}
@@ -196,10 +263,12 @@ const SeniorApporvalList = () => {
                                 ? '사위'
                                 : ''}
                     </td>
-                    <td>{family.memId}</td>
-                    <td>{family.memName}</td>
+                    <td>{family?.memId || '정보 없음'}</td>
+                    <td>{family?.memName || '정보 없음'}</td>
                     <td>{senior.memName}</td>
-                    <td>{family.memEnrollDate.split(' ')[0]}</td>
+                    <td>
+                      {family?.memEnrollDate?.split(' ')[0] || '정보 없음'}
+                    </td>
                   </tr>
                 );
               })}

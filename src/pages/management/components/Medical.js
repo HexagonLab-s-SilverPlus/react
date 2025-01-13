@@ -97,7 +97,8 @@ const Medical = ({ UUID }) => {
                 setIsPublic(response.data.list[0].mediPrivacy); // "T" 또는 "F" 설정
             }
         } catch (error) {
-            console.error('Medical useEffect Error : ', error);
+            // console.error('Medical useEffect Error : ', error);
+            alert('병력 정보를 가져오는데 실패했습니다.');
         }
     };
 
@@ -168,7 +169,7 @@ const Medical = ({ UUID }) => {
 
             alert(`가족 공개 설정이 ${isPublicValue === "T" ? "공개" : "비공개"}로 변경되었습니다.`);
         } catch (error) {
-            console.error("handlePrivacyChange Error:", error);
+            // console.error("handlePrivacyChange Error:", error);
             alert('가족 공개 설정 변경 중 오류가 발생했습니다.');
         }
     };
@@ -221,7 +222,7 @@ const Medical = ({ UUID }) => {
                 alert("병력이 저장되었습니다.");
                 window.location.reload();
             } catch (error) {
-                console.error("handleInsert Error:", error);
+                // console.error("handleInsert Error:", error);
                 alert("저장 중 오류가 발생했습니다.");
             }
         } else {
@@ -272,7 +273,7 @@ const Medical = ({ UUID }) => {
                 // 수정 상태 제거
                 setIsEditing((prev) => prev.filter((i) => i !== index));
             } catch (error) {
-                console.error("handleUpdate Error:", error);
+                // console.error("handleUpdate Error:", error);
                 alert("수정 중 오류가 발생했습니다.");
             }
         } else {
@@ -306,7 +307,7 @@ const Medical = ({ UUID }) => {
                 alert("선택한 항목이 삭제되었습니다.");
                 fetchMedical();
             } catch (error) {
-                console.error("handleDeleteClick Error:", error);
+                // console.error("handleDeleteClick Error:", error);
                 alert("삭제 중 오류가 발생했습니다.");
             }
         }
