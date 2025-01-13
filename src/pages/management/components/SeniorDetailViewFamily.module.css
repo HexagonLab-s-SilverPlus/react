@@ -1,5 +1,10 @@
 /* src/pages/managemnet/SeniorDetailViewFamily.module.css */
 
+.sdetailMainContainer input,
+.sdetailMainContainer button {
+  font-family: 'Pretendard Variable';
+}
+
 .sdetailMainContainer {
   display: flex;
 }

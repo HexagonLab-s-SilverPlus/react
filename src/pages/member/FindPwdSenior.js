@@ -181,24 +181,24 @@ const FindPwdSenior = () => {
     }
   };
 
-  // 아이디 찾기 결과페이지 이동 함수
-  // const moveFindPwdResult = () => {
-  //   if (verifyData.isVerify === true) {
-  //     navigate('/fimResult', { state: verifyData });
-  //   } else {
-  //     alert('휴대전화 또는 이메일 인증을 진행해주세요.');
-  //     return;
-  //   }
-  // };
+  // 비밀번호 찾기 결과페이지 이동 함수
+  const moveFindPwdResult = () => {
+    if (verifyData.isVerify === true) {
+      navigate('/fimResult', { state: verifyData });
+    } else {
+      alert('휴대전화 또는 이메일 인증을 진행해주세요.');
+      return;
+    }
+  };
 
   const handleMoveReturn = (e) => {
     e.preventDefault();
     navigate(-1);
   };
 
-  const moveFindPwdResult = () => {
-    navigate('/fpsResult', { state: verifyData });
-  };
+  // const moveFindPwdResult = () => {
+  //   navigate('/fpsResult', { state: verifyData });
+  // };
 
   const handleMoveIdFind = () => {
     navigate('/findidsenior');

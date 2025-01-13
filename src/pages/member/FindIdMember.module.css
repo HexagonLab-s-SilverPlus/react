@@ -1,4 +1,9 @@
 /* src/pages/member/FIndIdmember.module.css*/
+.findIdMainContainer button,
+.findIdMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .findIdMainContainer {
   position: absolute;
   width: 1200px;
@@ -19,7 +24,7 @@
   /* box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.1); */
   width: 120px;
   height: 40px;
-  border-radius: 1px;
+  border-radius: 3px;
   border: 0;
   cursor: pointer;
   background-color: #ffffff;
@@ -29,7 +34,7 @@
   background-color: #f3f3f3;
   width: 120px;
   height: 40px;
-  border-radius: 1px;
+  border-radius: 3px;
   border: 0;
   cursor: pointer;
 }

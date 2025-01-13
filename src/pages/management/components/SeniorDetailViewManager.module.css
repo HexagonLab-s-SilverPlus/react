@@ -1,5 +1,12 @@
 /* src/pages/managemnet/SeniorDetailViewManager.module.css */
-.sdetailMainContainer {width: 100%;}
+.sdetailMainContainer {
+  width: 100%;
+}
+
+.sdetailMainContainer input,
+.sdetailMainContainer button {
+  font-family: 'Pretendard Variable';
+}
 
 .sdetailSubContainer {
   width: 100%;
@@ -144,31 +151,37 @@
 }
 
 .sdetailButton1 {
-  border-radius: 3px;
+  border-radius: 10px;
   border: 0;
-  background-color: #064420;
-  color: #ffffff;
+  background-color: #eee;
   width: 144px;
   height: 48px;
   margin-right: 30px;
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
-  border-radius: 8px;
+}
+
+.sdetailButton1:hover {
+  background-color: #064420;
+  color: #fff;
 }
 
 .sdetailButton2 {
-  border-radius: 3px;
+  border-radius: 10px;
   background-color: #eeeeee;
   border: 0;
-  color: #000000;
   width: 144px;
   height: 48px;
   margin-right: 30px;
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
-  border-radius: 8px;
+}
+
+.sdetailButton2:hover {
+  background-color: #064420;
+  color: #fff;
 }
 
 .loading {

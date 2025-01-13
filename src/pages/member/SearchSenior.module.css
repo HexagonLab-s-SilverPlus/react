@@ -1,4 +1,9 @@
 /* src/pages/member/SearchSenior.module.css */
+.sSearchMainContainer button,
+.sSearchMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .sSearchMainContainer {
   position: relative;
   /* border: 1px solid; */
@@ -70,8 +75,14 @@
 }
 
 .sSearchSelect {
+  background-color: #eee;
   border: 0;
   cursor: pointer;
+}
+
+.sSearchSelect:hover {
+  background-color: #064420;
+  color: #fff;
 }
 
 .sSearchPaging {

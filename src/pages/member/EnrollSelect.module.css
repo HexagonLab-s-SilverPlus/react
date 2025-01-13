@@ -16,6 +16,7 @@
   color: #ffffff;
   cursor: pointer;
   background-color: #739072;
+  font-family: 'Pretendard Variable';
 }
 
 .button1:hover {
@@ -32,6 +33,7 @@
   color: #ffffff;
   cursor: pointer;
   background-color: #88ab8e;
+  font-family: 'Pretendard Variable';
 }
 
 .button2:hover {

@@ -1,4 +1,9 @@
 /* src/pages/member/OrgSearch.module.css */
+.orgSearchMainContainer button,
+.orgSearchMainContainer input {
+  font-family: 'Pretendard Variable';
+}
+
 .orgSearchMainContainer {
   width: 100%;
   height: 500px;

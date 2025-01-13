@@ -281,13 +281,13 @@ const MemberListView = () => {
           <table className={styles.mlistTable}>
             <thead>
               <tr style={{ cursor: 'auto' }}>
-                <th>이름</th>
-                <th>아이디</th>
-                <th>계정타입</th>
-                <th>계정상태</th>
-                <th>이메일</th>
-                <th>연락처</th>
-                <th>가입일자</th>
+                <th className={styles.nameCol}>이름</th>
+                <th className={styles.idCol}>아이디</th>
+                <th className={styles.typeCol}>계정타입</th>
+                <th className={styles.statusCol}>계정상태</th>
+                <th className={styles.emailCol}>이메일</th>
+                <th className={styles.phoneCol}>연락처</th>
+                <th className={styles.dateCol}>가입일자</th>
               </tr>
             </thead>
             <tbody>
@@ -296,9 +296,9 @@ const MemberListView = () => {
                   key={list.memUUID}
                   onClick={() => handleDetailView(list.memUUID)}
                 >
-                  <td>{list.memName}</td>
-                  <td>{list.memId}</td>
-                  <td>
+                  <td className={styles.nameCol}>{list.memName}</td>
+                  <td className={styles.idCol}>{list.memId}</td>
+                  <td className={styles.typeCol}>
                     {list.memType === 'MANAGER'
                       ? '담당자'
                       : list.memType === 'FAMILY'
@@ -307,7 +307,7 @@ const MemberListView = () => {
                           ? '어르신'
                           : '오류'}
                   </td>
-                  <td>
+                  <td className={styles.statusCol}>
                     {list.memStatus === 'ACTIVE'
                       ? '활동'
                       : list.memStatus === 'BLOCKED'
@@ -316,9 +316,19 @@ const MemberListView = () => {
                           ? '휴면'
                           : '정지'}
                   </td>
-                  <td>{list.memEmail}</td>
-                  <td>{list.memCellphone}</td>
-                  <td>{list.memEnrollDate.split(' ')[0]}</td>
+                  <td className={styles.emailCol}>{list.memEmail}</td>
+                  <td className={styles.phoneCol}>
+                    {/^\d{11}$/.test(list.memCellphone)
+                      ? list.memCellphone.replace(
+                          /(\d{3})(\d{4})(\d{4})/,
+                          '$1-$2-$3'
+                        )
+                      : list.memCellphone || ''}
+                  </td>
+
+                  <td className={styles.dateCol}>
+                    {list.memEnrollDate.split(' ')[0]}
+                  </td>
                 </tr>
               ))}
             </tbody>
