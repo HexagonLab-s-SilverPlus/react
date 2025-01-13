@@ -15,7 +15,7 @@ const SeniorNavbar = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   // 토큰 정보가져오기
-  const { isLoggedIn, logout, refreshToken, authInfo } =
+  const { isLoggedIn, logout, refreshToken, authInfo, member } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -73,6 +73,10 @@ const SeniorNavbar = () => {
         />
         {isModalVisible && (
           <div className={Styles.modal}>
+            <div className={Styles.modalMemName}>
+              {member.memName}님<br />
+              어서오세요.
+            </div>
             {/* <p>내정보 보기</p> */}
             <p onClick={handleLogout}>로그아웃</p>
           </div>
