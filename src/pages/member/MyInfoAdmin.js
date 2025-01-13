@@ -162,6 +162,7 @@ const MyInfoAdmin = () => {
     const newUpdateMember = {
       ...updateMember,
       memChangeStatus: currentTimestamp,
+      memEnrollDate: convertUTCToKST(updateMember.memEnrollDate),
     };
 
     Object.entries(newUpdateMember).forEach(([key, value]) => {
