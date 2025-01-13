@@ -242,7 +242,7 @@ const NoticeDetail = () => {
                                                 type="button"
                                                 onClick={()=>handleDeleteFile(index)}
                                                 value="x"
-                                                className={styles.noticeButton}
+                                                className={styles.noticeButton2}
                                             />
                                         </td>
                                     </tr>
@@ -252,11 +252,11 @@ const NoticeDetail = () => {
                                 <tr>
                                     <td className={styles.buttonDiv}>
                                         <button
-                                            className={styles.noticeButton2}
+                                            className={styles.noticeButton}
                                             type='submit'
                                         >수정</button> &nbsp;
                                         <button 
-                                            className={styles.noticeButton2}
+                                            className={styles.noticeButton}
                                             onClick={handleInsertCancel}
                                         >취소</button>
                                     </td>
