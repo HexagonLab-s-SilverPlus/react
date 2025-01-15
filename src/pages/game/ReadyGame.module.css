@@ -3,6 +3,14 @@
   justify-content: center;}
 .gameNavBar{position:fixed;top:0; width: 100%;}
 .gameWelcome {justify-items: center;}
-.gameWelcome > p {font-size: 72px;color: #fff;}
+.gameWelcome > p {font-size: 72px;color: #fff;text-align: center;}
 .gameWelcome > button {border:none; font-family: "Pretendard Variable";background-color: #618264;font-size:32px;color: #ffffff;padding:10px 60px;border-radius: 8px;text-decoration: none;cursor: pointer;transition: all 0.3s;letter-spacing: 1px;}
 .gameWelcome > button:hover { background: #064420;}
+
+.gameImgWrap {width: 70%; display: flex; justify-content: space-between; align-items: center; margin: 40px auto;}
+.gameImgBox {width: 30%;}
+.gameImgBox > img {width: 100%; display: block; transition: all 0.5s; cursor: pointer;}
+.gameImgBox > img:hover {width: 60%; position: absolute; top: 12%;left: 0; right: 0; margin: auto;}
+/* .gameInfoImg {width: 20%;margin-top:20px; transition: all 0.3s;} */
+/* .gameInfoImg:hover {transform: scale(2); position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto;} */
+/* .gameInfoImg:hover {display: flex; position: absolute;top:0;left: 0; width:70%;align-content: center;justify-content: center;} */
