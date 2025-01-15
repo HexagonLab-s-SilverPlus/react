@@ -1,4 +1,3 @@
-// src/pages/member/FaceLogin.js
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFlask, apiSpringBoot } from '../../utils/axios';
@@ -11,6 +10,10 @@ const FaceLogin = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [result, setResult] = useState();
+  const [message1, setMessage1] = useState(
+    '카메라를 5초간 정면으로 바라봐 주세요.'
+  ); // 초기 문구
+  const [message2, setMessage2] = useState();
   const [captured, setCaptured] = useState(false); // 캡처 완료 여부
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -68,6 +71,9 @@ const FaceLogin = () => {
     if (captured) return; // 이미 캡처가 완료된 경우 중단
     setCaptured(true); // 캡처 완료 상태 설정
 
+    setMessage1('얼굴인식 완료'); // 메시지 업데이트
+    setMessage2('페이스로그인 진행중입니다. 잠시만 기다려주세요.'); // 메시지 업데이트
+
     const imageData = captureImage();
     if (!imageData) {
       console.error('Failed to capture image');
@@ -97,18 +103,21 @@ const FaceLogin = () => {
       <SeniorNavbar />
       <div className={styles.floginMainContainer}>
         <div className={styles.floginSubContainer}>
-          <h1>카메라를 5초간 정면으로 바라봐 주세요. </h1>
+          <h2>{message1}</h2> {/* 메시지를 상태값으로 표시 */}
+          <h1>{message2}</h1>
           {!result ? (
             <>
               <video ref={videoRef} autoPlay muted></video>
               <canvas ref={canvasRef}></canvas>
             </>
           ) : (
-            <span class="material-symbols-outlined" style={{ color: 'green' }}>
+            <span
+              className="material-symbols-outlined"
+              style={{ color: 'green' }}
+            >
               check_circle
             </span>
           )}
-
           <div className={styles.floginBtnDiv}>
             <button onClick={handleMoveIdLogin}>아 이 디 로 그 인</button>
           </div>

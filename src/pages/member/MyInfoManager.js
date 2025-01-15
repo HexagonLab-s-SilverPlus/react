@@ -187,6 +187,7 @@ const MyInfoManager = () => {
       ...updateMember,
       memChangeStatus: currentTimestamp,
       memEnrollDate: convertUTCToKST(updateMember.memEnrollDate),
+      memCellphone: updateMember.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     Object.entries(newUpdateMember).forEach(([key, value]) => {
@@ -409,7 +410,11 @@ const MyInfoManager = () => {
                     </td>
                     <th>기 관 전 화 번 호</th>
                     <td>
-                      <input value={updateMember.memPhone} name="memPhone" />
+                      <input
+                        value={updateMember.memPhone}
+                        name="memPhone"
+                        onChange={handleInfoChange}
+                      />
                     </td>
                   </tr>
                   <tr>

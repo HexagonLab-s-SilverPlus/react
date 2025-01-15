@@ -8,6 +8,7 @@ import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
 
 import SeniorFooter from '../../components/common/SeniorFooter';
+import SeniorNavbar from '../../components/common/SeniorNavbar';
 
 const LoginSenior = () => {
   const [memId, setMemId] = useState('');
@@ -104,6 +105,7 @@ const LoginSenior = () => {
 
   return (
     <>
+      <SeniorNavbar />
       <div className={styles.form}>
         <div>
           <button
