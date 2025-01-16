@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { apiSpringBoot } from '../../utils/axios';
 import { AuthContext } from '../../AuthProvider';
+import SocialCheck from './SocialCheck';
 
 const oauth2 = () => {
   const location = useLocation();
@@ -23,16 +24,10 @@ const oauth2 = () => {
       login({ accessToken, refreshToken });
       naviagte('/');
     } else {
-      const confirmExtend = window.confirm('회원이신가요?');
-      if (confirmExtend) {
-        naviagte('/loginmember');
-      } else {
-        naviagte('/enrollselect');
-      }
     }
   }, [location]);
 
-  return <div>소셜로그인 진행중</div>;
+  return <SocialCheck></SocialCheck>;
 };
 
 export default oauth2;

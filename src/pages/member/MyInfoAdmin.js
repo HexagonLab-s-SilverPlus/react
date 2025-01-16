@@ -163,6 +163,7 @@ const MyInfoAdmin = () => {
       ...updateMember,
       memChangeStatus: currentTimestamp,
       memEnrollDate: convertUTCToKST(updateMember.memEnrollDate),
+      memCellphone: updateMember.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 
     Object.entries(newUpdateMember).forEach(([key, value]) => {

@@ -23,8 +23,6 @@ import Oauth2 from '../pages/member/oauth2';
 import FaceLogin from '../pages/member/FaceLogin';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
-import Test from '../pages/member/test';
-
 const memberRouter = [
   <>
     {/* 회원가입 관련 */}
@@ -73,8 +71,6 @@ const memberRouter = [
       path="/mlistview/mdetailview/:UUID"
       element={<ProtectedRoute element={<MemberDetailView />} />}
     />
-
-    <Route path="/test" element={<Test />} />
   </>,
 ];
 

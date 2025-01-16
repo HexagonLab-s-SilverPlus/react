@@ -1,0 +1,52 @@
+/* /src/pages/member/SocialCheck.module.css */
+.socialCheckMainContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.socialCheckSubContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 550px;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  position: relative;
+}
+
+.socialCheckTitle {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.socialCheckButtonDiv {
+  text-align: center;
+}
+
+.socialCheckButtonDiv > button {
+  margin: 10px;
+  width: 250px;
+  height: 40px;
+  border-radius: 10px;
+  border: 0;
+  background-color: #eee;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: 'Pretendard Variable';
+  font-size: 18px;
+}
+
+.socialCheckButtonDiv > button:hover {
+  background-color: #064420;
+  color: #fff;
+}

@@ -235,6 +235,7 @@ const MyInfoFamily = () => {
     const newUpdateMember = {
       ...updateMember,
       memChangeStatus: currentTimestamp,
+      memEnrollDate: convertUTCToKST(updateMember.memEnrollDate),
       memCellphone: updateMember.memCellphone.replace(/-/g, ''), // 하이픈 제거
     };
 

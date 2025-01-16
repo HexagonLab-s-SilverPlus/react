@@ -46,16 +46,6 @@ const SeniorNavbar = () => {
     navigate('/senior-menu');
   };
 
-  // 모달 외부 클릭 감지
-  // useEffect(() => {
-  //   if (isModalVisible) {
-  //     document.addEventListener('click', closeModal);
-  //   } else {
-  //     document.removeEventListener('click', closeModal);
-  //   }
-  //   return () => document.removeEventListener('click', closeModal);
-  // }, [isModalVisible]);
-
   return (
     <nav className={Styles.navbar}>
       <Link to="/" className={Styles.navbarlogo}>
@@ -73,10 +63,12 @@ const SeniorNavbar = () => {
         />
         {isModalVisible && (
           <div className={Styles.modal}>
-            <div className={Styles.modalMemName}>
-              {member.memName}님<br />
-              어서오세요.
-            </div>
+            {isLoggedIn && (
+              <div className={Styles.modalMemName}>
+                {member.memName}님<br />
+                어서오세요.
+              </div>
+            )}
             {/* <p>내정보 보기</p> */}
             <p onClick={handleLogout}>로그아웃</p>
           </div>

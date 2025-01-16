@@ -6,7 +6,6 @@ import SideBar from '../../components/common/SideBar';
 import styles from './MemberDetailView.module.css';
 import loading from '../../assets/images/loading.gif';
 import noimage from '../../assets/images/No image.png';
-import useMemberStore from './memberStore'; // Zustand import
 
 const MemberDetailView = () => {
   const navigate = useNavigate();
@@ -99,12 +98,6 @@ const MemberDetailView = () => {
     Object.entries(updatedFormData).forEach(([key, value]) => {
       data.append(key, value);
     });
-
-    // const data = new FormData();
-    // Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-
-    // const currentTimestamp = new Date().toISOString(); // ISO 8601 형식의 현재 시간
-    // data.append('memChangeStatus', currentTimestamp);
 
     console.log('formData 확인 : ', formData); // 여전히 이전 상태 출력 가능 (비동기 특성)
     console.log('FormData 확인 : ', Array.from(data.entries())); // 실제 전송할 데이터 확인

@@ -203,7 +203,9 @@ const SeniorDetailView = () => {
             <p>어르신 관리</p>
             <ul>
               <li onClick={() => scrollToSection(managerRef)}>인적사항</li>
-              <li onClick={() => scrollToSection(medicalRef)}>병력 관리</li>
+              {mediPrivacy === 'T' && (
+                <li onClick={() => scrollToSection(medicalRef)}>병력 관리</li>
+              )}
               <li onClick={() => scrollToSection(emgListRef)}>위급 상황 기록</li>
             </ul>
           </div>{/* sdetailHeader end */}

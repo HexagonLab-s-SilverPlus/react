@@ -9,6 +9,8 @@ import { AuthContext } from '../../AuthProvider';
 
 import SeniorFooter from '../../components/common/SeniorFooter';
 
+import Header from '../../components/common/Header';
+
 import kakao from '../../assets/images/icon/Kakao Icon.png';
 import naver from '../../assets/images/icon/Naver Icon.png';
 import google from '../../assets/images/icon/Google Icon.png';
@@ -127,6 +129,7 @@ const LoginMember = () => {
 
   return (
     <>
+      <Header />
       <div className={styles.form}>
         <div>
           <button

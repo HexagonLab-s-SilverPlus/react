@@ -251,6 +251,7 @@ const FindIdSenior = () => {
                       name="memCellphone"
                       style={{ width: '335px' }}
                       onChange={handleCellphoneChange}
+                      placeholder="'-' 를 제외한 숫자만 입력하세요."
                     />
                     <button
                       className={styles.findIdPhoneTableBtn}
