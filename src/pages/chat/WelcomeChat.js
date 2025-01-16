@@ -20,6 +20,8 @@ function WelcomeChat() {
     if (!userFirstMsg.trim()) return;
 
     try {
+
+
       const refreshToken = localStorage.getItem('refreshToken');
       const response = await apiFlask.post(
         '/chat',
@@ -36,7 +38,7 @@ function WelcomeChat() {
         },
       );
 
-      const { workspaceId, audioBase64, reply  } = response.data; // 생성된 워크스페이스 ID
+      const { workspaceId, audioBase64, reply } = response.data; // 생성된 워크스페이스 ID
 
       if (!workspaceId) {
         alert('워크스페이스 생성에 실패했습니다. 다시 시도해주세요.');
@@ -45,7 +47,7 @@ function WelcomeChat() {
 
 
       // Base64 오디오 재생
-      if (audioBase64 ) {
+      if (audioBase64) {
         const audio = new Audio(`data:audio/mpeg;base64,${audioBase64}`);
         audio.play();
       }
@@ -66,11 +68,11 @@ function WelcomeChat() {
 
 
   // 사용자 입력 처리 및 엔터키 감지
-const handleInputKeyDown = (e) => {
-  if (e.key === 'Enter') {
-    handleSend(); // 엔터키를 누르면 메시지 전송
-  }
-};
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSend(); // 엔터키를 누르면 메시지 전송
+    }
+  };
 
 
   // 사이드바 토글

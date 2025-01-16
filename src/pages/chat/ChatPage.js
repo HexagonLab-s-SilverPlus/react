@@ -28,6 +28,11 @@ function ChatPage() {
   const [onCamera, setOnCamera] = useState(false);
 
 
+  const aiReplyAdded = useRef(false); // AI 메시지 추가 여부 추적
+
+
+
+
   // 위험 키워드
   const dangerKeywords = ['아프다', '쓰러졌다', '도와줘', '긴급'];
 
@@ -58,14 +63,27 @@ function ChatPage() {
 
 
   useEffect(() => {
-    if (workspaceId) {
-      setSelectedWorkspaceId(workspaceId);
-      fetchChatHistory();
-    }
-    if (aiReply) {
-      setMessages((prev) => [...prev, { sender: 'AI', text: aiReply }]);
-    }
-  }, [workspaceId, aiReply]);
+    const initializeMessages = async () => {
+        if (!workspaceId) return;
+        
+        setSelectedWorkspaceId(workspaceId);
+        await fetchChatHistory();
+
+        if (aiReply && !aiReplyAdded.current) {
+            aiReplyAdded.current = true; // 중복 방지
+            setMessages(prev => [
+                ...prev.filter(msg => msg.text !== aiReply), // 기존 AI 메시지 제거
+                { sender: "USER", text: location.state.userMessage },
+                { sender: "AI", text: aiReply },
+            ]);
+        }
+    };
+
+    initializeMessages();
+}, [workspaceId, aiReply]);
+
+
+
 
 
 
@@ -74,7 +92,7 @@ function ChatPage() {
 
 
 
-  
+
   // 메시지 전송 핸들러
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
@@ -281,21 +299,40 @@ function ChatPage() {
 
               <div id="read">
 
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`${styles['chat-bubble']} ${message.sender === 'USER' ? styles['user-message'] : styles['ai-response']}`}
-                  >
-                    {message.loading ? (
-                      <Player autoplay loop src="/lottie/doc-loading-anime.json" style={{ height: '150px', width: '150px' }} />
-                    ) : (
-                      <div
-                        className={styles['markdown']}
-                        dangerouslySetInnerHTML={{ __html: marked(message.text) }}
-                      ></div>
-                    )}
-                  </div>
-                ))}
+                {messages.map((message, index) => {
+                  const isDuplicateAIMessage =
+                    message.sender === "AI" &&
+                    index > 0 &&
+                    messages[index - 1]?.sender === "AI" &&
+                    messages[index - 1]?.text === message.text;
+
+                  if (isDuplicateAIMessage) {
+                    return null; // 중복 메시지 렌더링 생략
+                  }
+
+                  return (
+                    <div
+                      key={index}
+                      className={`${styles["chat-bubble"]} ${message.sender === "USER" ? styles["user-message"] : styles["ai-response"]
+                        }`}
+                    >
+                      {message.sender === "AI" && message.loading && !message.text ? (
+                        <Player
+                          autoplay
+                          loop
+                          src="/lottie/doc-loading-anime.json"
+                          style={{ height: "150px", width: "150px" }}
+                        />
+                      ) : (
+                        <div
+                          className={styles["markdown"]}
+                          dangerouslySetInnerHTML={{ __html: message.text }}
+                        ></div>
+                      )}
+                    </div>
+                  );
+                })}
+
               </div>
               <div ref={chatEndRef}></div>
             </div>
