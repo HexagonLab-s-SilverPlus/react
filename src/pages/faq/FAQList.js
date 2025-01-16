@@ -120,7 +120,7 @@ const FAQList = () => {
 
             console.log(JSON.stringify(response.data.list));
         } catch {
-            console.error('qna 뷰 불러오기 실패', error);
+            console.error('faq 뷰 불러오기 실패', error);
         }
     };
 
