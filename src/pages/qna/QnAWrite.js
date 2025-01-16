@@ -89,7 +89,7 @@
         };
 
         return (
-            <div className={styles.bodyDiv}>
+            <div>
                 <SideBar />
                 <div className={styles.qnaContent}>
                     <QNAHeader text="Q&A 등록"/>
@@ -135,9 +135,9 @@
                         <input type='submit' value="등 록"/>
                         <button onClick={(event) => {navigate(-1); event.preventDefault();}}>취 소</button>
                     </div>
-                    </form>           
-                </div>       
-                <div style={{marginBottom: "50px"}}></div> 
+                    </form>  
+                </div>               
+
             </div>
         );
     }
