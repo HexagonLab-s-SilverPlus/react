@@ -74,7 +74,7 @@ const BookWrite = () => {
                 );
                 alert('Book 등록 성공');
                 // 게시글 등록이 성공되면 공지 목록 페이지로 이동
-                navigate('/book');
+                navigate('/bookRouter/book');
             } catch (error) {
                 console.error('Book 등록 실패', error);
                 alert('새 게시글 등록 실패');

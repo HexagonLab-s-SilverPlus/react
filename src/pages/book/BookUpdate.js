@@ -110,7 +110,7 @@ const BookUpdate = () => {
                 );
                 alert('Book 수정 성공');
                 // 게시글 수정이 성공되면 공지 목록 페이지로 이동
-                navigate('/book');
+                navigate('/bookRouter/book');
             } catch (error) {
                 console.error('Book 수정 실패', error);
                 alert('새 게시글 수정 실패');
@@ -161,6 +161,7 @@ const BookUpdate = () => {
     };
 
     const handleFileChange = (e) => {
+        
         setFile(e.target.files[0]);
         setFileSelect(e.target.files[0].name);
     };

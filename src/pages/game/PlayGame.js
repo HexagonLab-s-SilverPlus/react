@@ -195,7 +195,7 @@ const PlayGame = () => {
   };
   // 다시하기 버튼
   const handleMoveRegame = () => {
-    if(window.confirm('다시 하시겠습니까?')){window.location.href ="/game/play"}
+    if(window.confirm('다시 하시겠습니까?')){window.location.href ="/gameRouter/game/play"}
   };
   // ------------------------------------------
   const handleWinner = (getPlayerCardCount,getOpponentCardCount) =>{

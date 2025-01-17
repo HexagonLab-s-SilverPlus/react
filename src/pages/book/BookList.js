@@ -39,13 +39,13 @@ const BookList = () => {
 
     //등록하기 페이지로 이동 핸들러
     const handleWriteClick = () => {
-        navigate('/book/write');
+        navigate('/bookRouter/book/write');
     };
 
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrBookId) => {
-        navigate(`/book/detail/${snrBookId}`);
+        navigate(`/bookRouter/book/detail/${snrBookId}`);
     };
 
     useEffect(() => {
@@ -336,7 +336,7 @@ const BookList = () => {
                                             </li>
                                     ))}
                                 </ul>
-                            <button type="button" className={styles.bkListBtn} onClick={()=>(window.location.href ="/book")}>목록</button>
+                            <button type="button" className={styles.bkListBtn} onClick={()=>(window.location.href ="/bookRouter/book")}>목록</button>
 
                             <PagingDiv8
                                 pageNumber={pagingInfo.pageNumber || 1}
@@ -371,7 +371,7 @@ const BookList = () => {
                         <div className={styles.bkListTop}>
                             <p className={styles.bkTitle}>책 목록 <span>{pagingInfo.listCount}</span></p>
                             <div className={styles.bkTopBtns}>
-                                <button type="button" onClick={()=>(window.location.href ="/book")}>목록</button>
+                                <button type="button" onClick={()=>(window.location.href ="/bookRouter/book")}>목록</button>
                                 {(role === "MANAGER" || role === "ADMIN") && (
                                     <button type="button" onClick={handleWriteClick}>등록하기</button>
                                 )}

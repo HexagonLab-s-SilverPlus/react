@@ -119,7 +119,7 @@ const NoticeDetail = () => {
                     }
                 });
                 alert('공지사항 수정에 성공하였습니다.');
-                navigate(`/notice`)
+                navigate(`/noticeRouter/notice`)
             } catch (error) {
                 console.error('공지글 수정 실패', error);
                 alert('공지사항 수정에 오류가 발생하였습니다.');
@@ -175,7 +175,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                    <span onClick={() => (navigate("/notice"))}>공지사항</span>
+                    <span onClick={() => (navigate("/noticeRouter/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <form

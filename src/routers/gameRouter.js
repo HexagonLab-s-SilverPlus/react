@@ -9,8 +9,8 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const gameRouter = [
     <>
-    <Route path="/game" element={<ProtectedRoute element={<ReadyGame />} />} />,
-    <Route path="/game/play" element={<ProtectedRoute element={<PlayGame />} />} />,
+    <Route path="/gameRouter/game" element={<ProtectedRoute element={<ReadyGame />} />} />,
+    <Route path="/gameRouter/game/play" element={<ProtectedRoute element={<PlayGame />} />} />,
     </>
 ];
 

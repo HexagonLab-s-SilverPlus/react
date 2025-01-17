@@ -158,7 +158,7 @@ function NoticeList() {
                 <SeniorNavbar />
                 <section className={styles.noticeListBody}>
                     <div className={styles.noticeLeftMenu}>
-                        <div className={styles.menuName} onClick={() => (window.location.href = "/notice")}>공지사항</div>
+                        <div className={styles.menuName} onClick={() => (window.location.href = "/noticeRouter/notice")}>공지사항</div>
                     </div>
                     <div className={styles.noticeRightMenu}>
                         <div className={styles.top}>
@@ -225,7 +225,7 @@ function NoticeList() {
                             {notices.map((noticeList) => (
                                 <div
                                     key={noticeList.notId}
-                                    onClick={() => (navigate(`/notice/noticedetail/${noticeList.notId}`))}
+                                    onClick={() => (navigate(`/noticeRouter/notice/noticedetail/${noticeList.notId}`))}
                                     className={styles.object}
                                 >
                                     <div className={styles.title}>
@@ -274,14 +274,14 @@ function NoticeList() {
                 <SideBar />
                 <div className={styles.memberSubContainer}>
                     <div className={styles.MemberNoticeTop}>
-                        <span onClick={() => (window.location.href = "/notice")}>공지사항</span>
+                        <span onClick={() => (window.location.href = "/noticeRouter/notice")}>공지사항</span>
                     </div>
                     <div className={styles.memberSubLine}>
                         <div>
-                       <button className={styles.memberInputButton} onClick={()=>(window.location.href = "/notice")}>목록</button> &nbsp;
+                       <button className={styles.memberInputButton} onClick={()=>(window.location.href = "/noticeRouter/notice")}>목록</button> &nbsp;
                         {role ==="ADMIN"&&(
                         
-                            <button className={styles.memberInputButton} onClick={()=>(navigate("/notice/noticewrite"))}>공지사항 등록</button>
+                            <button className={styles.memberInputButton} onClick={()=>(navigate("/noticeRouter/notice/noticewrite"))}>공지사항 등록</button>
                         )
                         }
                         </div>
@@ -359,7 +359,7 @@ function NoticeList() {
                                 {notices.map((noticeList) => (
                                     <tr
                                         key={noticeList.notId}
-                                        onClick={() => (navigate(`/notice/noticedetail/${noticeList.notId}`))}
+                                        onClick={() => (navigate(`/noticeRouter/notice/noticedetail/${noticeList.notId}`))}
                                     >
                                         <td>{noticeList.notTitle}</td>
                                         <td>{adjustTimeZone(noticeList.notCreateAt).split('T')[0]}</td>

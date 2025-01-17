@@ -33,7 +33,7 @@ const ReadyGame = () => {
           </div>
           게임시작 버튼을 눌러 게임을 시작해 보세요.😊
         </p>
-        <button onClick={()=>(nav('/game/play'))}>게임시작</button> &nbsp;
+        <button onClick={()=>(nav('/gameRouter/game/play'))}>게임시작</button> &nbsp;
         <button onClick={()=>(nav('/senior-menu'))}>뒤로가기</button>
       </div>
     </div>

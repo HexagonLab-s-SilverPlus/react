@@ -8,10 +8,10 @@ import BookDetail from '../pages/book/BookDetail';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 const bookRouter = [
  <>
-    <Route path="/book" element={<ProtectedRoute element={<BookList/>} />}/>,
-    <Route path="/book/write" element={<ProtectedRoute element={<BookWrite/>} />}/>,
-    <Route path="/book/update/:bookUUID" element={<ProtectedRoute element={<BookUpdate/>} />}/>,
-    <Route path="/book/detail/:bookUUID" element={<ProtectedRoute element={<BookDetail/>} />}/>,
+    <Route path="/bookRouter/book" element={<ProtectedRoute element={<BookList/>} />}/>,
+    <Route path="/bookRouter/book/write" element={<ProtectedRoute element={<BookWrite/>} />}/>,
+    <Route path="/bookRouter/book/update/:bookUUID" element={<ProtectedRoute element={<BookUpdate/>} />}/>,
+    <Route path="/bookRouter/book/detail/:bookUUID" element={<ProtectedRoute element={<BookDetail/>} />}/>,
  </>
 ];
 

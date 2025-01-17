@@ -46,7 +46,7 @@ const BookDetail = () => {
     }
 
     const handleMoveUpdateView = (bookUUId) => {
-        navigate(`/book/update/${bookUUId}`);
+        navigate(`/bookRouter/book/update/${bookUUId}`);
     };
     
 

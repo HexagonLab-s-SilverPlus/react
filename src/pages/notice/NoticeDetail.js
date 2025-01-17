@@ -96,7 +96,7 @@ const NoticeDetail = () => {
                     },
                 });
                 alert("삭제가 완료되었습니다.");
-                navigate('/notice');
+                navigate('/noticeRouter/notice');
             } catch(error){
                 console.error('delete error : ', error);
                 alert('공지사항 삭제에 실패하였습니다.');
@@ -123,7 +123,7 @@ const NoticeDetail = () => {
                             <span class="material-symbols-outlined">arrow_back</span> 뒤로가기</button>
                         <button
                             className={styles.seniorButton} 
-                            onClick={() =>(navigate('/notice'))}
+                            onClick={() =>(navigate('/noticeRouter/notice'))}
                         >목록</button>
                         </td>
                     </tr>
@@ -202,7 +202,7 @@ const NoticeDetail = () => {
                     <div className={styles.seniorCenterButton}>                        
                         <button
                             className={styles.seniorButton} 
-                            onClick={() =>(navigate('/notice'))}
+                            onClick={() =>(navigate('/noticeRouter/notice'))}
                         >목록</button>
                     </div>
                 </div>
@@ -216,7 +216,7 @@ const NoticeDetail = () => {
             <SideBar />
             <div className={styles.memberSubContainer}>
                 <div className={styles.MemberNoticeTop}>
-                        <span onClick={()=>(navigate("/notice"))}>공지사항</span>
+                        <span onClick={()=>(navigate("/noticeRouter/notice"))}>공지사항</span>
                 </div>
                 <div className={styles.insertTableDiv}>
                     <table className={styles.insertTable}>
@@ -282,7 +282,7 @@ const NoticeDetail = () => {
                     </div>
                     {role==="ADMIN" && (
                         <div className={styles.rightButtons}>
-                            <button className={styles.noticebutton} onClick={()=>{navigate(`/notice/noticeupdate/${notice.notId}`)}}>수정</button>
+                            <button className={styles.noticebutton} onClick={()=>{navigate(`/noticeRouter/notice/noticeupdate/${notice.notId}`)}}>수정</button>
                             <button
                                 className={styles.noticebutton}
                                 onClick={handleDelete}
