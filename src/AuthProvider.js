@@ -344,7 +344,7 @@ export const AuthProvider = ({ children }) => {
         memId: '',
         member: null,
       });
-      navigate('/loginmember');
+      alert('로그아웃 성공');
     } catch (error) {
       console.error('로그아웃 실패 : ', error);
       alert('로그아웃 실패');

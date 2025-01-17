@@ -11,7 +11,7 @@ const ProtectedRoute = ({ element, roles = [], }) => {
 
     // 인증되지 않은 사용자인 경우 (accessToken이 없을 때)
     if (!accessToken) {
-        return <Navigate to="/loginmember" replace />;
+        return <Navigate to="/memRouter/loginmember" replace />;
     }
 
     // 역할 기반 접근 제어

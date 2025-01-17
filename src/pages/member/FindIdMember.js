@@ -201,7 +201,7 @@ const FindIdMember = () => {
   // };
 
   const handleMovePwdFind = () => {
-    navigate('/findpwdmember');
+    navigate('/memRouter/findpwdmember');
   };
 
   return (

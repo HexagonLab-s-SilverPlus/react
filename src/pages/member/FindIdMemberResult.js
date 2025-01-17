@@ -43,7 +43,7 @@ const FindIdMemberResult = () => {
   });
 
   const handleMovePwdFind = () => {
-    navigate('/findpwdmember');
+    navigate('/memRouter/findpwdmember');
   };
 
   return (
@@ -92,7 +92,7 @@ const FindIdMemberResult = () => {
                 color: '#333333',
                 border: 0,
               }}
-              onClick={() => navigate('/loginmember')}
+              onClick={() => navigate('/memRouter/loginmember')}
             >
               로그인 하기
             </button>

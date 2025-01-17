@@ -80,12 +80,12 @@ const LoginSenior = () => {
 
   const handleMoveLoginMember = (e) => {
     e.preventDefault();
-    navigate('/loginmember');
+    navigate('/memRouter/loginmember');
   };
 
   const handleMoveLoginSenior = (e) => {
     e.preventDefault();
-    navigate('/loginsenior');
+    navigate('/memRouter/loginsenior');
   };
 
   // 멤버 타입에 따른 리다이렉트 처리
@@ -100,7 +100,7 @@ const LoginSenior = () => {
 
   const handleMoveFaceLogin = (e) => {
     e.preventDefault();
-    navigate('/facelogin');
+    navigate('/memRouter/facelogin');
   };
 
   return (
@@ -166,13 +166,13 @@ const LoginSenior = () => {
             </div>
             <div style={{ marginBottom: '25px', textAlign: 'center' }}>
               <span>
-                <Link to="/findidsenior" className={styles.findlink}>
+                <Link to="/memRouter/findidsenior" className={styles.findlink}>
                   아이디 찾기
                 </Link>
               </span>
               <span className={styles.seperator}>❘</span>
               <span>
-                <Link to="/findpwdsenior" className={styles.findlink}>
+                <Link to="/memRouter/findpwdsenior" className={styles.findlink}>
                   비밀번호 찾기
                 </Link>
               </span>

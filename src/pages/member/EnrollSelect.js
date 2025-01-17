@@ -9,10 +9,10 @@ const EnrollSelect = () => {
   const navigate = useNavigate();
 
   const handleMoveEnrollManager = () => {
-    navigate('/enrollmanager');
+    navigate('/memRouter/enrollmanager');
   };
   const handleMoveEnrollFamily = () => {
-    navigate('/enrollfamily');
+    navigate('/memRouter/enrollfamily');
   };
 
   return (

@@ -94,7 +94,7 @@ const MyInfoManager = () => {
       if (result === 'success') {
         if (isLoggedIn) {
           logout({ refreshToken });
-          navigate('/loginmember');
+          navigate('/memRouter/loginmember');
           alert('회원탈퇴 성공');
         }
       } else if (result === 'failed') {
