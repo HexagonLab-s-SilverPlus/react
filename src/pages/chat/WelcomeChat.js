@@ -53,7 +53,7 @@ function WelcomeChat() {
       }
 
       // 생성된 워크스페이스 ID를 ChatPage로 전달하며 이동
-      navigate(`eyRouter/w/${workspaceId}`, {
+      navigate(`/eyRouter/w/${workspaceId}`, {
         state: { workspaceId, aiReply: reply },
       });
 
