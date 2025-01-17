@@ -55,6 +55,7 @@ const setupInterceptors = (axiosInstance) => {
       const refreshToken = localStorage.getItem('refreshToken');
       console.log('accessToken', accessToken);
       console.log('refreshToken', refreshToken);
+      console.log(config);
       console.log('요청 인터셉터 확인');
       if (ExceptionURL.some((url) => config.url.includes(url))) {
         console.log('예외 url 작동확인');
@@ -66,6 +67,7 @@ const setupInterceptors = (axiosInstance) => {
         config.headers['RefreshToken'] = `Bearer ${refreshToken}`;
         console.log('config headers', config.headers['Authorization']);
         console.log('config headers', config.headers['Authorization']);
+        console.log(config);
       }
       return config;
     },
@@ -264,6 +266,7 @@ const refreshAccessToken = async () => {
 // Context Provider 컴포넌트
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  const [isInitialized, setIsInitialized] = useState(false);
   const [authInfo, setAuthInfo] = useState(() => {
     // 초기화 시 로컬 저장소를 기반으로 상태 설정
     const accessToken = localStorage.getItem('accessToken');
@@ -305,6 +308,7 @@ export const AuthProvider = ({ children }) => {
       memId: parsedToken.sub, // 토큰에서 subject 정보 추출
       member: parsedToken.member,
     });
+    localStorage.setItem('authInfo', authInfo);
     console.log('login : ', authInfo);
     console.log('member:', authInfo.member); // member 객체가 포함되었는지 확인
   };
@@ -347,15 +351,51 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   // authInfo 상태 변경 시 로컬 저장소와 동기화
+  //   if (authInfo.accessToken) {
+  //     localStorage.setItem('accessToken', authInfo.accessToken);
+  //   }
+  //   if (authInfo.refreshToken) {
+  //     localStorage.setItem('refreshToken', authInfo.refreshToken);
+  //   }
+  // }, [authInfo.accessToken, authInfo.refreshToken]);
+
   useEffect(() => {
-    // authInfo 상태 변경 시 로컬 저장소와 동기화
-    if (authInfo.accessToken) {
-      localStorage.setItem('accessToken', authInfo.accessToken);
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (accessToken && refreshToken) {
+      const parsedToken = parseAccessToken(accessToken);
+      console.log('초기화된 authInfo:', parsedToken);
+
+      setAuthInfo({
+        isLoggedIn: true,
+        accessToken,
+        refreshToken,
+        role: parsedToken.role,
+        memName: parsedToken.name,
+        memId: parsedToken.sub,
+        member: parsedToken.member,
+      });
+    } else {
+      setAuthInfo({
+        isLoggedIn: false,
+        accessToken: '',
+        refreshToken: '',
+        role: '',
+        memName: '',
+        memId: '',
+        member: null,
+      });
     }
-    if (authInfo.refreshToken) {
-      localStorage.setItem('refreshToken', authInfo.refreshToken);
-    }
-  }, [authInfo.accessToken, authInfo.refreshToken]);
+
+    setIsInitialized(true); // 초기화 완료 플래그
+  }, []);
+
+  if (!isInitialized) {
+    return <div>Loading...</div>; // 초기화 중 로딩 표시
+  }
 
   return (
     <AuthContext.Provider
