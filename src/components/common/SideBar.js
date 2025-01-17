@@ -46,7 +46,7 @@ function SideBar() {
   ];
 
   const managerLinks = [
-    { path: '/dashlist', label: '대시보드', img : <span class="material-symbols-outlined">home</span> },
+    { path: '/sjRouter/dashlist', label: '대시보드', img : <span class="material-symbols-outlined">home</span> },
     { path: '/seniorlist', label: '어르신관리', img : <span class="material-symbols-outlined">manage_accounts</span> },
     { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span> },

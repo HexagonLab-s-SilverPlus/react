@@ -377,7 +377,7 @@ const DashList = () => {
                                 if (documentCount === 0) {
                                     alert('불러올 공문서 데이터가 없습니다.'); // 경고 메시지 출력
                                 } else {
-                                    navigate('/docrequest'); // 'docrequest'로 이동
+                                    navigate('/sjRouter/docrequest'); // 'docrequest'로 이동
                                 }
                             }}
 
