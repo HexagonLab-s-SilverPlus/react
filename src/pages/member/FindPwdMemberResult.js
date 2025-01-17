@@ -130,7 +130,7 @@ const FindPwdMemberResult = () => {
       const result = response.headers['response'];
       if (result === 'success') {
         alert('비밀번호 재설정 성공');
-        navigate('/loginmember');
+        navigate('/memRouter/loginmember');
       } else if (result === 'failed') {
         alert('비밀번호 재설정 실패. 인증관련 내용을 확인해주세요.');
       } else {
@@ -141,7 +141,7 @@ const FindPwdMemberResult = () => {
 
   // 아이디찾기 페이지로 이동하는 함수
   const handleMoveIdFind = () => {
-    navigate('/findidmember');
+    navigate('/memRouter/findidmember');
   };
 
   return (

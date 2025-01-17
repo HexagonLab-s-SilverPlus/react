@@ -19,7 +19,7 @@ const FaceLogin = () => {
   const navigate = useNavigate();
 
   const handleMoveIdLogin = () => {
-    navigate('/loginsenior');
+    navigate('/memRouter/loginsenior');
   };
 
   useEffect(() => {

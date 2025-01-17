@@ -26,27 +26,27 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 const memberRouter = [
   <>
     {/* 회원가입 관련 */}
-    <Route path="/enrollselect" element={<EnrollSelect />} />
-    <Route path="/enrollmanager" element={<EnrollManager />} />
-    <Route path="/enrollfamily" element={<EnrollFamily />} />
+    <Route path="/memRouter/enrollselect" element={<EnrollSelect />} />
+    <Route path="/memRouter/enrollmanager" element={<EnrollManager />} />
+    <Route path="/memRouter/enrollfamily" element={<EnrollFamily />} />
 
     {/* 로그인 관련 */}
-    <Route path="/loginmember" element={<LoginMember />} />
-    <Route path="/loginsenior" element={<LoginSenior />} />
-    <Route path="/facelogin" element={<FaceLogin />} />
+    <Route path="/memRouter/loginmember" element={<LoginMember />} />
+    <Route path="/memRouter/loginsenior" element={<LoginSenior />} />
+    <Route path="/memRouter/facelogin" element={<FaceLogin />} />
 
     {/* 소셜 */}
     <Route path="/oauth2" element={<Oauth2 />} />
 
     {/* 아이디, 비밀번호찾기 관련 */}
-    <Route path="/findpwdsenior" element={<FindPwdSenior />} />
-    <Route path="/findpwdmember" element={<FindPwdMember />} />
-    <Route path="/findidsenior" element={<FindIdSenior />} />
-    <Route path="/findidmember" element={<FindIdMember />} />
-    <Route path="/fimResult" element={<FindIdMemberResult />} />
-    <Route path="/fisResult" element={<FindIdSeniorResult />} />
-    <Route path="/fpmResult" element={<FindPwdMemberResult />} />
-    <Route path="/fpsResult" element={<FindPwdSeniorResult />} />
+    <Route path="/memRouter/findpwdsenior" element={<FindPwdSenior />} />
+    <Route path="/memRouter/findpwdmember" element={<FindPwdMember />} />
+    <Route path="/memRouter/findidsenior" element={<FindIdSenior />} />
+    <Route path="/memRouter/findidmember" element={<FindIdMember />} />
+    <Route path="/memRouter/fimResult" element={<FindIdMemberResult />} />
+    <Route path="/memRouter/fisResult" element={<FindIdSeniorResult />} />
+    <Route path="/memRouter/fpmResult" element={<FindPwdMemberResult />} />
+    <Route path="/memRouter/fpsResult" element={<FindPwdSeniorResult />} />
 
     {/* 마이페이지 관련 */}
     <Route

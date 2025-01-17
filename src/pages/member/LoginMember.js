@@ -109,12 +109,12 @@ const LoginMember = () => {
 
   const handleMoveLoginMember = (e) => {
     e.preventDefault();
-    navigate('/loginmember');
+    navigate('/memRouter/loginmember');
   };
 
   const handleMoveLoginSenior = (e) => {
     e.preventDefault();
-    navigate('/loginsenior');
+    navigate('/memRouter/loginsenior');
   };
 
   // 멤버 타입에 따른 리다이렉트 처리
@@ -124,7 +124,7 @@ const LoginMember = () => {
     if (member.memType === 'SENIOR') navigate('/senior-menu');
     else if (member.memType === 'MANAGER') navigate('/dashlist');
     else if (member.memType === 'FAMILY') navigate('/seniorlist');
-    else if (member.memType === 'ADMIN') navigate('/mlistview');
+    else if (member.memType === 'ADMIN') navigate('/memRouter/mlistview');
   }, [member, navigate]);
 
   return (
@@ -187,19 +187,19 @@ const LoginMember = () => {
             </div>
             <div style={{ marginBottom: '25px', textAlign: 'center' }}>
               <span>
-                <Link to="/findIdMember" className={styles.findlink}>
+                <Link to="/memRouter/findIdMember" className={styles.findlink}>
                   아이디 찾기
                 </Link>
               </span>
               <span className={styles.seperator}>❘</span>
               <span>
-                <Link to="/findPwdMember" className={styles.findlink}>
+                <Link to="/memRouter/findPwdMember" className={styles.findlink}>
                   비밀번호 찾기
                 </Link>
               </span>
               <span className={styles.seperator}>❘</span>
               <span>
-                <Link to="/enrollselect" className={styles.findlink}>
+                <Link to="/memRouter/enrollselect" className={styles.findlink}>
                   회원가입
                 </Link>
               </span>

@@ -212,7 +212,7 @@ function EnrollManager() {
         // 성공 응답 상태 확인
         alert('가입 성공');
         console.log('회원가입 성공 데이터:', response.data);
-        navigate('/loginmember');
+        navigate('/memRouter/loginmember');
       } else {
         alert('가입 실패');
         console.error('가입 실패 상태:', response);

@@ -12,7 +12,6 @@ function SideBar() {
       logout({ refreshToken });
       console.log('로그아웃');
       console.log('authInfo', authInfo);
-      alert('로그아웃 성공');
     }
   };
 
@@ -79,7 +78,7 @@ function SideBar() {
           </li>
         ) : (
           <li>
-            <NavLink to="/loginmember">로그인</NavLink>
+            <NavLink to=" /loginmember">로그인</NavLink>
           </li>
         )}
         </div>
