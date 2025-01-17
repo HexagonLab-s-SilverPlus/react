@@ -9,9 +9,9 @@ const dashboardRouter = [
  <>
 
 
-    <Route path="/dashlist" element={<ProtectedRoute element={<DashList/>}/>}/>,
-    <Route path="/dashboard/:Id" element={<ProtectedRoute element={<DashList/>}/>}/>,
-    <Route path="/dashboard/date/:date"  element={<ProtectedRoute element={<DashList />} />}/>,
+    <Route path="/dashboardRouter/dashlist" element={<ProtectedRoute element={<DashList/>}/>}/>,
+    <Route path="/dashboardRouter/dashboard/:Id" element={<ProtectedRoute element={<DashList/>}/>}/>,
+    <Route path="/dashboardRouter/dashboard/date/:date"  element={<ProtectedRoute element={<DashList />} />}/>,
  </>
 ];
 
