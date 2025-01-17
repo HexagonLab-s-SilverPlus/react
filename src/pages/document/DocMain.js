@@ -14,13 +14,13 @@ const DocMain = () => {
 
   const handleNavigate = (documentType) => {
     // 문서 유형에 따라 채팅 페이지로 이동
-    navigate(`/document/${documentType}`);
+    navigate(`/eyRouter/document/${documentType}`);
   };
 
 
   const handleCSVNavigate = () => {
     // CSV 파일 버튼 클릭 시 이동
-    navigate(`/d/${member.memUUID}`);
+    navigate(`/eyRouter/d/${member.memUUID}`);
   };
 
   return (

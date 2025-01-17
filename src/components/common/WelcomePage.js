@@ -133,7 +133,7 @@ const WelcomePage = () => {
             navigate('/facelogin');
             return;
         }
-        if (member.memType === 'SENIOR') navigate('/senior-menu');
+        if (member.memType === 'SENIOR') navigate('/eyRouter/senior-menu');
         else if (member.memType === 'MANAGER') navigate('/dashlist');
         else if (member.memType === 'FAMILY') navigate('/seniorlist');
         else if (member.memType === 'ADMIN') navigate('/mlistview');

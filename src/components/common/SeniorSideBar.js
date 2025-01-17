@@ -29,7 +29,7 @@ const WorkspaceModal = ({ isOpen, closeModal, workspaces, fetchMore, hasMore, ti
                                 className={styles.deletedItem}
                                 onClick={() => {
                                     closeModal();
-                                    navigate(`/w/${workspace.workspaceId}`);
+                                    navigate(`/eyRouter/w/${workspace.workspaceId}`);
                                 }}
                             >
                                 {workspace.workspaceName}
@@ -432,7 +432,7 @@ const SeniorSideBar = ({ memUUID }) => {
 
             <button
                 className={styles.createWorkspaceButton}
-                onClick={() => navigate("/welcome-chat")}>
+                onClick={() => navigate("/eyRouter/welcome-chat")}>
                 새 워크스페이스 생성
             </button>
 
@@ -450,7 +450,7 @@ const SeniorSideBar = ({ memUUID }) => {
                                             }`}
                                         onClick={() => {
                                             setSelectedWorkspaceId(workspace.workspaceId);
-                                            navigate(`/w/${workspace.workspaceId}`)
+                                            navigate(`/eyRouter/w/${workspace.workspaceId}`)
                                         }
                                         }
                                     >
@@ -513,7 +513,7 @@ const SeniorSideBar = ({ memUUID }) => {
                                     }`}
                                 onClick={() => {
                                     setSelectedWorkspaceId(workspace.workspaceId);
-                                    navigate(`/w/${workspace.workspaceId}`)
+                                    navigate(`/eyRouter/w/${workspace.workspaceId}`)
                                 }
                                 }
                             >
