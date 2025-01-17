@@ -38,7 +38,7 @@ function SideBar() {
 
   const adminLinks = [
     { path: '/mlistview', label: '계정관리', img : <span class="material-symbols-outlined">manage_accounts</span>  },
-    { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span>  },
+    { path: '/noticeRouter/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span>  },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span>  },
     { path: '/qna', label: 'Q&A', img : <span class="material-symbols-outlined">help_center</span>  },
     { path: '/myinfoadmin', label: '마이페이지', img : <span class="material-symbols-outlined">account_circle</span>  },
@@ -47,16 +47,16 @@ function SideBar() {
   const managerLinks = [
     { path: '/sjRouter/dashlist', label: '대시보드', img : <span class="material-symbols-outlined">home</span> },
     { path: '/seniorlist', label: '어르신관리', img : <span class="material-symbols-outlined">manage_accounts</span> },
-    { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
+    { path: '/noticeRouter/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span> },
-    { path: '/book', label: '전자책', img : <span class="material-symbols-outlined">menu_book</span> },
+    { path: '/bookRouter/book', label: '전자책', img : <span class="material-symbols-outlined">menu_book</span> },
     { path: '/qna', label: 'Q&A', img : <span class="material-symbols-outlined">help_center</span> },
     { path: '/myinfomanager', label: '마이페이지', img : <span class="material-symbols-outlined">account_circle</span> },
   ];
 
   const familyLinks = [
     { path: '/seniorlist', label: '어르신관리', img : <span class="material-symbols-outlined">manage_accounts</span> },
-    { path: '/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
+    { path: '/noticeRouter/notice', label: '공지사항', img : <span class="material-symbols-outlined">description</span> },
     { path: '/program', label: '어르신 프로그램', img : <span class="material-symbols-outlined">diversity_1</span> },
     { path: '/qna', label: 'Q&A', img : <span class="material-symbols-outlined">help_center</span> },
     { path: '/myinfofamily', label: '마이페이지', img : <span class="material-symbols-outlined">account_circle</span> },
