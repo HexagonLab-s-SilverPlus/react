@@ -17,7 +17,7 @@ const SeniorMenu = () => {
   const navigate = useNavigate();
 
   const handleChatButton = () => {
-    navigate('/welcome-chat')
+    navigate('/eyRouter/welcome-chat')
 
   }
   const handleDocButton = () => {

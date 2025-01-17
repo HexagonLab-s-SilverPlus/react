@@ -9,9 +9,9 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const documentRouter = [
     <>
-    <Route path="/docmain" element={<ProtectedRoute element={<DocMain/>}/>}/>,
-    <Route path="/docrequest" element={<ProtectedRoute element={<DocRequestList/>}/>}/>,
-    <Route path="/documentManaged" element={<ProtectedRoute element={<DocManaged/>}/>}/>,
+    <Route path="/sjRouter/docmain" element={<ProtectedRoute element={<DocMain/>}/>}/>,
+    <Route path="/sjRouter/docrequest" element={<ProtectedRoute element={<DocRequestList/>}/>}/>,
+    <Route path="/sjRouter/documentManaged" element={<ProtectedRoute element={<DocManaged/>}/>}/>,
     </>
 
 ];

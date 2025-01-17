@@ -248,7 +248,7 @@ function DocumentChatPage() {
                         key={idx}
                         className={styles['attachment-button']}
                         onClick={() => {
-                          navigate(`/d/${member.memUUID}`);
+                          navigate(`/eyRouter/d/${member.memUUID}`);
                         }}
                       >
                         {attachment.label}

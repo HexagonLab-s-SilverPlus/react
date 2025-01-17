@@ -43,7 +43,7 @@ const SeniorNavbar = () => {
 
   // 시니어 메뉴로 이동하는 핸들러
   const handleMenu = () => {
-    navigate('/senior-menu');
+    navigate('/eyRouter/senior-menu');
   };
 
   return (

@@ -11,13 +11,13 @@ import TestLottie from '../pages/SeniorDocument/TestLottie';
 
 const eyRouter = [
   <>
-    <Route path="/welcome-chat" element={<ProtectedRoute element={<WelcomeChat />} />} />
-    <Route path="/senior-menu" element={<ProtectedRoute element={<SeniorMenu />} />} />
-    <Route path="/w/:workspaceId" element={<ProtectedRoute element={<ChatPage />} />} />
+    <Route path="/eyRouter/welcome-chat" element={<ProtectedRoute element={<WelcomeChat />} />} />
+    <Route path="/eyRouter/senior-menu" element={<ProtectedRoute element={<SeniorMenu />} />} />
+    <Route path="/eyRouter/w/:workspaceId" element={<ProtectedRoute element={<ChatPage />} />} />
     <Route path="*" element={<NotFound />} />
-    <Route path="/document/:documentType" element={<ProtectedRoute element={<DocumentChatPage  />} />} />
-    <Route path="/d/:memUUID" element={<ProtectedRoute element={<CompletedDocument  />} />} />
-    <Route path="/lottie" element={<ProtectedRoute element={<TestLottie  />} />} />
+    <Route path="/eyRouter/document/:documentType" element={<ProtectedRoute element={<DocumentChatPage  />} />} />
+    <Route path="/eyRouter/d/:memUUID" element={<ProtectedRoute element={<CompletedDocument  />} />} />
+    <Route path="/eyRouter/lottie" element={<ProtectedRoute element={<TestLottie  />} />} />
   </>
 ];
 
