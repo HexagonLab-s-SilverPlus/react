@@ -77,7 +77,7 @@
                 );
                 alert('QnA 등록 성공');
                 // 게시글 등록이 성공되면 공지 목록 페이지로 이동
-                navigate('/qna');
+                navigate('/qnarouter/qna');
             } catch (error) {
                 console.error('게시글 등록 실패', error);
                 alert('새 게시글 등록 실패');

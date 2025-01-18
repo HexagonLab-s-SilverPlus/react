@@ -25,7 +25,7 @@ const SeniorMenu = () => {
   }
 
   const handleNoticeButton = () => {
-    navigate('/notice')
+    navigate('/noticeRotuer/notice')
   }
 
   const handleProgramButton = () => {
@@ -33,11 +33,11 @@ const SeniorMenu = () => {
   };
 
   const handleFAQButton = () => {
-    navigate('/qna/faq');
+    navigate('/qnarouter/qna/faq');
   };
 
   const handleBookButton = () => {
-    navigate('/book');
+    navigate('/bookRouter/book');
   };
 
   return (

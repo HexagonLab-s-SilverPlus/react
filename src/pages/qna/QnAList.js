@@ -35,15 +35,15 @@ const QnAList = () => {
   const navigate = useNavigate();         // 이동 훅
 
   const handleMoveDetailView = (qnaUUID) => {    // 디테일 뷰로 이동
-    navigate(`/qna/detail/${qnaUUID}`);
+    navigate(`/qnarouter/qna/detail/${qnaUUID}`);
   };
 
   const handleWriteClick = () => {        // 등록 뷰로 이동
-    navigate('/qna/write'); 
+    navigate('/qnarouter/qna/write'); 
   };
 
   const handleMoveQnA = () => {        // 등록 뷰로 이동
-    navigate('/qna'); 
+    navigate('/qnarouter/qna'); 
   };
 
   const handlePageChange = async (page) => {          // 페이지 눌렀을때 뷰 바꾸기

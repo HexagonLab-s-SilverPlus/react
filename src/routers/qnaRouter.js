@@ -13,12 +13,12 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const qnaRouter = [
     <>
-        <Route path="/qna" element={<ProtectedRoute element={<QnAList />} />} />,
-        <Route path="/qna/write" element={<ProtectedRoute element={<QnAWrite />} />} />,
-        <Route path="/qna/detail/:qnaUUID" element={<ProtectedRoute element={<QnADetail />} />} />,
+        <Route path="/qnarouter/qna" element={<ProtectedRoute element={<QnAList />} />} />,
+        <Route path="/qnarouter/qna/write" element={<ProtectedRoute element={<QnAWrite />} />} />,
+        <Route path="/qnarouter/qna/detail/:qnaUUID" element={<ProtectedRoute element={<QnADetail />} />} />,
         <Route path="/qna/update/:qnaUUID" element={<ProtectedRoute element={<QnAUpdate />} />} />,
-        <Route path="/qna/answer/:qnaUUID" element={<ProtectedRoute element={<QnAAnswer />} />} />,
-        <Route path="/emg/modal" element={<ProtectedRoute element={<ModalEMG />} />} />,
+        <Route path="/qnarouter/qna/answer/:qnaUUID" element={<ProtectedRoute element={<QnAAnswer />} />} />,
+        <Route path="/qnarouter/emg/modal" element={<ProtectedRoute element={<ModalEMG />} />} />,
 
     </>
 ];

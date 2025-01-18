@@ -19,11 +19,11 @@ const QnADetail = () => {
     const navigate = useNavigate();         // 이동 훅
 
     const handleMoveUpdateView = () => {    // 수정 뷰로 이동
-        navigate(`/qna/update/${qnaUUID}`);
+        navigate(`/qnarouter/qna/update/${qnaUUID}`);
     };
 
     const handleMoveAnswerView = () => {    // 답변 뷰로 이동
-        navigate(`/qna/answer/${qnaUUID}`);
+        navigate(`/qnarouter/qna/answer/${qnaUUID}`);
     };
 
     const handleQnADetailView = async () => {   // 페이지 불러오기
