@@ -86,7 +86,7 @@ const ProgramList = () => {
 
     //등록하기 페이지로 이동 핸들러
     const handleWriteClick = () => {
-        navigate('/program/write');
+        navigate('/programRouter/program/write');
     };
 
     // 검색 select 변경 핸들러
@@ -150,7 +150,7 @@ const ProgramList = () => {
 
     //디테일 페이지로 이동
     const handleMoveDetailView = (snrProgramId) => {
-        navigate(`/program/detail/${snrProgramId}`, { state: { pagingInfo, isNearby } });
+        navigate(`/programRouter/program/detail/${snrProgramId}`, { state: { pagingInfo, isNearby } });
     };
 
     useEffect(() => {

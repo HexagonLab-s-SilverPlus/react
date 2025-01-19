@@ -50,7 +50,7 @@ const ProgramDetail = () => {
 
         if (role === "SENIOR") {
             // isNearby 상태를 고려하여 이동
-            navigate(`/program`, {
+            navigate(`/programRouter/program`, {
                 state: {
                     pagingInfo: initialPagingInfo,
                     isNearby: isNearby || false, // 기본값으로 false 설정
@@ -58,7 +58,7 @@ const ProgramDetail = () => {
             });
         } else {
             // SENIOR가 아닌 경우 초기 상태로 이동
-            navigate(`/program`);
+            navigate(`/programRouter/program`);
         }
     };
 
@@ -67,15 +67,15 @@ const ProgramDetail = () => {
     const handleMovePrevPage = () => {
         if (role === "SENIOR") {
             const { pagingInfo, isNearby } = location.state || {};
-            navigate(`/program`, { state: { pagingInfo, isNearby } });
+            navigate(`/programRouter/program`, { state: { pagingInfo, isNearby } });
         } else {
-            navigate(`/program`); // SENIOR가 아닌 경우 상태 전달 없이 이동
+            navigate(`/programRouter/program`); // SENIOR가 아닌 경우 상태 전달 없이 이동
         }
     };
 
     //수정 페이지로 이동
     const handleUpdateProgram = () => {
-        navigate(`/program/update/${snrProgramId}`)
+        navigate(`/programRouter/program/update/${snrProgramId}`)
     };
 
     const formatDate = (w) => {     // 데이터 포멧(우리나라 시간으로)
@@ -173,7 +173,7 @@ const ProgramDetail = () => {
             try {
                 await apiSpringBoot.delete(`/program/${snrProgramId}`);
                 alert("프로그램이 삭제되었습니다.");
-                navigate(`/program`); // 삭제 후 목록 페이지로 이동
+                navigate(`/programRouter/program`); // 삭제 후 목록 페이지로 이동
             } catch (error) {
                 // console.error("프로그램 삭제 실패 : ", error);
                 alert("프로그램 삭제에 실패하였습니다. 관리자에게 문의하세요.");

@@ -167,7 +167,7 @@ const ProgramWrite = () => {
                     }
                 });
                 alert('프로그램 등록에 성공하였습니다.');
-                navigate('/program');
+                navigate('/programRouter/program');
             } catch (error) {
                 // console.error('프로그램 등록 실패 : ', error);
                 alert('프로그램 등록에 실패하였습니다. 관리자에게 문의하세요.')

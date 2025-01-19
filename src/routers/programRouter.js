@@ -9,10 +9,10 @@ import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const programRouter = [
     <>
-        <Route path="/program" element={<ProtectedRoute element={<ProgramList />} />} />,
-        <Route path="/program/write" element={<ProtectedRoute element={<ProgramWrite />} />} />,
-        <Route path="/program/detail/:snrProgramId" element={<ProtectedRoute element={<ProgramDetail />} />} />,
-        <Route path="/program/update/:snrProgramId" element={<ProtectedRoute element={<ProgramUpdate />} />} />,
+        <Route path="/programRouter/program" element={<ProtectedRoute element={<ProgramList />} />} />,
+        <Route path="/programRouter/program/write" element={<ProtectedRoute element={<ProgramWrite />} />} />,
+        <Route path="/programRouter/program/detail/:snrProgramId" element={<ProtectedRoute element={<ProgramDetail />} />} />,
+        <Route path="/programRouter/program/update/:snrProgramId" element={<ProtectedRoute element={<ProgramUpdate />} />} />,
     </>
 ];
 
