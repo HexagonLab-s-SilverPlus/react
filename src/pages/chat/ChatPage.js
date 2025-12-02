@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './ChatPage.module.css';
-import Container from './Container.js';
 import { AuthContext } from '../../AuthProvider.js';
 import SeniorSideBar from '../../components/common/SeniorSideBar.js';
-import { marked } from 'marked';
 import SeniorNavbar from '../../components/common/SeniorNavbar.js';
 import { Player } from '@lottiefiles/react-lottie-player';
 import EMG from '../../components/emg/EMG.js';
+import { streamingFetch } from '../../utils/axios.js';
 
 function ChatPage() {
   const location = useLocation();
@@ -93,7 +92,7 @@ function ChatPage() {
 
 
 
-  // 메시지 전송 핸들러
+  // 메시지 전송 핸들러 with streaming support
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
 
@@ -102,49 +101,123 @@ function ChatPage() {
 
     // 로딩 메시지 추가
     setMessages((prev) => [...prev, { sender: 'AI', loading: true }]);
+    const messageToSend = inputText;
     setInputText(''); // 입력창 초기화
 
     try {
-      const response = await apiFlask.post(
-        '/chat',
+      // 스트리밍으로 실시간 수신 시도
+      await streamingFetch(
+        '/chat-stream',
         {
-          message: inputText,
+          message: messageToSend,
           createWorkspace: false,
           workspaceId: selectedWorkspaceId,
         },
         {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
+          accessToken,
+          refreshToken: localStorage.getItem('refreshToken'),
+          onChunk: (chunk) => {
+            // 첫 번째 청크가 오면 로딩 상태를 해제하고 텍스트 표시 시작
+            setMessages((prev) => {
+              if (prev.length === 0) return prev;
+              const updated = [...prev];
+              const lastMessage = updated[updated.length - 1];
+              // AI 로딩 메시지인지 확인
+              if (lastMessage.sender !== 'AI') return prev;
+              updated[updated.length - 1] = {
+                sender: 'AI',
+                text: (lastMessage.text || '') + chunk,
+                loading: false
+              };
+              return updated;
+            });
           },
+          onComplete: async (fullText) => {
+            // TTS 지연 로딩: 텍스트 스트리밍 완료 후 TTS 별도 요청
+            try {
+              const ttsResponse = await apiFlask.post('/tts', { text: fullText }, {
+                withCredentials: true,
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
+                },
+              });
+              if (ttsResponse.data.audioBase64) {
+                const audio = new Audio(`data:audio/mpeg;base64,${ttsResponse.data.audioBase64}`);
+                audio.play();
+              }
+            } catch (ttsError) {
+              console.error('TTS 오류:', ttsError);
+              // TTS 실패는 무시하고 텍스트는 표시됨
+            }
+          },
+          onError: (streamError) => {
+            // 스트리밍 실패 시 폴백으로 기존 방식 사용
+            console.error('스트리밍 연결 오류:', streamError);
+            throw streamError;
+          }
         }
       );
+    } catch (error) {
+      console.error('스트리밍 실패, 기존 방식으로 폴백:', error);
+      
+      // 폴백: 기존 non-streaming 방식
+      try {
+        const response = await apiFlask.post(
+          '/chat',
+          {
+            message: messageToSend,
+            createWorkspace: false,
+            workspaceId: selectedWorkspaceId,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
+            },
+          }
+        );
 
-      const { reply, audioBase64 } = response.data;
+        const { reply, audioBase64 } = response.data;
 
-      // 로딩 상태 해제 및 AI 응답 추가
-      setMessages((prev) => {
-        const updatedMessages = [...prev];
-        updatedMessages[updatedMessages.length - 1] = {
-          sender: 'AI',
-          text: reply,
-          loading: false,
-        };
+        // 로딩 상태 해제 및 AI 응답 추가
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            sender: 'AI',
+            text: reply,
+            loading: false,
+          };
+          return updatedMessages;
+        });
 
         // Base64 오디오 재생
         if (audioBase64) {
           const audio = new Audio(`data:audio/mpeg;base64,${audioBase64}`);
           audio.play();
         }
-        return updatedMessages;
-      });
-    } catch (error) {
-      console.error('메시지 전송 중 오류:', error);
-      setMessages((prev) => [
-        ...prev,
-        { sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false },
-      ]);
+      } catch (fallbackError) {
+        console.error('메시지 전송 중 오류:', fallbackError);
+        setMessages((prev) => {
+          if (prev.length === 0) {
+            return [{ sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false }];
+          }
+          const updatedMessages = [...prev];
+          const lastMessage = updatedMessages[updatedMessages.length - 1];
+          // AI 로딩 메시지인지 확인
+          if (lastMessage.sender === 'AI') {
+            updatedMessages[updatedMessages.length - 1] = {
+              sender: 'AI',
+              text: 'AI 응답 생성 실패. 다시 시도해주세요.',
+              loading: false,
+            };
+          } else {
+            updatedMessages.push({ sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false });
+          }
+          return updatedMessages;
+        });
+      }
     }
   };
 

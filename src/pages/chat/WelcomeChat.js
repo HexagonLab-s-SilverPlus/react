@@ -8,6 +8,7 @@ import SeniorNavbar from '../../components/common/SeniorNavbar.js';
 
 function WelcomeChat() {
   const [userFirstMsg, setUserFirstMsg] = useState(''); // 사용자 첫 입력 메시지
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
   const navigate = useNavigate();
   const { apiFlask, member, accessToken } = useContext(AuthContext);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true); // 사이드바 상태 관리
@@ -16,18 +17,21 @@ function WelcomeChat() {
   const handleInputChange = (e) => setUserFirstMsg(e.target.value);
 
   // 메시지 전송 및 워크스페이스 생성
+  // Note: 첫 메시지는 워크스페이스 생성이 필요하므로 non-streaming 방식 사용
+  // ChatPage에서 후속 메시지는 streaming으로 실시간 표시
   const handleSend = async () => {
-    if (!userFirstMsg.trim()) return;
+    if (!userFirstMsg.trim() || isLoading) return;
+
+    setIsLoading(true);
+    const messageToSend = userFirstMsg;
 
     try {
-
-
       const refreshToken = localStorage.getItem('refreshToken');
       const response = await apiFlask.post(
         '/chat',
         {
-          message: userFirstMsg, // 사용자 입력 메시지
-          createWorkspace: true, // 워크스페이스 생성 요청
+          message: messageToSend,
+          createWorkspace: true,
         },
         {
           headers: {
@@ -38,13 +42,12 @@ function WelcomeChat() {
         },
       );
 
-      const { workspaceId, audioBase64, reply } = response.data; // 생성된 워크스페이스 ID
+      const { workspaceId, audioBase64, reply } = response.data;
 
       if (!workspaceId) {
         alert('워크스페이스 생성에 실패했습니다. 다시 시도해주세요.');
         return;
       }
-
 
       // Base64 오디오 재생
       if (audioBase64) {
@@ -54,13 +57,13 @@ function WelcomeChat() {
 
       // 생성된 워크스페이스 ID를 ChatPage로 전달하며 이동
       navigate(`/eyRouter/w/${workspaceId}`, {
-        state: { workspaceId, aiReply: reply },
+        state: { workspaceId, aiReply: reply, userMessage: messageToSend },
       });
-
-
     } catch (error) {
       console.error('Flask 서버 호출 중 오류:', error);
       alert('메시지 전송 중 문제가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,12 +111,14 @@ function WelcomeChat() {
                 value={userFirstMsg}
                 onChange={handleInputChange}
                 onKeyDown={handleInputKeyDown} // 엔터키 감지 이벤트 추가
+                disabled={isLoading}
               />
               <button
                 className={`${styles['send-button']} ${styles['button']}`}
                 onClick={handleSend}
+                disabled={isLoading}
               >
-                <span className={styles['arrow-icon']}>➤</span>
+                <span className={styles['arrow-icon']}>{isLoading ? '...' : '➤'}</span>
               </button>
             </div>
           </div>
