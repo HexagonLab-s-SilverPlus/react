@@ -119,8 +119,11 @@ function ChatPage() {
           onChunk: (chunk) => {
             // 첫 번째 청크가 오면 로딩 상태를 해제하고 텍스트 표시 시작
             setMessages((prev) => {
+              if (prev.length === 0) return prev;
               const updated = [...prev];
               const lastMessage = updated[updated.length - 1];
+              // AI 로딩 메시지인지 확인
+              if (lastMessage.sender !== 'AI') return prev;
               updated[updated.length - 1] = {
                 sender: 'AI',
                 text: (lastMessage.text || '') + chunk,
@@ -197,12 +200,21 @@ function ChatPage() {
       } catch (fallbackError) {
         console.error('메시지 전송 중 오류:', fallbackError);
         setMessages((prev) => {
+          if (prev.length === 0) {
+            return [{ sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false }];
+          }
           const updatedMessages = [...prev];
-          updatedMessages[updatedMessages.length - 1] = {
-            sender: 'AI',
-            text: 'AI 응답 생성 실패. 다시 시도해주세요.',
-            loading: false,
-          };
+          const lastMessage = updatedMessages[updatedMessages.length - 1];
+          // AI 로딩 메시지인지 확인
+          if (lastMessage.sender === 'AI') {
+            updatedMessages[updatedMessages.length - 1] = {
+              sender: 'AI',
+              text: 'AI 응답 생성 실패. 다시 시도해주세요.',
+              loading: false,
+            };
+          } else {
+            updatedMessages.push({ sender: 'AI', text: 'AI 응답 생성 실패. 다시 시도해주세요.', loading: false });
+          }
           return updatedMessages;
         });
       }
