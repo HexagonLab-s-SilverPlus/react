@@ -135,7 +135,7 @@ function ChatPage() {
           onComplete: async (fullText) => {
             // TTS 지연 로딩: 텍스트 스트리밍 완료 후 TTS 별도 요청
             try {
-              const ttsResponse = await apiFlask.post('/tts', { text: fullText }, {
+              const ttsResponse = await apiFlask.post('/chat/tts', { text: fullText }, {
                 withCredentials: true,
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
