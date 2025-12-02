@@ -148,9 +148,10 @@ function ChatPage() {
               // TTS 실패는 무시하고 텍스트는 표시됨
             }
           },
-          onError: () => {
+          onError: (streamError) => {
             // 스트리밍 실패 시 폴백으로 기존 방식 사용
-            throw new Error('Streaming failed');
+            console.error('스트리밍 연결 오류:', streamError);
+            throw streamError;
           }
         }
       );
